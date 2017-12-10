@@ -10,13 +10,15 @@ import { MaterialModule } from './material.module';
 import { ViewHomeComponent } from './view-home/view-home.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ViewLoginComponent } from './view-login/view-login.component';
+import { ViewConfigComponent } from './view-config/view-config.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ViewHomeComponent,
     SidenavComponent,
-    ViewLoginComponent
+    ViewLoginComponent,
+    ViewConfigComponent
   ],
   imports: [
     AppRoutingModule,
