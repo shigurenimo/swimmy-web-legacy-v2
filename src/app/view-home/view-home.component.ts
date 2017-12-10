@@ -14,19 +14,27 @@ import { Post } from '../models/Post';
   styleUrls: ['./view-home.component.css']
 })
 export class ViewHomeComponent {
-  col$: AngularFirestoreCollection<Post>;
-  docs$: Observable<Post[]>;
+  public col$: AngularFirestoreCollection<Post>;
+  public docs$: Observable<Post[]>;
 
   constructor(private afs: AngularFirestore) {
     this.getCol();
     this.getDocs();
   }
 
-  getCol() {
+  createdAt (date) {
+
+  }
+
+  private getCol() {
     this.col$ = this.afs.collection<Post>('posts');
   }
 
-  getDocs() {
+  private getDocs() {
     this.docs$ = this.col$.valueChanges();
+
+    this.docs$.subscribe(doc => {
+      console.log(doc)
+    });
   }
 }

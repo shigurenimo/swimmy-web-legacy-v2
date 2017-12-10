@@ -1,4 +1,16 @@
+class Image {
+  name: string;
+}
+
 export class Post {
-  id: string;
+  aud: string;
+  channelId: string;
   content: string;
+  createdAt: string;
+  id: string;
+  images: Image[];
+  ownerId: string;
+  reactions: string[];
+  replyId: string;
+  updatedAt: string;
 }
