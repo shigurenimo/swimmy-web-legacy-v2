@@ -1,9 +1,19 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-body {
-  margin: 0;
-}
-
 * {
   -webkit-font-smoothing: antialiased
+}
+
+html {
+  height: 100%;
+  background: white;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+}
+
+app-root {
+  height: 100%;
 }
