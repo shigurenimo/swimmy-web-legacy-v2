@@ -9,7 +9,8 @@
     "dev:ng": "ng serve --hmr -e=hmr --host=0.0.0.0",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "reset": "rm ~/.config/gcloud/application_default_credentials.json"
   },
   "private": true,
   "dependencies": {
