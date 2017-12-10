@@ -7,10 +7,14 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
+import { ViewHomeComponent } from './view-home/view-home.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ViewHomeComponent,
+    SidenavComponent
   ],
   imports: [
     AppRoutingModule,
