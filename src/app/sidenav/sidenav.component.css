@@ -1,0 +1,8 @@
+.mat-list {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.mat-list-item:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
