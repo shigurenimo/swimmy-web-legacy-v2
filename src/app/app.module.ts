@@ -11,6 +11,7 @@ import { ViewHomeComponent } from './view-home/view-home.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ViewLoginComponent } from './view-login/view-login.component';
 import { ViewConfigComponent } from './view-config/view-config.component';
+import { ViewInfoComponent } from './view-info/view-info.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ViewConfigComponent } from './view-config/view-config.component';
     ViewHomeComponent,
     SidenavComponent,
     ViewLoginComponent,
-    ViewConfigComponent
+    ViewConfigComponent,
+    ViewInfoComponent
   ],
   imports: [
     AppRoutingModule,
