@@ -1,6 +1,6 @@
 export const environment = {
-  production: true,
-  hmr: false,
+  production: false,
+  hmr: true,
   firebase: {},
   function: ''
 };
