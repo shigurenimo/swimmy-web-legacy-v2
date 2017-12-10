@@ -1,0 +1,14 @@
+<div class="root">
+
+  <mat-list>
+
+    <ng-container *ngFor="let doc of docs$ | async">
+      <mat-list-item>
+        {{doc.content}}
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-container>
+
+  </mat-list>
+
+</div>
