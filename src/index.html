@@ -1,15 +1,81 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Sw</title>
-  <base href="/">
+<html lang='en'>
+  <head>
+    <meta charset="utf-8">
+    <title>Sw</title>
+    <meta name="description" content="完全な匿名で利用できるシンプルなSNS・オープンソースプロジェクト"/>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+    <base href="/">
+
+    <!-- PWA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-starturl" content="/">
+    <meta name="theme-color" content="#f48c5b">
+
+    <!-- ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SNS">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/assets/icon-512x512.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-512x512.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/assets/icon-512x512.png">
+
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@twitter">
+    <meta name="twitter:title" content="SNS">
+    <meta name="twitter:description" content="Firestarter">
+    <meta name="twitter:image" content="/assets/icon-512x512.png">
+
+    <!-- og -->
+    <meta property="og:title" content="SNS"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://fir-s-60f4c.firebaseapp.com/"/>
+    <meta property="og:image" content="/assets/icon-512x512.png"/>
+    <meta property="og:description" content="SNS Firestarter"/>
+    <meta property="og:site_name" content="SNS Firestarter"/>
+
+    <!-- link -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel='icon' type='image/x-icon' href='favicon.ico'>
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+
+    <style>
+      .splash {
+        opacity: 0;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        color: #272c33;
+        padding-top: 25vh;
+        z-index: -1;
+      }
+
+      app-root:empty + .splash {
+        opacity: 1;
+        z-index: 100;
+      }
+
+      .splash img {
+        display: block;
+        margin: auto;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <app-root></app-root>
+
+    <div class='splash' id='content'>
+      <img src='/assets/icon-512x512.png' width='256px' alt='PWA logo'>
+    </div>
+
+    <noscript>
+      <p>
+        Please enable JavaScript
+      </p>
+    </noscript>
+  </body>
 </html>
