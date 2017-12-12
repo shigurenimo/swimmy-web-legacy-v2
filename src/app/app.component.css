@@ -1,7 +1,7 @@
 .mat-drawer-container {
   height: 100%;
   overflow: auto;
-  background: white;
+  background: #F8F7F8;
 }
 
 .mat-sidenav-content {
@@ -13,6 +13,8 @@
 
 .mat-sidenav {
   width: 70px;
+  height: 100%;
+  background: #F8F7F8;
 }
 
 .page {
