@@ -9,6 +9,9 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+    "axios": "^0.17.1",
+    "bcrypt": "^1.0.3",
+    "crypto": "^1.0.1",
     "firebase-admin": "~5.4.2",
     "firebase-functions": "^0.7.1"
   },
