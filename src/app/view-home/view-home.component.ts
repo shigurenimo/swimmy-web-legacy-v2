@@ -22,19 +22,11 @@ export class ViewHomeComponent {
     this.getDocs();
   }
 
-  createdAt (date) {
-
-  }
-
   private getCol() {
     this.col$ = this.afs.collection<Post>('posts');
   }
 
   private getDocs() {
     this.docs$ = this.col$.valueChanges();
-
-    this.docs$.subscribe(doc => {
-      console.log(doc)
-    });
   }
 }
