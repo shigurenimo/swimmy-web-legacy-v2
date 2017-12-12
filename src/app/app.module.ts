@@ -22,6 +22,7 @@ import { ViewInfoComponent } from './view-info/view-info.component';
 import { ViewUserComponent } from './view-user/view-user.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { ListItemPostComponent } from './list-item-post/list-item-post.component';
+import { EditorPostComponent } from './editor-post/editor-post.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ListItemPostComponent } from './list-item-post/list-item-post.component
     ViewInfoComponent,
     ViewUserComponent,
     TimelineComponent,
-    ListItemPostComponent
+    ListItemPostComponent,
+    EditorPostComponent
   ],
   imports: [
     AngularFireAuthModule,
