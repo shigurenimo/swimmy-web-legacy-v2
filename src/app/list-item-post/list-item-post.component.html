@@ -1,7 +1,44 @@
+<mat-divider></mat-divider>
+
 <mat-list-item>
-  <span class='mat-body-1'>
-    {{doc.content}}
-  </span>
+
+  <div>
+
+    <span class='mat-body-1'>
+      {{doc.content}}
+    </span>
+
+    <span class='mat-caption createdAt'>- {{createdAt}}</span>
+
+  </div>
+
 </mat-list-item>
 
-<mat-divider></mat-divider>
+<mat-list-item class='actions'>
+
+  <button mat-icon-button>
+    <mat-icon>sms</mat-icon>
+  </button>
+
+  <button mat-icon-button>
+    <mat-icon>plus_one</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)='onOpenClick()'>
+    <mat-icon *ngIf='isOpen'>keyboard_arrow_up</mat-icon>
+    <mat-icon *ngIf='!isOpen'>keyboard_arrow_down</mat-icon>
+  </button>
+
+</mat-list-item>
+
+<mat-list-item class='actions' *ngIf='isOpen'>
+
+  <mat-form-field>
+    <input matInput placeholder='新しいラベル'>
+  </mat-form-field>
+
+  <button mat-icon-button>
+    <mat-icon>add</mat-icon>
+  </button>
+
+</mat-list-item>

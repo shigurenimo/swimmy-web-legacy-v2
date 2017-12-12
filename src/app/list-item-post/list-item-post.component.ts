@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
-import { Post } from '../models/Post'
+import { createdAt } from '../helpers/createdAt';
+import { Post } from '../models/Post';
 
 @Component({
   selector: 'app-list-item-post',
@@ -9,4 +10,14 @@ import { Post } from '../models/Post'
 })
 export class ListItemPostComponent {
   @Input() doc: Post;
+
+  isOpen = false;
+
+  private onOpenClick() {
+    this.isOpen = !this.isOpen;
+  }
+
+  get createdAt() {
+    return createdAt(this.doc.createdAt);
+  }
 }

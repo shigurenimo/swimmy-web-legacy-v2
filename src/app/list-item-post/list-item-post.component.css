@@ -1,0 +1,23 @@
+:host {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.createdAt {
+  padding-left: 10px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actions button {
+  margin-left: 15px;
+}
+
+.actions .mat-icon {
+  opacity: 0.8;
+  font-size: 20px;
+}
