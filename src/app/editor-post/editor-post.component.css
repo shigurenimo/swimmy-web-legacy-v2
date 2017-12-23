@@ -1,0 +1,19 @@
+:host {
+  padding: 10px 10px 0;
+  box-sizing: border-box;
+}
+
+.mat-form-field {
+  flex: 1;
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+
+button.send {
+  margin-left: 10px;
+}
