@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-sidenav',
@@ -7,9 +8,11 @@ import { Component } from '@angular/core';
 })
 export class SidenavComponent {
   public links = [
-    {path: '/login', icon: 'account_circle'},
     {path: '/', icon: 'home'},
     {path: '/config', icon: 'settings'},
     {path: '/info', icon: 'info'}
   ];
+
+  constructor(public afAuth: AngularFireAuth) {
+  }
 }
