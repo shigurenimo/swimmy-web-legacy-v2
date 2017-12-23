@@ -1,5 +1,51 @@
-<div class="md-dialog">
+<h1 mat-dialog-title>Hello</h1>
 
-  <h1 mat-dialog-title>Hello</h1>
+<form (ngSubmit)="onSignInClick()" #loginForm='ngForm'>
 
-</div>
+  <div mat-dialog-content>
+
+    <mat-form-field [floatLabel]='options.value.floatLabel'>
+      <input matInput
+             type='text'
+             placeholder='ユーザネーム'
+             name='username'
+             [formControl]='username'>
+      <mat-error *ngIf='username.invalid'>
+        {{emailError}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field [floatLabel]='options.value.floatLabel'>
+      <input matInput
+             placeholder='パスワード'
+             type='password'
+             name='password'
+             minlength='6'
+             [formControl]='password'>
+      <mat-error *ngIf='password.invalid'>
+        {{passwordError}}
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <div mat-dialog-actions>
+
+    <button mat-raised-button
+            type='button'
+            [disabled]='loginForm.invalid'
+            (click)='onSignUpClick()'>
+      新しいユーザ
+    </button>
+
+    <button mat-raised-button
+            type='submit'
+            [disabled]='loginForm.invalid'
+            color='primary'
+            (click)='onSignInClick()'>
+      ログイン
+    </button>
+
+  </div>
+
+</form>
