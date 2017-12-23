@@ -1,6 +1,7 @@
 // Angular core modules
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
@@ -23,6 +24,7 @@ import { ViewUserComponent } from './view-user/view-user.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { ListItemPostComponent } from './list-item-post/list-item-post.component';
 import { EditorPostComponent } from './editor-post/editor-post.component';
+import { DialogLoginComponent } from './dialog-login/dialog-login.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { EditorPostComponent } from './editor-post/editor-post.component';
     ViewUserComponent,
     TimelineComponent,
     ListItemPostComponent,
-    EditorPostComponent
+    EditorPostComponent,
+    DialogLoginComponent
   ],
   imports: [
     AngularFireAuthModule,
@@ -43,13 +46,18 @@ import { EditorPostComponent } from './editor-post/editor-post.component';
     AngularFirestoreModule,
     AppRoutingModule,
     BrowserModule,
+    FormsModule,
     NoopAnimationsModule,
     MaterialModule,
+    ReactiveFormsModule,
     ServiceWorkerModule.register('/ngsw-worker.js',
       {enabled: environment.production})
   ],
   providers: [],
   bootstrap: [AppComponent],
+  entryComponents: [
+    DialogLoginComponent
+  ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ]
