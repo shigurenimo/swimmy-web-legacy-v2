@@ -13,7 +13,7 @@
   <!-- ログインしていない -->
   <mat-list-item *ngIf="!(afAuth.authState | async)">
 
-    <button mat-icon-button>
+    <button mat-icon-button (click)='onLoginClick()'>
       <mat-icon>account_circle</mat-icon>
     </button>
 
