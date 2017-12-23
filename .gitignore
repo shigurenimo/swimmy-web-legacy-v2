@@ -1,6 +1,7 @@
 # Firebase
 public
 node_modules
+firebase-debug.log
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
