@@ -2,16 +2,16 @@
 <mat-list>
 
   <!-- ログインしている -->
-  <mat-list-item *ngIf="afAuth.authState | async">
+  <mat-list-item class='auth' *ngIf='afAuth.authState | async'>
 
-    <button mat-icon-button>
+    <button mat-icon-button (click)='onLoginClick()'>
       <mat-icon>account_circle</mat-icon>
     </button>
 
   </mat-list-item>
 
   <!-- ログインしていない -->
-  <mat-list-item *ngIf="!(afAuth.authState | async)">
+  <mat-list-item class='auth' *ngIf='!(afAuth.authState | async)'>
 
     <button mat-icon-button (click)='onLoginClick()'>
       <mat-icon>account_circle</mat-icon>
