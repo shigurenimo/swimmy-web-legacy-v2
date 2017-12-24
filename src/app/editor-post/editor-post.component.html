@@ -1,7 +1,8 @@
 <mat-form-field>
-
-  <input matInput placeholder='新しい書き込み'>
-
+  <input matInput placeholder='新しい書き込み' [formControl]='content'>
+  <mat-error *ngIf='content.invalid'>
+    {{contentError}}
+  </mat-error>
 </mat-form-field>
 
 <div class='actions'>
@@ -10,7 +11,10 @@
     <mat-icon>keyboard_return</mat-icon>
   </button>
 
-  <button mat-mini-fab color='primary' class='send'>
+  <button mat-mini-fab
+          color='primary'
+          class='send'
+          (click)='onCreatePostClick()'>
     <mat-icon>create</mat-icon>
   </button>
 
