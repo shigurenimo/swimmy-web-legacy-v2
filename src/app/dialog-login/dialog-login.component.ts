@@ -67,7 +67,7 @@ export class DialogLoginComponent {
     const email = username + '@swimmy.io';
     this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .catch(err => {
-        console.log(err);
+        console.error(err);
         this.catchErrorCode(err.code);
         this.inProgress = false;
       });
@@ -83,7 +83,7 @@ export class DialogLoginComponent {
     const email = username + '@swimmy.io';
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .catch(err => {
-        console.log(err);
+        console.error(err);
         this.catchErrorCode(err.code);
         this.inProgress = false;
       });
