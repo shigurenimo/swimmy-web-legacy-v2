@@ -22,11 +22,22 @@ export class ViewHomeComponent {
     this.getDocs();
   }
 
+  public static snapshotsToDocs(snapshots) {
+    return snapshots
+      .map(snapshot => ({
+        id: snapshot.payload.doc.id,
+        ...snapshot.payload.doc.data()
+      }))
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
   private getCol() {
     this.col$ = this.afs.collection<Post>('posts');
   }
 
   private getDocs() {
-    this.docs$ = this.col$.valueChanges();
+    this.docs$ = this.col$
+      .snapshotChanges()
+      .map(ViewHomeComponent.snapshotsToDocs);
   }
 }
