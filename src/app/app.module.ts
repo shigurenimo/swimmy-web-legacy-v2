@@ -25,6 +25,7 @@ import { TimelineComponent } from './timeline/timeline.component';
 import { ListItemPostComponent } from './list-item-post/list-item-post.component';
 import { EditorPostComponent } from './editor-post/editor-post.component';
 import { DialogLoginComponent } from './dialog-login/dialog-login.component';
+import { FunctionsService } from './services/functions.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,9 @@ import { DialogLoginComponent } from './dialog-login/dialog-login.component';
     ServiceWorkerModule.register('/ngsw-worker.js',
       {enabled: environment.production})
   ],
-  providers: [],
+  providers: [
+    FunctionsService,
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     DialogLoginComponent
