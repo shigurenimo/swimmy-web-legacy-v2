@@ -26,6 +26,7 @@ import { ListItemPostComponent } from './list-item-post/list-item-post.component
 import { EditorPostComponent } from './editor-post/editor-post.component';
 import { DialogLoginComponent } from './dialog-login/dialog-login.component';
 import { FunctionsService } from './services/functions.service';
+import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { FunctionsService } from './services/functions.service';
     TimelineComponent,
     ListItemPostComponent,
     EditorPostComponent,
-    DialogLoginComponent
+    DialogLoginComponent,
+    ViewUserDetailComponent
   ],
   imports: [
     AngularFireAuthModule,
