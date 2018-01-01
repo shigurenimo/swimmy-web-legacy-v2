@@ -1,0 +1,18 @@
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+$general-typography: mat-typography-config(
+  $font-family: '"Arial", "Helvetica Neue", sans-serif',
+  $body-2: mat-typography-level(14px, 24px, 600)
+);
+
+@include mat-core($general-typography);
+
+$candy-app-primary: mat-palette($mat-grey);
+$candy-app-accent: mat-palette($mat-blue, A200, A100, A400);
+
+$candy-app-warn: mat-palette($mat-red);
+
+$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+
+@include angular-material-theme($candy-app-theme);
