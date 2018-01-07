@@ -17,13 +17,6 @@ export class EditorPostComponent implements OnInit {
 
   private inProgress = false;
 
-  get contentError() {
-    if (this.content.hasError('failure')) {
-      return '失敗しました';
-    }
-    return '';
-  }
-
   constructor(
     private fns: FunctionsService,
     private fb: FormBuilder) {
@@ -33,14 +26,21 @@ export class EditorPostComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  public get contentError() {
+    if (this.content.hasError('failure')) {
+      return '失敗しました';
+    }
+    return '';
   }
 
-  onCreatePostClick() {
+  public ngOnInit() {
+  }
+
+  public onCreatePostClick() {
     const payload = {
       content: this.content.value
     };
-    this.fns.createPost(payload)
+    this.fns.addPost(payload)
       .then(() => {
         this.content.setValue('');
       })
