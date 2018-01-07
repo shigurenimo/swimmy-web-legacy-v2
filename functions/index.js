@@ -11,6 +11,10 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
   exports.addPost = require('./https/addPost');
 }
 
+if (!FUNCTION_NAME || FUNCTION_NAME === 'addReactionToPost') {
+  exports.addReactionToPost = require('./https/addReactionToPost');
+}
+
 // storage
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'storage') {

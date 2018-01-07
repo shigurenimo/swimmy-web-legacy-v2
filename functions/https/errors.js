@@ -4,6 +4,11 @@ module.exports = {
     message: 'Unauthorized',
     reason: 'token-not-found',
   },
+  ID_NOT_FOUND: {
+    code: 401,
+    message: 'Unauthorized',
+    reason: 'id-not-found',
+  },
   CONTENT_NOT_FOUND: {
     code: 404,
     message: 'Content Not Found',
