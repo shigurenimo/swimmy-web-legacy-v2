@@ -5,10 +5,10 @@
   <div>
 
     <span class='mat-body-1'>
-      {{doc.content}}
+      {{content}}
     </span>
 
-    <span class='mat-caption createdAt'>- {{createdAt}}</span>
+    <span class='mat-caption createdAt'>- {{createdAtStr}}</span>
 
   </div>
 
@@ -21,7 +21,7 @@
   </button>
 
   <button mat-icon-button>
-    <mat-icon>plus_one</mat-icon>
+    <mat-icon (click)='onAddReactionClick()'>plus_one</mat-icon>
   </button>
 
   <button mat-icon-button (click)='onOpenClick()'>

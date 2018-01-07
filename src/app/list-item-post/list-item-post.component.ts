@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { createdAt } from '../helpers/createdAt';
-import { Post } from '../models/Post';
+import { FunctionsService } from '../services/functions.service';
 
 @Component({
   selector: 'app-list-item-post',
@@ -9,15 +9,49 @@ import { Post } from '../models/Post';
   styleUrls: ['./list-item-post.component.css']
 })
 export class ListItemPostComponent {
-  @Input() doc: Post;
+  @Input() aud: string;
+
+  @Input() content: string;
+
+  @Input() createdAt: string;
+
+  @Input() id: string;
+
+  @Input() images: string[];
+
+  @Input() owner: object;
+
+  @Input() ownerId: string;
+
+  @Input() repliedPostIds: string[];
+
+  @Input() replyPostIds: string[];
+
+  @Input() updatedAt: string;
 
   isOpen = false;
+
+  constructor(private fns: FunctionsService) {
+  }
 
   private onOpenClick() {
     this.isOpen = !this.isOpen;
   }
 
-  get createdAt() {
-    return createdAt(this.doc.createdAt);
+  public get createdAtStr() {
+    return createdAt(this.createdAt);
+  }
+
+  public onAddReactionClick() {
+    const payload = {
+      id: this.id,
+      reaction: 'hello'
+    };
+    this.fns.addReactionToPost(payload)
+      .then(() => {
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 }

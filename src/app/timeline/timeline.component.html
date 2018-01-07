@@ -3,7 +3,16 @@
   <mat-list>
 
     <app-list-item-post *ngFor='let doc of docs$ | async'
-                        [doc]='doc'>
+                        [aud]='doc.aud'
+                        [content]='doc.content'
+                        [createdAt]='doc.createdAt'
+                        [id]='doc.id'
+                        [images]='doc.images'
+                        [owner]='doc.owner'
+                        [ownerId]='doc.ownerId'
+                        [repliedPostIds]='doc.repliedPostIds'
+                        [replyPostIds]='doc.replyPostIds'
+                        [updatedAt]='doc.updatedAt'>
     </app-list-item-post>
 
   </mat-list>
