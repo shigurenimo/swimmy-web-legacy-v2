@@ -10,12 +10,31 @@ export class FunctionsService {
   constructor(private afa: AngularFireAuth) {
   }
 
-  public createPost(payload) {
-    return this.getIdToken()
+  public addPost(payload) {
+    return this.callFunctionWithToken('addPost', payload);
+  }
+
+  public addReactionToPost(payload) {
+    return this.callFunctionWithToken('addReactionToPost', payload);
+  }
+
+  private callFunction(name: string, payload = {}) {
+    return axios({
+      method: 'POST',
+      url: `${environment.function}/${name}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: payload
+    });
+  }
+
+  private callFunctionWithToken(name: string, payload = {}) {
+    return this.afa.auth.currentUser.getIdToken()
       .then(idToken => {
-        axios({
+        return axios({
           method: 'POST',
-          url: `${environment.function}/addPost`,
+          url: `${environment.function}/${name}`,
           headers: {
             'authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'
@@ -23,9 +42,5 @@ export class FunctionsService {
           data: payload
         });
       });
-  }
-
-  private getIdToken() {
-    return this.afa.auth.currentUser.getIdToken();
   }
 }
