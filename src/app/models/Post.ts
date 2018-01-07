@@ -2,6 +2,10 @@ class Image {
   name: string;
 }
 
+class Owner {
+  name: string;
+}
+
 export class Post {
   aud: string;
   channelId: string;
@@ -9,8 +13,9 @@ export class Post {
   createdAt: string;
   id: string;
   images: Image[];
+  owner: Owner;
   ownerId: string;
-  reactions: string[];
-  replyId: string;
+  repliedPostIds: string[];
+  replyPostIds: string[];
   updatedAt: string;
 }
