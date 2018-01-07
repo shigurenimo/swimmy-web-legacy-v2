@@ -16,26 +16,23 @@ module.exports = functions.https.onRequest((req, res) => {
 
     const body = req.body;
 
-    console.log(body)
-
     const Posts = admin.firestore().collection('posts');
 
-    admin.auth().verifyIdToken(idToken).then((decodedToken) => {
-      const {aud, uid, name} = decodedToken;
-      return Posts.add({
-        aud,
-        images: [],
-        ownerId: uid,
-        owner: {
-          name,
-        },
-        content: body.content,
-        createdAt: new Date(),
-        repliedPostIds: [],
-        replyPostIds: null,
-        updatedAt: new Date(),
-      });
-    }).then((data) => {
+    admin.auth().verifyIdToken(idToken)
+      .then((decodedToken) => {
+        const {aud, uid, name} = decodedToken;
+        return Posts.add({
+          aud,
+          images: [],
+          ownerId: uid,
+          owner: {name},
+          content: body.content,
+          createdAt: new Date(),
+          repliedPostIds: [],
+          replyPostIds: null,
+          updatedAt: new Date()
+        });
+      }).then((data) => {
       res.status(200).json(data);
     }).catch((err) => {
       console.log('ERROR!', err);
