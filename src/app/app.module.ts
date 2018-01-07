@@ -28,6 +28,7 @@ import { EditorPostComponent } from './editor-post/editor-post.component';
 import { DialogLoginComponent } from './dialog-login/dialog-login.component';
 import { FunctionsService } from './services/functions.service';
 import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.component';
+import { UsersService } from './services/users.service';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.com
   ],
   providers: [
     FunctionsService,
+    UsersService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
