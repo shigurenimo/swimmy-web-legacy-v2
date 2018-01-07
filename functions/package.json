@@ -11,10 +11,12 @@
   "dependencies": {
     "axios": "^0.17.1",
     "bcrypt": "^1.0.3",
+    "child-process-promise": "^2.2.1",
     "cors": "^2.8.4",
     "crypto": "^1.0.1",
     "firebase-admin": "~5.4.2",
-    "firebase-functions": "^0.7.1"
+    "firebase-functions": "^0.7.1",
+    "mkdirp-promise": "^5.0.1"
   },
   "private": true
 }
