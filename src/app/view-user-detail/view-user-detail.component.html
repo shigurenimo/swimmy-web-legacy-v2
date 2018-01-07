@@ -1,3 +1,41 @@
-<p>
-  view-user-detail works!
-</p>
+<div class="profile-icon">
+
+  <!-- アイコン -->
+  <ng-container *ngIf="afAuth.authState | async">
+
+    <button *ngIf="photoURL"
+            class="icon mat-elevation-z10"
+            (click)="imgFileInput.click()">
+      <img [src]="photoURL">
+      <input hidden type="file" #imgFileInput (change)="previewImage($event)" />
+    </button>
+
+    <!-- アイコン未設定 -->
+    <button *ngIf="!photoURL"
+            class="icon mat-elevation-z10"
+            (click)="imgFileInput.click()"
+            mat-fab>
+      <mat-icon>attach_file</mat-icon>
+      <input hidden type="file" #imgFileInput (change)="previewImage($event)" />
+    </button>
+
+  </ng-container>
+
+  <!-- 読み込み -->
+  <button *ngIf="!(afAuth.authState | async)"
+          class="icon mat-elevation-z10"
+          mat-fab>
+    <mat-icon>attach_file</mat-icon>
+  </button>
+
+</div>
+
+<div class="username">
+
+  <ng-container *ngIf="afAuth.authState | async">
+    <h1 class="mat-h1">
+      {{afAuth.auth.currentUser.displayName}}
+    </h1>
+  </ng-container>
+
+</div>
