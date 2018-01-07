@@ -4,7 +4,7 @@
   <!-- ログインしている -->
   <mat-list-item class='auth' *ngIf='afAuth.authState | async'>
 
-    <button mat-icon-button>
+    <button mat-icon-button routerLink='/{{afAuth.auth.currentUser.uid}}'>
       <mat-icon>account_circle</mat-icon>
     </button>
 
