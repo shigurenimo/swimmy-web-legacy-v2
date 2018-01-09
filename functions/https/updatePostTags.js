@@ -37,31 +37,27 @@ module.exports = functions.https.onRequest((req, res) => {
         .then((decodedToken) => {
           user = decodedToken;
 
-          const reactions = data.reactions || [];
+          const tags = data.tags || [];
 
-          const reactionIndex =
-            reactions.findIndex(reaction => reaction.name === body.name);
+          const tagIndex =
+            tags.findIndex(tag => tag.name === body.name);
 
-          console.log('reactionIndex', reactionIndex);
-
-          if (reactionIndex > -1) {
-            const reaction = reactions[reactionIndex];
-            console.log('reaction', reaction);
-            const index = reaction.uids.findIndex(uid => uid === user.uid);
-            console.log('index', index);
+          if (tagIndex > -1) {
+            const tag = tags[tagIndex];
+            const index = tag.uids.findIndex(uid => uid === user.uid);
             if (index > -1) {
-              if (reactions[index].count < 2) {
-                reactions.splice(index, 1);
+              if (tags[index].count < 2) {
+                tags.splice(index, 1);
               } else {
-                reactions[index].uids.splice(index, 1);
-                reactions[index].count = Number(reactions[index].count) - 1;
+                tags[index].uids.splice(index, 1);
+                tags[index].count = Number(tags[index].count) - 1;
               }
             } else {
-              reactions[index].uids.push(user.uid);
-              reactions[index].count = Number(reactions[index].count) + 1;
+              tags[index].uids.push(user.uid);
+              tags[index].count = Number(tags[index].count) + 1;
             }
           } else {
-            reactions.push({
+            tags.push({
               name: body.name,
               count: 1,
               uids: [user.uid]
@@ -69,7 +65,7 @@ module.exports = functions.https.onRequest((req, res) => {
           }
 
           return t.update(Posts.doc(body.id), {
-            reactions: reactions
+            tags: tags
           });
         });
     })

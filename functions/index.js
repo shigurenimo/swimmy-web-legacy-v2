@@ -11,8 +11,8 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
   exports.addPost = require('./https/addPost');
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostReaction') {
-  exports.updatePostReaction = require('./https/updatePostReaction');
+if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTags') {
+  exports.updatePostTags = require('./https/updatePostTags');
 }
 
 // storage
