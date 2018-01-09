@@ -42,12 +42,12 @@ export class ListItemPostComponent {
     return createdAt(this.createdAt);
   }
 
-  public onAddReactionClick() {
+  public onUpdateReactionClick() {
     const payload = {
       id: this.id,
-      reaction: 'hello'
+      name: '+1'
     };
-    this.fns.addReactionToPost(payload)
+    this.fns.updatePostReaction(payload)
       .then(() => {
       })
       .catch(err => {

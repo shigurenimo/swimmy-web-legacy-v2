@@ -14,8 +14,8 @@ export class FunctionsService {
     return this.callFunctionWithToken('addPost', payload);
   }
 
-  public addReactionToPost(payload) {
-    return this.callFunctionWithToken('addReactionToPost', payload);
+  public updatePostReaction(payload) {
+    return this.callFunctionWithToken('updatePostReaction', payload);
   }
 
   private callFunction(name: string, payload = {}) {
