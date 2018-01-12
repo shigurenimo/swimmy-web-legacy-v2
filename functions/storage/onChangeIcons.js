@@ -2,12 +2,11 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 
-const admin = require('firebase-admin');
-
 const {spawn} = require('child-process-promise');
+const admin = require('firebase-admin');
 const mkdirp = require('mkdirp-promise');
 
-module.exports = event => {
+module.exports = (event) => {
   const contentType = event.data.contentType;
 
   const filePath = event.data.name;
@@ -34,11 +33,11 @@ module.exports = event => {
 
   const Users = admin.firestore().collection('users');
 
-  return mkdirp(tmpDir)
-    .then(() => {
+  return mkdirp(tmpDir).
+    then(() => {
       return bucket.file(filePath).download({destination: tmpFile});
-    })
-    .then(() => {
+    }).
+    then(() => {
       // Convert
       return spawn('convert', [
         tmpFile,
@@ -48,26 +47,32 @@ module.exports = event => {
         'center',
         '-extent',
         `128x128`,
-        tmpOutFile
+        tmpOutFile,
       ], {
-        capture: ['stdout', 'stderr']
+        capture: ['stdout', 'stderr'],
       });
-    })
-    .then(() => {
+    }).
+    then(() => {
       return outBucket.upload(tmpOutFile, {
         destination: outFilePath,
-        metadata: metadata
+        metadata: metadata,
       });
-    })
-    .then(() => {
+    }).
+    then(() => {
       fs.unlinkSync(tmpFile);
       fs.unlinkSync(tmpOutFile);
-      const photoURL = toFileUrl('sw-icons', outFilePath);
+      const photoURL = toFileUrl('okinawa-likes-icons', outFilePath);
       return Users.doc(uid).set({
-        photoURL: photoURL
+        photoURL: photoURL,
       }, {merge: true});
-    })
-    .catch(err => {
+    }).
+    then(() => {
+      const photoURL = toFileUrl('okinawa-likes--icons', outFilePath);
+      return admin.auth().updateUser(uid, {
+        photoURL: photoURL,
+      });
+    }).
+    catch(err => {
       console.error(err);
     });
 };
