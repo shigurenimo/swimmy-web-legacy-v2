@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { createdAt } from '../helpers/createdAt';
 import { FunctionsService } from '../services/functions.service';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-list-item-post',
@@ -29,9 +30,13 @@ export class ListItemPostComponent {
 
   @Input() updatedAt: string;
 
-  isOpen = false;
+  public isOpen = false;
 
-  constructor(private fns: FunctionsService) {
+  public newTag;
+
+  constructor(
+    public afAuth: AngularFireAuth,
+    private fns: FunctionsService) {
   }
 
   private onOpenClick() {
