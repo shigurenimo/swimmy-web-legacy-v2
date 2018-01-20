@@ -35,6 +35,10 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'deletePost') {
   exports.deletePost = require('./https/deletePost').default;
 }
 
+if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
+  exports.graphql = require('./https/graphql').default;
+}
+
 if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTags') {
   exports.updatePostTags = require('./https/updatePostTags').default;
 }
