@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod -cc -vc -ec --aot",
     "dev:ng": "ng serve --hmr -e=hmr --host=0.0.0.0",
     "dev:functions": "firebase serve --only functions",
     "test": "ng test",
