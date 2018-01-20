@@ -1,14 +1,17 @@
-const cors = require('cors');
 const admin = require('firebase-admin');
+const cors = require('cors');
 const functions = require('firebase-functions');
 
-const errors = require('./errors');
+const {default: failureResponse} = require('./methods/failureResponse');
+const {default: getContext} = require('./methods/getContext');
+const {default: successResponse} = require('./methods/successResponse');
 
 module.exports = functions.https.onRequest((request, response) => {
   return cors({origin: true})(request, response, () => {
-    return getUser(request).
+    const args = getArguments(request);
+    return getContext(request).
       then((user) => {
-        return updatePostTag(request, user);
+        return updatePostTag(args, user);
       }).
       then(() => {
         return successResponse(response);
@@ -19,75 +22,146 @@ module.exports = functions.https.onRequest((request, response) => {
   });
 });
 
-const getUser = (request) => {
-  const {authorization} = request.headers || {};
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new Error(errors.TOKEN_NOT_FOUND);
-  }
-  const idToken = request.headers.authorization.split('Bearer ')[1];
-  return admin.auth().
-    verifyIdToken(idToken).
-    then((decodedToken) => {
-      return admin.firestore().
-        collection('users').
-        doc(decodedToken.uid).
-        get();
-    }).
-    then((snapshot) => {
-      return snapshot.exists
-        ? Object.assign({uid: snapshot.id}, snapshot.data())
-        : null;
-    });
+const getArguments = (request) => {
+  return {
+    id: request.body.id,
+    name: request.body.name || '+1',
+  };
 };
 
-const updatePostTag = (request, user) => {
+const updatePostTag = (args, user) => {
   return admin.firestore().runTransaction((t) => {
-    const ref = admin.firestore().
+    const newTagId = admin.firestore().collection('tags').doc().id;
+
+    const postRef = admin.firestore().
       collection('posts').
-      doc(request.body.id);
-    return t.get(ref).
-      then((doc) => {
-        const data = doc.data();
+      doc(args.id);
+    const userPostTagsRef = admin.firestore().
+      collection('users').
+      doc(user.uid).
+      collection('post-tags').
+      doc(args.id);
+    const tagNameRef = admin.firestore().
+      collection('tags').
+      where('name', '==', args.name);
+    return Promise.all([
+      t.get(postRef),
+      t.get(userPostTagsRef),
+      t.get(tagNameRef),
+    ]).
+      then(([postSnapshot, userPostTagsSnapshot, tagSnapshots]) => {
+        const createdAt = new Date();
 
-        const tags = data.tags || [];
+        const post = postSnapshot.data();
 
-        const tagIndex =
-          tags.findIndex((tag) => tag.name === request.body.name);
+        const postTags = post.tags;
 
-        if (tagIndex > -1) {
-          const tag = tags[tagIndex];
-          const index = tag.uids.findIndex((uid) => uid === user.uid);
-          if (index > -1) {
-            if (tags[index].count < 2) {
-              tags.splice(index, 1);
-            } else {
-              tags[index].uids.splice(index, 1);
-              tags[index].count = Number(tags[index].count) - 1;
+        const postTagId = Object.
+          keys(postTags).
+          filter((tagId) => postTags[tagId].name === args.name)[0];
+
+        const postTag = postTagId
+          ? postTags[postTagId]
+          : null;
+
+        const postTagExists = !!postTag;
+
+        const userPostTagExists = userPostTagsSnapshot.exists
+          && !!userPostTagsSnapshot.data()
+          && !!userPostTagsSnapshot.data()[postTagId];
+
+        // Postに同じ名前のタグが存在する
+        if (postTagExists) {
+          // 既にユーザが持っている
+          if (userPostTagExists) {
+            postTag.count = postTag.count - 1;
+            postTags[postTagId] = postTag;
+
+            if (postTag.count < 1 && postTag.name !== '+1') {
+              delete postTags[postTagId];
             }
-          } else {
-            tags[index].uids.push(user.uid);
-            tags[index].count = Number(tags[index].count) + 1;
+
+            t.update(userPostTagsRef, {
+              [postTagId]: admin.firestore.FieldValue.delete(),
+            });
           }
-        } else {
-          tags.push({
-            name: request.body.name,
-            count: 1,
-            uids: [user.uid],
+
+          // ユーザが持っていない
+          if (!userPostTagExists) {
+            postTag.count = postTag.count + 1;
+            postTags[postTagId] = postTag;
+
+            t.set(userPostTagsRef, {
+              [postTagId]: {
+                createdAt: createdAt,
+              },
+            }, {merge: true});
+          }
+
+          t.update(postRef, {
+            tags: postTags,
           });
         }
 
-        return t.update(ref, {
-          tags: tags,
-        });
+        // Postに同じ名前のタグが存在しない
+        if (!postTagExists) {
+          t.set(userPostTagsRef, {
+            [newTagId]: {
+              createdAt: createdAt,
+            },
+          }, {merge: true});
+
+          const newTag = {
+            count: 1,
+            createdAt: createdAt,
+            name: args.name,
+            updatedAt: createdAt,
+          };
+
+          postTags[newTagId] = newTag;
+
+          t.update(postRef, {
+            tags: postTags,
+          });
+        }
+
+        const tagSnapshot = tagSnapshots.docs[0];
+
+        const tagExists = tagSnapshot && tagSnapshot.exists;
+
+        // タグが存在する
+        if (tagExists) {
+          const tag = tagSnapshot.data();
+          const tagRef = admin.firestore().
+            collection('tags').
+            doc(tagSnapshot.id);
+          const count = tag.count + (userPostTagExists ? -1 : 1);
+          if (count < 1) {
+            if (tag.name !== '+1') {
+              t.delete(tagRef);
+            }
+          } else {
+            t.update(tagRef, {
+              count: count,
+              updatedAt: createdAt,
+            });
+          }
+        }
+
+        // タグが存在しない
+        if (!tagExists) {
+          const tagRef = admin.firestore().
+            collection('tags').
+            doc(newTagId);
+          t.set(tagRef, {
+            count: 1,
+            createdAt: createdAt,
+            name: args.name,
+            updatedAt: createdAt,
+          });
+        }
+
+        return postTagId;
       });
   });
-};
-
-const successResponse = (res) => {
-  res.end('200');
-};
-
-const failureResponse = (res, err) => {
-  console.error(err);
-  res.end('500');
 };
