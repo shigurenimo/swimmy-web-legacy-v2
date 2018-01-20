@@ -6,7 +6,7 @@ const {default: failureResponse} = require('./methods/failureResponse');
 const {default: getContext} = require('./methods/getContext');
 const {default: successResponse} = require('./methods/successResponse');
 
-module.exports = functions.https.onRequest((request, response) => {
+exports.default = functions.https.onRequest((request, response) => {
   return cors({origin: true})(request, response, () => {
     const args = getArguments(request);
     return getContext(request).

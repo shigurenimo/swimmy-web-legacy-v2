@@ -6,7 +6,7 @@ const {spawn} = require('child-process-promise');
 const admin = require('firebase-admin');
 const mkdirp = require('mkdirp-promise');
 
-module.exports = (event) => {
+exports.default = (event) => {
   const contentType = event.data.contentType;
 
   const filePath = event.data.name;

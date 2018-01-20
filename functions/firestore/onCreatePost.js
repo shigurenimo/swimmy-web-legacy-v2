@@ -1,18 +1,20 @@
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
-const eventDataLog = require('./methods/eventDataLog');
-const failureLog = require('./methods/failureLog');
-const getEventData = require('./methods/getEventData');
+const {default: eventDataLog} = require('./methods/eventDataLog');
+const {default: failureLog} = require('./methods/failureLog');
+const {default: getEventData} = require('./methods/getEventData');
 
-module.exports = functions.firestore.
+exports.default = functions.firestore.
   document('posts/{id}').
   onCreate((event) => {
     return Promise.all([
       eventDataLog(event),
       setPostToUser(event),
     ]).
-      catch(failureLog);
+      catch((err) => {
+        return failureLog(err);
+      });
   });
 
 const setPostToUser = (event) => {

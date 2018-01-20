@@ -1,3 +1,3 @@
-module.exports = (err) => {
+exports.default = (err) => {
   console.error(err);
 };

@@ -1,6 +1,6 @@
-const getData = require('./getEventData');
+const {default: getData} = require('./getEventData');
 
-module.exports = (event) => {
+exports.default = (event) => {
   const data = getData(event);
   console.log(data);
   return data;

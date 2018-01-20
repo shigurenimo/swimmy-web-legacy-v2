@@ -1,12 +1,16 @@
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
-module.exports = functions.auth.user().onCreate((event) => {
+const {default: failureLog} = require('./methods/failureLog');
+
+exports.default = functions.auth.user().onCreate((event) => {
   return Promise.all([
     updateDisplayName(event),
     addUser(event),
   ]).
-    catch(failureLog);
+    catch((err) => {
+      return failureLog(err);
+    });
 });
 
 // update displayName of user
@@ -33,12 +37,6 @@ const addUser = (event) => {
       links: [],
       photoURL: 0,
       postCount: 0,
-      postLikeCount: 0,
       updatedAt: createdAt,
     });
-};
-
-// error handler
-const failureLog = (err) => {
-  console.error(err);
 };
