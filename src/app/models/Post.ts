@@ -17,5 +17,6 @@ export class Post {
   ownerId: string;
   repliedPostIds: string[];
   replyPostIds: string[];
+  tags: string[];
   updatedAt: string;
 }
