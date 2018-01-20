@@ -11,5 +11,6 @@ import { Post } from '../models/Post';
 })
 export class TimelineComponent {
   @Input() docs$: Observable<Post[]>;
+
   @Input() loading$: Observable<boolean>;
 }

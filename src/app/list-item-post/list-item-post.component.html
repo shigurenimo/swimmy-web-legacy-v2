@@ -37,11 +37,11 @@
 <mat-list-item *ngIf="isOpen" class="actions">
 
   <mat-form-field>
-    <input matInput placeholder="新しいラベル">
+    <input [(ngModel)]="newTag" matInput placeholder="新しいタグ">
   </mat-form-field>
 
   <button mat-icon-button>
-    <mat-icon>add</mat-icon>
+    <mat-icon (click)="onAddTagClick()">add</mat-icon>
   </button>
 
 </mat-list-item>

@@ -28,11 +28,13 @@ export class ListItemPostComponent {
 
   @Input() replyPostIds: string[];
 
+  @Input() tags;
+
   @Input() updatedAt: string;
 
   public isOpen = false;
 
-  public newTag;
+  public newTag = '';
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -49,8 +51,20 @@ export class ListItemPostComponent {
 
   public onUpdateTagClick() {
     const payload = {
+      id: this.id
+    };
+    this.fns.updatePostTags(payload)
+      .then(() => {
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  public onAddTagClick() {
+    const payload = {
       id: this.id,
-      name: '+1'
+      name: this.newTag
     };
     this.fns.updatePostTags(payload)
       .then(() => {
