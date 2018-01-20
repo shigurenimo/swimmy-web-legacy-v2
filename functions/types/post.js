@@ -23,8 +23,8 @@ exports.default = {
   replyPostIds(root) {
     return root.replyPostIds;
   },
-  tags() {
-    return [];
+  tags(root) {
+    return Object.keys(root.tags).map((tagId) => root.tags[tagId]);
   },
   updatedAt(root) {
     return root.updatedAt;
