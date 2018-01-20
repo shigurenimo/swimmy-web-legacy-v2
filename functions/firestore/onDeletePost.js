@@ -1,9 +1,9 @@
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
-const {default: eventDataLog} = require('./methods/eventDataLog');
-const {default: failureLog} = require('./methods/failureLog');
-const {default: getEventData} = require('./methods/getEventData');
+const {default: eventDataLog} = require('../methods/eventDataLog');
+const {default: failureLog} = require('../methods/failureLog');
+const {default: getEventData} = require('../methods/getEventData');
 
 exports.default = functions.firestore.
   document('posts/{id}').

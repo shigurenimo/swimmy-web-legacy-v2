@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
-const {default: failureLog} = require('./methods/failureLog');
+const {default: failureLog} = require('../methods/failureLog');
 
 exports.default = functions.auth.user().onCreate((event) => {
   return Promise.all([
