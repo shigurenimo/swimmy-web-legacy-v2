@@ -1,0 +1,109 @@
+scalar DateTime
+scalar JSON
+
+input NodeWhere {
+  eq: String
+  gt: DateTime
+  gte: DateTime
+  lt: DateTime
+  lte: DateTime
+  ne: DateTime
+}
+
+input PostSort {
+  id: ID
+}
+
+input PostWhere {
+  id: NodeWhere
+}
+
+interface Node {
+  id: ID!
+}
+
+type Owner {
+  displayName: String
+  photoURL: String
+  uid: String
+}
+
+type Post implements Node {
+  content: String
+  createdAt: DateTime
+  id: ID!
+  owner: Owner
+  photoURL: String
+  photoURLs: PhotoURLs
+  repliedPostIds: [String]
+  replyPostIds: String
+  shortDescription: String
+  tags: [Tag]
+  updatedAt: DateTime
+}
+
+type PostConnection {
+  nodes: [Post]
+  totalCount: Int
+}
+
+type PhotoURLs {
+  xx32: String
+  xx64: String
+  xx128: String
+  xx256: String
+  x512: String
+  x1024: String
+  x2048: String
+}
+
+type Test {
+  hello: String
+}
+
+type Tag {
+  count: Int
+  createdAt: DateTime
+  id: ID!
+  name: String
+  updatedAt: DateTime
+}
+
+type UserLink {
+  type: String
+  name: String
+  id: String
+}
+
+type User implements Node {
+  id: ID!
+  createdAt: String
+  description: String
+  displayName: String
+  followeeCount: Int
+  followerCount: Int
+  headerPhotoURL: String
+  links: [UserLink]
+  photoURL: Int
+  postCount: Int
+  updatedAt: String
+}
+
+type Query {
+  test: Test
+
+  post (id: ID!): Post
+
+  posts (
+  skip: Int
+  limit: Int
+  sort: PostSort
+  where: PostWhere
+): PostConnection
+
+  user: User
+}
+
+type Mutation {
+  hello: String
+}
