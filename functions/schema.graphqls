@@ -37,7 +37,6 @@ type Post implements Node {
   photoURLs: PhotoURLs
   repliedPostIds: [String]
   replyPostIds: String
-  shortDescription: String
   tags: [Tag]
   updatedAt: DateTime
 }
@@ -76,13 +75,13 @@ type UserLink {
 }
 
 type User implements Node {
-  id: ID!
   createdAt: String
   description: String
   displayName: String
   followeeCount: Int
   followerCount: Int
   headerPhotoURL: String
+  id: ID!
   links: [UserLink]
   photoURL: Int
   postCount: Int
