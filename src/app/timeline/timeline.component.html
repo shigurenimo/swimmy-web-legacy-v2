@@ -1,18 +1,19 @@
-<div class='root'>
+<div class="root">
 
   <mat-list>
 
-    <app-list-item-post *ngFor='let doc of docs$ | async'
-                        [aud]='doc.aud'
-                        [content]='doc.content'
-                        [createdAt]='doc.createdAt'
-                        [id]='doc.id'
-                        [images]='doc.images'
-                        [owner]='doc.owner'
-                        [repliedPostIds]='doc.repliedPostIds'
-                        [replyPostIds]='doc.replyPostIds'
-                        [tags]='doc.tags'
-                        [updatedAt]='doc.updatedAt'>
+    <app-list-item-post
+      *ngFor="let doc of docs$ | async"
+      [aud]="doc.aud"
+      [content]="doc.content"
+      [createdAt]="doc.createdAt"
+      [id]="doc.id"
+      [images]="doc.images"
+      [owner]="doc.owner"
+      [repliedPostIds]="doc.repliedPostIds"
+      [replyPostIds]="doc.replyPostIds"
+      [tags]="doc.tags"
+      [updatedAt]="doc.updatedAt">
     </app-list-item-post>
 
   </mat-list>

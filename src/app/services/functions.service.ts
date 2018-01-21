@@ -21,7 +21,7 @@ export class FunctionsService {
   private callFunction(name: string, payload = {}) {
     return axios({
       method: 'POST',
-      url: `${environment.function}/${name}`,
+      url: `${environment.function}/${name}/`,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -34,7 +34,7 @@ export class FunctionsService {
       .then(idToken => {
         return axios({
           method: 'POST',
-          url: `${environment.function}/${name}`,
+          url: `${environment.function}/${name}/`,
           headers: {
             'authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'

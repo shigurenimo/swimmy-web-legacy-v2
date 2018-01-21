@@ -20,3 +20,11 @@ export class Post {
   tags: string[];
   updatedAt: string;
 }
+
+class Nodes {
+  nodes: Post;
+}
+
+export class PostsResult {
+  posts: Nodes;
+}

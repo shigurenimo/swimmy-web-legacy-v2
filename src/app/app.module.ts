@@ -1,14 +1,17 @@
 // Angular core modules
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
-
 // Modules not from angular core
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { Apollo, ApolloModule } from 'apollo-angular';
+import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
+import { HttpClientModule } from '@angular/common/http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import 'firebase/storage';
 
 import { environment } from '../environments/environment';
@@ -49,18 +52,22 @@ import { UsersService } from './services/users.service';
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    ApolloModule,
     AppRoutingModule,
     BrowserModule,
     FormsModule,
+    HttpClientModule,
+    HttpLinkModule,
     NoopAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
-    ServiceWorkerModule.register('/ngsw-worker.js',
-      {enabled: environment.production})
+    ServiceWorkerModule.register('/ngsw-worker.js', {
+      enabled: environment.production
+    })
   ],
   providers: [
     FunctionsService,
-    UsersService,
+    UsersService
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -71,4 +78,14 @@ import { UsersService } from './services/users.service';
   ]
 })
 export class AppModule {
+  constructor(
+    apollo: Apollo,
+    httpLink: HttpLink) {
+    apollo.create({
+      // By default, this client will send queries to the
+      // `/graphql` endpoint on the same host
+      link: httpLink.create({uri: environment.graphql}),
+      cache: new InMemoryCache()
+    });
+  }
 }

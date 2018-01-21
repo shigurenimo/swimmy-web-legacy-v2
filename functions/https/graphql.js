@@ -2,6 +2,7 @@ const {readFileSync} = require('fs');
 const {join} = require('path');
 
 const {graphqlExpress} = require('apollo-server-express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const express = require('express');
 const admin = require('firebase-admin');
@@ -50,6 +51,9 @@ const graphql = graphqlExpress((request, response) => {
   return {schema, context: {}};
 });
 
-const app = express().use(bodyParser.json(), graphql);
+const app = express().
+  use(cors({origin: true})).
+  use(bodyParser.json()).
+  use(graphql);
 
 exports.default = functions.https.onRequest(app);

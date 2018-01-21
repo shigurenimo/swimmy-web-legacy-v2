@@ -9,5 +9,6 @@ export const environment = {
     storageBucket: 'swimmy-171720.appspot.com',
     messagingSenderId: '105044844269'
   },
-  function: 'https://us-central1-swimmy-171720.cloudfunctions.net'
+  function: 'https://us-central1-swimmy-171720.cloudfunctions.net',
+  graphql: 'https://us-central1-swimmy-171720.cloudfunctions.net/graphql/'
 };
