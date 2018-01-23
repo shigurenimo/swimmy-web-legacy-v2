@@ -25,7 +25,7 @@ exports.default = functions.https.onRequest((request, response) => {
 const getArguments = (request) => {
   return {
     id: request.body.id,
-    name: request.body.name || '+1',
+    name: request.body.name || 'like',
   };
 };
 
@@ -77,7 +77,7 @@ const updatePostTag = (args, user) => {
             postTag.count = postTag.count - 1;
             postTags[postTagId] = postTag;
 
-            if (postTag.count < 1 && postTag.name !== '+1') {
+            if (postTag.count < 1 && postTag.name !== 'like') {
               delete postTags[postTagId];
             }
 
@@ -137,7 +137,7 @@ const updatePostTag = (args, user) => {
             doc(tagSnapshot.id);
           const count = tag.count + (userPostTagExists ? -1 : 1);
           if (count < 1) {
-            if (tag.name !== '+1') {
+            if (tag.name !== 'like') {
               t.delete(tagRef);
             }
           } else {
@@ -161,7 +161,11 @@ const updatePostTag = (args, user) => {
           });
         }
 
-        return postTagId;
+        post.tags[postTagId] = postTag;
+
+        return Object.assign({id: postSnapshot.id}, post);
       });
   });
 };
+
+exports.updatePostTag = updatePostTag;
