@@ -1,31 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
-import { postsQuery } from '../queries/posts';
-import { Post, PostsResult } from '../models/Post';
+
+import { Post } from '../models/Post';
+import { PostsService } from '../services/posts.service';
 
 @Component({
   selector: 'app-view-home',
   templateUrl: './view-home.component.html',
   styleUrls: ['./view-home.component.css']
 })
-export class ViewHomeComponent {
+export class ViewHomeComponent implements OnInit {
   public nodes$: Observable<Post>;
 
-  constructor(private apollo: Apollo) {
-    this.getDocs();
+  constructor(private posts: PostsService) {
   }
 
-  private getDocs() {
-    this.nodes$ = this.apollo
-      .query({query: postsQuery})
-      .map((res) => {
-        return res.data as PostsResult;
-      })
-      .map((res) => {
-        console.log(res.posts.nodes);
-        return res.posts.nodes;
-      });
+  public ngOnInit() {
+    this.nodes$ = this.posts.getDocs();
   }
 }

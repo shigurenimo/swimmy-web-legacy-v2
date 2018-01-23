@@ -14,7 +14,7 @@ export class FunctionsService {
     return this.callFunctionWithToken('addPost', payload);
   }
 
-  public updatePostTags(payload) {
+  public updatePostTag(payload) {
     return this.callFunctionWithToken('updatePostTags', payload);
   }
 

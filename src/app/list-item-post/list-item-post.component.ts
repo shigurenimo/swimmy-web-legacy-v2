@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
 import { createdAt } from '../helpers/createdAt';
-import { FunctionsService } from '../services/functions.service';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { PostsService } from '../services/posts.service';
 
 @Component({
   selector: 'app-list-item-post',
@@ -38,7 +38,7 @@ export class ListItemPostComponent {
 
   constructor(
     public afAuth: AngularFireAuth,
-    private fns: FunctionsService) {
+    private posts: PostsService) {
   }
 
   private onOpenClick() {
@@ -49,28 +49,27 @@ export class ListItemPostComponent {
     return createdAt(this.createdAt);
   }
 
-  public onUpdateTagClick() {
-    const payload = {
-      id: this.id
+  public onUpdateTagClick(name = 'like') {
+    const variables = {
+      id: this.id,
+      name: name
     };
-    this.fns.updatePostTags(payload)
-      .then(() => {
-      })
-      .catch(err => {
-        console.error(err);
+    this.posts.updateTag(variables)
+      .subscribe(() => {
+      }, (err) => {
+        console.log(err);
       });
   }
 
   public onAddTagClick() {
-    const payload = {
+    const variables = {
       id: this.id,
       name: this.newTag
     };
-    this.fns.updatePostTags(payload)
-      .then(() => {
-      })
-      .catch(err => {
-        console.error(err);
+    this.posts.updateTag(variables)
+      .subscribe(() => {
+      }, (err) => {
+        console.log(err);
       });
   }
 }

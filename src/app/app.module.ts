@@ -1,17 +1,18 @@
-// Angular core modules
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
-// Modules not from angular core
-import { AngularFireAuthModule } from 'angularfire2/auth';
+import { HttpClientModule, HttpHeaders } from '@angular/common/http';
+
+import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
-import { HttpClientModule } from '@angular/common/http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { setContext } from 'apollo-link-context';
+
 import 'firebase/storage';
 
 import { environment } from '../environments/environment';
@@ -32,6 +33,7 @@ import { DialogLoginComponent } from './dialog-login/dialog-login.component';
 import { FunctionsService } from './services/functions.service';
 import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.component';
 import { UsersService } from './services/users.service';
+import { PostsService } from './services/posts.service';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { UsersService } from './services/users.service';
   ],
   providers: [
     FunctionsService,
-    UsersService
+    UsersService,
+    PostsService
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -79,12 +82,26 @@ import { UsersService } from './services/users.service';
 })
 export class AppModule {
   constructor(
-    apollo: Apollo,
-    httpLink: HttpLink) {
+    private apollo: Apollo,
+    private httpLink: HttpLink,
+    private afAuth: AngularFireAuth) {
+    const http = httpLink.create({uri: environment.graphql});
+
+    const bearerHttp = setContext(() => {
+      if (afAuth.auth.currentUser) {
+        return afAuth.auth.currentUser.getIdToken().then((idToken) => {
+          const bearer = `Bearer ${idToken}`;
+          return {
+            headers: new HttpHeaders().set('authorization', bearer)
+          };
+        });
+      } else {
+        return {};
+      }
+    });
+
     apollo.create({
-      // By default, this client will send queries to the
-      // `/graphql` endpoint on the same host
-      link: httpLink.create({uri: environment.graphql}),
+      link: bearerHttp.concat(http),
       cache: new InMemoryCache()
     });
   }

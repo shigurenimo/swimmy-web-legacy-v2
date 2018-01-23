@@ -16,15 +16,14 @@
 
 <mat-list-item class="actions">
 
-  <button mat-icon-button>
-    <mat-icon>sms</mat-icon>
+  <button *ngFor="let tag of tags"
+          mat-button
+          (click)="onUpdateTagClick(tag.name)">
+    {{tag.name}} {{tag.count}}
   </button>
 
-  <button *ngIf="afAuth.authState|async"
-          mat-icon-button>
-    <span (click)="onUpdateTagClick()">
-      +{{plus.count}}
-    </span>
+  <button mat-icon-button>
+    <mat-icon>sms</mat-icon>
   </button>
 
   <button *ngIf="afAuth.authState|async"

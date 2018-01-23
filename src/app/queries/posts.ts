@@ -4,6 +4,7 @@ export const postsQuery = gql`
   query {
     posts {
       nodes {
+        __typename
         content
         createdAt
         id
@@ -16,10 +17,6 @@ export const postsQuery = gql`
         }
         photoURLs {
           x512
-        }
-        plus {
-          name
-          count
         }
         repliedPostIds
         replyPostIds
