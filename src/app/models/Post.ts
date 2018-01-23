@@ -6,6 +6,11 @@ class Owner {
   name: string;
 }
 
+class Tag {
+  name: string;
+  count: number;
+}
+
 export class Post {
   aud: string;
   channelId: string;
@@ -14,10 +19,10 @@ export class Post {
   id: string;
   images: Image[];
   owner: Owner;
-  ownerId: string;
+  plus: Tag;
   repliedPostIds: string[];
   replyPostIds: string[];
-  tags: string[];
+  tags: Tag[];
   updatedAt: string;
 }
 

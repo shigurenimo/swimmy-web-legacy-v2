@@ -4,12 +4,12 @@
 
   <app-list-item-post
     *ngFor="let node of nodes$ | async"
-    [aud]="node.aud"
     [content]="node.content"
     [createdAt]="node.createdAt"
     [id]="node.id"
     [images]="node.images"
     [owner]="node.owner"
+    [plus]="node.plus"
     [repliedPostIds]="node.repliedPostIds"
     [replyPostIds]="node.replyPostIds"
     [tags]="node.tags"

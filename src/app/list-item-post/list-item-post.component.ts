@@ -10,8 +10,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
   styleUrls: ['./list-item-post.component.css']
 })
 export class ListItemPostComponent {
-  @Input() aud: string;
-
   @Input() content: string;
 
   @Input() createdAt: string;
@@ -23,6 +21,8 @@ export class ListItemPostComponent {
   @Input() owner: object;
 
   @Input() ownerId: string;
+
+  @Input() plus;
 
   @Input() repliedPostIds: string[];
 

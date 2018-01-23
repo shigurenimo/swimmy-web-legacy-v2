@@ -24,6 +24,7 @@ export class ViewHomeComponent {
         return res.data as PostsResult;
       })
       .map((res) => {
+        console.log(res.posts.nodes);
         return res.posts.nodes;
       });
   }

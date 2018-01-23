@@ -22,7 +22,9 @@
 
   <button *ngIf="afAuth.authState|async"
           mat-icon-button>
-    <mat-icon (click)="onUpdateTagClick()">plus_one</mat-icon>
+    <span (click)="onUpdateTagClick()">
+      +{{plus.count}}
+    </span>
   </button>
 
   <button *ngIf="afAuth.authState|async"
