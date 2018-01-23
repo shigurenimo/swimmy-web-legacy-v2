@@ -33,8 +33,8 @@ type Post implements Node {
   createdAt: DateTime
   id: ID!
   owner: Owner
-  photoURL: String
-  photoURLs: PhotoURLs
+  photoURL: PhotoURL
+  photoURLs: [PhotoURL]
   repliedPostIds: [String]
   replyPostIds: String
   tags: [Tag]
@@ -46,7 +46,7 @@ type PostConnection {
   totalCount: Int
 }
 
-type PhotoURLs {
+type PhotoURL {
   xx32: String
   xx64: String
   xx128: String
@@ -105,4 +105,6 @@ type Query {
 
 type Mutation {
   hello: String
+
+  updatePostTag(id: String!, name: String): Post
 }
