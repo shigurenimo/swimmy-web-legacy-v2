@@ -14,11 +14,8 @@ exports.default = (event) => {
   const fileName = path.basename(filePath);
   // icons/rwRKm6OsSggwAS6zEJYsYRDJyXw1.png
 
-  const uid = fileName.match(/(.*)(?:\.([^.]+$))/)[1];
+  const uid = fileName.replace('icons/', '');
   // rwRKm6OsSggwAS6zEJYsYRDJyXw1
-
-  const outFilePath = path.normalize(fileName);
-  // rwRKm6OsSggwAS6zEJYsYRDJyXw1.png
 
   const tmp = os.tmpdir();
   const tmpDir = path.join(tmp, 'icons');
@@ -54,20 +51,20 @@ exports.default = (event) => {
     }).
     then(() => {
       return outBucket.upload(tmpOutFile, {
-        destination: outFilePath,
+        destination: uid,
         metadata: metadata,
       });
     }).
     then(() => {
       fs.unlinkSync(tmpFile);
       fs.unlinkSync(tmpOutFile);
-      const photoURL = toFileUrl('okinawa-likes-icons', outFilePath);
+      const photoURL = toFileUrl('sw-icons', uid);
       return Users.doc(uid).set({
         photoURL: photoURL,
       }, {merge: true});
     }).
     then(() => {
-      const photoURL = toFileUrl('okinawa-likes--icons', outFilePath);
+      const photoURL = toFileUrl('sw-icons', uid);
       return admin.auth().updateUser(uid, {
         photoURL: photoURL,
       });

@@ -26,11 +26,7 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
   public previewImage(e) {
     const uid = this.afAuth.app.auth().currentUser.uid;
     const file = e.target.files[0];
-    const ext = this.getExt(file.type);
-    if (!ext) {
-      return;
-    }
-    const fileName = `${uid}.${ext}`;
+    const fileName = `${uid}`;
     const filePath = `icons/${fileName}`;
     const storageRef = firebase.storage().ref(filePath);
     const task = storageRef.put(file);
@@ -48,14 +44,5 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.userSub.unsubscribe();
-  }
-
-  private getExt(type) {
-    switch (type) {
-      case 'image/png':
-        return 'png';
-      case 'image/jpeg':
-        return 'jpg';
-    }
   }
 }
