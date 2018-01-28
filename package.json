@@ -3,17 +3,16 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
     "build": "ng build --prod -cc -vc -ec --aot",
-    "dev:ng": "ng serve --hmr -e=hmr --host=0.0.0.0",
     "dev:functions": "firebase serve --only functions",
-    "test": "ng test",
-    "lint": "ng lint",
+    "dev:ng": "ng serve --hmr -e=hmr --host=0.0.0.0",
     "e2e": "ng e2e",
-    "reset": "rm ~/.config/gcloud/application_default_credentials.json"
+    "lint": "ng lint",
+    "ng": "ng",
+    "reset": "rm ~/.config/gcloud/application_default_credentials.json",
+    "start": "ng serve",
+    "test": "ng test"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^5.1.0",
     "@angular/cdk": "^5.0.0",
@@ -67,5 +66,6 @@
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
     "typescript": "~2.4.2"
-  }
+  },
+  "private": true
 }
