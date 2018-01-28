@@ -9,7 +9,7 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const {makeExecutableSchema} = require('graphql-tools');
 
-const {default: failureResponse} = require('../methods/failureResponse');
+const {default: failureResponse} = require('../helpers/failureResponse');
 const resolvers = require('../resolvers');
 
 const typeDefsFile = join(__dirname, '..', 'schema.graphqls');

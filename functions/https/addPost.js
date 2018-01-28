@@ -2,9 +2,9 @@ const cors = require('cors');
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
-const {default: failureResponse} = require('../methods/failureResponse');
-const {default: getContext} = require('../methods/getContext');
-const {default: successResponse} = require('../methods/successResponse');
+const failureResponse = require('../helpers/failureResponse').default;
+const getContext = require('../helpers/getContext').default;
+const successResponse = require('../helpers/successResponse').default;
 
 exports.default = functions.https.onRequest((request, response) => {
   return cors({origin: true})(request, response, () => {

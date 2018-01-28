@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-const {default: errors} = require('./errorMessage');
+const errors = require('./errorMessage').default;
 
 exports.default = (req) => {
   const {authorization} = req.headers || {};
