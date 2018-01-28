@@ -1,5 +1,5 @@
 exports.default = (root, args, context) => {
   return {
-    user: context,
+    user: context.user,
   };
 };

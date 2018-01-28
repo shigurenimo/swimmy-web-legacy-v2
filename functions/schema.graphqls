@@ -1,25 +1,36 @@
 scalar DateTime
 scalar JSON
 
-input NodeWhere {
-  eq: String
-  gt: DateTime
-  gte: DateTime
-  lt: DateTime
-  lte: DateTime
-  ne: DateTime
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+enum OrderField {
+  CREATED_AT
+  UPDATED_AT
+}
+
+input PostOrderBy {
+  field: OrderField!
+  direction: OrderDirection!
 }
 
 input PostSort {
   id: ID
 }
 
-input PostWhere {
-  id: NodeWhere
+input TagOrderBy {
+  field: OrderField!
+  direction: OrderDirection!
 }
 
 interface Node {
   id: ID!
+}
+
+interface Connection {
+  totalCount: Int
 }
 
 type Owner {
@@ -41,16 +52,15 @@ type Post implements Node {
   updatedAt: DateTime
 }
 
-type PostConnection {
+type PostConnection implements Connection {
   nodes: [Post]
   totalCount: Int
 }
 
 type PhotoURL {
-  xx32: String
-  xx64: String
-  xx128: String
   xx256: String
+  xx512: String
+  xx1024: String
   x512: String
   x1024: String
   x2048: String
@@ -68,6 +78,11 @@ type Tag {
   updatedAt: DateTime
 }
 
+type TagConnection implements Connection {
+  nodes: [Tag]
+  totalCount: Int
+}
+
 type UserLink {
   type: String
   name: String
@@ -83,9 +98,13 @@ type User implements Node {
   headerPhotoURL: String
   id: ID!
   links: [UserLink]
-  photoURL: Int
+  photoURL: String
   postCount: Int
   updatedAt: String
+}
+
+type Viewer {
+  user: User
 }
 
 type Query {
@@ -93,14 +112,15 @@ type Query {
 
   post (id: ID!): Post
 
-  posts (
-  skip: Int
-  limit: Int
-  sort: PostSort
-  where: PostWhere
-): PostConnection
+  posts (limit: Int orderBy: PostOrderBy): PostConnection
 
-  user: User
+  tag (id: ID!): Tag
+
+  tags (limit: Int orderBy: TagOrderBy): TagConnection
+
+  user (id: ID!): User
+
+  viewer: Viewer
 }
 
 type Mutation {
