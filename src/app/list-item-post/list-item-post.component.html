@@ -18,15 +18,15 @@
 
   <button *ngFor="let tag of tags"
           mat-button
-          (click)="onUpdateTagClick(tag.name)">
-    {{tag.name}} {{tag.count}}
+          (click)="onUpdateTagClick(tag?.name)">
+    {{tag?.name}} {{tag?.count}}
   </button>
 
   <button mat-icon-button>
     <mat-icon>sms</mat-icon>
   </button>
 
-  <button *ngIf="afAuth.authState|async"
+  <button *ngIf="afa.authState|async"
           mat-icon-button
           (click)="onOpenClick()">
     <mat-icon *ngIf="isOpen">keyboard_arrow_up</mat-icon>

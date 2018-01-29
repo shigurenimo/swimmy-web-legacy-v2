@@ -21,3 +21,8 @@
   opacity: 0.8;
   font-size: 20px;
 }
+
+.mat-button {
+  min-width: auto;
+  padding: 0 8px;
+}

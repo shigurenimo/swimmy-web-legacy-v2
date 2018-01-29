@@ -37,7 +37,7 @@ export class ListItemPostComponent {
   public newTag = '';
 
   constructor(
-    public afAuth: AngularFireAuth,
+    public afa: AngularFireAuth,
     private posts: PostsService) {
   }
 
@@ -54,6 +54,9 @@ export class ListItemPostComponent {
       id: this.id,
       name: name
     };
+    if (!this.afa.auth.currentUser) {
+      return;
+    }
     this.posts.updateTag(variables)
       .subscribe(() => {
       }, (err) => {
@@ -66,6 +69,9 @@ export class ListItemPostComponent {
       id: this.id,
       name: this.newTag
     };
+    if (!this.afa.auth.currentUser) {
+      return;
+    }
     this.posts.updateTag(variables)
       .subscribe(() => {
       }, (err) => {
