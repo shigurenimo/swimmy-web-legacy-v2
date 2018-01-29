@@ -89,12 +89,13 @@ export class AppModule {
 
     const bearerHttp = setContext(() => {
       if (afAuth.auth.currentUser) {
-        return afAuth.auth.currentUser.getIdToken().then((idToken) => {
-          const bearer = `Bearer ${idToken}`;
-          return {
-            headers: new HttpHeaders().set('authorization', bearer)
-          };
-        });
+        return afAuth.auth.currentUser.getIdToken()
+          .then((idToken) => {
+            const bearer = `Bearer ${idToken}`;
+            return {
+              headers: new HttpHeaders().set('authorization', bearer)
+            };
+          });
       } else {
         return {};
       }
