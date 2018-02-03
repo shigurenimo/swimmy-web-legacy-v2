@@ -4,13 +4,14 @@ export const postsQuery = gql`
   query {
     posts {
       nodes {
-        __typename
+        id
         content
         createdAt
-        id
         owner {
+          id
           displayName
           photoURL
+          uid
         }
         photoURL {
           x512
@@ -21,6 +22,7 @@ export const postsQuery = gql`
         repliedPostIds
         replyPostIds
         tags {
+          id
           name
           count
         }

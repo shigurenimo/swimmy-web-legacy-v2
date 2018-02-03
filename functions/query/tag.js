@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-exports.default = (root, args, context) => {
+exports.default = (root, args) => {
   return admin.
     firestore().
     collection('tags').
@@ -8,6 +8,6 @@ exports.default = (root, args, context) => {
     get().
     then((snapshot) => {
       if (!snapshot.exists) return null;
-      return Object.assign(snapshot.data(), {id: snapshot.id});
+      return Object.assign({id: snapshot.id}, snapshot.data());
     });
 };

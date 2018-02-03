@@ -49,7 +49,7 @@ export class ListItemPostComponent {
     return createdAt(this.createdAt);
   }
 
-  public onUpdateTagClick(name = 'like') {
+  public onUpdateTag(name = 'like') {
     const variables = {
       id: this.id,
       name: name
@@ -58,13 +58,13 @@ export class ListItemPostComponent {
       return;
     }
     this.posts.updateTag(variables)
-      .subscribe(() => {
+      .subscribe((next) => {
       }, (err) => {
         console.log(err);
       });
   }
 
-  public onAddTagClick() {
+  public onAddTag() {
     const variables = {
       id: this.id,
       name: this.newTag

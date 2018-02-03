@@ -1,4 +1,7 @@
 exports.default = {
+  id(root) {
+    return root.uid;
+  },
   createdAt(root) {
     return root.createdAt;
   },
@@ -16,9 +19,6 @@ exports.default = {
   },
   headerPhotoURL(root) {
     return root.headerPhotoURL;
-  },
-  id(root) {
-    return root.uid;
   },
   links(root) {
     return root.links;

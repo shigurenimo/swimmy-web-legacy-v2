@@ -39,10 +39,7 @@ const graphql = graphqlExpress((request, response) => {
           : null;
       }).
       then((user) => {
-        return {
-          schema,
-          context: user,
-        };
+        return {schema, context: {user}};
       }).
       catch((err) => {
         return failureResponse(response, err);
@@ -52,14 +49,14 @@ const graphql = graphqlExpress((request, response) => {
 });
 
 const app = express().
-  use(cors({origin: true})).
+  use(cors()).
   use(bodyParser.json()).
   use(graphql);
 
 exports.default = functions.https.onRequest((request, response) => {
-  request.method = 'POST';
-  request.url = '/';
   if (Object.keys(request.query).length) {
+    request.method = 'POST';
+    request.url = '/';
     request.body = request.query;
     if (request.body.operationName) {
       request.body.operationName = JSON.parse(request.body.operationName);
@@ -68,6 +65,5 @@ exports.default = functions.https.onRequest((request, response) => {
       request.body.variables = JSON.parse(request.body.variables);
     }
   }
-  console.log('body', request.body);
   return app(request, response);
 });

@@ -1,12 +1,12 @@
 exports.default = {
+  id(root) {
+    return root.id;
+  },
   count(root) {
     return root.count;
   },
   createdAt(root) {
     return root.createdAt;
-  },
-  id(root) {
-    return root.id;
   },
   name(root) {
     return root.name;

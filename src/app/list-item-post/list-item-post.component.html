@@ -18,7 +18,7 @@
 
   <button *ngFor="let tag of tags"
           mat-button
-          (click)="onUpdateTagClick(tag?.name)">
+          (click)="onUpdateTag(tag?.name)">
     {{tag?.name}} {{tag?.count}}
   </button>
 
@@ -42,7 +42,7 @@
   </mat-form-field>
 
   <button mat-icon-button>
-    <mat-icon (click)="onAddTagClick()">add</mat-icon>
+    <mat-icon (click)="onAddTag()">add</mat-icon>
   </button>
 
 </mat-list-item>

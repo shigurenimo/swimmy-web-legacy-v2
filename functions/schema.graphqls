@@ -34,6 +34,7 @@ interface Connection {
 }
 
 type Owner {
+  id: ID!
   displayName: String
   photoURL: String
   uid: String
@@ -126,5 +127,5 @@ type Query {
 type Mutation {
   hello: String
 
-  updatePostTag(id: String!, name: String): Post
+  updatePostTag(id: String!, name: String): Tag
 }
