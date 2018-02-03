@@ -7,12 +7,12 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
 import 'firebase/storage';
+import { enUS, NgZorroAntdModule, NZ_LOCALE } from 'ng-zorro-antd';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -49,13 +49,13 @@ import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.com
   imports: [
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
     ApolloModule,
     AppRoutingModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
     HttpLinkModule,
+    NgZorroAntdModule.forRoot(),
     NoopAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
@@ -66,7 +66,8 @@ import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.com
   providers: [
     FunctionsService,
     PostsService,
-    UsersService
+    UsersService,
+    {provide: NZ_LOCALE, useValue: enUS}
   ],
   bootstrap: [
     AppComponent

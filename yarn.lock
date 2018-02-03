@@ -5346,7 +5346,7 @@ modelo@^4.2.0:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/modelo/-/modelo-4.2.3.tgz#b278588a4db87fc1e5107ae3a277c0876f38d894"
 
-moment@2.x.x:
+moment@2.x.x, moment@^2.18.1:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
@@ -5446,6 +5446,14 @@ nested-error-stacks@^1.0.0:
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-1.0.2.tgz#19f619591519f096769a5ba9a86e6eeec823c3cf"
   dependencies:
     inherits "~2.0.1"
+
+ng-zorro-antd@^0.6.13:
+  version "0.6.13"
+  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-0.6.13.tgz#db1031b7d034a710be9b2019b7f31fff3e1520a5"
+  dependencies:
+    "@angular/cdk" "^5.0.0"
+    moment "^2.18.1"
+    tslib "^1.7.1"
 
 no-case@^2.2.0:
   version "2.3.2"
