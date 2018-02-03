@@ -56,4 +56,18 @@ const app = express().
   use(bodyParser.json()).
   use(graphql);
 
-exports.default = functions.https.onRequest(app);
+exports.default = functions.https.onRequest((request, response) => {
+  request.method = 'POST';
+  request.url = '/';
+  if (Object.keys(request.query).length) {
+    request.body = request.query;
+    if (request.body.operationName) {
+      request.body.operationName = JSON.parse(request.body.operationName);
+    }
+    if (request.body.variables) {
+      request.body.variables = JSON.parse(request.body.variables);
+    }
+  }
+  console.log('body', request.body);
+  return app(request, response);
+});

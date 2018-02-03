@@ -10,5 +10,5 @@ export const environment = {
     messagingSenderId: '105044844269'
   },
   function: 'http://localhost:5000/swimmy-171720/us-central1',
-  graphql: 'http://localhost:5000/swimmy-171720/us-central1/graphql/'
+  graphql: 'http://localhost:5000/swimmy-171720/us-central1/graphql'
 };

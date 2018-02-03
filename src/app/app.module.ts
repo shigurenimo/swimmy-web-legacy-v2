@@ -85,7 +85,12 @@ export class AppModule {
     private apollo: Apollo,
     private httpLink: HttpLink,
     private afAuth: AngularFireAuth) {
-    const http = httpLink.create({uri: environment.graphql});
+    const http = httpLink.create({
+      uri: environment.graphql,
+      method: 'GET'
+    });
+
+    const cache = new InMemoryCache();
 
     const bearerHttp = setContext(() => {
       if (afAuth.auth.currentUser) {
@@ -103,7 +108,7 @@ export class AppModule {
 
     apollo.create({
       link: bearerHttp.concat(http),
-      cache: new InMemoryCache()
+      cache: cache
     });
   }
 }
