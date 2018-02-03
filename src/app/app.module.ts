@@ -25,7 +25,6 @@ import { FunctionsService } from './services/functions.service';
 import { UsersService } from './services/users.service';
 import { PostsService } from './services/posts.service';
 import { SidenavComponent } from './sidenav/sidenav.component';
-import { TimelineComponent } from './timeline/timeline.component';
 import { ViewHomeComponent } from './view-home/view-home.component';
 import { ViewLoginComponent } from './view-login/view-login.component';
 import { ViewConfigComponent } from './view-config/view-config.component';
@@ -40,7 +39,6 @@ import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.com
     DialogLoginComponent,
     ListItemPostComponent,
     SidenavComponent,
-    TimelineComponent,
     ViewConfigComponent,
     ViewHomeComponent,
     ViewInfoComponent,
