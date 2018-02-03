@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FunctionsService } from '../services/functions.service';
-import {
-  FormBuilder, FormControl, FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-editor-post',
@@ -11,35 +8,41 @@ import {
   styleUrls: ['./editor-post.component.css']
 })
 export class EditorPostComponent implements OnInit {
-  public options: FormGroup;
+  private formGroup: FormGroup;
 
-  public content = new FormControl('', [Validators.maxLength(400)]);
+  private controlsConfig = {
+    content: [
+      '', [
+        Validators.maxLength(20)
+      ]
+    ]
+  };
 
-  private inProgress = false;
+  public nzAutosize = {minRows: 2, maxRows: 6};
+
+  public nzPlaceHolder = '新しい書き込み';
+
+  public isStorage = false;
+
+  public isMutation = false;
 
   constructor(
     private fns: FunctionsService,
-    private fb: FormBuilder) {
-    this.options = fb.group({
-      hideRequired: false,
-      floatLabel: 'auto'
-    });
+    private formBuilder: FormBuilder) {
   }
 
-  public get contentError() {
-    if (this.content.hasError('failure')) {
-      return '失敗しました';
-    }
-    return '';
+  public get content() {
+    return this.formGroup.get('content');
   }
 
-  public ngOnInit() {
-  }
-
-  public onCreatePostClick() {
+  public onAddPost() {
+    this.isMutation = true;
+    const content = this.content.value;
     const payload = {
-      content: this.content.value
+      content: content
     };
+    console.log(payload);
+    /*
     this.fns.addPost(payload)
       .then(() => {
         this.content.setValue('');
@@ -48,5 +51,10 @@ export class EditorPostComponent implements OnInit {
         console.error(err);
         this.content.setErrors({failure: true});
       });
+    */
+  }
+
+  public ngOnInit() {
+    this.formGroup = this.formBuilder.group(this.controlsConfig);
   }
 }

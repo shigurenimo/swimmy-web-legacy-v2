@@ -1,21 +1,30 @@
-<mat-form-field>
-  <input matInput placeholder='新しい書き込み' [formControl]='content'>
-  <mat-error *ngIf='content.invalid'>
-    {{contentError}}
-  </mat-error>
-</mat-form-field>
+<form nz-form [formGroup]="formGroup">
 
-<div class='actions'>
+  <div nz-form-control>
+    <nz-input formControlName="content"
+              nzType="textarea"
+              [nzAutosize]="nzAutosize"
+              [nzPlaceHolder]="nzPlaceHolder"
+              [nzDisabled]="isMutation">
+    </nz-input>
+  </div>
 
-  <button mat-mini-fab color='primary' class='send'>
-    <mat-icon>keyboard_return</mat-icon>
-  </button>
+  <div class="actions" nz-form-control>
 
-  <button mat-mini-fab
-          color='primary'
-          class='send'
-          (click)='onCreatePostClick()'>
-    <mat-icon>create</mat-icon>
-  </button>
+    <button class="input"
+            nz-button
+            [disabled]="isMutation">
+      <i class="anticon anticon-link"></i>
+      <span>画像</span>
+    </button>
 
-</div>
+    <button class="input"
+            nz-button
+            (click)="onAddPost()"
+            [nzLoading]="isMutation">
+      <span>送信</span>
+    </button>
+
+  </div>
+
+</form>

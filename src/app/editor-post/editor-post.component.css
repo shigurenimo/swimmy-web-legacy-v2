@@ -3,17 +3,16 @@
   box-sizing: border-box;
 }
 
-.mat-form-field {
-  flex: 1;
-  width: 100%;
-}
-
 .actions {
   display: flex;
   justify-content: flex-end;
-  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
-button.send {
+.actions .input {
   margin-left: 10px;
+}
+
+.error {
+  padding-top: 10px;
 }
