@@ -1,6 +1,6 @@
 exports.default = {
   id(root) {
-    return root.uid;
+    return root.id;
   },
   createdAt(root) {
     return root.createdAt;
@@ -28,6 +28,9 @@ exports.default = {
   },
   postCount(root) {
     return root.postCount;
+  },
+  uid(root) {
+    return root.id;
   },
   updatedAt(root) {
     return root.updatedAt;

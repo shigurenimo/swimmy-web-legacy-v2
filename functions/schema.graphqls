@@ -41,9 +41,9 @@ type Owner {
 }
 
 type Post implements Node {
+  id: ID!
   content: String
   createdAt: DateTime
-  id: ID!
   owner: Owner
   photoURL: PhotoURL
   photoURLs: [PhotoURL]
@@ -72,9 +72,9 @@ type Test {
 }
 
 type Tag {
+  id: ID!
   count: Int
   createdAt: DateTime
-  id: ID!
   name: String
   updatedAt: DateTime
 }
@@ -85,23 +85,24 @@ type TagConnection implements Connection {
 }
 
 type UserLink {
+  id: ID!
   type: String
   name: String
-  id: String
 }
 
 type User implements Node {
+  id: ID!
   createdAt: String
   description: String
   displayName: String
   followeeCount: Int
   followerCount: Int
   headerPhotoURL: String
-  id: ID!
   links: [UserLink]
   photoURL: String
   postCount: Int
   updatedAt: String
+  uid: String
 }
 
 type Viewer {

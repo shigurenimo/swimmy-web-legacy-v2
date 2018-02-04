@@ -24,6 +24,10 @@
   overflow-y: auto;
 }
 
+/**
+ * textarea
+ */
+
 ::ng-deep textarea.ant-input {
   min-height: 28px;
   resize: none;

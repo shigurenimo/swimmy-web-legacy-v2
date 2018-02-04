@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 
-const onChangeIcons = require('./onChangeIcons');
+const onChangeIcons = require('./onChangeIcons').default;
 
 exports.default = functions.storage.object().onChange((event) => {
   // リソースの状態
@@ -25,8 +25,6 @@ exports.default = functions.storage.object().onChange((event) => {
   }
 
   const filePath = event.data.name;
-
-  console.log('filePath', filePath);
 
   if (filePath.includes('icons/')) {
     return onChangeIcons(event);

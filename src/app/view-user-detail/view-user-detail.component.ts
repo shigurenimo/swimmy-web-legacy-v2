@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-
-import * as firebase from 'firebase/app';
+import { ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 
+import { User } from '../interfaces/User';
 import { UsersService } from '../services/users.service';
-import { User } from '../models/User';
+import * as firebase from 'firebase/app';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-view-user-detail',
@@ -13,33 +13,71 @@ import { User } from '../models/User';
   styleUrls: ['./view-user-detail.component.css']
 })
 export class ViewUserDetailComponent implements OnInit, OnDestroy {
+  public createdAt;
+
+  public description;
+
+  public followeeCount;
+
+  public followerCount;
+
+  public headerPhotoURL;
+
   public photoURL;
 
+  public postCount;
+
+  public file;
+
+  private uploadText = 'アップロード中..';
+
   private userSub;
+
+  private uploadMessageId = null;
 
   constructor(
     private route: ActivatedRoute,
     private users: UsersService,
+    private nzMessage: NzMessageService,
     public afAuth: AngularFireAuth) {
   }
 
-  public previewImage(e) {
+  public onUpload(e) {
+    if (!this.afAuth.app.auth().currentUser) {
+      return;
+    }
     const uid = this.afAuth.app.auth().currentUser.uid;
-    const file = e.target.files[0];
-    const fileName = `${uid}`;
-    const filePath = `icons/${fileName}`;
+    if (this.route.snapshot.params.uid !== uid) {
+      return;
+    }
+    this.uploadMessageId =
+      this.nzMessage.loading(this.uploadText).messageId;
+    this.file = e.file;
+    const file = e.file.originFileObj;
+    const filePath = `icons/${uid}`;
     const storageRef = firebase.storage().ref(filePath);
-    const task = storageRef.put(file);
+    const task = storageRef.put(file)
+      .then(() => {
+        this.nzMessage.remove(this.uploadMessageId);
+      });
   }
 
   public ngOnInit() {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const uid = params.get('uid');
-      this.userSub = this.users.fetch(uid)
-        .subscribe((user: User) => {
-          this.photoURL = user.photoURL;
-        });
-    });
+    if (!this.afAuth.app.auth().currentUser) {
+      return;
+    }
+    const uid = this.route.snapshot.params.uid;
+    this.userSub = this.users.getDoc({id: uid})
+      .subscribe(({data}) => {
+        const user = data.user as User;
+        this.createdAt = user.createdAt;
+        this.description = user.description;
+        this.followeeCount = user.followeeCount;
+        this.followerCount = user.followerCount;
+        this.headerPhotoURL = user.headerPhotoURL;
+        this.photoURL = user.photoURL;
+        this.postCount = user.postCount;
+      });
   }
 
   public ngOnDestroy() {

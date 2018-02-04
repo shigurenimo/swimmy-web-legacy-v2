@@ -1,17 +1,17 @@
-class Image {
+export interface Image {
   name: string;
 }
 
-class Owner {
+export interface Owner {
   name: string;
 }
 
-class Tag {
+export interface Tag {
   name: string;
   count: number;
 }
 
-export class Post {
+export interface Post {
   aud: string;
   channelId: string;
   content: string;
@@ -26,10 +26,10 @@ export class Post {
   updatedAt: string;
 }
 
-class Nodes {
+export interface Nodes {
   nodes: [Post];
 }
 
-export class PostsResult {
+export interface PostsResult {
   posts: Nodes;
 }

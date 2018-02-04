@@ -1,32 +1,20 @@
 <div class="profile-icon">
 
-  <!-- アイコン -->
-  <ng-container *ngIf="afAuth.authState | async">
-
-    <button *ngIf="photoURL"
-            class="icon mat-elevation-z10"
-            (click)="imgFileInput.click()">
-      <img [src]="photoURL">
-      <input hidden type="file" #imgFileInput (change)="previewImage($event)" />
-    </button>
-
-    <!-- アイコン未設定 -->
-    <button *ngIf="!photoURL"
-            class="icon mat-elevation-z10"
-            (click)="imgFileInput.click()"
-            mat-fab>
-      <mat-icon>attach_file</mat-icon>
-      <input hidden type="file" #imgFileInput (change)="previewImage($event)" />
-    </button>
-
-  </ng-container>
-
-  <!-- 読み込み -->
-  <button *ngIf="!(afAuth.authState | async)"
-          class="icon mat-elevation-z10"
-          mat-fab>
-    <mat-icon>attach_file</mat-icon>
-  </button>
+  <!-- アップロード アイコン -->
+  <nz-upload class="avatar-uploader"
+             nzName="avatar"
+             [nzShowUploadList]="false"
+             (nzChange)="onUpload($event)">
+    <ng-container *ngIf="file">
+      <img [src]="file.thumbUrl" class="avatar">
+    </ng-container>
+    <ng-container *ngIf="!file">
+      <!-- アイコン未設定 -->
+      <i *ngIf="!photoURL" class="anticon anticon-plus avatar-uploader-trigger"></i>
+      <!-- アイコン -->
+      <img *ngIf="photoURL" [src]="photoURL" class="avatar">
+    </ng-container>
+  </nz-upload>
 
 </div>
 

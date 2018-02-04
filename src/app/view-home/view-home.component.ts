@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { PostsService } from '../services/posts.service';
-import { Post } from '../models/Post';
+import { Post } from '../interfaces/Post';
 
 @Component({
   selector: 'app-view-home',

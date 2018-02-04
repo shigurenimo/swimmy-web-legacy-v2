@@ -1,29 +1,17 @@
 import { Injectable } from '@angular/core';
 
-import { AngularFirestore } from 'angularfire2/firestore';
+import { Apollo } from 'apollo-angular';
 
-import { User } from '../models/User';
+import { queryUser } from '../queries/users';
 
 @Injectable()
 export class UsersService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private apollo: Apollo) { }
 
-  public fetch(id: string) {
-    return this.afs
-      .collection<User>('users')
-      .doc(id)
-      .snapshotChanges()
-      .map(snapshot => {
-        const payload = snapshot.payload;
-        if (!payload.exists) {
-          return;
-        }
-        return {
-          id: payload.id,
-          ...payload.data() as User
-        };
-      })
-      .share();
+  public getDoc(variables) {
+    return this.apollo
+      .watchQuery<any>({query: queryUser, variables})
+      .valueChanges;
   }
 }

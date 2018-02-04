@@ -45,6 +45,6 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTags') {
 
 // storage
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'storage') {
-  exports.storage = require('./storage').default;
+if (!FUNCTION_NAME || FUNCTION_NAME === 'onChangeStorage') {
+  exports.onChangeStorage = require('./storage').default;
 }
