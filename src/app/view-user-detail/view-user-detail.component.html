@@ -18,12 +18,22 @@
 
 </div>
 
-<div class="username">
+<div class="displayName">
 
   <ng-container *ngIf="afAuth.authState | async">
     <h1 class="mat-h1">
       {{afAuth.auth.currentUser.displayName}}
     </h1>
   </ng-container>
+
+</div>
+
+<div class="posts">
+
+  <nz-card>
+    <ng-template #body>
+      <p>ここにはプロフィール機能が追加される予定です。</p>
+    </ng-template>
+  </nz-card>
 
 </div>
