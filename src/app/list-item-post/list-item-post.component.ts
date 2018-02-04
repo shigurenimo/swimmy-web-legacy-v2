@@ -55,7 +55,7 @@ export class ListItemPostComponent {
     return createdAt(this.createdAt);
   }
 
-  public onUpdateTag(name = 'like') {
+  public onUpdateTag(name = 'スキ') {
     if (!this.afa.auth.currentUser) {
       return;
     }
