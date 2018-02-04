@@ -40,9 +40,15 @@ exports.default = (args, user) => {
             filter((tagId) => postTags[tagId].name === args.name)[0]
           : newTagId;
 
-        const postTag = postTagId
+        const postTag = tagExists
           ? postTags[postTagId]
-          : null;
+          : {
+            count: 1,
+            createdAt: createdAt,
+            name: args.name,
+            updatedAt: createdAt,
+          };
+
 
         const postTagExists = !!postTag;
 
@@ -91,14 +97,7 @@ exports.default = (args, user) => {
             },
           }, {merge: true});
 
-          const newTag = {
-            count: 1,
-            createdAt: createdAt,
-            name: args.name,
-            updatedAt: createdAt,
-          };
-
-          postTags[postTagId] = newTag;
+          postTags[postTagId] = postTag;
 
           t.update(postRef, {
             tags: postTags,
@@ -129,12 +128,7 @@ exports.default = (args, user) => {
           const tagRef = admin.firestore().
             collection('tags').
             doc(postTagId);
-          t.set(tagRef, {
-            count: 1,
-            createdAt: createdAt,
-            name: args.name,
-            updatedAt: createdAt,
-          });
+          t.set(tagRef, postTag);
         }
 
         post.tags[postTagId] = postTag;
