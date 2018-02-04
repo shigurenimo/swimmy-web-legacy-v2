@@ -1,6 +1,4 @@
-<mat-divider></mat-divider>
-
-<mat-list-item>
+<div class="content">
 
   <div>
 
@@ -12,37 +10,60 @@
 
   </div>
 
-</mat-list-item>
+</div>
 
-<mat-list-item class="actions">
+<div class="actions">
 
-  <button *ngFor="let tag of tags"
-          mat-button
-          (click)="onUpdateTag(tag.name)">
+  <nz-checkable-tag *ngFor="let tag of tags"
+                    class="tag"
+                    [nzChecked]="false"
+                    (click)="onUpdateTag(tag.name)">
     {{tag.name}} {{tag.count}}
+  </nz-checkable-tag>
+
+  <span *ngIf="afa.authState|async" class="edit">
+
+    <button *ngIf="!isEditNewTag"
+            nz-button
+            nzSize="default"
+            nzShape="circle"
+            [disabled]="isMutation"
+            (click)="editNewTag()">
+      <i class="anticon anticon-plus"></i>
+    </button>
+
+    <nz-input *ngIf="isEditNewTag"
+              nzType="text"
+              style="width: 140px;"
+              [(ngModel)]="newTag"
+              [nzReadonly]="isMutation"
+              [nzPlaceHolder]="nzPlaceHolder"
+              (nzBlur)="onUpdateTag(newTag)">
+      <ng-template #prefix>
+        <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
+        <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
+      </ng-template>
+    </nz-input>
+
+  </span>
+
+  <button class="reply"
+          nz-button
+          nzSize="default"
+          nzShape="circle"
+          (click)="onOpenReply()">
+    <i *ngIf="isOpenReply" class="anticon anticon-up"></i>
+    <i *ngIf="!isOpenReply" class="anticon anticon-down"></i>
   </button>
 
-  <button mat-icon-button>
-    <mat-icon>sms</mat-icon>
-  </button>
+</div>
 
-  <button *ngIf="afa.authState|async"
-          mat-icon-button
-          (click)="onOpenClick()">
-    <mat-icon *ngIf="isOpen">keyboard_arrow_up</mat-icon>
-    <mat-icon *ngIf="!isOpen">keyboard_arrow_down</mat-icon>
-  </button>
+<div class="reply-content" *ngIf="isOpenReply">
 
-</mat-list-item>
+  <nz-card>
+    <ng-template #body>
+      <p>リプライ機能を開発しています。</p>
+    </ng-template>
+  </nz-card>
 
-<mat-list-item *ngIf="isOpen" class="actions">
-
-  <mat-form-field>
-    <input [(ngModel)]="newTag" matInput placeholder="新しいタグ">
-  </mat-form-field>
-
-  <button mat-icon-button>
-    <mat-icon (click)="onAddTag()">add</mat-icon>
-  </button>
-
-</mat-list-item>
+</div>

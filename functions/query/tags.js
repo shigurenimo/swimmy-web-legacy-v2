@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-exports.default = (root, args, context) => {
+exports.default = (root) => {
   return admin.
     firestore().
     collection('tags').

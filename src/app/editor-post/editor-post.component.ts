@@ -18,7 +18,7 @@ export class EditorPostComponent implements OnInit {
     ]
   };
 
-  public nzAutosize = {minRows: 2, maxRows: 6};
+  public nzAutosize = {minRows: 1, maxRows: 6};
 
   public nzPlaceHolder = '新しい書き込み';
 

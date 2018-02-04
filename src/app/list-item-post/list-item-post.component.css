@@ -1,5 +1,6 @@
 :host {
-  background: rgba(0, 0, 0, 0.1);
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .createdAt {
@@ -8,21 +9,34 @@
   opacity: 0.8;
 }
 
+.content {
+  padding: 10px;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
+  padding: 0 10px 5px;
 }
 
-.actions button {
-  margin-left: 15px;
+.actions .tag {
+  padding: 5px 0;
 }
 
-.actions .mat-icon {
-  opacity: 0.8;
-  font-size: 20px;
+.actions .edit {
+  margin-left: 10px;
 }
 
-.mat-button {
-  min-width: auto;
-  padding: 0 8px;
+.actions .reply {
+  margin-left: 5px;
+}
+
+.reply-content {
+  padding: 0 10px 10px;
+}
+
+::ng-deep .ant-tag-root .ant-tag {
+  margin-right: 0;
+  margin-left: 5px;
 }

@@ -24,8 +24,6 @@ export class ListItemPostComponent {
 
   @Input() ownerId: string;
 
-  @Input() plus;
-
   @Input() repliedPostIds: string[];
 
   @Input() replyPostIds: string[];
@@ -34,7 +32,13 @@ export class ListItemPostComponent {
 
   @Input() updatedAt: string;
 
-  public isOpen = false;
+  public nzPlaceHolder = 'new';
+
+  public isEditNewTag = false;
+
+  public isOpenReply = false;
+
+  public isMutation = false;
 
   public newTag = '';
 
@@ -43,8 +47,8 @@ export class ListItemPostComponent {
     private posts: PostsService) {
   }
 
-  private onOpenClick() {
-    this.isOpen = !this.isOpen;
+  private onOpenReply() {
+    this.isOpenReply = !this.isOpenReply;
   }
 
   public get createdAtStr() {
@@ -55,30 +59,27 @@ export class ListItemPostComponent {
     if (!this.afa.auth.currentUser) {
       return;
     }
-    this.posts.updateTag({
-      id: this.id,
-      name: name
-    })
+
+    if (name === '') {
+      this.isEditNewTag = false;
+      return;
+    }
+
+    this.isMutation = true;
+
+    this.posts.updateTag({id: this.id, name: name})
       .subscribe(({data}) => {
         const tag = data.updatePostTag;
         this.tags = updateTags(this.tags, tag);
-      }, (err) => {
-        console.log(err);
+        this.isEditNewTag = false;
+        this.isMutation = false;
+        this.newTag = '';
+      }, () => {
+        this.isMutation = false;
       });
   }
 
-  public onAddTag() {
-    const variables = {
-      id: this.id,
-      name: this.newTag
-    };
-    if (!this.afa.auth.currentUser) {
-      return;
-    }
-    this.posts.updateTag(variables)
-      .subscribe(() => {
-      }, (err) => {
-        console.log(err);
-      });
+  public editNewTag() {
+    this.isEditNewTag = true;
   }
 }

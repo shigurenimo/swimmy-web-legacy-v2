@@ -4,7 +4,7 @@ const failureLog = require('../helpers/failureLog').default;
 exports.default = (root, args, context) => {
   console.log('mutation: updatePostTag');
 
-  args.name = args.name || 'like';
+  args.name = args.name || 'スキ';
 
   if (!context.user) return;
 

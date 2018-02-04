@@ -34,13 +34,20 @@ exports.default = (args, user) => {
 
         const postTags = post.tags;
 
-        const postTagId = tagExists
+        console.log('array', Object.keys(postTags));
+
+        const postTagExists = !!Object.keys(postTags).
+          find((tagId) => postTags[tagId].name === args.name);
+
+        console.log('postTagExists', postTagExists);
+
+        const postTagId = postTagExists
           ? Object.
             keys(postTags).
             filter((tagId) => postTags[tagId].name === args.name)[0]
           : newTagId;
 
-        const postTag = tagExists
+        const postTag = postTagExists
           ? postTags[postTagId]
           : {
             count: 1,
@@ -48,9 +55,6 @@ exports.default = (args, user) => {
             name: args.name,
             updatedAt: createdAt,
           };
-
-
-        const postTagExists = !!postTag;
 
         const userPostTagExists = userPostTagsSnapshot.exists
           && !!userPostTagsSnapshot.data()
@@ -63,7 +67,7 @@ exports.default = (args, user) => {
             postTag.count = postTag.count - 1;
             postTags[postTagId] = postTag;
 
-            if (postTag.count < 1 && postTag.name !== 'like') {
+            if (postTag.count < 1 && postTag.name !== 'スキ') {
               delete postTags[postTagId];
             }
 
@@ -112,7 +116,7 @@ exports.default = (args, user) => {
             doc(tagSnapshot.id);
           const count = tag.count + (userPostTagExists ? -1 : 1);
           if (count < 1) {
-            if (tag.name !== 'like') {
+            if (tag.name !== 'スキ') {
               t.delete(tagRef);
             }
           } else {
@@ -132,6 +136,8 @@ exports.default = (args, user) => {
         }
 
         post.tags[postTagId] = postTag;
+
+        console.log(Object.assign({id: postTagId}, postTag));
 
         return Object.assign({id: postTagId}, postTag);
       });
