@@ -48,12 +48,11 @@ const graphql = graphqlExpress((request, response) => {
   return {schema, context: {}};
 });
 
-const app = express().
-  use(cors()).
-  use(bodyParser.json()).
-  use(graphql);
-
-exports.default = functions.https.onRequest((request, response) => {
+const filter = (request, response, next) => {
+  if (request.method === 'OPTIONS') {
+    response.sendStatus(200);
+    return;
+  }
   if (Object.keys(request.query).length) {
     request.method = 'POST';
     request.url = '/';
@@ -65,5 +64,13 @@ exports.default = functions.https.onRequest((request, response) => {
       request.body.variables = JSON.parse(request.body.variables);
     }
   }
-  return app(request, response);
-});
+  next();
+};
+
+const app = express().
+  use(cors()).
+  use(bodyParser.json()).
+  use(filter).
+  use(graphql);
+
+exports.default = functions.https.onRequest(app);
