@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 
-import { createdAt } from '../helpers/createdAt';
 import { AngularFireAuth } from 'angularfire2/auth';
+
+import { createdAt } from '../helpers/createdAt';
+import { updateTags } from '../helpers/updateTags';
 import { PostsService } from '../services/posts.service';
 
 @Component({
@@ -50,15 +52,16 @@ export class ListItemPostComponent {
   }
 
   public onUpdateTag(name = 'like') {
-    const variables = {
-      id: this.id,
-      name: name
-    };
     if (!this.afa.auth.currentUser) {
       return;
     }
-    this.posts.updateTag(variables)
-      .subscribe((next) => {
+    this.posts.updateTag({
+      id: this.id,
+      name: name
+    })
+      .subscribe(({data}) => {
+        const tag = data.updatePostTag;
+        this.tags = updateTags(this.tags, tag);
       }, (err) => {
         console.log(err);
       });

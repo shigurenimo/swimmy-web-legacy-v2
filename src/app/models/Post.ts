@@ -27,7 +27,7 @@ export class Post {
 }
 
 class Nodes {
-  nodes: Post;
+  nodes: [Post];
 }
 
 export class PostsResult {

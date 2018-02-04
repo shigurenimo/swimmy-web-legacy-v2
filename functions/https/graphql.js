@@ -58,10 +58,18 @@ const filter = (request, response, next) => {
     request.url = '/';
     request.body = request.query;
     if (request.body.operationName) {
-      request.body.operationName = JSON.parse(request.body.operationName);
+      try {
+        request.body.operationName = request.body.operationName;
+      } catch (e) {
+        console.error(e);
+      }
     }
     if (request.body.variables) {
-      request.body.variables = JSON.parse(request.body.variables);
+      try {
+        request.body.variables = JSON.parse(request.body.variables);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
   next();

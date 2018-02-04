@@ -3,7 +3,7 @@
 <mat-list>
 
   <app-list-item-post
-    *ngFor="let node of nodes$ | async"
+    *ngFor="let node of data"
     [content]="node.content"
     [createdAt]="node.createdAt"
     [id]="node.id"

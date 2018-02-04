@@ -26,13 +26,19 @@ exports.default = (args, user) => {
       then(([postSnapshot, userPostTagsSnapshot, tagSnapshots]) => {
         const createdAt = new Date();
 
+        const tagSnapshot = tagSnapshots.docs[0];
+
+        const tagExists = tagSnapshot && tagSnapshot.exists;
+
         const post = postSnapshot.data();
 
         const postTags = post.tags;
 
-        const postTagId = Object.
-          keys(postTags).
-          filter((tagId) => postTags[tagId].name === args.name)[0];
+        const postTagId = tagExists
+          ? Object.
+            keys(postTags).
+            filter((tagId) => postTags[tagId].name === args.name)[0]
+          : newTagId;
 
         const postTag = postTagId
           ? postTags[postTagId]
@@ -80,7 +86,7 @@ exports.default = (args, user) => {
         // Postに同じ名前のタグが存在しない
         if (!postTagExists) {
           t.set(userPostTagsRef, {
-            [newTagId]: {
+            [postTagId]: {
               createdAt: createdAt,
             },
           }, {merge: true});
@@ -92,16 +98,12 @@ exports.default = (args, user) => {
             updatedAt: createdAt,
           };
 
-          postTags[newTagId] = newTag;
+          postTags[postTagId] = newTag;
 
           t.update(postRef, {
             tags: postTags,
           });
         }
-
-        const tagSnapshot = tagSnapshots.docs[0];
-
-        const tagExists = tagSnapshot && tagSnapshot.exists;
 
         // タグが存在する
         if (tagExists) {
@@ -126,7 +128,7 @@ exports.default = (args, user) => {
         if (!tagExists) {
           const tagRef = admin.firestore().
             collection('tags').
-            doc(newTagId);
+            doc(postTagId);
           t.set(tagRef, {
             count: 1,
             createdAt: createdAt,
@@ -136,8 +138,6 @@ exports.default = (args, user) => {
         }
 
         post.tags[postTagId] = postTag;
-
-        // return Object.assign({id: postSnapshot.id}, post);
 
         return Object.assign({id: postTagId}, postTag);
       });

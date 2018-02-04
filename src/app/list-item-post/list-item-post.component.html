@@ -18,8 +18,8 @@
 
   <button *ngFor="let tag of tags"
           mat-button
-          (click)="onUpdateTag(tag?.name)">
-    {{tag?.name}} {{tag?.count}}
+          (click)="onUpdateTag(tag.name)">
+    {{tag.name}} {{tag.count}}
   </button>
 
   <button mat-icon-button>
