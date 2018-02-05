@@ -6,6 +6,7 @@ exports.default = () => {
   return admin.
     firestore().
     collection('posts').
+    orderBy('createdAt').
     get().
     then((snapshots) => {
       const nodes = [];
@@ -14,6 +15,7 @@ exports.default = () => {
         const node = Object.assign({id: snapshot.id}, snapshot.data());
         nodes.push(node);
       });
-      return {nodes};
+      const sortedNodes = nodes.sort((a, b) => b.createdAt - a.createdAt);
+      return {nodes: sortedNodes};
     });
 };

@@ -1,6 +1,8 @@
 :host {
-  padding: 10px 10px 0;
+  display: block;
+  padding: 10px;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .actions {
@@ -10,7 +12,19 @@
 }
 
 .actions .input {
+  display: inline-block;
+  vertical-align: top;
   margin-left: 10px;
+}
+
+.images {
+  padding-top: 10px;
+}
+
+.images .image-avater {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10px;
 }
 
 .error {

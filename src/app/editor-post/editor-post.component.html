@@ -11,12 +11,14 @@
 
   <div class="actions" nz-form-control>
 
-    <button class="input"
-            nz-button
-            [disabled]="isMutation">
-      <i class="anticon anticon-link"></i>
-      <span>画像</span>
-    </button>
+    <nz-upload class="input"
+               [nzShowUploadList]="false"
+               [(nzFileList)]="fileList">
+      <button nz-button>
+        <i class="anticon anticon-link"></i>
+        <span>画像</span>
+      </button>
+    </nz-upload>
 
     <button class="input"
             nz-button
@@ -24,6 +26,17 @@
             [nzLoading]="isMutation">
       <span>送信</span>
     </button>
+
+  </div>
+
+  <div *ngIf="fileList[0]" class="images">
+
+    <nz-avatar *ngFor="let file of fileList"
+               class="image-avater"
+               nzShape="square"
+               nzSize="large"
+               [nzSrc]="file.thumbUrl">
+    </nz-avatar>
 
   </div>
 

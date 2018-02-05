@@ -11,6 +11,12 @@ enum OrderField {
   UPDATED_AT
 }
 
+input AddPostInput {
+  content: String
+  photoURLs: [String]
+  replyPostId: String
+}
+
 input PostOrderBy {
   field: OrderField!
   direction: OrderDirection!
@@ -45,10 +51,9 @@ type Post implements Node {
   content: String
   createdAt: DateTime
   owner: Owner
-  photoURL: PhotoURL
   photoURLs: [PhotoURL]
-  repliedPostIds: [String]
-  replyPostIds: String
+  repliedPostCount: Int
+  replyPostId: String
   tags: [Tag]
   updatedAt: DateTime
 }
@@ -59,7 +64,7 @@ type PostConnection implements Connection {
 }
 
 type PhotoURL {
-  xx256: String
+  full: String
   xx512: String
   xx1024: String
   x512: String
@@ -111,22 +116,16 @@ type Viewer {
 
 type Query {
   test: Test
-
   post (id: ID!): Post
-
   posts (limit: Int orderBy: PostOrderBy): PostConnection
-
   tag (id: ID!): Tag
-
   tags (limit: Int orderBy: TagOrderBy): TagConnection
-
   user (id: ID!): User
-
   viewer: Viewer
 }
 
 type Mutation {
   hello: String
-
+  addPost(input: AddPostInput!): Post
   updatePostTag(id: String!, name: String): Tag
 }

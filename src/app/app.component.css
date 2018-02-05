@@ -32,3 +32,7 @@
   min-height: 28px;
   resize: none;
 }
+
+::ng-deep .ng-star-inserted {
+  vertical-align: top;
+}

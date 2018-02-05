@@ -69,7 +69,7 @@ exports.default = (event) => {
         photoURL: photoURL,
       });
     }).
-    catch(err => {
+    catch((err) => {
       console.error(err);
     });
 };

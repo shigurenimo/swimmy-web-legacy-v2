@@ -13,14 +13,11 @@ export const queryPosts = gql`
           photoURL
           uid
         }
-        photoURL {
-          x512
-        }
         photoURLs {
           x512
         }
-        repliedPostIds
-        replyPostIds
+        repliedPostCount
+        replyPostId
         tags {
           id
           name
@@ -30,3 +27,29 @@ export const queryPosts = gql`
     }
   }
 `;
+
+export const mutationAddPost = gql`
+  mutation addPost($input: AddPostInput!) {
+    addPost(input: $input) {
+      id
+      content
+      createdAt
+      owner {
+        id
+        displayName
+        photoURL
+        uid
+      }
+      photoURLs {
+        x512
+      }
+      repliedPostCount
+      replyPostId
+      tags {
+        id
+        name
+        count
+      }
+    }
+  }
+`

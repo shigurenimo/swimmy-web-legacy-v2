@@ -11,22 +11,22 @@ exports.default = {
   owner(root) {
     return root.owner;
   },
-  photoURL(root) {
-    return root.photoURL;
-  },
   photoURLs(root) {
-    return root.photoURLs;
+    return Object.keys(root.photoURLs).
+      map((id) => {
+        return Object.assign(root.tags[id], {id: id});
+      });
   },
-  repliedPostIds(root) {
-    return root.repliedPostIds;
+  repliedPostCount(root) {
+    return root.repliedPostCount;
   },
-  replyPostIds(root) {
-    return root.replyPostIds;
+  replyPostId(root) {
+    return root.replyPostId;
   },
   tags(root) {
     return Object.keys(root.tags).
-      map((tagId) => {
-        return Object.assign({id: tagId}, root.tags[tagId]);
+      map((id) => {
+        return Object.assign(root.tags[id], {id: id});
       });
   },
   updatedAt(root) {

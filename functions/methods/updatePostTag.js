@@ -34,12 +34,8 @@ exports.default = (args, user) => {
 
         const postTags = post.tags;
 
-        console.log('array', Object.keys(postTags));
-
         const postTagExists = !!Object.keys(postTags).
           find((tagId) => postTags[tagId].name === args.name);
-
-        console.log('postTagExists', postTagExists);
 
         const postTagId = postTagExists
           ? Object.

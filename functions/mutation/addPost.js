@@ -1,16 +1,14 @@
-const updatePostTag = require('../methods/updatePostTag').default;
+const addPost = require('../methods/addPost').default;
 const failureLog = require('../helpers/failureLog').default;
 
 exports.default = (root, args, context) => {
-  console.log('mutation: updatePostTag');
-
-  args.name = args.name || 'スキ';
+  console.log('mutation: addPost');
 
   if (!context.user) {
     throw new Error('user not found');
   }
 
-  return updatePostTag(args, context.user).
+  return addPost(args.input, context.user).
     catch((err) => {
       return failureLog(err);
     });

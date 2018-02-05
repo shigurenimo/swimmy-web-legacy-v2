@@ -12,6 +12,7 @@ import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
 import 'firebase/storage';
+import 'firebase/firestore';
 import { enUS, NgZorroAntdModule, NZ_LOCALE } from 'ng-zorro-antd';
 
 import { environment } from '../environments/environment';
@@ -111,12 +112,22 @@ export class AppModule {
 
     apollo.createDefault({
       link: httpBearer.concat(httpQuery),
-      cache: cache
+      cache: cache,
+      defaultOptions: {
+        watchQuery: {
+          errorPolicy: 'all'
+        }
+      }
     });
 
     apollo.createNamed('mutation', {
       link: httpBearer.concat(httpMutation),
-      cache: cache
+      cache: cache,
+      defaultOptions: {
+        watchQuery: {
+          errorPolicy: 'all'
+        }
+      }
     });
   }
 }
