@@ -18,7 +18,7 @@ export class PostsService {
         variables: {input},
         update: (store, {data: {addPost: newPost}}) => {
           const data = store.readQuery({query: queryPosts}) as any;
-          data.posts.nodes.push(newPost);
+          data.posts.nodes.unshift(newPost);
           store.writeQuery({query: queryPosts, data});
         }
       });
