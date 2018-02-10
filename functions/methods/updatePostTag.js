@@ -1,22 +1,22 @@
 const admin = require('firebase-admin');
 
-exports.default = (args, user) => {
+exports.default = (input, user) => {
   return admin.firestore().runTransaction((t) => {
     const newTagId = admin.firestore().collection('tags').doc().id;
 
     const postRef = admin.firestore().
       collection('posts').
-      doc(args.id);
+      doc(input.postId);
 
     const userPostTagsRef = admin.firestore().
       collection('users').
       doc(user.uid).
       collection('post-tags').
-      doc(args.id);
+      doc(input.postId);
 
     const tagNameRef = admin.firestore().
       collection('tags').
-      where('name', '==', args.name);
+      where('name', '==', input.name);
 
     return Promise.all([
       t.get(postRef),
@@ -35,50 +35,50 @@ exports.default = (args, user) => {
         const postTags = post.tags;
 
         const postTagExists = !!Object.keys(postTags).
-          find((tagId) => postTags[tagId].name === args.name);
+          find((tagId) => postTags[tagId].name === input.name);
 
-        const postTagId = postTagExists
+        const tagId = postTagExists
           ? Object.
             keys(postTags).
-            filter((tagId) => postTags[tagId].name === args.name)[0]
+            filter((tagId) => postTags[tagId].name === input.name)[0]
           : newTagId;
 
         const postTag = postTagExists
-          ? postTags[postTagId]
+          ? postTags[tagId]
           : {
             count: 1,
             createdAt: createdAt,
-            name: args.name,
+            name: input.name,
             updatedAt: createdAt,
           };
 
         const userPostTagExists = userPostTagsSnapshot.exists
           && !!userPostTagsSnapshot.data()
-          && !!userPostTagsSnapshot.data()[postTagId];
+          && !!userPostTagsSnapshot.data()[tagId];
 
         // Postに同じ名前のタグが存在する
         if (postTagExists) {
           // 既にユーザが持っている
           if (userPostTagExists) {
             postTag.count = postTag.count - 1;
-            postTags[postTagId] = postTag;
+            postTags[tagId] = postTag;
 
             if (postTag.count < 1 && postTag.name !== 'スキ') {
-              delete postTags[postTagId];
+              delete postTags[tagId];
             }
 
             t.update(userPostTagsRef, {
-              [postTagId]: admin.firestore.FieldValue.delete(),
+              [tagId]: admin.firestore.FieldValue.delete(),
             });
           }
 
           // ユーザが持っていない
           if (!userPostTagExists) {
             postTag.count = postTag.count + 1;
-            postTags[postTagId] = postTag;
+            postTags[tagId] = postTag;
 
             t.set(userPostTagsRef, {
-              [postTagId]: {
+              [tagId]: {
                 createdAt: createdAt,
               },
             }, {merge: true});
@@ -92,12 +92,12 @@ exports.default = (args, user) => {
         // Postに同じ名前のタグが存在しない
         if (!postTagExists) {
           t.set(userPostTagsRef, {
-            [postTagId]: {
+            [tagId]: {
               createdAt: createdAt,
             },
           }, {merge: true});
 
-          postTags[postTagId] = postTag;
+          postTags[tagId] = postTag;
 
           t.update(postRef, {
             tags: postTags,
@@ -127,15 +127,17 @@ exports.default = (args, user) => {
         if (!tagExists) {
           const tagRef = admin.firestore().
             collection('tags').
-            doc(postTagId);
+            doc(tagId);
           t.set(tagRef, postTag);
         }
 
-        post.tags[postTagId] = postTag;
+        postTag.id = `${postSnapshot.id}-${tagId}`;
+        postTag.postId = postSnapshot.id;
+        postTag.tagId = tagId;
 
-        console.log(Object.assign({id: postTagId}, postTag));
+        post.tags[tagId] = postTag;
 
-        return Object.assign({id: postTagId}, postTag);
+        return Object.assign(post, {id: postSnapshot.id});
       });
   });
 };

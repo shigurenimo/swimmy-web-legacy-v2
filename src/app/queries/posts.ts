@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const queryPosts = gql`
-  query getPosts {
+  query posts {
     posts {
       nodes {
         id
@@ -23,6 +23,32 @@ export const queryPosts = gql`
           name
           count
         }
+      }
+    }
+  }
+`;
+
+export const queryPost = gql`
+  query post($id: ID) {
+    post(id: $id) {
+      id
+      content
+      createdAt
+      owner {
+        id
+        displayName
+        photoURL
+        uid
+      }
+      photoURLs {
+        x512
+      }
+      repliedPostCount
+      replyPostId
+      tags {
+        id
+        name
+        count
       }
     }
   }
@@ -52,4 +78,4 @@ export const mutationAddPost = gql`
       }
     }
   }
-`
+`;

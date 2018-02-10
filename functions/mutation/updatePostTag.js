@@ -10,7 +10,9 @@ exports.default = (root, args, context) => {
     throw new Error('user not found');
   }
 
-  return updatePostTag(args, context.user).
+  const input = args.input;
+
+  return updatePostTag(input, context.user).
     catch((err) => {
       return failureLog(err);
     });

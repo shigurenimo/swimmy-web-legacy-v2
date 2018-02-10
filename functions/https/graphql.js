@@ -57,13 +57,6 @@ const filter = (request, response, next) => {
     request.method = 'POST';
     request.url = '/';
     request.body = request.query;
-    if (request.body.operationName) {
-      try {
-        request.body.operationName = request.body.operationName;
-      } catch (e) {
-        console.error(e);
-      }
-    }
     if (request.body.variables) {
       try {
         request.body.variables = JSON.parse(request.body.variables);

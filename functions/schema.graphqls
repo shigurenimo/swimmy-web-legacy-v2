@@ -31,6 +31,11 @@ input TagOrderBy {
   direction: OrderDirection!
 }
 
+input UpdatePostTagInput {
+  postId: ID!
+  name: String!
+}
+
 interface Node {
   id: ID!
 }
@@ -54,13 +59,23 @@ type Post implements Node {
   photoURLs: [PhotoURL]
   repliedPostCount: Int
   replyPostId: String
-  tags: [Tag]
+  tags: [PostTag]
   updatedAt: DateTime
 }
 
 type PostConnection implements Connection {
   nodes: [Post]
   totalCount: Int
+}
+
+type PostTag implements Node {
+  id: ID!
+  count: Int
+  createdAt: DateTime
+  name: String
+  postId: String
+  tagId: String
+  updatedAt: DateTime
 }
 
 type PhotoURL {
@@ -127,5 +142,5 @@ type Query {
 type Mutation {
   hello: String
   addPost(input: AddPostInput!): Post
-  updatePostTag(id: String!, name: String): Tag
+  updatePostTag(input: UpdatePostTagInput!): Post
 }

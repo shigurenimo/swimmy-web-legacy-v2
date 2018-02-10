@@ -3,7 +3,6 @@ import { Component, Input } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { createdAt } from '../helpers/createdAt';
-import { updateTags } from '../helpers/updateTags';
 import { PostsService } from '../services/posts.service';
 
 @Component({
@@ -43,8 +42,8 @@ export class ListItemPostComponent {
   public newTag = '';
 
   constructor(
-    public afa: AngularFireAuth,
-    private posts: PostsService) {
+    private posts: PostsService,
+    public afa: AngularFireAuth) {
   }
 
   private onOpenReply() {
@@ -67,14 +66,18 @@ export class ListItemPostComponent {
 
     this.isMutation = true;
 
-    this.posts.updateTag({id: this.id, name: name})
+    this.posts
+      .updateTag({
+        postId: this.id,
+        name: name
+      })
       .subscribe(({data}) => {
-        const tag = data.updatePostTag;
-        this.tags = updateTags(this.tags, tag);
+        console.log('data', data);
         this.isEditNewTag = false;
         this.isMutation = false;
         this.newTag = '';
-      }, () => {
+      }, (err) => {
+        console.error(err);
         this.isMutation = false;
       });
   }

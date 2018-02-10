@@ -25,8 +25,15 @@ exports.default = {
   },
   tags(root) {
     return Object.keys(root.tags).
-      map((id) => {
-        return Object.assign(root.tags[id], {id: id});
+      filter((tagId) => {
+        return root.tags[tagId].count;
+      }).
+      map((tagId) => {
+        return Object.assign(root.tags[tagId], {
+          id: `${root.id}-${tagId}`,
+          postId: root.id,
+          tagId: tagId,
+        });
       });
   },
   updatedAt(root) {

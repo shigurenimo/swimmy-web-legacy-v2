@@ -9,22 +9,22 @@ import { Post } from '../interfaces/Post';
   styleUrls: ['./view-home.component.css']
 })
 export class ViewHomeComponent implements OnInit, OnDestroy {
-  private subscription;
+  public posts$;
 
-  public data: Post[] = [];
+  public posts: Post[] = [];
 
-  constructor(private posts: PostsService) {
+  constructor(private postsService: PostsService) {
   }
 
   public ngOnInit() {
-    this.subscription = this.posts
+    this.posts$ = this.postsService
       .getDocs()
       .subscribe(({data}) => {
-        this.data = data.posts.nodes;
+        this.posts = data.posts.nodes;
       });
   }
 
   public ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.posts$.unsubscribe();
   }
 }

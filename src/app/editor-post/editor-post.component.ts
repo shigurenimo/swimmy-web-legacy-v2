@@ -14,9 +14,9 @@ import { PostsService } from '../services/posts.service';
   styleUrls: ['./editor-post.component.css']
 })
 export class EditorPostComponent implements OnInit {
-  private formGroup: FormGroup;
-
   private messageId = null;
+
+  public formGroup: FormGroup;
 
   public nzAutosize = {minRows: 1, maxRows: 6};
 
@@ -32,8 +32,8 @@ export class EditorPostComponent implements OnInit {
 
   constructor(
     private fns: FunctionsService,
-    private nzMessage: NzMessageService,
     private formBuilder: FormBuilder,
+    private nzMessage: NzMessageService,
     private posts: PostsService,
     public afa: AngularFireAuth) {
   }

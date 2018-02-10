@@ -3,15 +3,23 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.createdAt {
+/* Content */
+
+.content {
+  padding: 10px;
+}
+
+.content > p {
+  white-space: pre;
+}
+
+.content .createdAt {
   padding-left: 10px;
   font-size: 12px;
   opacity: 0.8;
 }
 
-.content {
-  padding: 10px;
-}
+/* Actions */
 
 .actions {
   display: flex;
@@ -36,7 +44,7 @@
   padding: 0 10px 10px;
 }
 
-::ng-deep .ant-tag-root .ant-tag {
+:host ::ng-deep .ant-tag-root .ant-tag {
   margin-right: 0;
   margin-left: 5px;
 }

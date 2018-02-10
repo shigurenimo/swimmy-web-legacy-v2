@@ -100,18 +100,18 @@ export class AppModule {
 
     const cache = new InMemoryCache();
 
-    const httpQuery = httpLink.create({
-      uri: environment.graphql,
-      method: 'GET'
-    });
-
-    const httpMutation = httpLink.create({
+    const httpDefault = httpLink.create({
       uri: environment.graphql,
       method: 'POST'
     });
 
+    const httpServiceWorker = httpLink.create({
+      uri: environment.graphql,
+      method: 'GET'
+    });
+
     apollo.createDefault({
-      link: httpBearer.concat(httpQuery),
+      link: httpBearer.concat(httpDefault),
       cache: cache,
       defaultOptions: {
         watchQuery: {
@@ -120,8 +120,8 @@ export class AppModule {
       }
     });
 
-    apollo.createNamed('mutation', {
-      link: httpBearer.concat(httpMutation),
+    apollo.createNamed('sw', {
+      link: httpBearer.concat(httpServiceWorker),
       cache: cache,
       defaultOptions: {
         watchQuery: {

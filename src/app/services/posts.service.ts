@@ -13,44 +13,30 @@ export class PostsService {
 
   public add(input) {
     return this.apollo
-      .use('mutation')
       .mutate({
         mutation: mutationAddPost,
         variables: {input},
-        update: (store, {data: {addPost}}) => {
+        update: (store, {data: {addPost: newPost}}) => {
           const data = store.readQuery({query: queryPosts}) as any;
-          data.posts.nodes.unshift(addPost);
-          data.posts.nodes = data.posts.nodes.sort((a, b) => {
-            return b.createdAt - a.createdAt;
-          });
+          data.posts.nodes.push(newPost);
           store.writeQuery({query: queryPosts, data});
         }
       });
   }
 
-  public updateTag(variables) {
+  public updateTag(input) {
     return this.apollo
-      .use('mutation')
       .mutate({
         mutation: mutationUpdatePostTag,
-        variables
+        variables: {input}
       });
   }
 
   public getDocs() {
-    const watchQuery = this.apollo.watchQuery<any>({query: queryPosts});
-    console.log(watchQuery.refetch);
-    /*
-    setInterval(() => {
-      watchQuery.refetch()
-    }, 10000)
-    */
-    return watchQuery.valueChanges;
-  }
-
-  public readDocs() {
     return this.apollo
-      .getClient()
-      .readQuery({query: queryPosts});
+      .watchQuery<any>({
+        query: queryPosts
+      })
+      .valueChanges;
   }
 }

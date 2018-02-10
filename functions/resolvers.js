@@ -5,6 +5,7 @@ exports.DateTime = require('./scalars/dateTime').default;
 exports.Owner = require('./types/owner').default;
 exports.Post = require('./types/post').default;
 exports.PostConnection = require('./types/postConnection').default;
+exports.PostTag = require('./types/postTag').default;
 exports.Tag = require('./types/tag').default;
 exports.Test = require('./types/test').default;
 exports.User = require('./types/user').default;
