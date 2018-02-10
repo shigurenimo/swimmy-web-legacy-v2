@@ -43,6 +43,14 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTags') {
   exports.updatePostTags = require('./https/updatePostTags').default;
 }
 
+if (!FUNCTION_NAME || FUNCTION_NAME === 'uploadPosts') {
+  exports.uploadPosts = require('./https/uploadPosts').default;
+}
+
+if (!FUNCTION_NAME || FUNCTION_NAME === 'uploadUsers') {
+  exports.uploadUsers = require('./https/uploadUsers').default;
+}
+
 // storage
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'onChangeStorage') {
