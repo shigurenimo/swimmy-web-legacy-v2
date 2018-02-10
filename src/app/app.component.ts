@@ -6,12 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  public isCollapsed = false;
 
-  public opened = true;
+  public nzBreakpoint = 'sm';
 
-  public mode = 'side';
+  public nzWidth = 64;
 
   constructor() {
   }
-
 }

@@ -20,20 +20,26 @@
 
 <div class="displayName">
 
-  <ng-container *ngIf="afAuth.authState | async">
-    <h1 class="mat-h1">
-      {{afAuth.auth.currentUser.displayName}}
-    </h1>
-  </ng-container>
+  <h1 class="mat-h1">
+    {{displayName}}
+  </h1>
 
 </div>
 
-<div class="posts">
+<div class="profile">
 
   <nz-card>
     <ng-template #body>
       <p>ここにはプロフィール機能が追加される予定です。</p>
     </ng-template>
   </nz-card>
+
+</div>
+
+<div class="logout" nz-row nzType="flex" nzAlign="middle" nzJustify="center">
+
+  <span nz-col>
+    <button nz-button (click)="onLogout()">ログアウト</button>
+  </span>
 
 </div>

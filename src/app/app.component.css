@@ -1,27 +1,13 @@
-.mat-drawer-container {
+.ant-layout {
   height: 100%;
   overflow: auto;
   background: white;
 }
 
-.mat-sidenav-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: auto;
-}
-
-.mat-sidenav {
-  width: 70px;
+.ant-layout-sider {
   height: 100%;
   background: white;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.page {
-  flex: 1;
-  max-height: 100%;
-  overflow-y: auto;
+  border-right: 1px solid #e9e9e9;
 }
 
 /**
@@ -35,4 +21,11 @@
 
 ::ng-deep .ng-star-inserted {
   vertical-align: top;
+}
+
+::ng-deep nz-header.ant-layout-header {
+  background: rgba(0, 0, 0, 0);
+  padding: 0;
+  height: auto;
+  line-height: auto;
 }

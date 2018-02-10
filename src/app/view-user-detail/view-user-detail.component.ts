@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import { NzMessageService } from 'ng-zorro-antd';
 
 import { User } from '../interfaces/User';
 import { UsersService } from '../services/users.service';
-import * as firebase from 'firebase/app';
-import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-view-user-detail',
@@ -16,6 +17,8 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
   public createdAt;
 
   public description;
+
+  public displayName = '読み込み中..';
 
   public followeeCount;
 
@@ -29,28 +32,42 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
 
   public file;
 
+  public isLoading = true;
+
   private uploadText = 'アップロード中..';
 
-  private userSub;
-
-  private uploadMessageId = null;
+  private user$;
 
   constructor(
     private route: ActivatedRoute,
     private users: UsersService,
     private nzMessage: NzMessageService,
-    public afAuth: AngularFireAuth) {
+    public afA: AngularFireAuth) {
+  }
+
+  public onLogout() {
+    this.afA.auth
+      .signOut()
+      .then(() => {
+        const messageText = 'ログアウトしました';
+        this.nzMessage.info(messageText);
+      })
+      .catch((err) => {
+        console.error(err);
+        const messageText = 'ログアウトに失敗しました';
+        this.nzMessage.info(messageText);
+      });
   }
 
   public onUpload(e) {
-    if (!this.afAuth.app.auth().currentUser) {
+    if (!this.afA.app.auth().currentUser) {
       return;
     }
-    const uid = this.afAuth.app.auth().currentUser.uid;
+    const uid = this.afA.app.auth().currentUser.uid;
     if (this.route.snapshot.params.uid !== uid) {
       return;
     }
-    this.uploadMessageId =
+    const uploadMessageId =
       this.nzMessage.loading(this.uploadText).messageId;
     this.file = e.file;
     const file = e.file.originFileObj;
@@ -58,29 +75,31 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
     const storageRef = firebase.storage().ref(filePath);
     const task = storageRef.put(file)
       .then(() => {
-        this.nzMessage.remove(this.uploadMessageId);
+        this.nzMessage.remove(uploadMessageId);
       });
   }
 
   public ngOnInit() {
-    if (!this.afAuth.app.auth().currentUser) {
-      return;
-    }
     const uid = this.route.snapshot.params.uid;
-    this.userSub = this.users.getDoc({id: uid})
+    this.user$ = this.users
+      .getDoc({id: uid})
       .subscribe(({data}) => {
         const user = data.user as User;
         this.createdAt = user.createdAt;
         this.description = user.description;
+        this.displayName = user.displayName;
         this.followeeCount = user.followeeCount;
         this.followerCount = user.followerCount;
         this.headerPhotoURL = user.headerPhotoURL;
         this.photoURL = user.photoURL;
         this.postCount = user.postCount;
+        this.isLoading = false;
       });
   }
 
   public ngOnDestroy() {
-    this.userSub.unsubscribe();
+    if (this.user$) {
+      this.user$.unsubscribe();
+    }
   }
 }

@@ -37,6 +37,10 @@ img {
   text-align: center;
 }
 
-.posts {
+.profile {
   padding: 10px;
+}
+
+.logout {
+  padding-top: 36px;
 }

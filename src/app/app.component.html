@@ -1,16 +1,20 @@
-<mat-sidenav-container>
+<nz-layout>
 
   <!-- サイドバー -->
-  <mat-sidenav [opened]='opened' [mode]='mode'>
+  <nz-sider nzCollapsible
+            [nzTrigger]="true"
+            [nzCollapsed]="isCollapsed"
+            [nzCollapsedWidth]="0"
+            [nzWidth]="nzWidth"
+            [nzBreakpoint]="nzBreakpoint">
     <app-sidenav></app-sidenav>
-  </mat-sidenav>
+  </nz-sider>
 
-  <!-- コンテンツ -->
-  <mat-sidenav-content>
+  <nz-layout>
 
     <!-- ルーティング -->
     <router-outlet></router-outlet>
 
-  </mat-sidenav-content>
+  </nz-layout>
 
-</mat-sidenav-container>
+</nz-layout>

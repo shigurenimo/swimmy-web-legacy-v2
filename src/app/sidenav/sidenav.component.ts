@@ -10,10 +10,18 @@ import { DialogLoginComponent } from '../dialog-login/dialog-login.component';
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent {
+  public nzTheme = 'white';
+
+  public nzMode = 'inline';
+
+  public routerLinkActiveOptions = {
+    exact: true
+  };
+
   public links = [
-    {path: '/', icon: 'home'},
-    {path: '/config', icon: 'settings'},
-    {path: '/info', icon: 'info'}
+    {path: '/', icon: 'anticon anticon-home'},
+    {path: '/config', icon: 'anticon anticon-setting'},
+    {path: '/info', icon: 'anticon anticon-info'}
   ];
 
   constructor(

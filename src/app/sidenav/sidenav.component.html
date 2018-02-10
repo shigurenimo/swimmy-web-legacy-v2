@@ -1,31 +1,38 @@
-<!-- リスト -->
-<mat-list>
+<ul nz-menu [nzTheme]="nzTheme" [nzMode]="nzMode">
 
   <!-- ログインしている -->
-  <mat-list-item class='auth' *ngIf='afAuth.authState | async'>
+  <li *ngIf="afAuth.authState | async"
+      nz-menu-item
+      class="auth"
+      [routerLinkActiveOptions]="routerLinkActiveOptions"
+      routerLinkActive="ant-menu-item-selected"
+      routerLink="/{{afAuth.auth.currentUser.uid}}">
 
-    <button mat-icon-button routerLink='/{{afAuth.auth.currentUser.uid}}'>
-      <mat-icon>account_circle</mat-icon>
-    </button>
+    <span class="anticon anticon-user"></span>
 
-  </mat-list-item>
+  </li>
 
   <!-- ログインしていない -->
-  <mat-list-item class='auth' *ngIf='!(afAuth.authState | async)'>
+  <li *ngIf="!(afAuth.authState | async)"
+      nz-menu-item
+      class="auth"
+      [routerLinkActiveOptions]="routerLinkActiveOptions"
+      routerLinkActive="ant-menu-item-selected"
+      routerLink="/login">
 
-    <button mat-icon-button (click)='onLoginClick()'>
-      <mat-icon>account_circle</mat-icon>
-    </button>
+    <span class="anticon anticon-poweroff"></span>
 
-  </mat-list-item>
+  </li>
 
   <!-- メニューの項目 -->
-  <mat-list-item *ngFor='let link of links'>
+  <li *ngFor="let link of links"
+      nz-menu-item
+      [routerLinkActiveOptions]="routerLinkActiveOptions"
+      routerLinkActive="ant-menu-item-selected"
+      [routerLink]="link.path">
 
-    <button mat-icon-button [routerLink]='link.path'>
-      <mat-icon>{{link.icon}}</mat-icon>
-    </button>
+    <span [class]="link.icon"></span>
 
-  </mat-list-item>
+  </li>
 
-</mat-list>
+</ul>
