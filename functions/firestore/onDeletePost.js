@@ -1,37 +1,19 @@
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+import * as functions from 'firebase-functions';
 
-const eventDataLog = require('../helpers/eventDataLog').default;
-const failureLog = require('../helpers/failureLog').default;
-const getEventData = require('../helpers/getEventData').default;
+import {deleteTags} from '../api/tags/deleteTags';
+
+import {failureLog} from '../helpers/failureLog';
+import {getEventData} from '../helpers/getEventData';
 
 exports.default = functions.firestore.
-  document('posts/{id}').
+  document('posts/{postId}').
   onDelete((event) => {
+    const post = getEventData(event);
+
     return Promise.all([
-      eventDataLog(event),
-      deleteTags(event),
+      deleteTags(post.tags),
     ]).
       catch((err) => {
         return failureLog(err);
       });
   });
-
-const deleteTags = (event) => {
-  const post = getEventData(event);
-  return Promise.all(post.tags.map((tag) => {
-    return admin.firestore().runTransaction((t) => {
-      const ref = admin.firestore().
-        collection('tags').
-        where('name', '==', tag);
-      return t.get(ref).
-        then((doc) => {
-          const data = doc.data();
-          t.set(ref, {
-            name: tag,
-            count: Number(data.count || 0) - 1,
-          }, {merge: true});
-        });
-    });
-  }));
-};

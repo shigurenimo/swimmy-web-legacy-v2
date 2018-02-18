@@ -1,7 +1,6 @@
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
-
-const failureLog = require('../helpers/failureLog').default;
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
+import failureLog from '../helpers/failureLog';
 
 exports.default = functions.auth.user().onCreate((event) => {
   const data = event.data;

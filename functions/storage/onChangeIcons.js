@@ -1,12 +1,12 @@
-const path = require('path');
-const os = require('os');
-const fs = require('fs');
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 
-const {spawn} = require('child-process-promise');
-const admin = require('firebase-admin');
-const mkdirp = require('mkdirp-promise');
+import {spawn} from 'child-process-promise';
+import * as admin from 'firebase-admin';
+import mkdirp from 'mkdirp-promise';
 
-exports.default = (event) => {
+export const onChangeIcons = (event) => {
   const contentType = event.data.contentType;
 
   const filePath = event.data.name;

@@ -1,6 +1,6 @@
-const functions = require('firebase-functions');
+import * as functions from 'firebase-functions';
 
-const onChangeIcons = require('./onChangeIcons').default;
+import {onChangeIcons} from './onChangeIcons';
 
 exports.default = functions.storage.object().onChange((event) => {
   // リソースの状態

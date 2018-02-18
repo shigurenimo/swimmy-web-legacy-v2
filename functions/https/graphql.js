@@ -1,16 +1,17 @@
-const {readFileSync} = require('fs');
-const {join} = require('path');
+import {readFileSync} from 'fs';
+import {join} from 'path';
 
-const {graphqlExpress} = require('apollo-server-express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const express = require('express');
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
-const {makeExecutableSchema} = require('graphql-tools');
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
-const failureResponse = require('../helpers/failureResponse').default;
-const resolvers = require('../resolvers');
+import {graphqlExpress} from 'apollo-server-express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
+import {makeExecutableSchema} from 'graphql-tools';
+
+import failureResponse from '../helpers/failureResponse';
+import resolvers from '../resolvers';
 
 const typeDefsFile = join(__dirname, '..', 'schema.graphqls');
 
@@ -19,8 +20,8 @@ const typeDefs = readFileSync(typeDefsFile, 'utf-8');
 const schema = makeExecutableSchema({typeDefs, resolvers});
 
 const graphql = graphqlExpress((request, response) => {
-  const headers = request.headers;
-  const authorization = headers.authorization;
+  const {authorization} = request.headers;
+
   if (authorization &&
     authorization.startsWith('Bearer ') &&
     authorization.split('Bearer ')[1]) {
@@ -28,17 +29,12 @@ const graphql = graphqlExpress((request, response) => {
     return admin.auth().
       verifyIdToken(idToken).
       then((decodedToken) => {
-        return admin.firestore().
-          collection('users').
-          doc(decodedToken.uid).
-          get();
-      }).
-      then((snapshot) => {
-        return snapshot.exists
-          ? Object.assign({uid: snapshot.id}, snapshot.data())
-          : null;
-      }).
-      then((user) => {
+        const user = {
+          displayName: decodedToken.name,
+          photoURL: decodedToken.picture,
+          uid: decodedToken.uid,
+          email: decodedToken.email,
+        };
         return {schema, context: {user}};
       }).
       catch((err) => {
@@ -53,11 +49,12 @@ const filter = (request, response, next) => {
     response.sendStatus(200);
     return;
   }
-  if (Object.keys(request.query).length) {
+
+  if (request.method === 'GET') {
     request.method = 'POST';
     request.url = '/';
-    request.body = request.query;
-    if (request.body.variables) {
+    request.body = request.body || request.query;
+    if (typeof request.body.variables === 'string') {
       try {
         request.body.variables = JSON.parse(request.body.variables);
       } catch (e) {

@@ -1,12 +1,13 @@
-const {readFile, writeFileSync} = require('fs');
-const {join} = require('path');
+import {readFile, writeFileSync} from 'fs';
+import {join} from 'path';
 
-const cors = require('cors');
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
-const failureResponse = require('../helpers/failureResponse').default;
-const successResponse = require('../helpers/successResponse').default;
+import cors from 'cors';
+
+import {failureResponse} from '../helpers/failureResponse';
+import {successResponse} from '../helpers/successResponse';
 
 const batchLimit = 450; // < 500
 const limit = 50;

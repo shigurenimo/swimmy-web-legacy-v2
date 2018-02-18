@@ -1,4 +1,4 @@
-exports.default = (root, args, context) => {
+export default () => {
   return {
     hello: 'hello!',
   };

@@ -1,11 +1,25 @@
-exports.JSON = require('graphql-type-json');
-exports.Mutation = require('./mutation');
-exports.Query = require('./query');
-exports.DateTime = require('./scalars/dateTime').default;
-exports.Owner = require('./types/owner').default;
-exports.Post = require('./types/post').default;
-exports.PostConnection = require('./types/postConnection').default;
-exports.PostTag = require('./types/postTag').default;
-exports.Tag = require('./types/tag').default;
-exports.Test = require('./types/test').default;
-exports.User = require('./types/user').default;
+import JSON from 'graphql-type-json';
+import Mutation from './mutation';
+import Query from './query';
+import DateTime from './scalars/dateTime';
+import Owner from './types/owner';
+import Post from './types/post';
+import PostConnection from './types/postConnection';
+import PostTag from './types/postTag';
+import Test from './types/test';
+import Tag from './types/tag';
+import User from './types/user';
+
+export default {
+  JSON,
+  Mutation,
+  Query,
+  DateTime,
+  Owner,
+  Post,
+  PostConnection,
+  PostTag,
+  Tag,
+  Test,
+  User,
+};

@@ -1,3 +1,3 @@
-exports.default = (err) => {
+export const failureLog = (err) => {
   console.error(err);
 };

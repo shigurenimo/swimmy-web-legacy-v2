@@ -1,5 +1,5 @@
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
 admin.initializeApp(functions.config().firebase);
 
@@ -27,17 +27,6 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'onDeletePost') {
 
 // https
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'internal_reactionToTag') {
-  exports.internal_reactionToTag = require('./https/addPost').default;
-}
-
-if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
-  exports.addPost = require('./https/addPost').default;
-}
-
-if (!FUNCTION_NAME || FUNCTION_NAME === 'deletePost') {
-  exports.deletePost = require('./https/deletePost').default;
-}
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./https/graphql').default;

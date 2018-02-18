@@ -1,3 +1,9 @@
-exports.addPost = require('./addPost').default;
-exports.hello = require('./hello').default;
-exports.updatePostTag = require('./updatePostTag').default;
+import addPost from './addPost';
+import hello from './hello';
+import updatePostTag from './updatePostTag';
+
+export default {
+  addPost,
+  hello,
+  updatePostTag,
+};

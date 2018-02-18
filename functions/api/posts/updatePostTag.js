@@ -1,6 +1,12 @@
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
 
-exports.default = (input, user) => {
+/**
+ * Update /posts/{postId}-tags
+ * @param {Object} input
+ * @param {Object} user
+ * @return {Promise<any> | *}
+ */
+export const updatePostTag = (input, user) => {
   return admin.firestore().runTransaction((t) => {
     const newTagId = admin.firestore().collection('tags').doc().id;
 

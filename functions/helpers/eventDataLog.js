@@ -1,7 +1,7 @@
-const {default: getData} = require('./getEventData');
+import {getEventData} from './getEventData';
 
-exports.default = (event) => {
-  const data = getData(event);
+export const eventDataLog = (event) => {
+  const data = getEventData(event);
   console.log(data);
   return data;
 };

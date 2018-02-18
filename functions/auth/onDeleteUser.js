@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+import * as functions from 'firebase-functions';
 
 exports.default = functions.auth.user().onDelete((event) => {
   const user = event.data;

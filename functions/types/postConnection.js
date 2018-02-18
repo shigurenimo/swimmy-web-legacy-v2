@@ -1,4 +1,4 @@
-exports.default = {
+export default {
   nodes(root) {
     return root.nodes;
   },

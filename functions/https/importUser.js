@@ -1,12 +1,12 @@
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
-const cors = require('cors');
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+import bcrypt from 'bcrypt';
+import cors from 'cors';
+import crypto from 'crypto';
 
-const failureResponse = require('../helpers/failureResponse').default;
-const successResponse = require('../helpers/successResponse').default;
+import {failureResponse} from '../helpers/failureResponse';
+import {successResponse} from '../helpers/successResponse';
 
 exports.default = functions.https.onRequest((request, response) => {
   return cors({origin: true})(request, response, () => {

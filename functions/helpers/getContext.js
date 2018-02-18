@@ -1,11 +1,11 @@
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
 
-const errors = require('./errorMessage').default;
+import {errorMessage} from './errorMessage';
 
-exports.default = (req) => {
+export const getContext = (req) => {
   const {authorization} = req.headers || {};
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new Error(errors.TOKEN_NOT_FOUND);
+    throw new Error(errorMessage.TOKEN_NOT_FOUND);
   }
   const idToken = req.headers.authorization.split('Bearer ')[1];
   return admin.auth().

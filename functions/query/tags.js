@@ -1,17 +1,5 @@
-const admin = require('firebase-admin');
+import {getTags} from '../api/tags/getTags';
 
-exports.default = (root) => {
-  return admin.
-    firestore().
-    collection('tags').
-    get().
-    then((snapshots) => {
-      const nodes = [];
-      snapshots.forEach((snapshot) => {
-        if (!snapshot.exists) return;
-        const node = Object.assign({id: snapshot.id}, snapshot.data());
-        nodes.push(node);
-      });
-      return {nodes};
-    });
+export default (root) => {
+  return getTags({limit: 40});
 };

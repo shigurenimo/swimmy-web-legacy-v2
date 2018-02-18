@@ -1,13 +1,13 @@
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
 
-const {POSTS} = require('../../constants');
+import {POSTS} from '../../constants';
 
 /**
  * Get /posts/{postId}
  * @param {string} postId
  * @return {Promise}
  */
-exports.default = (postId) => {
+export const getPost = (postId) => {
   if (!postId) {
     throw new Error('postId not found');
   }

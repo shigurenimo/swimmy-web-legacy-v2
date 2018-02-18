@@ -1,20 +1,28 @@
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
 
-exports.default = (input, user) => {
-  const docId = admin.firestore().collection('posts').doc().id;
+import {POSTS, TAGS} from '../../constants';
+import {COUNT} from '../../constants/tags';
+import {toStorageURL} from '../../helpers/toStorageURL';
+import config from '../../config';
 
-  const bucketName = 'swimmy-171720';
-
+/**
+ * Set posts/{postId}
+ * @param {string} postId
+ * @param {Object} input
+ * @param {Object} owner
+ * @return {Promise}
+ */
+export const setPost = (postId, input, owner) => {
   const createdAt = new Date();
 
   const payload = {
-    id: docId,
+    id: postId,
     content: input.content,
     createdAt: createdAt,
     owner: {
-      uid: user.uid,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
+      uid: owner.uid,
+      displayName: owner.displayName,
+      photoURL: owner.photoURL,
     },
     photoURLs: {},
     repliedPostCount: 0,
@@ -25,7 +33,7 @@ exports.default = (input, user) => {
 
   input.photoURLs.forEach((photoURL) => {
     payload.photoURLs[photoURL] = {
-      full: `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${photoURL}?alt=media`,
+      full: toStorageURL(config.projectId, photoURL),
       xx512: null,
       xx1024: null,
       x512: null,
@@ -35,12 +43,13 @@ exports.default = (input, user) => {
   });
 
   return admin.firestore().
-    collection('tags').
-    orderBy('count').
+    collection(TAGS).
+    orderBy(COUNT).
     limit(1).
     get().
     then((snapshots) => {
       const snapshot = snapshots.docs[0];
+
       if (snapshot) {
         const data = snapshot.data();
         payload.tags[snapshot.id] = {
@@ -50,12 +59,13 @@ exports.default = (input, user) => {
           updatedAt: createdAt,
         };
       }
+
       return admin.firestore().
-        collection('posts').
-        doc(docId).
+        collection(POSTS).
+        doc(postId).
         set(payload);
     }).
     then(() => {
-      return Object.assign(payload, {id: docId});
+      return Object.assign(payload, {id: postId});
     });
 };

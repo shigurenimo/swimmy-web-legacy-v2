@@ -8,6 +8,9 @@
     "eslint:recommended",
     "google"
   ],
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "rules": {
     "no-console": 0
   }

@@ -1,12 +1,13 @@
-const {GraphQLScalarType} = require('graphql');
-const {Kind} = require('graphql/language');
+import {GraphQLScalarType} from 'graphql';
+
+import {Kind} from 'graphql/language';
 
 const parseDate = (str) => {
   let d = new Date(str);
   return Number.isNaN(d.getTime()) ? null : d;
 };
 
-exports.default = new GraphQLScalarType({
+export default new GraphQLScalarType({
   name: 'DateTime',
   serialize(value) {
     return value.toJSON();

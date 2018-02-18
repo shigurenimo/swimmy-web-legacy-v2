@@ -1,11 +1,28 @@
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
 
-exports.default = (id) => {
+import {TAGS} from '../../constants';
+
+/**
+ * Get tags/{tagId}
+ * @param {string} tagId
+ * @return {Promise}
+ */
+export const getTag = (tagId) => {
+  if (!tagId) {
+    throw new Error('postId not found');
+  }
+
   return admin.firestore().
-    collection('tags').
-    doc(id).
+    collection(TAGS).
+    doc(tagId).
     get().
     then((snapshot) => {
-      return Object.assign({id: snapshot.id}, snapshot.data());
+      if (!snapshot.exists) {
+        throw new Error('tag not found');
+      }
+
+      const data = snapshot.data();
+
+      return Object.assign(data, {id: snapshot.id});
     });
 };

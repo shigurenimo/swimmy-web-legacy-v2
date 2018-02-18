@@ -1,11 +1,12 @@
-const addPost = require('../methods/addPost').default;
-const failureLog = require('../helpers/failureLog').default;
+import {addPost} from '../api/posts/addPost';
 
-exports.default = (root, args, context) => {
+import {failureLog} from '../helpers/failureLog';
+
+export default (root, args, context) => {
   console.log('mutation: addPost');
 
   if (!context.user) {
-    throw new Error('user not found');
+    throw new Error('context.user not found');
   }
 
   return addPost(args.input, context.user).

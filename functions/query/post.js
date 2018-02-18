@@ -1,13 +1,5 @@
-const admin = require('firebase-admin');
+import {getPost} from '../api/posts/getPost';
 
-exports.default = (root, args) => {
-  return admin.
-    firestore().
-    collection('posts').
-    doc(args.id).
-    get().
-    then((snapshot) => {
-      if (!snapshot.exists) return null;
-      return Object.assign({id: snapshot.id}, snapshot.data());
-    });
+export default (root, {id}) => {
+  return getPost(id);
 };

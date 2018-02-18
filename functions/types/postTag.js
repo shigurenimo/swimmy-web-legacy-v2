@@ -1,4 +1,4 @@
-exports.default = {
+export default {
   id(root) {
     return root.id;
   },
