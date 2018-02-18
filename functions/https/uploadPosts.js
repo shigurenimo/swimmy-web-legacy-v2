@@ -9,7 +9,7 @@ const failureResponse = require('../helpers/failureResponse').default;
 const successResponse = require('../helpers/successResponse').default;
 
 const batchLimit = 450; // < 500
-const limit = 20000;
+const limit = 50;
 const collectionPostsName = 'posts';
 const collectionTagsName = 'tags';
 const merge = false;
@@ -22,21 +22,15 @@ exports.default = functions.https.onRequest((request, response) => {
       }).
       then(([posts, tags]) => {
         return Promise.all([
-          writeTagsToFile(tags).
-            then((tags) => {
-              return toTasks(tags);
-            }).
+          // writeTagsToFile(tags),
+          // writePostsToFile(posts),
+          toTasks(tags).
             then((data) => {
-              console.log(data.length);
-              // return writePostsData(data);
+              return writeTagsData(data);
             }),
-          writePostsToFile(posts).
-            then((posts) => {
-              return toTasks(posts);
-            }).
+          toTasks(posts).
             then((data) => {
-              console.log(data.length);
-              // return writePostsData(data);
+              return writePostsData(data);
             }),
         ]);
       }).

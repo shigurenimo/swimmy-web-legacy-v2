@@ -3,7 +3,6 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
 const failureResponse = require('../helpers/failureResponse').default;
-const getContext = require('../helpers/getContext').default;
 const successResponse = require('../helpers/successResponse').default;
 
 exports.default = functions.https.onRequest((request, response) => {

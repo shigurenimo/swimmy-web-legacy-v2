@@ -43,12 +43,12 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./https/graphql').default;
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'importUser') {
-  exports.importUser = require('./https/importUser').default;
+if (!FUNCTION_NAME || FUNCTION_NAME === 'hello') {
+  exports.hello = require('./https/hello').default;
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTags') {
-  exports.updatePostTags = require('./https/updatePostTags').default;
+if (!FUNCTION_NAME || FUNCTION_NAME === 'importUser') {
+  exports.importUser = require('./https/importUser').default;
 }
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'uploadPosts') {
