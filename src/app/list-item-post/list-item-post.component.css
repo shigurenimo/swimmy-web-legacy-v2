@@ -10,7 +10,7 @@
 }
 
 .content > p {
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .content .createdAt {

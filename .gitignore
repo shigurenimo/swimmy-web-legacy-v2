@@ -1,5 +1,6 @@
 # Project
 functions/exports
+functions/internals
 
 # Node.js
 yarn-error.log

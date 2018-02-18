@@ -16,6 +16,7 @@
     "graphql": "^0.12.3",
     "graphql-tools": "^2.19.0",
     "graphql-type-json": "^0.1.4",
+    "iterall": "^1.1.4",
     "mkdirp-promise": "^5.0.1"
   },
   "private": true

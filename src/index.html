@@ -41,37 +41,9 @@
     <link rel="manifest" href="/manifest.json">
     <link rel='icon' type='image/x-icon' href='favicon.ico'>
     <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
-
-    <style>
-      .splash {
-        opacity: 0;
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        color: #272c33;
-        padding-top: 25vh;
-        z-index: -1;
-      }
-
-      app-root:empty + .splash {
-        opacity: 1;
-        z-index: 100;
-      }
-
-      .splash img {
-        display: block;
-        margin: auto;
-        border-radius: 50%;
-      }
-    </style>
   </head>
   <body>
     <app-root></app-root>
-
-    <div class='splash' id='content'>
-      <img src='/assets/icon-512x512.png' width='256px' alt='PWA logo'>
-    </div>
-
     <noscript>
       <p>
         Please enable JavaScript

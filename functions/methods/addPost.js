@@ -8,6 +8,7 @@ exports.default = (input, user) => {
   const createdAt = new Date();
 
   const payload = {
+    id: docId,
     content: input.content,
     createdAt: createdAt,
     owner: {
@@ -42,7 +43,12 @@ exports.default = (input, user) => {
       const snapshot = snapshots.docs[0];
       if (snapshot) {
         const data = snapshot.data();
-        payload.tags[snapshot.id] = data;
+        payload.tags[snapshot.id] = {
+          name: data.name,
+          count: 0,
+          createdAt: createdAt,
+          updatedAt: createdAt,
+        };
       }
       return admin.firestore().
         collection('posts').

@@ -1,3 +1,11 @@
-exports.default = (res) => {
-  res.end('200');
+exports.default = (res, result) => {
+  if (typeof result !== 'undefined') {
+    if (typeof result === 'string') {
+      res.end(result);
+    } else {
+      res.json(result);
+    }
+  } else {
+    res.end('200');
+  }
 };

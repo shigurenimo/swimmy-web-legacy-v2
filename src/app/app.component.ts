@@ -8,8 +8,6 @@ import { Component } from '@angular/core';
 export class AppComponent {
   public isCollapsed = false;
 
-  public nzBreakpoint = 'sm';
-
   public nzWidth = 64;
 
   constructor() {

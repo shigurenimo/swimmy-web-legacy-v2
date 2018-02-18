@@ -6,7 +6,8 @@ exports.default = () => {
   return admin.
     firestore().
     collection('posts').
-    orderBy('createdAt').
+    orderBy('createdAt', 'desc').
+    limit(40).
     get().
     then((snapshots) => {
       const nodes = [];

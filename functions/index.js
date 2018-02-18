@@ -27,6 +27,10 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'onDeletePost') {
 
 // https
 
+if (!FUNCTION_NAME || FUNCTION_NAME === 'internal_reactionToTag') {
+  exports.internal_reactionToTag = require('./https/addPost').default;
+}
+
 if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
   exports.addPost = require('./https/addPost').default;
 }
@@ -37,6 +41,10 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'deletePost') {
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./https/graphql').default;
+}
+
+if (!FUNCTION_NAME || FUNCTION_NAME === 'importUser') {
+  exports.importUser = require('./https/importUser').default;
 }
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTags') {

@@ -9,8 +9,8 @@ const failureResponse = require('../helpers/failureResponse').default;
 const successResponse = require('../helpers/successResponse').default;
 
 const batchLimit = 450; // < 500
-const limit = 40;
-const collectionName = 'test-users';
+const limit = 500;
+const collectionName = 'export-users';
 const merge = false;
 
 exports.default = functions.https.onRequest((request, response) => {
@@ -48,7 +48,7 @@ const writeData = (tasks) => {
 };
 
 const readData = () => {
-  const inputUserFile = join(__dirname, '..', 'exports', 'posts.json');
+  const inputUserFile = join(__dirname, '..', 'exports', 'users.json');
 
   return new Promise((resolve, reject) => {
     return readFile(inputUserFile, 'utf-8', (err, res) => {
@@ -74,16 +74,9 @@ const readData = () => {
         users[batchIndex].push({
           bycript: res.services.password.bcrypt,
           code: res.profile.code,
-          comment: '',
           createdAt: res.createdAt.$date,
-          description: '',
+          email: `${res.username}@swimmy.io`,
           displayName: res.profile.name,
-          followeeCount: 0,
-          followerCount: 0,
-          headerPhotoURL: '',
-          links: [],
-          photoURL: 0,
-          postCount: 0,
           updatedAt: res.createdAt.$date,
           username: res.username,
           uid: res._id,

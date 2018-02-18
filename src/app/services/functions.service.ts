@@ -14,8 +14,8 @@ export class FunctionsService {
     return this.callFunctionWithToken('addPost', payload);
   }
 
-  public updatePostTag(payload) {
-    return this.callFunctionWithToken('updatePostTags', payload);
+  public importUser(payload) {
+    return this.callFunction('importUser', payload);
   }
 
   private callFunction(name: string, payload = {}) {

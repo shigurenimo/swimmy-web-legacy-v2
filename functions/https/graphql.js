@@ -2,8 +2,8 @@ const {readFileSync} = require('fs');
 const {join} = require('path');
 
 const {graphqlExpress} = require('apollo-server-express');
-const cors = require('cors');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const express = require('express');
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
