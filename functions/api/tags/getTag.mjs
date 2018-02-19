@@ -1,24 +1,24 @@
 import * as admin from 'firebase-admin';
 
-import {POSTS} from '../../constants';
+import {TAGS} from '../../constants/index';
 
 /**
- * Get /posts/{postId}
- * @param {string} postId
+ * Get tags/{tagId}
+ * @param {string} tagId
  * @return {Promise}
  */
-export const getPost = (postId) => {
-  if (!postId) {
+export const getTag = (tagId) => {
+  if (!tagId) {
     throw new Error('postId not found');
   }
 
   return admin.firestore().
-    collection(POSTS).
-    doc(postId).
+    collection(TAGS).
+    doc(tagId).
     get().
     then((snapshot) => {
       if (!snapshot.exists) {
-        throw new Error('post not found');
+        throw new Error('tag not found');
       }
 
       const data = snapshot.data();

@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 
-import {TAGS} from '../../constants';
+import {TAGS} from '../../constants/index';
 
 /**
  * Delete /tags/{tagId}

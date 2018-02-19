@@ -1,6 +1,6 @@
 import JSON from 'graphql-type-json';
 import Mutation from './mutation';
-import Query from './query';
+import Query from './query/index';
 import DateTime from './scalars/dateTime';
 import Owner from './types/owner';
 import Post from './types/post';

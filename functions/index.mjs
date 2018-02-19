@@ -47,9 +47,3 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'uploadPosts') {
 if (!FUNCTION_NAME || FUNCTION_NAME === 'uploadUsers') {
   exports.uploadUsers = require('./https/uploadUsers').default;
 }
-
-// storage
-
-if (!FUNCTION_NAME || FUNCTION_NAME === 'onChangeStorage') {
-  exports.onChangeStorage = require('./storage').default;
-}

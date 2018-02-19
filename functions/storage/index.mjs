@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 
 import {onChangeIcons} from './onChangeIcons';
 
-exports.default = functions.storage.object().onChange((event) => {
+export default functions.storage.object().onChange((event) => {
   // リソースの状態
   const resourceState = event.data.resourceState;
 

@@ -1,14 +1,19 @@
 import * as admin from 'firebase-admin';
 
-import {TAGS} from '../../constants';
+import {POSTS} from '../../constants/index';
 
 /**
- * Get /tags
+ * Get /posts
  * @return {Promise}
  */
-export const getTags = ({limit}) => {
-  return admin.firestore().
-    collection(TAGS).
+export const getPosts = ({limit}) => {
+  if (!limit) {
+    throw new Error('limit not found');
+  }
+
+  return admin.
+    firestore().
+    collection(POSTS).
     orderBy('createdAt', 'desc').
     limit(limit).
     get().

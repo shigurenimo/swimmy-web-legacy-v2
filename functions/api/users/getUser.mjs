@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 
-import {USERS} from '../../constants';
+import {USERS} from '../../constants/index';
 
 export const getUser = (root, args) => {
   return admin.

@@ -1,11 +1,12 @@
-const cors = require('cors');
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+import admin from 'firebase-admin';
+import functions from 'firebase-functions';
 
-const failureResponse = require('../helpers/failureResponse').default;
-const successResponse = require('../helpers/successResponse').default;
+import cors from 'cors';
 
-exports.default = functions.https.onRequest((request, response) => {
+import {failureResponse} from '../helpers/failureResponse';
+import {successResponse} from '../helpers/successResponse';
+
+export default functions.https.onRequest((request, response) => {
   return cors()(request, response, () => {
     return writeData().
       then(() => {

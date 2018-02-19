@@ -15,7 +15,7 @@ const collectionPostsName = 'posts';
 const collectionTagsName = 'tags';
 const merge = false;
 
-exports.default = functions.https.onRequest((request, response) => {
+export default functions.https.onRequest((request, response) => {
   return cors()(request, response, () => {
     return readData().
       then((data) => {

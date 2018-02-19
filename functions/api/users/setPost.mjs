@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 
-import {POSTS, USERS} from '../../constants';
+import {POSTS, USERS} from '../../constants/index';
 
 /**
  * Set /users/{uid}/posts/{postId}

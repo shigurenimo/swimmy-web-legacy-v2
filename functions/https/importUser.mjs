@@ -8,7 +8,7 @@ import crypto from 'crypto';
 import {failureResponse} from '../helpers/failureResponse';
 import {successResponse} from '../helpers/successResponse';
 
-exports.default = functions.https.onRequest((request, response) => {
+export default functions.https.onRequest((request, response) => {
   return cors({origin: true})(request, response, () => {
     const args = getArguments(request.body);
     return importUser(args.username, args.password).

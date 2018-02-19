@@ -10,7 +10,7 @@ import cors from 'cors';
 import express from 'express';
 import {makeExecutableSchema} from 'graphql-tools';
 
-import failureResponse from '../helpers/failureResponse';
+import {failureResponse} from '../helpers/failureResponse';
 import resolvers from '../resolvers';
 
 const typeDefsFile = join(__dirname, '..', 'schema.graphqls');
@@ -71,4 +71,4 @@ const app = express().
   use(filter).
   use(graphql);
 
-exports.default = functions.https.onRequest(app);
+export default functions.https.onRequest(app);
