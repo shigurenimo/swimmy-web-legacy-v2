@@ -21,17 +21,23 @@ export const setPost = (postId, input, owner) => {
     id: postId,
     content: input.content,
     createdAt: createdAt,
-    owner: {
-      uid: owner.uid,
-      displayName: owner.displayName,
-      photoURL: owner.photoURL,
-    },
+    ownerId: null,
+    owner: null,
     photoURLs: {},
     repliedPostCount: 0,
     replyPostId: input.replyPostId || null,
     tags: {},
     updatedAt: createdAt,
   };
+
+  if (owner) {
+    payload.ownerId = owner.uid;
+    payload.owner = {
+      uid: owner.uid,
+      displayName: owner.displayName,
+      photoURL: owner.photoURL,
+    };
+  }
 
   input.photoURLs.forEach((photoURL) => {
     payload.photoURLs[photoURL] = {

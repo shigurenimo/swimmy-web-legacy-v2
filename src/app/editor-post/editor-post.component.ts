@@ -34,43 +34,19 @@ export class EditorPostComponent implements OnInit {
     private fns: FunctionsService,
     private formBuilder: FormBuilder,
     private posts: PostsService,
-    public afa: AngularFireAuth) {
+    public afAuth: AngularFireAuth) {
   }
 
   public get content() {
     return this.formGroup.get('content');
   }
 
-  public async onAddPost() {
-    if (!this.afa.app.auth().currentUser) {
-      return;
-    }
-
+  public onAddPost() {
     this.isMutation = true;
 
-    const content = this.content.value;
-
-    let downloadURLs = [];
-
-    if (!this.fileList.length) {
-      // this.messageId = this.nzMessage.loading(this.uploadText).messageId;
-      downloadURLs = await Promise.all(this.uploadImages());
-      // this.nzMessage.remove(this.messageId);
-    }
-
-    return this.posts
-      .add({
-        content: content,
-        photoURLs: downloadURLs,
-        replyPostId: ''
-      })
-      .subscribe(() => {
-        this.content.setValue('');
-      }, (err) => {
-        console.error(err);
-      }, () => {
-        this.isMutation = false;
-      });
+    this.mutateAddPost().catch((err) => {
+      console.error(err);
+    });
   }
 
   public uploadImages() {
@@ -91,5 +67,33 @@ export class EditorPostComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       content: ['', [Validators.maxLength(20)]]
     });
+  }
+
+  private async mutateAddPost() {
+    const content = this.content.value;
+
+    let downloadURLs = [];
+
+    if (this.afAuth.app.auth().currentUser) {
+      if (!this.fileList.length) {
+        // this.messageId = this.nzMessage.loading(this.uploadText).messageId;
+        downloadURLs = await Promise.all(this.uploadImages());
+        // this.nzMessage.remove(this.messageId);
+      }
+    }
+
+    return this.posts
+      .add({
+        content: content,
+        photoURLs: downloadURLs,
+        replyPostId: null
+      })
+      .subscribe(() => {
+        this.content.setValue('');
+      }, (err) => {
+        console.error(err);
+      }, () => {
+        this.isMutation = false;
+      });
   }
 }
