@@ -1,8 +1,36 @@
-.login-form {
-  margin: 40px auto 0;
-  max-width: 300px;
+:host {
+  display: block;
 }
 
-.submit {
-  text-align: right;
+:host > div {
+  padding: 0 16px;
+}
+
+/** タイトル */
+
+.title {
+  padding-top: 80px;
+}
+
+.title h1 {
+  text-align: center;
+  letter-spacing: 4px;
+  color: #108ee9;
+}
+
+.title .line {
+  color: gray;
+}
+
+/** フォーム */
+
+.form {
+  margin: 0 auto;
+  padding-top: 40px;
+  max-width: 280px;
+}
+
+.or {
+  letter-spacing: 1px;
+  padding: 0 5px;
 }

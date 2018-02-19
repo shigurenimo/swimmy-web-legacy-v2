@@ -4,6 +4,12 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 
 import { FunctionsService } from '../services/functions.service';
+import {
+  ERROR_INVALID_USERNAME,
+  ERROR_USERNAME_ALREADY_IN_USE,
+  MSG_INPUT_EMAIL,
+  USER_NOT_FOUND
+} from '../constants/login';
 
 @Component({
   selector: 'app-view-login',
@@ -11,19 +17,29 @@ import { FunctionsService } from '../services/functions.service';
   styleUrls: ['./view-login.component.css']
 })
 export class ViewLoginComponent implements OnInit {
+  // forms
   public formGroup: FormGroup;
 
+  // https
   public isMutate = false;
+
+  // constants
+  public nzSize = 'large';
+  public usernamePlaceHolder = 'ユーザネーム';
+  public passwordPlaceHolder = 'パスワード';
 
   public get emailError() {
     if (this.username.hasError('required')) {
-      return 'ユーザネームを入力してください';
+      return MSG_INPUT_EMAIL;
     }
     if (this.username.hasError('auth/invalid-email')) {
-      return '無効な形式です';
+      return ERROR_INVALID_USERNAME;
     }
     if (this.username.hasError('auth/email-already-in-use')) {
-      return '既に存在します';
+      return ERROR_USERNAME_ALREADY_IN_USE;
+    }
+    if (this.username.hasError('auth/user-not-found')) {
+      return USER_NOT_FOUND;
     }
     return '';
   }
@@ -56,19 +72,6 @@ export class ViewLoginComponent implements OnInit {
     private functionsService: FunctionsService) {
   }
 
-  private catchErrorCode(code) {
-    switch (code) {
-      case 'auth/invalid-email':
-        return this.username.setErrors({'auth/invalid-email': true});
-      case 'auth/email-already-in-use':
-        return this.username.setErrors({'auth/email-already-in-use': true});
-      case 'auth/wrong-password':
-        return this.password.setErrors({'auth/wrong-password': true});
-      case 'auth/too-many-requests':
-        return this.password.setErrors({'auth/too-many-requests': true});
-    }
-  }
-
   public onSignUp(event) {
     event.preventDefault();
 
@@ -81,6 +84,7 @@ export class ViewLoginComponent implements OnInit {
     const username = this.username.value;
     const password = this.password.value;
     const email = username + '@swimmy.io';
+
     this.functionsService.importUser({username, password})
       .then((res: any) => {
         if (res.exists || !res.uid) {
@@ -124,7 +128,7 @@ export class ViewLoginComponent implements OnInit {
           })
           .then(() => {
             this.isMutate = false;
-            this.router.navigate(['/']);
+            return this.router.navigate(['/']);
           })
           .catch((_err) => {
             this.isMutate = false;
@@ -137,5 +141,18 @@ export class ViewLoginComponent implements OnInit {
       username: [null, [Validators.required]],
       password: [null, [Validators.required]]
     });
+  }
+
+  private catchErrorCode(code) {
+    switch (code) {
+      case 'auth/invalid-email':
+        return this.username.setErrors({'auth/invalid-email': true});
+      case 'auth/email-already-in-use':
+        return this.username.setErrors({'auth/email-already-in-use': true});
+      case 'auth/wrong-password':
+        return this.password.setErrors({'auth/wrong-password': true});
+      case 'auth/too-many-requests':
+        return this.password.setErrors({'auth/too-many-requests': true});
+    }
   }
 }

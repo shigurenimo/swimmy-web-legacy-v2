@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import { firestore, storage } from 'firebase/app';
-import { NzMessageService, UploadFile } from 'ng-zorro-antd';
+import { UploadFile } from 'ng-zorro-antd';
 
 import { FunctionsService } from '../services/functions.service';
 import { PostsService } from '../services/posts.service';
@@ -33,7 +33,6 @@ export class EditorPostComponent implements OnInit {
   constructor(
     private fns: FunctionsService,
     private formBuilder: FormBuilder,
-    private nzMessage: NzMessageService,
     private posts: PostsService,
     public afa: AngularFireAuth) {
   }
@@ -54,10 +53,9 @@ export class EditorPostComponent implements OnInit {
     let downloadURLs = [];
 
     if (!this.fileList.length) {
-      this.messageId =
-        this.nzMessage.loading(this.uploadText).messageId;
+      // this.messageId = this.nzMessage.loading(this.uploadText).messageId;
       downloadURLs = await Promise.all(this.uploadImages());
-      this.nzMessage.remove(this.messageId);
+      // this.nzMessage.remove(this.messageId);
     }
 
     return this.posts

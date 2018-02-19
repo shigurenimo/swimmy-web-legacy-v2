@@ -1,42 +1,90 @@
-<form nz-form [formGroup]="formGroup" class="login-form">
-  <div nz-form-item>
-    <div nz-form-control>
-      <nz-input formControlName="username" [nzPlaceHolder]="'Username'" [nzSize]="'large'">
-        <ng-template #prefix>
-          <i class="anticon anticon-user"></i>
-        </ng-template>
-      </nz-input>
-      <div nz-form-explain
-           *ngIf="username.dirty && username.hasError('auth/invalid-email')">
-        ユーザネームが正しくありません
-      </div>
-      <div nz-form-explain
-           *ngIf="username.dirty && username.hasError('auth/email-already-in-use')">
-        このユーザネームは既に使われています
-      </div>
-    </div>
+<app-header></app-header>
+
+<div>
+
+  <!-- タイトル -->
+  <div class='title'>
+    <h1>S<span class='line'>/</span>w</h1>
   </div>
-  <div nz-form-item>
-    <div nz-form-control>
-      <nz-input formControlName="password" [nzType]="'password'" [nzPlaceHolder]="'Password'" [nzSize]="'large'">
-        <ng-template #prefix>
-          <i class="anticon anticon-lock"></i>
-        </ng-template>
-      </nz-input>
-      <div nz-form-explain
-           *ngIf="password.dirty && password.hasError('auth/wrong-password')">
-        パスワードが間違っています
+
+  <!-- フォーム -->
+  <div class='form'>
+
+    <form nz-form [formGroup]='formGroup'>
+
+      <!-- Email -->
+      <div nz-form-item>
+        <div nz-form-control nzHasFeedback>
+          <nz-input
+            formControlName='username'
+            [nzPlaceHolder]='usernamePlaceHolder'
+            [nzSize]='nzSize'>
+            <ng-template #prefix>
+              <i class='anticon anticon-user'></i>
+            </ng-template>
+          </nz-input>
+          <div *ngIf="emailError" nz-form-explain>
+            {{emailError}}
+          </div>
+        </div>
       </div>
-      <div nz-form-explain
-           *ngIf="password.dirty && password.hasError('auth/too-many-requests')">
-        リクエスト数が多過ぎます
+
+      <!-- Password -->
+      <div nz-form-item>
+        <div nz-form-control nzHasFeedback>
+          <nz-input
+            formControlName='password'
+            nzType='password'
+            [nzPlaceHolder]='passwordPlaceHolder'
+            [nzSize]='nzSize'>
+            <ng-template #prefix>
+              <i class='anticon anticon-lock'></i>
+            </ng-template>
+          </nz-input>
+          <div
+            nz-form-explain
+            *ngIf="password.dirty && password.hasError('required')">
+            パスワードを入力してください
+          </div>
+          <div
+            *ngIf="password.dirty && password.hasError('auth/wrong-password')"
+            nz-form-explain>
+            パスワードが間違っています
+          </div>
+          <div
+            *ngIf="password.dirty && password.hasError('auth/too-many-requests')"
+            nz-form-explain>
+            リクエスト数が多過ぎます
+          </div>
+        </div>
       </div>
-    </div>
+
+      <!-- Login -->
+      <div nz-form-item>
+        <div nz-form-control [nzValidateStatus]='isMutate'>
+          <div nz-row nzType='flex' nzAlign='middle' nzGutter='8' nzJustify='end'>
+            <span nz-col>
+              <button
+                nz-button
+                [nzSize]='nzSize'
+                [disabled]='isMutate'
+                (click)="onSignUp($event)">登録</button>
+            </span>
+            <span class='or'>or</span>
+            <span nz-col>
+              <button
+                nz-button
+                nzType='primary'
+                [nzSize]='nzSize'
+                [disabled]='isMutate'
+                (click)="onSignIn($event)">ログイン</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
   </div>
-  <div nz-form-item>
-    <div nz-form-control class="submit">
-      <button nz-button nzSize="large" (click)="onSignUp($event)">新規登録</button>
-      <button nz-button nzSize="large" (click)="onSignIn($event)">ログイン</button>
-    </div>
-  </div>
-</form>
+
+</div>
