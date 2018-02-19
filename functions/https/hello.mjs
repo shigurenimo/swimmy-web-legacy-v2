@@ -1,5 +1,5 @@
-import admin from 'firebase-admin';
-import functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
 import cors from 'cors';
 

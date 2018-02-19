@@ -18,7 +18,7 @@ export const getPost = (postId) => {
     get().
     then((snapshot) => {
       if (!snapshot.exists) {
-        throw new Error('post not found');
+        throw new Error(`post(${postId}) not found`);
       }
 
       const data = snapshot.data();

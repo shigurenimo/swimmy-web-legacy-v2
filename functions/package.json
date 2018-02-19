@@ -11,12 +11,12 @@
     "cors": "^2.8.4",
     "crypto": "^1.0.1",
     "express": "^4.16.2",
-    "firebase-admin": "~5.8.2",
+    "firebase-admin": "~5.9.0",
     "firebase-functions": "^0.8.1",
-    "graphql": "^0.12.3",
-    "graphql-tools": "^2.19.0",
+    "graphql": "^0.13.1",
+    "graphql-tools": "^2.21.0",
     "graphql-type-json": "^0.1.4",
-    "iterall": "^1.1.4",
+    "iterall": "^1.2.0",
     "mkdirp-promise": "^5.0.1"
   },
   "private": true

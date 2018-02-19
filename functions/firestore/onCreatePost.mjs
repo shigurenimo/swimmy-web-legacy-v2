@@ -5,7 +5,7 @@ import {setPostToUser} from '../api/users/setPost';
 import {failureLog} from '../helpers/failureLog';
 import {getEventData} from '../helpers/getEventData';
 
-exports.default = functions.firestore.
+export default functions.firestore.
   document('posts/{postId}').
   onCreate((event) => {
     const post = getEventData(event);

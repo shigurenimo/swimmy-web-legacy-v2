@@ -6,7 +6,7 @@ import {toStorageURL} from '../../helpers/toStorageURL';
 import config from '../../config';
 
 /**
- * Set posts/{postId}
+ * Set /posts/{postId}
  * @param {string} postId
  * @param {Object} input
  * @param {Object} owner

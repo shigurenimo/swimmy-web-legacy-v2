@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 import {TAGS} from '../../constants/index';
 
 /**
- * Get tags/{tagId}
+ * Get /tags/{tagId}
  * @param {string} tagId
  * @return {Promise}
  */
@@ -18,7 +18,7 @@ export const getTag = (tagId) => {
     get().
     then((snapshot) => {
       if (!snapshot.exists) {
-        throw new Error('tag not found');
+        throw new Error(`tag(${tagId}) not found`);
       }
 
       const data = snapshot.data();

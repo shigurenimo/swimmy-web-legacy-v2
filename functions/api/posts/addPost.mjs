@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 import {setPost} from './setPost';
 
 /**
- * Add posts/{postId}
+ * Add /posts/{postId}
  * @param {Object} input
  * @param {Object} owner
  * @return {*}

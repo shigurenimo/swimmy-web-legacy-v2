@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import {deleteTags} from '../api/tags/deleteTags';
 
 import {failureLog} from '../helpers/failureLog';
-import {getEventData} from '../helpers/getContext';
+import {getEventData} from '../helpers/getEventData';
 
 export default functions.firestore.
   document('posts/{postId}').
