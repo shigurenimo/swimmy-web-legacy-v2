@@ -9,7 +9,7 @@ import {POSTS, USERS} from '../../constants/index';
  * @param {Object} post
  * @return {Promise}
  */
-export const setPostToUser = (uid, postId, post) => {
+export const setUserPost = (uid, postId, post) => {
   if (!post) {
     throw new Error('post not found');
   }

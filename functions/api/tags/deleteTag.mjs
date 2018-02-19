@@ -5,7 +5,7 @@ import {TAGS} from '../../constants/index';
 /**
  * Delete /tags/{tagId}
  * @param {Object} tag
- * @return {Promise<any[]>}
+ * @return {Promise}
  */
 export const deleteTag = (tag) => {
   return admin.firestore().runTransaction((t) => {

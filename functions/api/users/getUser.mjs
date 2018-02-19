@@ -2,11 +2,15 @@ import * as admin from 'firebase-admin';
 
 import {USERS} from '../../constants/index';
 
-export const getUser = (root, args) => {
+export const getUser = (root, userId) => {
+  if (!userId) {
+    throw new Error('userId not found');
+  }
+
   return admin.
     firestore().
     collection(USERS).
-    doc(args.id).
+    doc(userId).
     get().
     then((snapshot) => {
       if (!snapshot.exists) {

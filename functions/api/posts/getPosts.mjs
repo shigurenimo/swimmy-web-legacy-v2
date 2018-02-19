@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 
 import {POSTS} from '../../constants/index';
+import {DESC} from '../../constants/query';
 
 /**
  * Get /posts
@@ -14,7 +15,7 @@ export const getPosts = ({limit}) => {
   return admin.
     firestore().
     collection(POSTS).
-    orderBy('createdAt', 'desc').
+    orderBy('createdAt', DESC).
     limit(limit).
     get().
     then((snapshots) => {

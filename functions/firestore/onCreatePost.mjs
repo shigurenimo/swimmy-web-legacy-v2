@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 
-import {setPostToUser} from '../api/users/setPost';
+import {setUserPost} from '../api/users/setUserPost';
 
 import {failureLog} from '../helpers/failureLog';
 import {getEventData} from '../helpers/getEventData';
@@ -13,7 +13,7 @@ export default functions.firestore.
     const {postId} = event.params;
 
     return Promise.all([
-      setPostToUser(post.owner.uid, postId, post),
+      setUserPost(post.owner.uid, postId, post),
     ]).
       catch((err) => {
         return failureLog(err);

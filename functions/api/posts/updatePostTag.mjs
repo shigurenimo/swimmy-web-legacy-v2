@@ -1,5 +1,7 @@
 import * as admin from 'firebase-admin';
 
+import {POST_TAGS, POSTS, TAGS, USERS} from '../../constants/index';
+
 /**
  * Update /posts/{postId}-tags
  * @param {Object} input
@@ -8,20 +10,20 @@ import * as admin from 'firebase-admin';
  */
 export const updatePostTag = (input, user) => {
   return admin.firestore().runTransaction((t) => {
-    const newTagId = admin.firestore().collection('tags').doc().id;
+    const newTagId = admin.firestore().collection(TAGS).doc().id;
 
     const postRef = admin.firestore().
-      collection('posts').
+      collection(POSTS).
       doc(input.postId);
 
     const userPostTagsRef = admin.firestore().
-      collection('users').
+      collection(USERS).
       doc(user.uid).
-      collection('post-tags').
+      collection(POST_TAGS).
       doc(input.postId);
 
     const tagNameRef = admin.firestore().
-      collection('tags').
+      collection(TAGS).
       where('name', '==', input.name);
 
     return Promise.all([
@@ -114,7 +116,7 @@ export const updatePostTag = (input, user) => {
         if (tagExists) {
           const tag = tagSnapshot.data();
           const tagRef = admin.firestore().
-            collection('tags').
+            collection(TAGS).
             doc(tagSnapshot.id);
           const count = tag.count + (userPostTagExists ? -1 : 1);
           if (count < 1) {
@@ -132,7 +134,7 @@ export const updatePostTag = (input, user) => {
         // タグが存在しない
         if (!tagExists) {
           const tagRef = admin.firestore().
-            collection('tags').
+            collection(TAGS).
             doc(tagId);
           t.set(tagRef, postTag);
         }
