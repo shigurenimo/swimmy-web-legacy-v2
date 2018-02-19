@@ -7,9 +7,7 @@
       [routerLinkActiveOptions]="routerLinkActiveOptions"
       routerLinkActive="ant-menu-item-selected"
       routerLink="/{{afAuth.auth.currentUser.uid}}">
-
     <span class="anticon anticon-user"></span>
-
   </li>
 
   <!-- ログインしていない -->
@@ -19,9 +17,7 @@
       [routerLinkActiveOptions]="routerLinkActiveOptions"
       routerLinkActive="ant-menu-item-selected"
       routerLink="/login">
-
     <span class="anticon anticon-poweroff"></span>
-
   </li>
 
   <!-- メニューの項目 -->
@@ -30,9 +26,7 @@
       [routerLinkActiveOptions]="routerLinkActiveOptions"
       routerLinkActive="ant-menu-item-selected"
       [routerLink]="link.path">
-
     <span [class]="link.icon"></span>
-
   </li>
 
 </ul>

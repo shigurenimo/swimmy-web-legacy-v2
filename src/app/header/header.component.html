@@ -1,0 +1,57 @@
+<div class="header">
+
+  <div class="row" nz-row nzType="flex" nzAlign="middle" *ngIf="goBack">
+
+    <span nz-col class="user">
+      <button nz-button nzShape="circle" nzSize="large" (click)="onGoBack()">
+        <span class="anticon anticon-left"></span>
+      </button>
+    </span>
+
+    <span>
+      <span class="center">
+        <ng-template [ngTemplateOutlet]="title"></ng-template>
+      </span>
+    </span>
+
+  </div>
+
+  <div class="row" nz-row nzType="flex" nzAlign="middle" *ngIf="!goBack">
+
+    <!-- Links -->
+    <ul nz-menu nzMode="horizontal">
+
+      <li *ngFor="let link of links"
+          nz-menu-item
+          [routerLink]="link.routerLink"
+          [routerLinkActiveOptions]="routerLinkActiveOptions"
+          routerLinkActive="ant-menu-item-selected">
+        <span [class]="link.iconClass"></span>
+        <span class="name">{{link.name}}</span>
+      </li>
+
+    </ul>
+
+    <span class="flex-space"></span>
+
+    <!-- ログインしている -->
+    <span nz-col class="user" routerLink="/settings" *ngIf="uid">
+      <button nz-button nzShape="circle" nzSize="large">
+        <span class="anticon anticon-setting"></span>
+      </button>
+    </span>
+
+    <!-- ログインしていない -->
+    <span nz-col class="user" routerLink="/login" *ngIf="!uid">
+      <button nz-button nzShape="circle" nzSize="large">
+        <span class="anticon anticon-poweroff"></span>
+      </button>
+    </span>
+
+  </div>
+
+</div>
+
+<div class="body">
+  <ng-template [ngTemplateOutlet]="body"></ng-template>
+</div>

@@ -20,6 +20,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { EditorPostComponent } from './editor-post/editor-post.component';
 import { DialogLoginComponent } from './dialog-login/dialog-login.component';
+import { HeaderComponent } from './header/header.component';
 import { ListItemPostComponent } from './list-item-post/list-item-post.component';
 import { MaterialModule } from './material.module';
 import { FunctionsService } from './services/functions.service';
@@ -38,6 +39,7 @@ import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.com
     AppComponent,
     EditorPostComponent,
     DialogLoginComponent,
+    HeaderComponent,
     ListItemPostComponent,
     SidenavComponent,
     ViewConfigComponent,
