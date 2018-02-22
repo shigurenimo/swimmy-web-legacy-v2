@@ -3,24 +3,25 @@
 <div>
 
   <!-- タイトル -->
-  <div class='title'>
-    <h1>S<span class='line'>/</span>w</h1>
+  <div class="title">
+    <h1>S<span class="line">/</span>w</h1>
   </div>
 
   <!-- フォーム -->
-  <div class='form'>
+  <div class="form">
 
-    <form nz-form [formGroup]='formGroup'>
+    <form nz-form [formGroup]="formGroup">
 
       <!-- Email -->
       <div nz-form-item>
         <div nz-form-control nzHasFeedback>
           <nz-input
-            formControlName='username'
-            [nzPlaceHolder]='usernamePlaceHolder'
-            [nzSize]='nzSize'>
+            nzType="text"
+            formControlName="username"
+            [nzPlaceHolder]="usernamePlaceHolder"
+            [nzSize]="nzSize">
             <ng-template #prefix>
-              <i class='anticon anticon-user'></i>
+              <i class="anticon anticon-user"></i>
             </ng-template>
           </nz-input>
           <div *ngIf="emailError" nz-form-explain>
@@ -33,50 +34,38 @@
       <div nz-form-item>
         <div nz-form-control nzHasFeedback>
           <nz-input
-            formControlName='password'
-            nzType='password'
-            [nzPlaceHolder]='passwordPlaceHolder'
-            [nzSize]='nzSize'>
+            formControlName="password"
+            nzType="password"
+            [nzPlaceHolder]="passwordPlaceHolder"
+            [nzSize]="nzSize">
             <ng-template #prefix>
-              <i class='anticon anticon-lock'></i>
+              <i class="anticon anticon-lock"></i>
             </ng-template>
           </nz-input>
-          <div
-            nz-form-explain
-            *ngIf="password.dirty && password.hasError('required')">
-            パスワードを入力してください
-          </div>
-          <div
-            *ngIf="password.dirty && password.hasError('auth/wrong-password')"
-            nz-form-explain>
-            パスワードが間違っています
-          </div>
-          <div
-            *ngIf="password.dirty && password.hasError('auth/too-many-requests')"
-            nz-form-explain>
-            リクエスト数が多過ぎます
+          <div *ngIf="passwordError" nz-form-explain>
+            {{passwordError}}
           </div>
         </div>
       </div>
 
       <!-- Login -->
       <div nz-form-item>
-        <div nz-form-control [nzValidateStatus]='isMutate'>
-          <div nz-row nzType='flex' nzAlign='middle' nzGutter='8' nzJustify='end'>
+        <div nz-form-control [nzValidateStatus]="isMutate">
+          <div nz-row nzType="flex" nzAlign="middle" nzGutter="8" nzJustify="end">
             <span nz-col>
               <button
                 nz-button
-                [nzSize]='nzSize'
-                [disabled]='isMutate'
+                [nzSize]="nzSize"
+                [disabled]="isMutate"
                 (click)="onSignUp($event)">登録</button>
             </span>
-            <span class='or'>or</span>
+            <span class="or">or</span>
             <span nz-col>
               <button
                 nz-button
-                nzType='primary'
-                [nzSize]='nzSize'
-                [disabled]='isMutate'
+                nzType="primary"
+                [nzSize]="nzSize"
+                [disabled]="isMutate"
                 (click)="onSignIn($event)">ログイン</button>
             </span>
           </div>

@@ -20,7 +20,7 @@ export class EditorPostComponent implements OnInit {
 
   public nzAutosize = {minRows: 1, maxRows: 6};
 
-  public nzPlaceHolder = '新しい書き込み';
+  public nzPlaceHolder = 'Aro';
 
   public uploadText = 'アップロード中..';
 

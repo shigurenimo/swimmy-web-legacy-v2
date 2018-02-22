@@ -1,46 +1,20 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import axios from 'axios';
 
 import { environment } from '../../environments/environment';
 
 @Injectable()
 export class FunctionsService {
-  constructor(private afa: AngularFireAuth) {
+  constructor(
+    private afa: AngularFireAuth,
+    private http: HttpClient) {
   }
 
-  public addPost(payload) {
-    return this.callFunctionWithToken('addPost', payload);
-  }
+  public restoreUser(payload) {
+    const url = `${environment.function}/restoreUser`;
 
-  public importUser(payload) {
-    return this.callFunction('importUser', payload);
-  }
-
-  private callFunction(name: string, payload = {}) {
-    return axios({
-      method: 'POST',
-      url: `${environment.function}/${name}/`,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: payload
-    });
-  }
-
-  private callFunctionWithToken(name: string, payload = {}) {
-    return this.afa.auth.currentUser.getIdToken()
-      .then(idToken => {
-        return axios({
-          method: 'POST',
-          url: `${environment.function}/${name}/`,
-          headers: {
-            'authorization': `Bearer ${idToken}`,
-            'Content-Type': 'application/json'
-          },
-          data: payload
-        });
-      });
+    return this.http.post<any>(url, payload);
   }
 }

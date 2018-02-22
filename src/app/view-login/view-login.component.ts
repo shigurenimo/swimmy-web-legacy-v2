@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
+
+import { AngularFireAuth } from 'angularfire2/auth';
 
 import { FunctionsService } from '../services/functions.service';
 import {
@@ -41,6 +42,9 @@ export class ViewLoginComponent implements OnInit {
     if (this.username.hasError('auth/user-not-found')) {
       return USER_NOT_FOUND;
     }
+    if (this.username.hasError('auth/user-disabled')) {
+      return 'このユーザは現在使用できません';
+    }
     return '';
   }
 
@@ -53,6 +57,9 @@ export class ViewLoginComponent implements OnInit {
     }
     if (this.password.hasError('auth/too-many-request')) {
       return '試行回数が多すぎます';
+    }
+    if (this.password.hasError('auth/weak-password')) {
+      return 'パスワードが弱すぎます';
     }
     return '';
   }
@@ -81,25 +88,7 @@ export class ViewLoginComponent implements OnInit {
 
     this.isMutate = true;
 
-    const username = this.username.value;
-    const password = this.password.value;
-    const email = username + '@swimmy.io';
-
-    this.functionsService.importUser({username, password})
-      .then((res: any) => {
-        if (res.exists || !res.uid) {
-          this.catchErrorCode('auth/email-already-in-use');
-          return;
-        }
-        return this.afa.auth.createUserWithEmailAndPassword(email, password);
-      })
-      .then(() => {
-        this.isMutate = false;
-        this.router.navigate(['/']);
-      })
-      .catch((err) => {
-        this.isMutate = false;
-      });
+    this.mutateSignUp();
   }
 
   public onSignIn(event) {
@@ -111,29 +100,7 @@ export class ViewLoginComponent implements OnInit {
 
     this.isMutate = true;
 
-    const username = this.username.value;
-    const password = this.password.value;
-    const email = username + '@swimmy.io';
-
-    this.afa.auth.signInWithEmailAndPassword(email, password)
-      .catch((err) => {
-        this.functionsService.importUser({username, password})
-          .then(({data}: any) => {
-            if (data.exists && data.uid) {
-              return this.afa.auth
-                .createUserWithEmailAndPassword(email, password);
-            } else {
-              this.catchErrorCode(err.code);
-            }
-          })
-          .then(() => {
-            this.isMutate = false;
-            return this.router.navigate(['/']);
-          })
-          .catch((_err) => {
-            this.isMutate = false;
-          });
-      });
+    this.mutateSignIn();
   }
 
   public ngOnInit() {
@@ -143,16 +110,82 @@ export class ViewLoginComponent implements OnInit {
     });
   }
 
+  private mutateSignUp() {
+    const username = this.username.value;
+    const password = this.password.value;
+    const email = username + '@swimmy.io';
+
+    this.afa.auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        this.catchMutation();
+      })
+      .catch((err) => {
+        this.catchErrorCode(err.code);
+      });
+  }
+
+  private mutateSignIn() {
+    const username = this.username.value;
+    const password = this.password.value;
+    const email = username + '@swimmy.io';
+
+    this.afa.auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.catchMutation();
+      })
+      .catch((err) => {
+        if (err.code === 'auth/user-disabled') {
+          this.mutateRestore();
+        } else {
+          this.catchErrorCode(err.code);
+        }
+      });
+  }
+
+  private mutateRestore() {
+    const username = this.username.value;
+    const password = this.password.value;
+    const email = username + '@swimmy.io';
+
+    this.functionsService
+      .restoreUser({username, password})
+      .subscribe(({valid, error}) => {
+        if (!valid) {
+          this.catchErrorCode(error);
+          return;
+        }
+        this.afa.auth.signInWithEmailAndPassword(email, password)
+          .then(() => {
+            this.catchMutation();
+          })
+          .catch((err) => {
+            this.catchErrorCode(err.code);
+          });
+      });
+  }
+
+  private catchMutation() {
+    this.router.navigate(['/']).catch((err) => {
+      console.error(err);
+    });
+  }
+
   private catchErrorCode(code) {
+    this.isMutate = false;
     switch (code) {
+      case 'auth/user-not-found':
       case 'auth/invalid-email':
-        return this.username.setErrors({'auth/invalid-email': true});
       case 'auth/email-already-in-use':
-        return this.username.setErrors({'auth/email-already-in-use': true});
+      case 'auth/user-disabled':
+        this.username.setErrors({[code]: true});
+        break;
       case 'auth/wrong-password':
-        return this.password.setErrors({'auth/wrong-password': true});
       case 'auth/too-many-requests':
-        return this.password.setErrors({'auth/too-many-requests': true});
+      case 'auth/weak-password':
+        this.password.setErrors({[code]: true});
+        break;
     }
   }
 }

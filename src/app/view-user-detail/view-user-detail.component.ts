@@ -36,17 +36,17 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
 
   private uploadText = 'アップロード中..';
 
-  private user$;
+  private params$$;
 
   constructor(
-    private route: ActivatedRoute,
-    private users: UsersService,
+    private activatedRoute: ActivatedRoute,
+    private usersService: UsersService,
     private nzMessage: NzMessageService,
-    public afA: AngularFireAuth) {
+    public afAuth: AngularFireAuth) {
   }
 
   public onLogout() {
-    this.afA.auth
+    this.afAuth.auth
       .signOut()
       .then(() => {
         const messageText = 'ログアウトしました';
@@ -60,11 +60,11 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
   }
 
   public onUpload(e) {
-    if (!this.afA.app.auth().currentUser) {
+    if (!this.afAuth.app.auth().currentUser) {
       return;
     }
-    const uid = this.afA.app.auth().currentUser.uid;
-    if (this.route.snapshot.params.uid !== uid) {
+    const uid = this.afAuth.app.auth().currentUser.uid;
+    if (this.activatedRoute.snapshot.params.uid !== uid) {
       return;
     }
     const uploadMessageId =
@@ -80,8 +80,21 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    const uid = this.route.snapshot.params.uid;
-    this.user$ = this.users
+    this.params$$ = this.activatedRoute.params.subscribe((params) => {
+      this.onChangeParams(params);
+    });
+  }
+
+  public ngOnDestroy() {
+    if (this.params$$) {
+      this.params$$.unsubscribe();
+    }
+  }
+
+  private onChangeParams(params) {
+    const {uid} = params;
+    this.isLoading = true;
+    this.usersService
       .getDoc({id: uid})
       .subscribe(({data}) => {
         const user = data.user as User;
@@ -95,11 +108,5 @@ export class ViewUserDetailComponent implements OnInit, OnDestroy {
         this.postCount = user.postCount;
         this.isLoading = false;
       });
-  }
-
-  public ngOnDestroy() {
-    if (this.user$) {
-      this.user$.unsubscribe();
-    }
   }
 }
