@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { MatDialog } from '@angular/material';
-
-import { DialogLoginComponent } from '../dialog-login/dialog-login.component';
 
 @Component({
   selector: 'app-sidenav',
@@ -23,11 +20,6 @@ export class SidenavComponent {
   ];
 
   constructor(
-    public afAuth: AngularFireAuth,
-    private dialog: MatDialog) {
-  }
-
-  onLoginClick() {
-    this.dialog.open(DialogLoginComponent);
+    public afAuth: AngularFireAuth) {
   }
 }
