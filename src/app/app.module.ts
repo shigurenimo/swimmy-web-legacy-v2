@@ -11,7 +11,6 @@ import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
-import 'firebase/storage';
 import 'firebase/firestore';
 import { enUS, NgZorroAntdModule, NZ_LOCALE } from 'ng-zorro-antd';
 
@@ -31,8 +30,8 @@ import { ViewHomeComponent } from './view-home/view-home.component';
 import { ViewLoginComponent } from './view-login/view-login.component';
 import { ViewConfigComponent } from './view-config/view-config.component';
 import { ViewInfoComponent } from './view-info/view-info.component';
-import { ViewUserComponent } from './view-user/view-user.component';
-import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.component';
+import { ViewUsersComponent } from './view-users/view-users.component';
+import { ViewUsersDetailComponent } from './view-users-detail/view-users-detail.component';
 
 @NgModule({
   declarations: [
@@ -46,8 +45,8 @@ import { ViewUserDetailComponent } from './view-user-detail/view-user-detail.com
     ViewHomeComponent,
     ViewInfoComponent,
     ViewLoginComponent,
-    ViewUserComponent,
-    ViewUserDetailComponent
+    ViewUsersComponent,
+    ViewUsersDetailComponent
   ],
   imports: [
     AngularFireAuthModule,

@@ -9,11 +9,11 @@ import { User } from '../interfaces/User';
 import { UsersService } from '../services/users.service';
 
 @Component({
-  selector: 'app-view-user-detail',
-  templateUrl: './view-user-detail.component.html',
-  styleUrls: ['./view-user-detail.component.css']
+  selector: 'app-view-users-detail',
+  templateUrl: './view-users-detail.component.html',
+  styleUrls: ['./view-users-detail.component.css']
 })
-export class ViewUserDetailComponent implements OnInit, OnDestroy {
+export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   public createdAt;
 
   public description;
