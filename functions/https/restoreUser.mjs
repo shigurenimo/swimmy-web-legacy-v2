@@ -11,7 +11,7 @@ import {successResponse} from '../helpers/successResponse';
 export default functions.https.onRequest((request, response) => {
   return cors({origin: true})(request, response, () => {
     const args = getArguments(request.body);
-    return importUser(args.username, args.password).
+    return updateAuthentication(args.username, args.password).
       then((result) => {
         return successResponse(response, result);
       }).
@@ -28,21 +28,23 @@ const getArguments = (body) => {
   };
 };
 
-const importUser = (username, password) => {
+const updateAuthentication = (username, password) => {
   return admin.firestore().
-    collection('export-users').
+    collection('users').
     where('username', '==', username).
     limit(1).
     get().
     then((snapshots) => {
       const snapshot = snapshots.docs[0];
+
       if (!snapshot) {
-        return {exists: false, uid: null};
+        return {valid: false, error: 'auth/user-disabled'};
       }
+
       const user = snapshot.data();
 
       if (!user.bycript) {
-        return {exists: true, uid: null};
+        return {valid: false, error: 'auth/user-disabled'};
       }
 
       const sha512 = crypto.createHash('sha256');
@@ -51,14 +53,16 @@ const importUser = (username, password) => {
 
       const hash = sha512.digest('hex');
 
-      return compare(hash, user.bycript).
-        then((result) => {
-          if (result) {
-            return {exists: true, uid: user.uid};
-          } else {
-            return {exists: true, uid: null};
-          }
-        });
+      return compare(hash, user.bycript).then((result) => {
+        if (!result) {
+          return {valid: false, error: 'auth/wrong-password'};
+        }
+
+        return admin.auth().updateUser(user.uid, {password, disabled: false}).
+          then(() => {
+            return {valid: true, error: null};
+          });
+      });
     });
 };
 
@@ -69,6 +73,7 @@ const compare = (hash, bcryptHash) => {
         reject(err);
         return;
       }
+
       resolve(res);
     });
   });

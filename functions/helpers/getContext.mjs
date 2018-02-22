@@ -11,10 +11,10 @@ export const getCntext = (request) => {
 
   return admin.auth().verifyIdToken(idToken).then((token) => {
     return {
-      displayName: token.name,
-      photoURL: token.picture,
+      displayName: token.name || '',
+      photoURL: token.picture || '',
       uid: token.uid,
-      email: token.email,
+      email: token.email || '',
     };
   });
 };

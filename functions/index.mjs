@@ -48,10 +48,6 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./https/graphql').default;
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'hello') {
-  exports.hello = require('./https/hello').default;
-}
-
 if (!FUNCTION_NAME || FUNCTION_NAME === 'importUsers') {
   exports.importUsers = require('./https/importUsers').default;
 }

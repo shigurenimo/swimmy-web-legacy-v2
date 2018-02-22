@@ -5,5 +5,5 @@ export default functions.auth.user().onDelete((event) => {
 
   console.info(`delete ${user.displayName}`);
 
-  return;
+  return 200;
 });

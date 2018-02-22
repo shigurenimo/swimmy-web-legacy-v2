@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 
 import {USERS} from '../../constants/index';
 
-export const getUser = (root, userId) => {
+export const getUser = (userId) => {
   if (!userId) {
     throw new Error('userId not found');
   }

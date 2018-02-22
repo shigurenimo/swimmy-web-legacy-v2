@@ -30,10 +30,10 @@ const graphql = graphqlExpress((request, response) => {
       verifyIdToken(idToken).
       then((decodedToken) => {
         const user = {
-          displayName: decodedToken.name,
-          photoURL: decodedToken.picture,
+          displayName: decodedToken.name || '',
+          photoURL: decodedToken.picture || '',
           uid: decodedToken.uid,
-          email: decodedToken.email,
+          email: decodedToken.email || '',
         };
         return {schema, context: {user}};
       }).

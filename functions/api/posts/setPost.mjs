@@ -30,6 +30,11 @@ export const setPost = (postId, input, owner) => {
     updatedAt: createdAt,
   };
 
+  console.log(owner);
+  console.log(owner.displayName);
+
+  console.log('----');
+
   if (owner) {
     payload.ownerId = owner.uid;
     payload.owner = {
@@ -38,6 +43,8 @@ export const setPost = (postId, input, owner) => {
       photoURL: owner.photoURL,
     };
   }
+
+  console.log(payload);
 
   input.photoURLs.forEach((photoURL) => {
     payload.photoURLs[photoURL] = {
