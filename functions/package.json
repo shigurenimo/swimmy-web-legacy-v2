@@ -17,7 +17,8 @@
     "graphql-tools": "^2.21.0",
     "graphql-type-json": "^0.1.4",
     "iterall": "^1.2.0",
-    "mkdirp-promise": "^5.0.1"
+    "mkdirp-promise": "^5.0.1",
+    "node-fetch": "^2.0.0"
   },
   "private": true
 }

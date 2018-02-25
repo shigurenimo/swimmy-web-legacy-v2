@@ -1,23 +1,23 @@
 export const getEventData = (event) => {
-  const previousData = event.data.previous.data();
-  const currentData = event.data.data();
+  const previousData = event.data.previous.data()
+  const currentData = event.data.data()
 
-  let data = null;
+  let data = null
 
   if (!previousData) {
-    data = currentData;
+    data = currentData
   }
 
   if (!currentData) {
-    data = previousData;
+    data = previousData
   }
 
   if (previousData && currentData) {
     data = {
       previous: previousData,
-      current: currentData,
-    };
+      current: currentData
+    }
   }
 
-  return data;
-};
+  return data
+}

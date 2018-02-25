@@ -1,3 +1,3 @@
 export const failureLog = (err) => {
-  console.error(err);
-};
+  console.error(err)
+}

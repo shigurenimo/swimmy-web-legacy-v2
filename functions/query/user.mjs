@@ -1,5 +1,5 @@
-import {getUser} from '../api/users/getUser';
+import { getUser } from '../api/users/getUser'
 
 export default (root, {id}) => {
-  return getUser(id);
+  return getUser(id)
 };

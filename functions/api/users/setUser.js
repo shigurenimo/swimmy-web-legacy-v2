@@ -1,26 +1,27 @@
-import * as admin from 'firebase-admin';
+import * as admin from 'firebase-admin'
 
-import {USERS} from '../../constants/index';
+import { USERS } from '../../constants/index'
 
 export const setUser = (uid, input) => {
   if (!input) {
-    throw new Error('input not found');
+    throw new Error('input not found')
   }
 
   if (!input.email) {
-    throw new Error('input.email not found');
+    throw new Error('input.email not found')
   }
 
   if (!uid) {
-    throw new Error('uid not found');
+    throw new Error('uid not found')
   }
 
-  const createdAt = new Date();
+  const createdAt = new Date()
 
-  return admin.firestore().
-    collection(USERS).
-    doc(uid).
-    set({
+  return admin
+    .firestore()
+    .collection(USERS)
+    .doc(uid)
+    .set({
       uid: uid,
       comment: '',
       createdAt: createdAt,
@@ -33,6 +34,6 @@ export const setUser = (uid, input) => {
       links: [],
       photoURL: '',
       postCount: 0,
-      updatedAt: createdAt,
-    });
-};
+      updatedAt: createdAt
+    })
+}

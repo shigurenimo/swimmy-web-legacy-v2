@@ -1,5 +1,5 @@
-import {getTag} from '../api/tags/getTag';
+import { getTag } from '../api/tags/getTag'
 
 export default (root, {id}) => {
-  return getTag(id);
+  return getTag(id)
 };

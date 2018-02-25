@@ -1,11 +1,11 @@
 export const successResponse = (res, result) => {
   if (typeof result !== 'undefined') {
     if (typeof result === 'string') {
-      res.end(result);
+      res.end(result)
     } else {
-      res.json(result);
+      res.json(result)
     }
   } else {
-    res.end('200');
+    res.end('200')
   }
-};
+}

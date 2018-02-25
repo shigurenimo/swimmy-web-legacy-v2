@@ -1,38 +1,38 @@
 export default {
-  id(root) {
-    return root.id;
+  id (root) {
+    return root.id
   },
-  createdAt(root) {
-    return root.createdAt;
+  createdAt (root) {
+    return root.createdAt
   },
-  description(root) {
-    return root.description;
+  description (root) {
+    return root.description
   },
-  displayName(root) {
-    return root.displayName;
+  displayName (root) {
+    return root.displayName
   },
-  followeeCount(root) {
-    return root.followeeCount;
+  followeeCount (root) {
+    return root.followeeCount
   },
-  followerCount(root) {
-    return root.followerCount;
+  followerCount (root) {
+    return root.followerCount
   },
-  headerPhotoURL(root) {
-    return root.headerPhotoURL;
+  headerPhotoURL (root) {
+    return root.headerPhotoURL
   },
-  links(root) {
-    return root.links;
+  links (root) {
+    return root.links
   },
-  photoURL(root) {
-    return root.photoURL;
+  photoURL (root) {
+    return root.photoURL
   },
-  postCount(root) {
-    return root.postCount;
+  postCount (root) {
+    return root.postCount
   },
-  uid(root) {
-    return root.id;
+  uid (root) {
+    return root.id
   },
-  updatedAt(root) {
-    return root.updatedAt;
-  },
-};
+  updatedAt (root) {
+    return root.updatedAt
+  }
+}

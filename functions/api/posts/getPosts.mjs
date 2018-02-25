@@ -1,7 +1,7 @@
-import * as admin from 'firebase-admin';
+import * as admin from 'firebase-admin'
 
-import {POSTS} from '../../constants/index';
-import {DESC} from '../../constants/query';
+import { POSTS } from '../../constants/index'
+import { DESC } from '../../constants/query'
 
 /**
  * Get /posts
@@ -9,20 +9,20 @@ import {DESC} from '../../constants/query';
  */
 export const getPosts = ({limit}) => {
   if (!limit) {
-    throw new Error('limit not found');
+    throw new Error('limit not found')
   }
 
-  return admin.
-    firestore().
-    collection(POSTS).
-    orderBy('createdAt', DESC).
-    limit(limit).
-    get().
-    then((snapshots) => {
+  return admin
+    .firestore()
+    .collection(POSTS)
+    .orderBy('createdAt', DESC)
+    .limit(limit)
+    .get()
+    .then((snapshots) => {
       return snapshots.docs.map((snapshot) => {
-        const data = snapshot.data();
+        const data = snapshot.data()
 
-        return Object.assign(data, {id: snapshot.id});
-      });
-    });
-};
+        return Object.assign(data, {id: snapshot.id})
+      })
+    })
+}

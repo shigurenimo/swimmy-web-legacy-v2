@@ -1,5 +1,5 @@
 export default () => {
   return {
-    hello: 'hello!',
-  };
+    hello: 'hello!'
+  }
 };

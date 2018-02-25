@@ -1,11 +1,11 @@
-import * as admin from 'firebase-admin';
+import * as admin from 'firebase-admin'
 
-import {POSTS, TAGS} from '../../constants/index';
-import {COUNT} from '../../constants/tags';
+import config from '../../config'
 
-import {toStorageURL} from '../../helpers/toStorageURL';
+import { POSTS, TAGS } from '../../constants/index'
+import { COUNT } from '../../constants/tags'
 
-import config from '../../config';
+import { toStorageURL } from '../../helpers/toStorageURL'
 
 /**
  * Set /posts/{postId}
@@ -15,7 +15,7 @@ import config from '../../config';
  * @return {Promise}
  */
 export const setPost = (postId, input, owner) => {
-  const createdAt = new Date();
+  const createdAt = new Date()
 
   const payload = {
     id: postId,
@@ -27,24 +27,17 @@ export const setPost = (postId, input, owner) => {
     repliedPostCount: 0,
     replyPostId: input.replyPostId || null,
     tags: {},
-    updatedAt: createdAt,
-  };
-
-  console.log(owner);
-  console.log(owner.displayName);
-
-  console.log('----');
+    updatedAt: createdAt
+  }
 
   if (owner) {
-    payload.ownerId = owner.uid;
+    payload.ownerId = owner.uid
     payload.owner = {
       uid: owner.uid,
       displayName: owner.displayName,
-      photoURL: owner.photoURL,
-    };
+      photoURL: owner.photoURL
+    }
   }
-
-  console.log(payload);
 
   input.photoURLs.forEach((photoURL) => {
     payload.photoURLs[photoURL] = {
@@ -53,34 +46,35 @@ export const setPost = (postId, input, owner) => {
       xx1024: null,
       x512: null,
       x1024: null,
-      x2048: null,
-    };
-  });
+      x2048: null
+    }
+  })
 
-  return admin.firestore().
-    collection(TAGS).
-    orderBy(COUNT).
-    limit(1).
-    get().
-    then((snapshots) => {
-      const snapshot = snapshots.docs[0];
+  return admin
+    .firestore()
+    .collection(TAGS)
+    .orderBy(COUNT)
+    .limit(1)
+    .get()
+    .then((snapshots) => {
+      const snapshot = snapshots.docs[0]
 
       if (snapshot) {
-        const data = snapshot.data();
+        const data = snapshot.data()
         payload.tags[snapshot.id] = {
           name: data.name,
           count: 0,
           createdAt: createdAt,
-          updatedAt: createdAt,
-        };
+          updatedAt: createdAt
+        }
       }
-
-      return admin.firestore().
-        collection(POSTS).
-        doc(postId).
-        set(payload);
-    }).
-    then(() => {
-      return Object.assign(payload, {id: postId});
-    });
-};
+      return admin
+        .firestore()
+        .collection(POSTS)
+        .doc(postId)
+        .set(payload)
+    })
+    .then(() => {
+      return Object.assign(payload, {id: postId})
+    })
+}

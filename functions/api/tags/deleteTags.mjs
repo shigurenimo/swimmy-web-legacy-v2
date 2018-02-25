@@ -1,6 +1,6 @@
-import {toArray} from '../../utils/toArray';
+import { toArray } from '../../utils/toArray'
 
-import {deleteTag} from './deleteTag';
+import { deleteTag } from './deleteTag'
 
 /**
  * Delete /tags/{tagId}
@@ -8,7 +8,7 @@ import {deleteTag} from './deleteTag';
  * @return {Promise}
  */
 export const deleteTags = (tags) => {
-  const promises = toArray(tags).map(deleteTag);
+  const promises = toArray(tags).map(deleteTag)
 
-  return Promise.all(promises);
-};
+  return Promise.all(promises)
+}

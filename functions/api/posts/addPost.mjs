@@ -1,8 +1,8 @@
-import * as admin from 'firebase-admin';
+import * as admin from 'firebase-admin'
 
-import {POSTS} from '../../constants/index';
+import { POSTS } from '../../constants/index'
 
-import {setPost} from './setPost';
+import { setPost } from './setPost'
 
 /**
  * Add /posts/{postId}
@@ -11,7 +11,7 @@ import {setPost} from './setPost';
  * @return {*}
  */
 export const addPost = (input, owner) => {
-  const postId = admin.firestore().collection(POSTS).doc().id;
+  const postId = admin.firestore().collection(POSTS).doc().id
 
-  return setPost(postId, input, owner);
-};
+  return setPost(postId, input, owner)
+}

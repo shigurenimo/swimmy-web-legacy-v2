@@ -1,5 +1,5 @@
-import {getTags} from '../api/tags/getTags';
+import { getTags } from '../api/tags/getTags'
 
 export default (root) => {
-  return getTags({limit: 40});
+  return getTags({limit: 40})
 };

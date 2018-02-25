@@ -1,12 +1,11 @@
-import {addPost} from '../api/posts/addPost';
+import { addPost } from '../api/posts/addPost'
 
-import {failureLog} from '../helpers/failureLog';
+import { failureLog } from '../helpers/failureLog'
 
 export default (root, args, context) => {
-  console.log('mutation: addPost');
+  console.log('mutation: addPost')
 
-  return addPost(args.input, context.user).
-    catch((err) => {
-      return failureLog(err);
-    });
+  return addPost(args.input, context.user).catch((err) => {
+    return failureLog(err)
+  })
 };
