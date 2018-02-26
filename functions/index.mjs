@@ -52,6 +52,6 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'importUsers') {
   exports.importUsers = require('./https/importUsers').default
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'uploadPosts') {
-  exports.uploadPosts = require('./https/uploadPosts').default
+if (!FUNCTION_NAME || FUNCTION_NAME === 'importPosts') {
+  exports.importPosts = require('./https/importPosts').default
 }

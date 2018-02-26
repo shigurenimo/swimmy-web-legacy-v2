@@ -134,58 +134,63 @@ const readData = () => {
 
   return new Promise((resolve) => {
     return readFile(inputUserFile, 'utf-8', (err, res) => {
-      const posts = res.split('\n').filter((line) => {
-        return line
-      }).map((line) => {
-        return JSON.parse(line)
-      }).filter((line, index) => index < limit).map((res) => {
-        const post = {
-          id: res._id,
-          content: res.content,
-          createdAt: new Date(res.createdAt.$date),
-          channelId: null,
-          from: 'swimmy',
-          ownerId: res.ownerId || null,
-          owner: null,
-          tags: res.reactions,
-          repliedPostCount: (res.repliedPostIds || []).length || 0,
-          repliedPostIds: res.repliedPostIds || [],
-          replyPostId: res.replyPostId || null,
-          updatedAt: new Date(res.createdAt.$date),
-          webURL: null,
-          photoURLs: res.images
-            ? res.images.map((image) => {
-              if (image.full) {
-                return {
-                  default: image.full
-                  // default: image.full.split(/\.(?=[^.]+$)/)[0],
+      if (err) { throw err }
+      const posts = res.split('\n')
+        .filter((line) => {
+          return line
+        })
+        .map((line) => {
+          return JSON.parse(line)
+        })
+        .filter((line, index) => index < limit)
+        .map((res) => {
+          const post = {
+            id: res._id,
+            content: res.content,
+            createdAt: new Date(res.createdAt.$date),
+            channelId: null,
+            from: 'swimmy',
+            ownerId: res.ownerId || null,
+            owner: null,
+            tags: res.reactions,
+            repliedPostCount: (res.repliedPostIds || []).length || 0,
+            repliedPostIds: res.repliedPostIds || [],
+            replyPostId: res.replyPostId || null,
+            updatedAt: new Date(res.createdAt.$date),
+            webURL: null,
+            photoURLs: res.images
+              ? res.images.map(async (image) => {
+                const fileName = image.full.split(/\.(?=[^.]+$)/)[0]
+                if (image.full) {
+                  return {
+                    default: fileName
+                  }
+                } else {
+                  console.log('image.full not found')
+                  console.log(image)
+                  return null
                 }
-              } else {
-                console.log('image.full not found')
-                console.log(image)
-                return null
-              }
-            })
-            : []
-        }
+              })
+              : []
+          }
 
-        let web = null
+          let web = null
 
-        if (res.web) {
-          web = res.web
-        }
+          if (res.web) {
+            web = res.web
+          }
 
-        if (res.extension && res.extension.web) {
-          web = res.extension.web
-        }
+          if (res.extension && res.extension.web) {
+            web = res.extension.web
+          }
 
-        if (web && web.url) {
-          post.webURL = web.url
-          post.oEmbed = web.oEmbed || null
-        }
+          if (web && web.url) {
+            post.webURL = web.url
+            post.oEmbed = web.oEmbed || null
+          }
 
-        return post
-      })
+          return post
+        })
 
       resolve(posts)
     })
