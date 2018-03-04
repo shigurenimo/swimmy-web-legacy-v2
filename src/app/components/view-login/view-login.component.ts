@@ -4,13 +4,13 @@ import { Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { FunctionsService } from '../services/functions.service';
+import { FunctionsService } from '../../services/functions.service';
 import {
   ERROR_INVALID_USERNAME,
   ERROR_USERNAME_ALREADY_IN_USE,
   MSG_INPUT_EMAIL,
   USER_NOT_FOUND
-} from '../constants/login';
+} from '../../constants/login';
 
 @Component({
   selector: 'app-view-login',

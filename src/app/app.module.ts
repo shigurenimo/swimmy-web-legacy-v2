@@ -4,32 +4,31 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { AngularFireModule } from 'angularfire2';
 
-import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
-import 'firebase/firestore';
 import { enUS, NgZorroAntdModule, NZ_LOCALE } from 'ng-zorro-antd';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EditorPostComponent } from './editor-post/editor-post.component';
-import { HeaderComponent } from './header/header.component';
-import { ListItemPostComponent } from './list-item-post/list-item-post.component';
+import { EditorPostComponent } from './components/editor-post/editor-post.component';
+import { HeaderComponent } from './components/header/header.component';
+import { ListItemPostComponent } from './components/list-item-post/list-item-post.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { ViewConfigComponent } from './components/view-config/view-config.component';
+import { ViewHomeComponent } from './components/view-home/view-home.component';
+import { ViewInfoComponent } from './components/view-info/view-info.component';
+import { ViewLoginComponent } from './components/view-login/view-login.component';
+import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
+import { ViewUsersComponent } from './components/view-users/view-users.component';
+import { FirebaseModule } from './firebase.module';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { ViewConfigComponent } from './view-config/view-config.component';
-import { ViewHomeComponent } from './view-home/view-home.component';
-import { ViewInfoComponent } from './view-info/view-info.component';
-import { ViewLoginComponent } from './view-login/view-login.component';
-import { ViewUsersDetailComponent } from './view-users-detail/view-users-detail.component';
-import { ViewUsersComponent } from './view-users/view-users.component';
 
 @NgModule({
   declarations: [
@@ -46,8 +45,7 @@ import { ViewUsersComponent } from './view-users/view-users.component';
     ViewUsersDetailComponent
   ],
   imports: [
-    AngularFireAuthModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    FirebaseModule,
     ApolloModule,
     AppRoutingModule,
     BrowserModule,
@@ -65,7 +63,7 @@ import { ViewUsersComponent } from './view-users/view-users.component';
     FunctionsService,
     PostsService,
     UsersService,
-    {provide: NZ_LOCALE, useValue: enUS}
+    { provide: NZ_LOCALE, useValue: enUS }
   ],
   bootstrap: [
     AppComponent
@@ -76,18 +74,16 @@ import { ViewUsersComponent } from './view-users/view-users.component';
   ]
 })
 export class AppModule {
-  constructor(
+  constructor (
     private apollo: Apollo,
     private httpLink: HttpLink,
     private afAuth: AngularFireAuth) {
-    const httpBearer = setContext(() => {
+    const httpBearer = setContext(async () => {
       if (this.afAuth.auth.currentUser) {
-        return this.afAuth.auth.currentUser.getIdToken()
-          .then((idToken) => {
-            const bearer = `Bearer ${idToken}`;
-            const headers = new HttpHeaders().set('authorization', bearer);
-            return {headers};
-          });
+        const idToken = await this.afAuth.auth.currentUser.getIdToken();
+        const bearer = `Bearer ${idToken}`;
+        const headers = new HttpHeaders().set('authorization', bearer);
+        return { headers };
       } else {
         return {};
       }

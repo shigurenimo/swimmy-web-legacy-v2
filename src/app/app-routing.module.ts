@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ViewConfigComponent } from './view-config/view-config.component';
-import { ViewHomeComponent } from './view-home/view-home.component';
-import { ViewInfoComponent } from './view-info/view-info.component';
-import { ViewLoginComponent } from './view-login/view-login.component';
-import { ViewUsersDetailComponent } from './view-users-detail/view-users-detail.component';
+import { ViewConfigComponent } from './components/view-config/view-config.component';
+import { ViewHomeComponent } from './components/view-home/view-home.component';
+import { ViewInfoComponent } from './components/view-info/view-info.component';
+import { ViewLoginComponent } from './components/view-login/view-login.component';
+import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
 
 const routes: Routes = [
   {path: 'config', component: ViewConfigComponent},

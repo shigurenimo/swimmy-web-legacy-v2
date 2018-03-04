@@ -5,8 +5,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { NzMessageService } from 'ng-zorro-antd';
 
-import { User } from '../interfaces/User';
-import { UsersService } from '../services/users.service';
+import { User } from '../../interfaces/User';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-view-users-detail',

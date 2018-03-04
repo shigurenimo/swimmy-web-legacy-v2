@@ -5,8 +5,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { firestore, storage } from 'firebase/app';
 import { UploadFile } from 'ng-zorro-antd';
 
-import { FunctionsService } from '../services/functions.service';
-import { PostsService } from '../services/posts.service';
+import { FunctionsService } from '../../services/functions.service';
+import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-editor-post',

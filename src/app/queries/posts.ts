@@ -14,7 +14,8 @@ export const queryPosts = gql`
           uid
         }
         photoURLs {
-          x512
+          id
+          photoURL
         }
         repliedPostCount
         replyPostId

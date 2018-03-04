@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { createdAt } from '../helpers/createdAt';
-import { PostsService } from '../services/posts.service';
+import { createdAt } from '../../helpers/createdAt';
+import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-list-item-post',

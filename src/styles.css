@@ -30,10 +30,11 @@ input:-webkit-autofill {
 }
 
 ::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 0;
 }
