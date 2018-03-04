@@ -72,16 +72,19 @@ export class EditorPostComponent implements OnInit {
   private async mutateAddPost() {
     const content = this.content.value;
 
-    let downloadURLs = [];
+    let photoIds = [];
 
     if (this.afAuth.app.auth().currentUser) {
       if (!this.fileList.length) {
         // this.messageId = this.nzMessage.loading(this.uploadText).messageId;
-        downloadURLs = await Promise.all(this.uploadImages());
+        photoIds = await Promise.all(this.uploadImages());
         // this.nzMessage.remove(this.messageId);
       }
     }
 
+    console.log(photoIds)
+
+    /*
     return this.posts
       .add({
         content: content,
@@ -95,5 +98,6 @@ export class EditorPostComponent implements OnInit {
       }, () => {
         this.isMutation = false;
       });
+    */
   }
 }

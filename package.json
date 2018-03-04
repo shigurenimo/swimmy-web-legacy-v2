@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "fns:watch": "babel --watch 'functions' --out-dir 'functions.out' --copy-files --ignore 'functions/node_modules'",
+    "fns:build": "tsc --project functions/tsconfig.json",
+    "fns:watch": "tsc --watch --project functions/tsconfig.json",
     "fns:logs": "firebase functions:log",
     "fns:serve": "firebase serve --only functions",
     "fns:shell": "firebase experimental:functions:shell",

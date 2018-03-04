@@ -79,12 +79,11 @@ type PostTag implements Node {
 }
 
 type PhotoURL {
-  full: String
-  xx512: String
-  xx1024: String
-  x512: String
-  x1024: String
-  x2048: String
+  id: String
+  downloadURL: String
+  objectId: String
+  photoURL: String
+  storageURL: String
 }
 
 type Test {

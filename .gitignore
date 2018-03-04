@@ -1,8 +1,8 @@
 # Project
-service-accounts.json
-functions/exports
-functions/internals
-functions.out
+/functions/config.json
+/functions/exports
+/functions/internals
+/functions/lib
 
 # Node.js
 yarn-error.log
