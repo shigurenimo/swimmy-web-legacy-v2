@@ -13,10 +13,7 @@ export const queryPosts = gql`
           photoURL
           uid
         }
-        photoURLs {
-          id
-          photoURL
-        }
+        photoURLs
         repliedPostCount
         replyPostId
         tags {
@@ -41,9 +38,7 @@ export const queryPost = gql`
         photoURL
         uid
       }
-      photoURLs {
-        x512
-      }
+      photoURLs
       repliedPostCount
       replyPostId
       tags {
@@ -67,9 +62,7 @@ export const mutationAddPost = gql`
         photoURL
         uid
       }
-      photoURLs {
-        x512
-      }
+      photoURLs
       repliedPostCount
       replyPostId
       tags {

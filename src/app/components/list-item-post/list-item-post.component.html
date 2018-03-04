@@ -1,56 +1,65 @@
-<div class="content">
-
-  <p class="createdAt">{{content}}<span class="createdAt">- {{createdAtStr}}</span></p>
-
+<div class='photoURLs' nz-row nzType='flex' nzAlign='middle' nzJustify='start'>
+  <div class='item' nz-col *ngFor='let photoURL of photoURLs'>
+    <img [src]='photoURL'>
+  </div>
 </div>
 
-<div class="actions">
+<div class='content'>
+  <ng-container *ngIf='content'>
+    <p class='createdAt'>{{content}}<span class='createdAt'>- {{createdAtStr}}</span></p>
+  </ng-container>
+  <ng-container *ngIf='!content'>
+    <p class='createdAt'><span class='createdAt'>- {{createdAtStr}}</span></p>
+  </ng-container>
+</div>
 
-  <nz-checkable-tag *ngFor="let tag of tags"
-                    class="tag"
-                    [nzChecked]="false"
-                    (click)="onUpdateTag(tag.name)">
+<div class='actions'>
+
+  <nz-checkable-tag *ngFor='let tag of tags'
+    class='tag'
+    [nzChecked]='false'
+    (click)='onUpdateTag(tag.name)'>
     {{tag.name}} {{tag.count}}
   </nz-checkable-tag>
 
-  <span *ngIf="afa.authState|async" class="edit">
+  <span *ngIf='afa.authState|async' class='edit'>
 
-    <button *ngIf="!isEditNewTag"
-            nz-button
-            nzSize="default"
-            nzShape="circle"
-            [disabled]="isMutation"
-            (click)="editNewTag()">
-      <i class="anticon anticon-plus"></i>
+    <button *ngIf='!isEditNewTag'
+      nz-button
+      nzSize='default'
+      nzShape='circle'
+      [disabled]='isMutation'
+      (click)='editNewTag()'>
+      <i class='anticon anticon-plus'></i>
     </button>
 
-    <nz-input *ngIf="isEditNewTag"
-              nzType="text"
-              style="width: 140px;"
-              [(ngModel)]="newTag"
-              [nzReadonly]="isMutation"
-              [nzPlaceHolder]="nzPlaceHolder"
-              (nzBlur)="onUpdateTag(newTag)">
+    <nz-input *ngIf='isEditNewTag'
+      nzType='text'
+      style='width: 140px;'
+      [(ngModel)]='newTag'
+      [nzReadonly]='isMutation'
+      [nzPlaceHolder]='nzPlaceHolder'
+      (nzBlur)='onUpdateTag(newTag)'>
       <ng-template #prefix>
-        <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
-        <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
+        <i *ngIf='isMutation' class='anticon anticon-loading anticon-spin'></i>
+        <i *ngIf='!isMutation' class='anticon anticon-plus'></i>
       </ng-template>
     </nz-input>
 
   </span>
 
-  <button class="reply"
-          nz-button
-          nzSize="default"
-          nzShape="circle"
-          (click)="onOpenReply()">
-    <i *ngIf="isOpenReply" class="anticon anticon-up"></i>
-    <i *ngIf="!isOpenReply" class="anticon anticon-down"></i>
+  <button class='reply'
+    nz-button
+    nzSize='default'
+    nzShape='circle'
+    (click)='onOpenReply()'>
+    <i *ngIf='isOpenReply' class='anticon anticon-up'></i>
+    <i *ngIf='!isOpenReply' class='anticon anticon-down'></i>
   </button>
 
 </div>
 
-<div class="reply-content" *ngIf="isOpenReply">
+<div class='reply-content' *ngIf='isOpenReply'>
 
   <nz-card>
     <ng-template #body>

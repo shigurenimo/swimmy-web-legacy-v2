@@ -1,11 +1,9 @@
-import { addPost } from '../api/posts/addPost'
+import { addPost } from '../api/posts/addPost';
 
-import { failureLog } from '../helpers/failureLog'
+export default async (root, { input }, context) => {
+  console.log('mutation: addPost');
 
-export default (root, args, context) => {
-  console.log('mutation: addPost')
+  const newPost = await addPost(input, context.user);
 
-  return addPost(args.input, context.user).catch((err) => {
-    return failureLog(err)
-  })
+  return newPost;
 };

@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import { firestore, storage } from 'firebase/app';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { UploadFile } from 'ng-zorro-antd';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { map, mergeMap } from 'rxjs/operators';
 
 import { FunctionsService } from '../../services/functions.service';
 import { PostsService } from '../../services/posts.service';
@@ -18,7 +21,7 @@ export class EditorPostComponent implements OnInit {
 
   public formGroup: FormGroup;
 
-  public nzAutosize = {minRows: 1, maxRows: 6};
+  public nzAutosize = { minRows: 1, maxRows: 6 };
 
   public nzPlaceHolder = 'Aro';
 
@@ -30,18 +33,20 @@ export class EditorPostComponent implements OnInit {
 
   public isMutation = false;
 
-  constructor(
+  constructor (
     private fns: FunctionsService,
     private formBuilder: FormBuilder,
     private posts: PostsService,
-    public afAuth: AngularFireAuth) {
+    public afAuth: AngularFireAuth,
+    private afStorage: AngularFireStorage,
+    private afStore: AngularFirestore) {
   }
 
-  public get content() {
+  public get content () {
     return this.formGroup.get('content');
   }
 
-  public onAddPost() {
+  public onAddPost () {
     this.isMutation = true;
 
     this.mutateAddPost().catch((err) => {
@@ -49,55 +54,59 @@ export class EditorPostComponent implements OnInit {
     });
   }
 
-  public uploadImages() {
-    return this.fileList.map((file) => {
-      const originFileObj = file.originFileObj;
-      const uuid = firestore().collection('posts').doc().id;
-      const filePath = `images/${uuid}`;
-      const storageRef = storage().ref(filePath);
-      return storageRef
-        .put(originFileObj)
-        .then((snapshot) => {
-          return uuid;
-        });
+  public uploadImage (file) {
+    const originFileObj = file.originFileObj;
+    const photoId = this.afStore.createId();
+    const filePath = `posts/${photoId}`;
+    const task = this.afStorage.upload(filePath, originFileObj);
+    const downloadURL$ = task.downloadURL();
+    const map$ = map((photoURL) => {
+      return { photoURL, photoId };
     });
+    return downloadURL$.pipe(map$);
   }
 
-  public ngOnInit() {
+  public ngOnInit () {
     this.formGroup = this.formBuilder.group({
       content: ['', [Validators.maxLength(20)]]
     });
   }
 
-  private async mutateAddPost() {
+  private async mutateAddPost () {
     const content = this.content.value;
 
-    let photoIds = [];
+    let $mutation = null;
 
-    if (this.afAuth.app.auth().currentUser) {
-      if (!this.fileList.length) {
-        // this.messageId = this.nzMessage.loading(this.uploadText).messageId;
-        photoIds = await Promise.all(this.uploadImages());
-        // this.nzMessage.remove(this.messageId);
-      }
+    if (this.fileList.length) {
+      const uploadImageMap$ = this.fileList.map((file) => {
+        return this.uploadImage(file);
+      });
+
+      const uploadImages$ = combineLatest(uploadImageMap$);
+
+      const post$ = mergeMap((photoURLs) => {
+        return this.posts.add({
+          content: content,
+          photoURLs: photoURLs,
+          replyPostId: null
+        });
+      });
+
+      $mutation = uploadImages$.pipe(post$);
+    } else {
+      $mutation = this.posts.add({
+        content: content,
+        photoURLs: [],
+        replyPostId: null
+      });
     }
 
-    console.log(photoIds)
-
-    /*
-    return this.posts
-      .add({
-        content: content,
-        photoURLs: downloadURLs,
-        replyPostId: null
-      })
-      .subscribe(() => {
-        this.content.setValue('');
-      }, (err) => {
-        console.error(err);
-      }, () => {
-        this.isMutation = false;
-      });
-    */
+    $mutation.subscribe((post) => {
+      this.content.setValue('');
+      this.isMutation = false;
+    }, (err) => {
+      console.error(err);
+      this.isMutation = false;
+    });
   }
 }

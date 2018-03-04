@@ -11,9 +11,14 @@ enum OrderField {
   UPDATED_AT
 }
 
+input PhotoURLInput {
+  photoURL: String
+  photoId: String
+}
+
 input AddPostInput {
   content: String
-  photoURLs: [String]
+  photoURLs: [PhotoURLInput]
   replyPostId: String
 }
 
@@ -56,7 +61,7 @@ type Post implements Node {
   content: String
   createdAt: DateTime
   owner: Owner
-  photoURLs: [PhotoURL]
+  photoURLs: [String]
   repliedPostCount: Int
   replyPostId: String
   tags: [PostTag]

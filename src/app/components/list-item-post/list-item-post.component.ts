@@ -12,27 +12,17 @@ import { PostsService } from '../../services/posts.service';
 })
 export class ListItemPostComponent {
   @Input() content: string;
-
   @Input() createdAt: string;
-
   @Input() id: string;
-
-  @Input() images: string[];
-
+  @Input() photoURLs: string[];
   @Input() owner: object;
-
   @Input() ownerId: string;
-
   @Input() repliedPostIds: string[];
-
   @Input() replyPostIds: string[];
-
   @Input() tags;
-
   @Input() updatedAt: string;
 
   public nzPlaceHolder = 'new';
-
   public isEditNewTag = false;
 
   public isOpenReply = false;

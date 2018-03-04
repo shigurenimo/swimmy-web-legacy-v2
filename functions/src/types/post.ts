@@ -13,7 +13,7 @@ export const Post = {
   },
   photoURLs (root) {
     return Object.keys(root.photoURLs).map((id) => {
-      return Object.assign(root.tags[id], {id: id})
+      return root.photoURLs[id].photoURL
     })
   },
   repliedPostCount (root) {
