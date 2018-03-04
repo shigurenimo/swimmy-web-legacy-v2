@@ -26,6 +26,7 @@ import { ViewLoginComponent } from './components/view-login/view-login.component
 import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
 import { ViewUsersComponent } from './components/view-users/view-users.component';
 import { FirebaseModule } from './firebase.module';
+import { ResizePipe } from './pipes/resize.pipe';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
@@ -42,7 +43,8 @@ import { UsersService } from './services/users.service';
     ViewInfoComponent,
     ViewLoginComponent,
     ViewUsersComponent,
-    ViewUsersDetailComponent
+    ViewUsersDetailComponent,
+    ResizePipe
   ],
   imports: [
     FirebaseModule,

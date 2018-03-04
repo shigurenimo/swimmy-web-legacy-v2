@@ -60,6 +60,7 @@ type Post implements Node {
   id: ID!
   content: String
   createdAt: DateTime
+  ownerId: Boolean
   owner: Owner
   photoURLs: [String]
   repliedPostCount: Int

@@ -7,6 +7,7 @@ export const queryPosts = gql`
         id
         content
         createdAt
+        ownerId
         owner {
           id
           displayName
@@ -56,6 +57,7 @@ export const mutationAddPost = gql`
       id
       content
       createdAt
+      ownerId
       owner {
         id
         displayName

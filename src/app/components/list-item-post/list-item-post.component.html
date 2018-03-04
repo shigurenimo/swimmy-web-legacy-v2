@@ -1,6 +1,6 @@
 <div class='photoURLs' nz-row nzType='flex' nzAlign='middle' nzJustify='start'>
   <div class='item' nz-col *ngFor='let photoURL of photoURLs'>
-    <img [src]='photoURL'>
+    <img [src]='photoURL|resize:resize'>
   </div>
 </div>
 
@@ -14,7 +14,6 @@
 </div>
 
 <div class='actions'>
-
   <nz-checkable-tag *ngFor='let tag of tags'
     class='tag'
     [nzChecked]='false'
@@ -23,16 +22,13 @@
   </nz-checkable-tag>
 
   <span *ngIf='afa.authState|async' class='edit'>
-
     <button *ngIf='!isEditNewTag'
       nz-button
-      nzSize='default'
-      nzShape='circle'
+      [nzShape]='nzShape'
       [disabled]='isMutation'
       (click)='editNewTag()'>
       <i class='anticon anticon-plus'></i>
     </button>
-
     <nz-input *ngIf='isEditNewTag'
       nzType='text'
       style='width: 140px;'
@@ -45,13 +41,22 @@
         <i *ngIf='!isMutation' class='anticon anticon-plus'></i>
       </ng-template>
     </nz-input>
-
   </span>
 
-  <button class='reply'
+  <!--
+  <button
+    *ngIf='ownerId'
+    class='reply'
     nz-button
-    nzSize='default'
-    nzShape='circle'
+    [nzShape]='nzShape'>
+    <i class='anticon anticon-delete'></i>
+  </button>
+  -->
+
+  <button
+    class='reply'
+    nz-button
+    [nzShape]='nzShape'
     (click)='onOpenReply()'>
     <i *ngIf='isOpenReply' class='anticon anticon-up'></i>
     <i *ngIf='!isOpenReply' class='anticon anticon-down'></i>
@@ -60,11 +65,9 @@
 </div>
 
 <div class='reply-content' *ngIf='isOpenReply'>
-
   <nz-card>
     <ng-template #body>
-      <p>ここにはリプライ機能が追加される予定です。</p>
+      <p>リプライ機能は開発中です。</p>
     </ng-template>
   </nz-card>
-
 </div>
