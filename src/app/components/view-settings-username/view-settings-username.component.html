@@ -1,30 +1,37 @@
 <app-header [goBack]='true'>
   <ng-template #title>
-    メールアドレス
+    識別子の更新
   </ng-template>
 </app-header>
 
 <div>
   <ng-container *ngIf='!isQuery && !isNotFound'>
+    <div class='description'>
+      <p>
+        識別子はログインやプロフィールのURLに使用されます。<br />
+        他のユーザと同じ識別子は使用できません。
+      </p>
+    </div>
+
     <!-- フォーム -->
     <div class='form'>
       <form nz-form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
         <div nz-form-item>
           <div nz-form-label nz-col>
-            <label>現在のメールアドレス</label>
+            <label>現在の識別子</label>
           </div>
           <div>
             <nz-input
-              formControlName='currentEmail'
+              formControlName='currentUsername'
               [nzReadonly]='true'
               [nzSize]='nzSize'>
               <ng-template #prefix>
-                <i class='anticon anticon-mail'></i>
+                <i class='anticon anticon-code-o'></i>
               </ng-template>
             </nz-input>
           </div>
           <p class='form-helper'>
-            変更するとこのメールアドレスでログインすることはできなくなります。
+            変更するとこの識別子でログインすることはできなくなります。
           </p>
         </div>
 
@@ -34,20 +41,20 @@
 
         <div nz-form-item>
           <div nz-form-label nz-col>
-            <label nz-form-item-required>新しいメールアドレス</label>
+            <label nz-form-item-required>新しい識別子</label>
           </div>
           <div nz-form-control nzHasFeedback>
             <nz-input
-              formControlName='newEmail'
-              [nzPlaceHolder]='emailPlaceHolder'
+              formControlName='newUsername'
+              [nzPlaceHolder]='usernamePlaceHolder'
               [nzSize]='nzSize'>
               <ng-template #prefix>
-                <i class='anticon anticon-mail'></i>
+                <i class='anticon anticon-code-o'></i>
               </ng-template>
             </nz-input>
           </div>
           <p class='form-helper'>
-            このメールアドレスでログインします。
+            この識別子でログインします。
           </p>
         </div>
 
@@ -71,10 +78,10 @@
         <form nz-form [formGroup]='loginFormGroup' (ngSubmit)='onLogin()'>
           <div nz-form-item>
             <div nz-form-label nz-col>
-              <label nz-form-item-required>メールアドレス</label>
+              <label nz-form-item-required>ユーザネーム</label>
             </div>
             <div nz-form-control>
-              <nz-input formControlName='email' [nzSize]='nzSize' [nzReadonly]='true'>
+              <nz-input formControlName='username' [nzSize]='nzSize' [nzReadonly]='true'>
                 <ng-template #prefix>
                   <i class='anticon anticon-mail'></i>
                 </ng-template>

@@ -27,6 +27,10 @@ export const updateUser = async (uid, input) => {
     newUser.displayName = input.displayName;
   }
 
+  if (input.username) {
+    newUser.username = input.username;
+  }
+
   newUser.photoURLs = {};
 
   if (input.photoURLs && input.photoURLs[0]) {

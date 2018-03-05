@@ -1,7 +1,7 @@
 <ul nz-menu [nzTheme]='nzTheme' [nzMode]='nzMode'>
 
   <!-- ログインしている -->
-  <li *ngIf='afAuth.authState | async'
+  <li *ngIf='uid'
     nz-menu-item
     class='auth'
     [routerLinkActiveOptions]='routerLinkActiveOptions'
@@ -11,17 +11,17 @@
   </li>
 
   <!-- ログインしている -->
-  <li *ngIf='afAuth.authState | async'
+  <li *ngIf='uid'
     nz-menu-item
     class='auth'
     [routerLinkActiveOptions]='routerLinkActiveOptions'
     routerLinkActive='ant-menu-item-selected'
-    routerLink='/{{afAuth.auth.currentUser.uid}}'>
+    routerLink='/{{username}}'>
     <span class='anticon anticon-user'></span>
   </li>
 
   <!-- ログインしていない -->
-  <li *ngIf='!(afAuth.authState | async)'
+  <li *ngIf='!(uid)'
     nz-menu-item
     class='auth'
     [routerLinkActiveOptions]='routerLinkActiveOptions'

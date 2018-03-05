@@ -1,45 +1,19 @@
-<div class="profile-icon">
+<app-header></app-header>
 
-  <!-- アップロード アイコン -->
-  <nz-upload class="avatar-uploader"
-             nzName="avatar"
-             [nzShowUploadList]="false"
-             (nzChange)="onUpload($event)">
-    <ng-container *ngIf="file">
-      <img [src]="file.thumbUrl" class="avatar">
-    </ng-container>
-    <ng-container *ngIf="!file">
-      <!-- アイコン未設定 -->
-      <i *ngIf="!photoURL" class="anticon anticon-plus avatar-uploader-trigger"></i>
-      <!-- アイコン -->
-      <img *ngIf="photoURL" [src]="photoURL" class="avatar">
-    </ng-container>
-  </nz-upload>
+<div>
+  <div class='user-icon'>
+    <nz-avatar nzIcon='code' [nzSrc]='photoURL'></nz-avatar>
+  </div>
 
-</div>
+  <div class='displayName'>
+    <h1 class='mat-h1'>{{displayName}}</h1>
+  </div>
 
-<div class="displayName">
-
-  <h1 class="mat-h1">
-    {{displayName}}
-  </h1>
-
-</div>
-
-<div class="profile">
-
-  <nz-card>
-    <ng-template #body>
-      <p>ここにはプロフィール機能が追加される予定です。</p>
-    </ng-template>
-  </nz-card>
-
-</div>
-
-<div class="logout" nz-row nzType="flex" nzAlign="middle" nzJustify="center">
-
-  <span nz-col>
-    <button nz-button (click)="onLogout()">ログアウト</button>
-  </span>
-
+  <div class='profile'>
+    <nz-card>
+      <ng-template #body>
+        <p>ここにはプロフィール機能が追加される予定です。</p>
+      </ng-template>
+    </nz-card>
+  </div>
 </div>

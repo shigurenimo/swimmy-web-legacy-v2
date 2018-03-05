@@ -1,21 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import { NzMessageService } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 
-import { UsersService } from '../../services/users.service';
-import { LOGIN_ERROR, UPDATE_DATA_ERROR, UPDATE_DATA_LOADING, UPDATE_DATA_SUCCESS } from '../../constants/messages';
+import { NzMessageService } from 'ng-zorro-antd';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { mergeMap } from 'rxjs/operators';
+import { LOGIN_ERROR, UPDATE_DATA_ERROR, UPDATE_DATA_LOADING, UPDATE_DATA_SUCCESS } from '../../constants/messages';
+
+import { UsersService } from '../../services/users.service';
 
 @Component({
-  selector: 'app-view-settings-email',
-  templateUrl: './view-settings-email.component.html',
-  styleUrls: ['./view-settings-email.component.css']
+  selector: 'app-view-settings-username',
+  templateUrl: './view-settings-username.component.html',
+  styleUrls: ['./view-settings-username.component.css']
 })
-export class ViewSettingsEmailComponent implements OnInit, OnDestroy {
+export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   // form states
   public formGroup: FormGroup;
   public loginFormGroup: FormGroup;
@@ -23,7 +23,7 @@ export class ViewSettingsEmailComponent implements OnInit, OnDestroy {
   // ui states
   public nzSize = 'large';
   public nzTitle = '重要な変更';
-  public emailPlaceHolder = 'example@pwao.io';
+  public usernamePlaceHolder = 'username';
   public isShowModal = false;
 
   // http
@@ -47,7 +47,7 @@ export class ViewSettingsEmailComponent implements OnInit, OnDestroy {
 
     this.isMutate = true;
 
-    this.formGroup.controls.newEmail.markAsDirty();
+    this.formGroup.controls.newUsername.markAsDirty();
 
     if (!this.formGroup.valid) {
       this.isMutate = false;
@@ -55,10 +55,20 @@ export class ViewSettingsEmailComponent implements OnInit, OnDestroy {
     }
 
     const currentUser = this.afAuth.auth.currentUser;
-    const { newEmail } = this.formGroup.value;
+    const { newUsername } = this.formGroup.value;
     const messageId = this.message.loading(UPDATE_DATA_LOADING).messageId;
 
-    return fromPromise(currentUser.updateEmail(newEmail)).subscribe(() => {
+    const newEmail = `${newUsername}@swimmy.io`;
+
+    const email$ = fromPromise(currentUser.updateEmail(newEmail));
+
+    const user$ = mergeMap(() => {
+      return this.usersService.updateUser(currentUser.uid, {
+        username: newUsername
+      });
+    });
+
+    return email$.pipe(user$).subscribe(() => {
       this.message.remove(messageId);
       this.message.success(UPDATE_DATA_SUCCESS);
       this.resetFormGroup();
@@ -80,21 +90,32 @@ export class ViewSettingsEmailComponent implements OnInit, OnDestroy {
 
     this.isMutateLogin = true;
 
-    this.loginFormGroup.controls.email.markAsDirty();
+    this.loginFormGroup.controls.username.markAsDirty();
 
     if (!this.loginFormGroup.valid) { return; }
 
     const currentUser = this.afAuth.auth.currentUser;
-    const { email, password } = this.loginFormGroup.value;
-    const { newEmail } = this.formGroup.value;
+    const { username, password } = this.loginFormGroup.value;
+    const { newUsername } = this.formGroup.value;
+
+    const email = `${username}@swimmy.io`;
+    const newEmail = `${newUsername}@swimmy.io`;
 
     const credential = firebase.auth.EmailAuthProvider.credential(email, password);
 
-    fromPromise(currentUser.reauthenticateWithCredential(credential)).pipe(
-      mergeMap(() => {
-        return fromPromise(currentUser.updateEmail(newEmail));
-      })
-    ).subscribe(() => {
+    const username$ = mergeMap(() => {
+      return fromPromise(currentUser.updateEmail(newEmail));
+    });
+
+    const credential$ = fromPromise(currentUser.reauthenticateWithCredential(credential));
+
+    const user$ = mergeMap(() => {
+      return this.usersService.updateUser(currentUser.uid, {
+        username: newUsername
+      });
+    });
+
+    credential$.pipe(username$).pipe(user$).subscribe(() => {
       this.message.success(UPDATE_DATA_SUCCESS);
       this.resetFormGroup();
       this.isShowModal = false;
@@ -122,8 +143,10 @@ export class ViewSettingsEmailComponent implements OnInit, OnDestroy {
   private setLoginForm () {
     const user = this.afAuth.auth.currentUser;
 
+    const username = user.email.replace('@swimmy.io', '');
+
     this.loginFormGroup = this.formBuilder.group({
-      email: [user.email, []],
+      username: [username, []],
       password: [null, [Validators.required]]
     });
   }
@@ -131,16 +154,20 @@ export class ViewSettingsEmailComponent implements OnInit, OnDestroy {
   private setFormGroup () {
     const user = this.afAuth.auth.currentUser;
 
+    const username = user.email.replace('@swimmy.io', '');
+
     this.formGroup = this.formBuilder.group({
-      currentEmail: [user.email, [Validators.email]],
-      newEmail: [null, [Validators.required, Validators.email]]
+      currentUsername: [username, [Validators.max(10)]],
+      newUsername: [null, [Validators.required, Validators.max(10)]]
     });
   }
 
   private resetFormGroup () {
     const user = this.afAuth.auth.currentUser;
 
-    this.formGroup.reset({ currentEmail: user.email, newEmail: '' });
+    const username = user.email.replace('@swimmy.io', '');
+
+    this.formGroup.reset({ currentUsername: username, newUsername: '' });
   }
 
   private onAuthState (user) {

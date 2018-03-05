@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       iconClass: 'anticon anticon-home'
     }];
   public uid = null;
+  public username = null;
 
   // subscriptions
   private authState$$ = null;
@@ -50,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private onChangeAuthState (user) {
     if (user) {
       this.uid = user.uid;
+      this.username = user.email.replace('@swimmy.io', '')
     } else {
       this.uid = null;
     }

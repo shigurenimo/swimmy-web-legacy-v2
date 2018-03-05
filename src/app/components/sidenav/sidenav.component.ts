@@ -7,9 +7,14 @@ import { AngularFireAuth } from 'angularfire2/auth';
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent {
+  // ui states
   public nzTheme = 'white';
-
   public nzMode = 'inline';
+  public uid = null;
+  public username = null;
+
+  // subscriptions
+  private authState$$ = null;
 
   public routerLinkActiveOptions = {
     exact: true
@@ -21,5 +26,24 @@ export class SidenavComponent {
 
   constructor(
     public afAuth: AngularFireAuth) {
+  }
+
+  private onChangeAuthState (user) {
+    if (user) {
+      this.uid = user.uid;
+      this.username = user.email.replace('@swimmy.io', '')
+    } else {
+      this.uid = null;
+    }
+  }
+
+  ngOnInit () {
+    this.authState$$ = this.afAuth.authState.subscribe((next) => {
+      this.onChangeAuthState(next);
+    });
+  }
+
+  ngOnDestroy () {
+    this.authState$$.unsubscribe();
   }
 }

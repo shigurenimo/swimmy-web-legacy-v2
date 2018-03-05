@@ -1,6 +1,6 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { POSTS } from '../../constants/index'
+import { POSTS } from '../../constants/index';
 
 /**
  * Get /posts/{postId}
@@ -9,7 +9,7 @@ import { POSTS } from '../../constants/index'
  */
 export const getPost = (postId) => {
   if (!postId) {
-    throw new Error('postId not found')
+    throw new Error('postId not found');
   }
 
   return admin
@@ -19,11 +19,11 @@ export const getPost = (postId) => {
     .get()
     .then((snapshot) => {
       if (!snapshot.exists) {
-        throw new Error(`post(${postId}) not found`)
+        throw new Error(`post(${postId}) not found`);
       }
 
-      const data = snapshot.data()
+      const data = snapshot.data();
 
-      return Object.assign(data, {id: snapshot.id})
-    })
-}
+      return { ...data, id: snapshot.id };
+    });
+};

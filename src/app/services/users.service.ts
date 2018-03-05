@@ -9,10 +9,10 @@ export class UsersService {
 
   constructor (private apollo: Apollo) { }
 
-  public getUser (id) {
+  public getUser (id?, username?) {
     return this.apollo.watchQuery<any>({
       query: queryUser,
-      variables: { id }
+      variables: { id, username }
     }).valueChanges
   }
 

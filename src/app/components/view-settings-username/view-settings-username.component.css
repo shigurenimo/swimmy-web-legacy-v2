@@ -1,7 +1,12 @@
 :host > div {
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 400px;
   padding: 8px;
+}
+
+.description {
+  margin: 0 auto;
+  padding-top: 40px;
 }
 
 /** Form */
@@ -9,7 +14,6 @@
 .form {
   margin: 0 auto;
   padding-top: 40px;
-  max-width: 280px;
 }
 
 .form-helper {

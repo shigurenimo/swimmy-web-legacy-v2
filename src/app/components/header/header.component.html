@@ -1,7 +1,5 @@
 <div class='header'>
-
   <div class='row' nz-row nzType='flex' nzAlign='middle' *ngIf='goBack'>
-
     <span nz-col class='user'>
       <button nz-button nzShape='circle' nzSize='large' (click)='onGoBack()'>
         <span class='anticon anticon-left'></span>
@@ -13,14 +11,11 @@
         <ng-template [ngTemplateOutlet]='title'></ng-template>
       </span>
     </span>
-
   </div>
 
   <div class='row' nz-row nzType='flex' nzAlign='middle' *ngIf='!goBack'>
-
     <!-- Links -->
     <ul nz-menu nzMode='horizontal'>
-
       <li *ngFor='let link of links'
         nz-menu-item
         [routerLink]='link.routerLink'
@@ -32,12 +27,11 @@
       <li
         *ngIf='uid'
         nz-menu-item
-        routerLink='/{{uid}}'
+        routerLink='/{{username}}'
         [routerLinkActiveOptions]='routerLinkActiveOptions'
         routerLinkActive='ant-menu-item-selected'>
         <span class='anticon anticon-user'></span>
       </li>
-
     </ul>
 
     <span class='flex-space'></span>
@@ -55,9 +49,7 @@
         <span class='anticon anticon-poweroff'></span>
       </button>
     </span>
-
   </div>
-
 </div>
 
 <div class='body'>

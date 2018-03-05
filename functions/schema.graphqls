@@ -134,6 +134,7 @@ type User implements Node {
   photoURL: String
   postCount: Int
   updatedAt: String
+  username: String
   uid: String
 }
 
@@ -147,7 +148,7 @@ type Query {
   posts (limit: Int orderBy: PostOrderBy): PostConnection
   tag (id: ID!): Tag
   tags (limit: Int orderBy: TagOrderBy): TagConnection
-  user (id: ID!): User
+  user (id: ID, username: String): User
   viewer: Viewer
 }
 

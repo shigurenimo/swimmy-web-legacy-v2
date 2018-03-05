@@ -5,7 +5,7 @@ import { ViewConfigComponent } from './components/view-config/view-config.compon
 import { ViewHomeComponent } from './components/view-home/view-home.component';
 import { ViewInfoComponent } from './components/view-info/view-info.component';
 import { ViewLoginComponent } from './components/view-login/view-login.component';
-import { ViewSettingsEmailComponent } from './components/view-settings-email/view-settings-email.component';
+import { ViewSettingsUsernameComponent } from './components/view-settings-username/view-settings-username.component';
 import { ViewSettingsPasswordComponent } from './components/view-settings-password/view-settings-password.component';
 import { ViewSettingsProfileComponent } from './components/view-settings-profile/view-settings-profile.component';
 import { ViewSettingsComponent } from './components/view-settings/view-settings.component';
@@ -21,8 +21,8 @@ const routes: Routes = [{
   path: 'login',
   component: ViewLoginComponent
 }, {
-  path: 'settings/email',
-  component: ViewSettingsEmailComponent
+  path: 'settings/username',
+  component: ViewSettingsUsernameComponent
 }, {
   path: 'settings/password',
   component: ViewSettingsPasswordComponent
@@ -33,7 +33,7 @@ const routes: Routes = [{
   path: 'settings',
   component: ViewSettingsComponent
 }, {
-  path: ':uid',
+  path: ':username',
   component: ViewUsersDetailComponent
 }, {
   path: '',

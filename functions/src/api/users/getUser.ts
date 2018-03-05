@@ -7,8 +7,6 @@ export const getUser = (userId) => {
     throw new Error('userId not found');
   }
 
-  console.log('userId', userId);
-
   return admin
     .firestore()
     .collection(USERS)

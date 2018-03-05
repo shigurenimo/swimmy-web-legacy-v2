@@ -92,9 +92,9 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   }
 
   private onChangeParams (params) {
-    const { uid } = params;
+    const { username } = params;
     this.isLoading = true;
-    const user$ = this.usersService.getUser(uid);
+    const user$ = this.usersService.getUser(null, username);
     user$.subscribe(({ data }) => {
       const user = data.user as User;
       console.log(user);
