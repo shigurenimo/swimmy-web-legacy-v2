@@ -1,50 +1,58 @@
-<div class="header">
+<div class='header'>
 
-  <div class="row" nz-row nzType="flex" nzAlign="middle" *ngIf="goBack">
+  <div class='row' nz-row nzType='flex' nzAlign='middle' *ngIf='goBack'>
 
-    <span nz-col class="user">
-      <button nz-button nzShape="circle" nzSize="large" (click)="onGoBack()">
-        <span class="anticon anticon-left"></span>
+    <span nz-col class='user'>
+      <button nz-button nzShape='circle' nzSize='large' (click)='onGoBack()'>
+        <span class='anticon anticon-left'></span>
       </button>
     </span>
 
     <span>
-      <span class="center">
-        <ng-template [ngTemplateOutlet]="title"></ng-template>
+      <span class='center'>
+        <ng-template [ngTemplateOutlet]='title'></ng-template>
       </span>
     </span>
 
   </div>
 
-  <div class="row" nz-row nzType="flex" nzAlign="middle" *ngIf="!goBack">
+  <div class='row' nz-row nzType='flex' nzAlign='middle' *ngIf='!goBack'>
 
     <!-- Links -->
-    <ul nz-menu nzMode="horizontal">
+    <ul nz-menu nzMode='horizontal'>
 
-      <li *ngFor="let link of links"
-          nz-menu-item
-          [routerLink]="link.routerLink"
-          [routerLinkActiveOptions]="routerLinkActiveOptions"
-          routerLinkActive="ant-menu-item-selected">
-        <span [class]="link.iconClass"></span>
-        <span class="name">{{link.name}}</span>
+      <li *ngFor='let link of links'
+        nz-menu-item
+        [routerLink]='link.routerLink'
+        [routerLinkActiveOptions]='routerLinkActiveOptions'
+        routerLinkActive='ant-menu-item-selected'>
+        <span [class]='link.iconClass'></span>
+      </li>
+
+      <li
+        *ngIf='uid'
+        nz-menu-item
+        routerLink='/{{uid}}'
+        [routerLinkActiveOptions]='routerLinkActiveOptions'
+        routerLinkActive='ant-menu-item-selected'>
+        <span class='anticon anticon-user'></span>
       </li>
 
     </ul>
 
-    <span class="flex-space"></span>
+    <span class='flex-space'></span>
 
     <!-- ログインしている -->
-    <span nz-col class="user" routerLink="/settings" *ngIf="uid">
-      <button nz-button nzShape="circle" nzSize="large">
-        <span class="anticon anticon-setting"></span>
+    <span nz-col class='user' routerLink='/settings' *ngIf='uid'>
+      <button nz-button nzShape='circle' nzSize='large'>
+        <span class='anticon anticon-setting'></span>
       </button>
     </span>
 
     <!-- ログインしていない -->
-    <span nz-col class="user" routerLink="/login" *ngIf="!uid">
-      <button nz-button nzShape="circle" nzSize="large">
-        <span class="anticon anticon-poweroff"></span>
+    <span nz-col class='user' routerLink='/login' *ngIf='!uid'>
+      <button nz-button nzShape='circle' nzSize='large'>
+        <span class='anticon anticon-poweroff'></span>
       </button>
     </span>
 
@@ -52,6 +60,6 @@
 
 </div>
 
-<div class="body">
-  <ng-template [ngTemplateOutlet]="body"></ng-template>
+<div class='body'>
+  <ng-template [ngTemplateOutlet]='body'></ng-template>
 </div>
