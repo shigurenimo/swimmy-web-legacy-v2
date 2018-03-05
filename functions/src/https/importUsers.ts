@@ -61,15 +61,17 @@ const readData = () => {
 };
 
 const createAuthentication = (data) => {
-  const promises = data.filter((res, index) => index < limit).map((user) => {
-    return admin.auth().createUser({
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      disabled: true
-    }).catch(() => {
+  const promises = data
+    .filter((res, index) => index < limit)
+    .map((user) => {
+      return admin.auth().createUser({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        disabled: true
+      }).catch(() => {
+      });
     });
-  });
 
   return Promise.all(promises);
 };
