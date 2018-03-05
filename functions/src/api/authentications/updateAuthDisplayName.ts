@@ -5,16 +5,20 @@ export const updateAuthDisplayName = (uid, input) => {
     throw new Error('input not found')
   }
 
-  if (!input.email) {
-    throw new Error('input.email not found')
+  if (typeof input.displayName === 'undefined') {
+    throw new Error('input.displayName not found')
+  }
+
+  if (typeof input.photoURL === 'undefined') {
+    throw new Error('input.photoURL not found')
   }
 
   if (!uid) {
     throw new Error('uid not found')
   }
 
-  return admin.auth()
-    .updateUser(uid, {
-      displayName: input.email.match(/^[^@]+/)[0]
-    })
+  return admin.auth().updateUser(uid, {
+    displayName: input.displayName,
+    photoURL: input.photoURL
+  })
 }

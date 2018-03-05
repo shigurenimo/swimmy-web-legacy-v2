@@ -1,9 +1,7 @@
-:host {
-  display: block;
-}
-
 :host > div {
-  padding: 0 16px;
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 8px;
 }
 
 /** タイトル */

@@ -1,0 +1,73 @@
+<app-header [goBack]='true'>
+  <ng-template #title>
+    プロファイル
+  </ng-template>
+</app-header>
+
+<div>
+  <!-- Spinner -->
+  <ng-container *ngIf='isQuery'>
+    <div class='spinner'>
+      <nz-spin [nzTip]='nzTip' nzSize='large'></nz-spin>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf='!isQuery && !isNotFound'>
+    <!-- Upload -->
+    <div class='icon'>
+      <nz-upload
+        nzName='avatar'
+        [nzShowUploadList]='false'
+        (nzChange)='onUpload($event)'>
+        <nz-avatar nzIcon='user' [nzSrc]='nzSrc'></nz-avatar>
+      </nz-upload>
+    </div>
+
+    <!-- Form -->
+    <div class='form'>
+      <form nz-form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
+        <div nz-form-item>
+          <div nz-form-label nz-col>
+            <label nz-form-item-required>ディスプレイネーム</label>
+          </div>
+          <div nz-form-control nzHasFeedback>
+            <nz-input
+              formControlName='displayName'
+              [nzPlaceHolder]='displayNamePlaceHolder'
+              [nzSize]='nzSize'
+              (nzBlur)='onMutate()'>
+              <ng-template #prefix>
+                <i class='anticon anticon-user'></i>
+              </ng-template>
+            </nz-input>
+          </div>
+          <p class='form-helper'>
+            この名前は公開されます。
+          </p>
+        </div>
+
+        <div nz-form-item>
+          <div nz-form-label nz-col>
+            <label>自己紹介</label>
+          </div>
+          <div nz-form-control nzHasFeedback>
+            <nz-input
+              formControlName='description'
+              [nzPlaceHolder]='descriptionPlaceHolder'
+              nzType='textarea'
+              [nzSize]='nzSize'
+              nzAutosize
+              (nzBlur)='onMutate()'>
+            </nz-input>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+
+  <!-- Error -->
+  <div *ngIf='!isQuery && isNotFound'>
+    <p>データの取得に失敗しました</p>
+  </div>
+</div>
+

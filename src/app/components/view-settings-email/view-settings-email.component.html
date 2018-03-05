@@ -1,0 +1,105 @@
+<app-header [goBack]='true'>
+  <ng-template #title>
+    メールアドレス
+  </ng-template>
+</app-header>
+
+<div>
+  <ng-container *ngIf='!isQuery && !isNotFound'>
+    <!-- フォーム -->
+    <div class='form'>
+      <form nz-form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
+        <div nz-form-item>
+          <div nz-form-label nz-col>
+            <label>現在のメールアドレス</label>
+          </div>
+          <div>
+            <nz-input
+              formControlName='currentEmail'
+              [nzReadonly]='true'
+              [nzSize]='nzSize'>
+              <ng-template #prefix>
+                <i class='anticon anticon-mail'></i>
+              </ng-template>
+            </nz-input>
+          </div>
+          <p class='form-helper'>
+            変更するとこのメールアドレスでログインすることはできなくなります。
+          </p>
+        </div>
+
+        <div class='down'>
+          <i class='anticon anticon-down'></i>
+        </div>
+
+        <div nz-form-item>
+          <div nz-form-label nz-col>
+            <label nz-form-item-required>新しいメールアドレス</label>
+          </div>
+          <div nz-form-control nzHasFeedback>
+            <nz-input
+              formControlName='newEmail'
+              [nzPlaceHolder]='emailPlaceHolder'
+              [nzSize]='nzSize'>
+              <ng-template #prefix>
+                <i class='anticon anticon-mail'></i>
+              </ng-template>
+            </nz-input>
+          </div>
+          <p class='form-helper'>
+            このメールアドレスでログインします。
+          </p>
+        </div>
+
+        <div nz-row nzType='flex' nzJustify='end'>
+          <span nz-col>
+            <button nz-button (click)='onMutate()'>変更する</button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <!-- モーダル -->
+    <nz-modal
+      *ngIf='loginFormGroup'
+      [nzVisible]='isShowModal'
+      [nzTitle]='nzTitle'
+      [nzContent]='content'
+      [nzFooter]='footer'
+      (nzOnCancel)='onCancelLogin()'>
+      <ng-template #content>
+        <form nz-form [formGroup]='loginFormGroup' (ngSubmit)='onLogin()'>
+          <div nz-form-item>
+            <div nz-form-label nz-col>
+              <label nz-form-item-required>メールアドレス</label>
+            </div>
+            <div nz-form-control>
+              <nz-input formControlName='email' [nzSize]='nzSize' [nzReadonly]='true'>
+                <ng-template #prefix>
+                  <i class='anticon anticon-mail'></i>
+                </ng-template>
+              </nz-input>
+            </div>
+          </div>
+          <div nz-form-item>
+            <div nz-form-label nz-col>
+              <label nz-form-item-required>パスワード</label>
+            </div>
+            <div nz-form-control>
+              <nz-input formControlName='password' [nzSize]='nzSize' nzType='password'>
+                <ng-template #prefix>
+                  <i class='anticon anticon-key'></i>
+                </ng-template>
+              </nz-input>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+      <ng-template #footer>
+        <div>
+          <button nz-button [nzSize]='nzSize' (click)='onLogin()'>ログイン</button>
+        </div>
+      </ng-template>
+    </nz-modal>
+  </ng-container>
+</div>

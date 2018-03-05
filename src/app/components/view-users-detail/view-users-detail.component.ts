@@ -38,14 +38,14 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
 
   private params$$;
 
-  constructor(
+  constructor (
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
     private nzMessage: NzMessageService,
     public afAuth: AngularFireAuth) {
   }
 
-  public onLogout() {
+  public onLogout () {
     this.afAuth.auth
       .signOut()
       .then(() => {
@@ -59,7 +59,7 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onUpload(e) {
+  public onUpload (e) {
     if (!this.afAuth.app.auth().currentUser) {
       return;
     }
@@ -79,34 +79,34 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  public ngOnInit() {
+  public ngOnInit () {
     this.params$$ = this.activatedRoute.params.subscribe((params) => {
       this.onChangeParams(params);
     });
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy () {
     if (this.params$$) {
       this.params$$.unsubscribe();
     }
   }
 
-  private onChangeParams(params) {
-    const {uid} = params;
+  private onChangeParams (params) {
+    const { uid } = params;
     this.isLoading = true;
-    this.usersService
-      .getDoc({id: uid})
-      .subscribe(({data}) => {
-        const user = data.user as User;
-        this.createdAt = user.createdAt;
-        this.description = user.description;
-        this.displayName = user.displayName;
-        this.followeeCount = user.followeeCount;
-        this.followerCount = user.followerCount;
-        this.headerPhotoURL = user.headerPhotoURL;
-        this.photoURL = user.photoURL;
-        this.postCount = user.postCount;
-        this.isLoading = false;
-      });
+    const user$ = this.usersService.getUser({ id: uid });
+    user$.subscribe(({ data }) => {
+      const user = data.user as User;
+      console.log(user);
+      this.createdAt = user.createdAt;
+      this.description = user.description;
+      this.displayName = user.displayName;
+      this.followeeCount = user.followeeCount;
+      this.followerCount = user.followerCount;
+      this.headerPhotoURL = user.headerPhotoURL;
+      this.photoURL = user.photoURL;
+      this.postCount = user.postCount;
+      this.isLoading = false;
+    });
   }
 }

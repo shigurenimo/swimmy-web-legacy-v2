@@ -22,3 +22,16 @@ export const queryUser = gql`
     }
   }
 `;
+
+export const updateUser = gql`  
+  mutation updateUser($id: ID!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      description
+      displayName
+      photoURL
+      postCount
+      updatedAt
+      uid
+    }
+  }
+`;

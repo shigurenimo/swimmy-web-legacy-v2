@@ -43,8 +43,16 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'onCreatePost') {
   exports.onCreatePost = require('./lib/firestore/onCreatePost')
 }
 
+if (!FUNCTION_NAME || FUNCTION_NAME === 'onDeleteImage') {
+  exports.onDeleteImage = require('./lib/firestore/onDeleteImage')
+}
+
 if (!FUNCTION_NAME || FUNCTION_NAME === 'onDeletePost') {
   exports.onDeletePost = require('./lib/firestore/onDeletePost')
+}
+
+if (!FUNCTION_NAME || FUNCTION_NAME === 'onUpdateUser') {
+  exports.onUpdateUser = require('./lib/firestore/onUpdateUser')
 }
 
 // https

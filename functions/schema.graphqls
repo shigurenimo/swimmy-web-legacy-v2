@@ -41,6 +41,13 @@ input UpdatePostTagInput {
   name: String!
 }
 
+input UpdateUserInput {
+  description: String
+  displayName: String
+  photoURLs: [PhotoURLInput]
+  username: String
+}
+
 interface Node {
   id: ID!
 }
@@ -148,4 +155,5 @@ type Mutation {
   hello: String
   addPost(input: AddPostInput!): Post
   updatePostTag(input: UpdatePostTagInput!): Post
+  updateUser(id: ID!, input: UpdateUserInput!): User
 }
