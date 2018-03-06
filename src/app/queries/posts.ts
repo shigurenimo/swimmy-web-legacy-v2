@@ -12,7 +12,6 @@ export const queryPosts = gql`
           id
           displayName
           photoURL
-          uid
         }
         photoURLs
         repliedPostCount
@@ -33,11 +32,11 @@ export const queryPost = gql`
       id
       content
       createdAt
+      ownerId
       owner {
         id
         displayName
         photoURL
-        uid
       }
       photoURLs
       repliedPostCount
@@ -62,7 +61,6 @@ export const mutationAddPost = gql`
         id
         displayName
         photoURL
-        uid
       }
       photoURLs
       repliedPostCount

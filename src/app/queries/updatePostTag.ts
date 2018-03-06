@@ -6,15 +6,13 @@ export const mutationUpdatePostTag = gql`
       id
       content
       createdAt
+      ownerId
       owner {
         id
         displayName
         photoURL
-        uid
       }
-      photoURLs {
-        x512
-      }
+      photoURLs
       repliedPostCount
       replyPostId
       tags {
