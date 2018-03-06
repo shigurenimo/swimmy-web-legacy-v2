@@ -6,7 +6,7 @@
 /* Content */
 
 .content {
-  padding: 10px;
+  padding: 8px;
 }
 
 .content > p {
@@ -15,8 +15,10 @@
 
 .content .createdAt {
   padding-left: 10px;
-  font-size: 12px;
-  opacity: 0.8;
+}
+
+:host ::ng-deep .ant-btn-circle {
+  border: none;
 }
 
 .photoURLs {
