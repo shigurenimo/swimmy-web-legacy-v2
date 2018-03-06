@@ -60,11 +60,3 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'onUpdateUser') {
 if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./lib/https/graphql')
 }
-
-if (!FUNCTION_NAME || FUNCTION_NAME === 'importUsers') {
-  exports.importUsers = require('./lib/https/importUsers')
-}
-
-if (!FUNCTION_NAME || FUNCTION_NAME === 'importPosts') {
-  exports.importPosts = require('./lib/https/importPosts')
-}

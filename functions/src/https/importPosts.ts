@@ -3,15 +3,18 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { readFile, writeFileSync } from 'fs';
 import { join } from 'path';
+import { getPhotoURL } from '../api/microservices/getPhotoURL';
 
 import { failureResponse } from '../helpers/failureResponse';
+import { getDownloadURL } from '../helpers/getDownloadURL';
 import { successResponse } from '../helpers/successResponse';
 
 const batchLimit = 450; // < 500
-const limit = 50;
+const limit = 20000;
 const collectionPostsName = 'posts';
 const collectionTagsName = 'tags';
 const merge = false;
+const startAt = 0;
 
 export = functions.https.onRequest((request, response) => {
   return cors()(request, response, () => {
@@ -129,20 +132,22 @@ const toTasks = (posts) => {
 };
 
 const readData = () => {
-  const inputUserFile = join(__dirname, '..', 'exports', 'posts.json');
+  const inputUserFile = join(__dirname, '..', '..', 'exports', 'posts.json');
 
   return new Promise((resolve) => {
-    return readFile(inputUserFile, 'utf-8', (err, res) => {
+    return readFile(inputUserFile, 'utf-8', async (err, res) => {
       if (err) { throw err; }
-      const posts = res.split('\n')
+      const postsPromise = res.split('\n')
         .filter((line) => {
           return line;
         })
         .map((line) => {
           return JSON.parse(line);
         })
-        .filter((line, index) => index < limit)
-        .map((res) => {
+        .filter((line, index) => {
+          return startAt <= index && index < limit;
+        })
+        .map(async (res) => {
           const post = {
             id: res._id,
             content: res.content,
@@ -151,27 +156,26 @@ const readData = () => {
             from: 'swimmy',
             ownerId: res.ownerId || null,
             owner: null,
+            photoURLs: {},
+            photoURL: null,
             tags: res.reactions,
             repliedPostCount: (res.repliedPostIds || []).length || 0,
             repliedPostIds: res.repliedPostIds || [],
             replyPostId: res.replyPostId || null,
             updatedAt: new Date(res.createdAt.$date),
-            webURL: null,
-            photoURLs: res.images
-              ? res.images.map(async (image) => {
-                const fileName = image.full.split(/\.(?=[^.]+$)/)[0];
-                if (image.full) {
-                  return {
-                    default: fileName
-                  };
-                } else {
-                  console.log('image.full not found');
-                  console.log(image);
-                  return null;
-                }
-              })
-              : []
+            webURL: null
           } as any;
+
+          if (res.images) {
+            for (let i = 0; i < res.images.length; ++i) {
+              const image = res.images[i];
+              const photoId = image.full.split(/\.(?=[^.]+$)/)[0];
+              const photoURL = getDownloadURL('posts', photoId);
+              const data = await getPhotoURL('posts', photoId, photoURL);
+              post.photoURLs[photoId] = data;
+              post.photoURL = data.photoURL;
+            }
+          }
 
           let web = null;
 
@@ -190,6 +194,28 @@ const readData = () => {
 
           return post;
         });
+
+      /*
+      for (let i = 0; i < posts.length; ++i) {
+        const post = posts[i];
+        if (post.photoURL) {
+          const photoId = post.photoURL;
+          console.log('photoId', photoId);
+          try {
+            const photoURL = getDownloadURL('posts', photoId);
+            const data = await getPhotoURL('posts', photoId, photoURL);
+            post.photoURLs[photoId] = data;
+            post.photoURL = data.photoURL;
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      }
+      */
+
+      const posts = await Promise.all(postsPromise)
+
+      console.log('done');
 
       resolve(posts);
     });

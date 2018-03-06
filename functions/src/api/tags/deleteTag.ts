@@ -15,13 +15,16 @@ export const deleteTag = (tag) => {
       .where('name', '==', tag.name);
 
     return t.get(findRef).then((querySnapshot) => {
-      const doc = querySnapshot.docs[0].data();
-      const data = doc.data();
+      if (querySnapshot.empty) { return; }
+
+      const snapshot = querySnapshot.docs[0];
+
+      const data = snapshot.data();
 
       const ref = admin
         .firestore()
         .collection(TAGS)
-        .doc(doc.id);
+        .doc(snapshot.id);
 
       t.set(ref, {
         name: tag.name,

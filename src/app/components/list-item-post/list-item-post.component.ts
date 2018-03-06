@@ -41,7 +41,7 @@ export class ListItemPostComponent {
     public afa: AngularFireAuth) {
   }
 
-  private onOpenReply () {
+  public onOpenReply () {
     this.isOpenReply = !this.isOpenReply;
   }
 

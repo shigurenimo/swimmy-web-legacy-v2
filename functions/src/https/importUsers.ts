@@ -30,7 +30,7 @@ export = functions.https.onRequest((request, response) => {
 })
 
 const readData = () => {
-  const inputUserFile = join(__dirname, '..', 'exports', 'users.json');
+  const inputUserFile = join(__dirname, '..', '..', 'exports', 'users.json');
 
   return new Promise((resolve, reject) => {
     return readFile(inputUserFile, 'utf-8', (err, res) => {
@@ -48,7 +48,15 @@ const readData = () => {
             code: res.profile.code,
             createdAt: res.createdAt.$date,
             email: `${res.username}@swimmy.io`,
+            description: '',
             displayName: res.profile.name,
+            followeeCount: 0,
+            followerCount: 0,
+            headerPhotoURLs: {},
+            headerPhotoURL: null,
+            providers: {},
+            photoURLs: {},
+            photoURL: null,
             updatedAt: res.createdAt.$date,
             username: res.username,
             uid: res._id
