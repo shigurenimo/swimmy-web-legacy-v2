@@ -1,16 +1,23 @@
-import * as functions from 'firebase-functions'
+import * as functions from 'firebase-functions';
 
-import { deleteTags } from '../api/tags/deleteTags'
+import { deletePostObject } from '../api/algolia/deletePostObject';
+import { deleteTags } from '../api/tags/deleteTags';
+import { failureLog } from '../helpers/failureLog';
+import { getEventData } from '../helpers/getEventData';
 
-import { failureLog } from '../helpers/failureLog'
-import { getEventData } from '../helpers/getEventData'
+export = functions.firestore
+  .document('posts/{postId}')
+  .onDelete(async (event) => {
+    const post = getEventData(event);
 
-export = functions.firestore.document('posts/{postId}').onDelete((event) => {
-  const post = getEventData(event)
+    const { postId } = event.params;
 
-  return Promise.all([
-    deleteTags(post.tags)
-  ]).catch((err) => {
-    return failureLog(err)
+    try {
+      await Promise.all([
+        deleteTags(post.tags),
+        deletePostObject(postId)
+      ]);
+    } catch (err) {
+      failureLog(err);
+    }
   })
-})

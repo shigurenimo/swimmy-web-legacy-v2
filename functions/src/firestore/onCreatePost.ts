@@ -1,19 +1,24 @@
-import * as functions from 'firebase-functions'
+import * as functions from 'firebase-functions';
 
-import { setUserPost } from '../api/users/setUserPost'
+import { updatePostObject } from '../api/algolia/updatePostObject';
+import { setUserPost } from '../api/users/setUserPost';
+import { failureLog } from '../helpers/failureLog';
+import { getEventData } from '../helpers/getEventData';
 
-import { failureLog } from '../helpers/failureLog'
-import { getEventData } from '../helpers/getEventData'
+export = functions.firestore
+  .document('posts/{postId}')
+  .onCreate(async (event) => {
+    const post = getEventData(event);
 
-export = functions.firestore.document('posts/{postId}').onCreate((event) => {
-  const post = getEventData(event)
+    const { postId } = event.params;
 
-  const {postId} = event.params
-
-  return Promise.all([
-    post.ownerId &&
-    setUserPost(post.owner.uid, postId, post)
-  ]).catch((err) => {
-    return failureLog(err)
+    try {
+      await Promise.all([
+        post.ownerId &&
+        setUserPost(post.owner.uid, postId, post),
+        updatePostObject(postId, post)
+      ]);
+    } catch (err) {
+      failureLog(err);
+    }
   })
-})

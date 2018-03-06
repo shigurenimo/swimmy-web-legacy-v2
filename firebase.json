@@ -8,6 +8,14 @@
     ],
     "rewrites": [
       {
+        "source": "/graphiql",
+        "function": "graphiql"
+      },
+      {
+        "source": "/graphql",
+        "function": "graphql"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
