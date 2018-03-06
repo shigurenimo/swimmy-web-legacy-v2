@@ -60,3 +60,7 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'onUpdateUser') {
 if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./lib/https/graphql')
 }
+
+if (!FUNCTION_NAME || FUNCTION_NAME === 'restoreUser') {
+  exports.restoreUser = require('./lib/https/restoreUser')
+}
