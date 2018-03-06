@@ -27,6 +27,7 @@ export const setPost = async (postId, input, owner) => {
     updatedAt: createdAt
   };
 
+  /*
   if (owner) {
     newPost.ownerId = owner.uid;
     newPost.owner = {
@@ -35,6 +36,7 @@ export const setPost = async (postId, input, owner) => {
       photoURL: owner.photoURL
     };
   }
+  */
 
   newPost.photoURLs = {};
 

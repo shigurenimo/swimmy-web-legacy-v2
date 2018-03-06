@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import * as cors from 'cors';
 import * as crypto from 'crypto';
 import * as admin from 'firebase-admin';

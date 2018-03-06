@@ -11,6 +11,7 @@ export = functions.firestore.document('posts/{postId}').onCreate((event) => {
   const {postId} = event.params
 
   return Promise.all([
+    post.ownerId &&
     setUserPost(post.owner.uid, postId, post)
   ]).catch((err) => {
     return failureLog(err)

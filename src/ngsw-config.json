@@ -26,18 +26,5 @@
         ]
       }
     }
-  ],
-  "dataGroups": [
-    {
-      "name": "graphql",
-      "urls": [
-        "https://us-central1-swimmy-171720.cloudfunctions.net/graphql"
-      ],
-      "cacheConfig": {
-        "maxSize": 100,
-        "maxAge": "1d",
-        "strategy": "performance"
-      }
-    }
   ]
 }
