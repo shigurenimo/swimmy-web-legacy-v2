@@ -17,8 +17,6 @@ export class UsersService {
   }
 
   public updateUser (id, input) {
-    console.log(id, input);
-    console.log(updateUser);
     return this.apollo.mutate<any>({
       mutation: updateUser,
       variables: { id, input }

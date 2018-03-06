@@ -47,35 +47,20 @@ export class EditorPostComponent implements OnInit {
   }
 
   public onAddPost () {
+    if (this.isMutation) { return; }
+
     this.isMutation = true;
 
-    this.mutateAddPost().catch((err) => {
-      console.error(err);
-    });
-  }
+    this.markAsDirty();
 
-  public uploadImage (file) {
-    const originFileObj = file.originFileObj;
-    const photoId = this.afStore.createId();
-    const filePath = `posts/${photoId}`;
-    const task = this.afStorage.upload(filePath, originFileObj);
-    const downloadURL$ = task.downloadURL();
-    const map$ = map((photoURL) => {
-      return { photoURL, photoId };
-    });
-    return downloadURL$.pipe(map$);
-  }
-
-  public ngOnInit () {
-    this.formGroup = this.formBuilder.group({
-      content: ['', [Validators.maxLength(20)]]
-    });
-  }
-
-  private async mutateAddPost () {
     const content = this.content.value;
 
     let $mutation = null;
+
+    if (!this.fileList.length && !content) {
+      this.isMutation = false;
+      return
+    }
 
     if (this.fileList.length) {
       const uploadImageMap$ = this.fileList.map((file) => {
@@ -108,5 +93,27 @@ export class EditorPostComponent implements OnInit {
       console.error(err);
       this.isMutation = false;
     });
+  }
+
+  public uploadImage (file) {
+    const originFileObj = file.originFileObj;
+    const photoId = this.afStore.createId();
+    const filePath = `posts/${photoId}`;
+    const task = this.afStorage.upload(filePath, originFileObj);
+    const downloadURL$ = task.downloadURL();
+    const map$ = map((photoURL) => {
+      return { photoURL, photoId };
+    });
+    return downloadURL$.pipe(map$);
+  }
+
+  public ngOnInit () {
+    this.formGroup = this.formBuilder.group({
+      content: ['', [Validators.maxLength(200)]]
+    });
+  }
+
+  private markAsDirty () {
+    this.formGroup.controls.content.markAsDirty();
   }
 }

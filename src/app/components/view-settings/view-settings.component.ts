@@ -63,7 +63,6 @@ export class ViewSettingsComponent implements OnInit, OnDestroy {
 
   private onAuthState (user) {
     if (user) {
-      console.log(user);
       this.displayName = user.displayName;
       this.photoURL = user.photoURL;
     } else {

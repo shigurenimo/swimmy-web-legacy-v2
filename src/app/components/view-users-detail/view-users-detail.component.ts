@@ -97,7 +97,6 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
     const user$ = this.usersService.getUser(null, username);
     user$.subscribe(({ data }) => {
       const user = data.user as User;
-      console.log(user);
       this.createdAt = user.createdAt;
       this.description = user.description;
       this.displayName = user.displayName;
