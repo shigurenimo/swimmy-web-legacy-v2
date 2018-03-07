@@ -34,6 +34,7 @@ import { ResizePipe } from './pipes/resize.pipe';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
+import { ViewImagesComponent } from './components/view-images/view-images.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { UsersService } from './services/users.service';
     ViewSettingsUsernameComponent,
     ViewSettingsPasswordComponent,
     ViewSettingsProfileComponent,
-    ResizePipe
+    ResizePipe,
+    ViewImagesComponent
   ],
   imports: [
     FirebaseModule,
