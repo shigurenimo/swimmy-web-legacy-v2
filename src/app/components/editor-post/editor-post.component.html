@@ -1,45 +1,45 @@
-<form nz-form [formGroup]="formGroup">
+<form nz-form [formGroup]='formGroup'>
 
   <div nz-form-control>
-    <nz-input formControlName="content"
-              nzType="textarea"
-              [nzAutosize]="nzAutosize"
-              [nzPlaceHolder]="nzPlaceHolder"
-              [nzDisabled]="isMutation">
+    <nz-input formControlName='content'
+      nzType='textarea'
+      [nzAutosize]='nzAutosize'
+      [nzPlaceHolder]='nzPlaceHolder'
+      [nzDisabled]='isMutation'>
     </nz-input>
   </div>
 
-  <div class="actions" nz-form-control>
-
-    <nz-upload
-      *ngIf="afAuth.authState|async"
-      class="input"
-      [nzShowUploadList]="false"
-      [(nzFileList)]="fileList">
-      <button nz-button>
-        <i class="anticon anticon-link"></i>
-        <span>画像</span>
+  <div class='actions' nz-form-control>
+    <div nz-row nzType="flex" nzJustify="end" nzAlign="middle">
+      <nz-upload
+        *ngIf='afAuth.authState|async'
+        class='input'
+        [nzShowUploadList]='false'
+        [(nzFileList)]='fileList'>
+        <button nz-button>
+          <i class='anticon anticon-link'></i>
+          <span>画像</span>
+        </button>
+      </nz-upload>
+      <button
+        nz-col
+        class='input'
+        nz-button
+        (click)='onAddPost()'
+        [nzLoading]='isMutation'>
+        <span>送信</span>
       </button>
-    </nz-upload>
-
-    <button
-      class="input"
-      nz-button
-      (click)="onAddPost()"
-      [nzLoading]="isMutation">
-      <span>送信</span>
-    </button>
-
+    </div>
   </div>
 
-  <div *ngIf="fileList[0]" class="images">
+  <div *ngIf='fileList[0]' class='images'>
 
     <nz-avatar
-      *ngFor="let file of fileList"
-      class="image-avater"
-      nzShape="square"
-      nzSize="large"
-      [nzSrc]="file.thumbUrl">
+      *ngFor='let file of fileList'
+      class='image-avater'
+      nzShape='square'
+      nzSize='large'
+      [nzSrc]='file.thumbUrl'>
     </nz-avatar>
 
   </div>

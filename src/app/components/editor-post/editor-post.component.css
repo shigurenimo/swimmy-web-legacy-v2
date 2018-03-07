@@ -6,14 +6,10 @@
 }
 
 .actions {
-  display: flex;
-  justify-content: flex-end;
   padding-top: 10px;
 }
 
 .actions .input {
-  display: inline-block;
-  vertical-align: top;
   margin-left: 10px;
 }
 
