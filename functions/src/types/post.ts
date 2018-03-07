@@ -23,6 +23,9 @@ export const Post = {
       return root.photoURLs[id].photoURL;
     });
   },
+  photoURL (root) {
+    return root.photoURL
+  },
   repliedPostCount (root) {
     return root.repliedPostCount;
   },

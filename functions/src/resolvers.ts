@@ -1,4 +1,7 @@
 import * as JSON from 'graphql-type-json';
+import { PostOrderField } from './enums/PostOrderField';
+import { PostType } from './enums/PostType';
+import { TagOrderField } from './enums/TagOrderField';
 import { Mutation } from './mutation';
 import { Query } from './query/index';
 import { DateTime } from './scalars/dateTime';
@@ -13,6 +16,9 @@ import { User } from './types/user';
 
 export const resolvers = {
   JSON,
+  PostOrderField,
+  PostType,
+  TagOrderField,
   Mutation,
   Query,
   DateTime,

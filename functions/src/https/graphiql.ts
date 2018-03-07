@@ -4,22 +4,22 @@ import * as express from 'express';
 import * as functions from 'firebase-functions';
 
 const query = `{
-    posts {
-      nodes {
+  posts {
+    nodes {
+      id
+      content
+      createdAt
+      photoURLs
+      repliedPostCount
+      replyPostId
+      tags {
         id
-        content
-        createdAt
-        photoURLs
-        repliedPostCount
-        replyPostId
-        tags {
-          id
-          name
-          count
-        }
+        name
+        count
       }
     }
-  }`;
+  }
+}`;
 
 const endpointURL = process.env.NODE_ENV === 'production'
   ? `https://us-central1-${process.env.GCP_PROJECT}.cloudfunctions.net/graphql/`

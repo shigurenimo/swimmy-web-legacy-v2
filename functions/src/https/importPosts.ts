@@ -13,7 +13,7 @@ const batchLimit = 450; // < 500
 const limit = 20000;
 const collectionPostsName = 'posts';
 const collectionTagsName = 'tags';
-const merge = false;
+const merge = true;
 const startAt = 0;
 
 export = functions.https.onRequest((request, response) => {

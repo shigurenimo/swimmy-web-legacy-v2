@@ -1,5 +1,5 @@
-import { getPost } from '../api/posts/getPost'
+import { getPost } from '../api/posts/getPost';
 
-export default (root, {id}) => {
-  return getPost(id)
+export default (root, { id }) => {
+  return getPost(id);
 };

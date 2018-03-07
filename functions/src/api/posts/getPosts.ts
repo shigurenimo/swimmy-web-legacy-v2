@@ -1,28 +1,50 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { POSTS } from '../../constants/index'
-import { DESC } from '../../constants/query'
+import { POSTS } from '../../constants/index';
+import { DESC } from '../../constants/query';
 
 /**
  * Get /posts
  * @return {Promise}
  */
-export const getPosts = ({limit}) => {
-  if (!limit) {
-    throw new Error('limit not found')
+export const getPosts = async (args) => {
+  const {
+    limit = 15,
+    orderBy = {
+      direction: 'DESC',
+      field: 'createdAt'
+    },
+    type = 'NONE'
+  } = args;
+
+  let ref = admin.firestore().collection(POSTS) as any;
+
+  switch (type) {
+    case 'THREAD': {
+      ref = ref.orderBy('repliedPostCount', 'DESC')
+      break;
+    }
+    case 'PHOTO': {
+      ref = ref.orderBy('photoURL', 'DESC')
+      break;
+    }
   }
 
-  return admin
-    .firestore()
-    .collection(POSTS)
-    .orderBy('createdAt', DESC)
-    .limit(limit)
-    .get()
-    .then((snapshots) => {
-      return snapshots.docs.map((snapshot) => {
-        const data = snapshot.data()
+  ref = ref.orderBy(orderBy.field, orderBy.direction);
 
-        return Object.assign(data, {id: snapshot.id})
-      })
-    })
-}
+  ref = ref.limit(limit);
+
+  const querySnapshots = await ref.get();
+
+  if (querySnapshots.empty) {
+    return [];
+  }
+
+  const posts = querySnapshots.docs.map((snapshot) => {
+    const data = snapshot.data();
+
+    return { ...data, id: snapshot.id };
+  });
+
+  return posts;
+};
