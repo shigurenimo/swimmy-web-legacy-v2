@@ -4,11 +4,11 @@
       "collectionId": "posts",
       "fields": [
         {
-          "fieldPath": "repliedPostCount",
+          "fieldPath": "createdAt",
           "mode": "DESCENDING"
         },
         {
-          "fieldPath": "createdAt",
+          "fieldPath": "repliedPostCount",
           "mode": "ASCENDING"
         }
       ]
@@ -17,38 +17,12 @@
       "collectionId": "posts",
       "fields": [
         {
-          "fieldPath": "repliedPostCount",
-          "mode": "DESCENDING"
-        },
-        {
           "fieldPath": "createdAt",
           "mode": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionId": "posts",
-      "fields": [
+        },
         {
           "fieldPath": "photoURL",
-          "mode": "DESCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
           "mode": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionId": "posts",
-      "fields": [
-        {
-          "fieldPath": "photoURL",
-          "mode": "DESCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "mode": "DESCENDING"
         }
       ]
     }

@@ -23,10 +23,11 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
   private onChangeAuthState () {
     const posts$ = this.postsService.getPhotoPosts();
     const posts$$ = posts$.subscribe(({ data }) => {
-      data.posts.nodes.forEach((node) => {
-        this.posts.push(node);
+      data.posts.nodes.forEach((node, index) => {
+        setTimeout(() => {
+          this.posts.push(node);
+        }, index * 400)
       });
-      console.log(this.posts);
       posts$$.unsubscribe();
     });
   }

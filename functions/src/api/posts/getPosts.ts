@@ -19,18 +19,18 @@ export const getPosts = async (args) => {
 
   let ref = admin.firestore().collection(POSTS) as any;
 
+  ref = ref.orderBy(orderBy.field, orderBy.direction);
+
   switch (type) {
     case 'THREAD': {
-      ref = ref.orderBy('repliedPostCount', 'DESC')
+      ref = ref.orderBy('repliedPostCount', 'ASC')
       break;
     }
     case 'PHOTO': {
-      ref = ref.orderBy('photoURL', 'DESC')
+      ref = ref.orderBy('photoURL', 'ASC')
       break;
     }
   }
-
-  ref = ref.orderBy(orderBy.field, orderBy.direction);
 
   ref = ref.limit(limit);
 

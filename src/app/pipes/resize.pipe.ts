@@ -12,8 +12,12 @@ export class ResizePipe implements PipeTransform {
     }
 
     switch (args) {
+      case 'replica':
+        return `${value}=s10`;
       case 'icon':
         return `${value}=s80-c`;
+      case 'image':
+        return `${value}=s600`;
       case 'post':
         return `${value}=s200-c`;
       default:
