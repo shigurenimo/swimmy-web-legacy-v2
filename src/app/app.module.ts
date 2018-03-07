@@ -35,6 +35,7 @@ import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
 import { ViewImagesComponent } from './components/view-images/view-images.component';
+import { CardImageComponent } from './components/card-image/card-image.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ViewImagesComponent } from './components/view-images/view-images.compon
     ViewSettingsPasswordComponent,
     ViewSettingsProfileComponent,
     ResizePipe,
-    ViewImagesComponent
+    ViewImagesComponent,
+    CardImageComponent
   ],
   imports: [
     FirebaseModule,
