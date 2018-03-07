@@ -21,7 +21,7 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit () {
-    const posts$ = this.postsService.getDocs();
+    const posts$ = this.postsService.observePosts();
     const authState$ = this.afAuth.authState;
     this.authState$$ = authState$.subscribe(() => {
       this.posts$$ = posts$.subscribe(({ data }) => {

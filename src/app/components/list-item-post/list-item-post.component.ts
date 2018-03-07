@@ -63,7 +63,7 @@ export class ListItemPostComponent {
 
     this.isMutation = true;
 
-    const post$ = this.posts.updateTag({
+    const post$ = this.posts.updatePostTag({
       postId: this.id,
       name: name
     });

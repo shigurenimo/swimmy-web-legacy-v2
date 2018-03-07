@@ -26,6 +26,58 @@ export const queryPosts = gql`
   }
 `;
 
+export const queryThreadPosts = gql`
+  query posts {
+    posts(type: THREAD) {
+      nodes {
+        id
+        content
+        createdAt
+        ownerId
+        owner {
+          id
+          displayName
+          photoURL
+        }
+        photoURLs
+        repliedPostCount
+        replyPostId
+        tags {
+          id
+          name
+          count
+        }
+      }
+    }
+  }
+`;
+
+export const queryPhotoPosts = gql`
+  query posts {
+    posts(type: PHOTO) {
+      nodes {
+        id
+        content
+        createdAt
+        ownerId
+        owner {
+          id
+          displayName
+          photoURL
+        }
+        photoURLs
+        repliedPostCount
+        replyPostId
+        tags {
+          id
+          name
+          count
+        }
+      }
+    }
+  }
+`;
+
 export const queryPost = gql`
   query post($id: ID) {
     post(id: $id) {

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { Apollo } from 'apollo-angular';
+import { PostsResult } from '../interfaces/Post';
 
-import { mutationAddPost, queryPosts } from '../queries/posts';
+import { mutationAddPost, queryPhotoPosts, queryPosts, queryThreadPosts } from '../queries/posts';
 import { mutationUpdatePostTag } from '../queries/updatePostTag';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class PostsService {
   constructor (private apollo: Apollo) {
   }
 
-  public add (input) {
+  public addPost (input) {
     return this.apollo.mutate({
       mutation: mutationAddPost,
       variables: { input },
@@ -23,16 +24,31 @@ export class PostsService {
     });
   }
 
-  public updateTag (input) {
+  public updatePostTag (input) {
     return this.apollo.mutate({
       mutation: mutationUpdatePostTag,
       variables: { input }
     });
   }
 
-  public getDocs () {
-    return this.apollo.watchQuery<any>({
-      query: queryPosts
+  public observePosts () {
+    return this.apollo.watchQuery<PostsResult>({
+      query: queryPosts,
+      pollInterval: 5000
+    }).valueChanges;
+  }
+
+  public observeThreadPosts () {
+    return this.apollo.watchQuery<PostsResult>({
+      query: queryThreadPosts,
+      pollInterval: 120000
+    }).valueChanges;
+  }
+
+  public observePhotoPosts () {
+    return this.apollo.watchQuery<PostsResult>({
+      query: queryPhotoPosts,
+      pollInterval: 120000
     }).valueChanges;
   }
 }

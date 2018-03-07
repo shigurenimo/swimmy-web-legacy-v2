@@ -70,7 +70,7 @@ export class EditorPostComponent implements OnInit {
       const uploadImages$ = combineLatest(uploadImageMap$);
 
       const post$ = mergeMap((photoURLs) => {
-        return this.posts.add({
+        return this.posts.addPost({
           content: content,
           photoURLs: photoURLs,
           replyPostId: null
@@ -79,7 +79,7 @@ export class EditorPostComponent implements OnInit {
 
       $mutation = uploadImages$.pipe(post$);
     } else {
-      $mutation = this.posts.add({
+      $mutation = this.posts.addPost({
         content: content,
         photoURLs: [],
         replyPostId: null
