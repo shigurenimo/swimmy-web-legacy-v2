@@ -45,10 +45,9 @@ export class PostsService {
     }).valueChanges;
   }
 
-  public observePhotoPosts () {
+  public getPhotoPosts (startAt?) {
     return this.apollo.watchQuery<PostsResult>({
-      query: queryPhotoPosts,
-      pollInterval: 120000
+      query: queryPhotoPosts
     }).valueChanges;
   }
 }

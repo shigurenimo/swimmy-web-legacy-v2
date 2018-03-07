@@ -1,5 +1,5 @@
-import { Component, ContentChild, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { Location } from '@angular/common';
+import { Component, ContentChild, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
@@ -19,9 +19,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   };
   public links = [
     {
-      name: 'ホーム',
       routerLink: ['/'],
       iconClass: 'anticon anticon-home'
+    }, {
+      routerLink: ['/images'],
+      iconClass: 'anticon anticon-camera'
     }];
   public uid = null;
   public username = null;
@@ -51,7 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private onChangeAuthState (user) {
     if (user) {
       this.uid = user.uid;
-      this.username = user.email.replace('@swimmy.io', '')
+      this.username = user.email.replace('@swimmy.io', '');
     } else {
       this.uid = null;
     }

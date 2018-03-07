@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { Post } from '../../interfaces/Post';
 
+import { AngularFireAuth } from 'angularfire2/auth';
+
+import { Post } from '../../interfaces/Post';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
@@ -20,13 +21,17 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     private afAuth: AngularFireAuth) {
   }
 
-  public ngOnInit () {
+  private onChangeAuthState () {
     const posts$ = this.postsService.observePosts();
+    this.posts$$ = posts$.subscribe(({ data }) => {
+      this.posts = data.posts.nodes;
+    });
+  }
+
+  public ngOnInit () {
     const authState$ = this.afAuth.authState;
     this.authState$$ = authState$.subscribe(() => {
-      this.posts$$ = posts$.subscribe(({ data }) => {
-        this.posts = data.posts.nodes;
-      });
+      this.onChangeAuthState();
     });
   }
 

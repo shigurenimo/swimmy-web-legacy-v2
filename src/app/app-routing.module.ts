@@ -3,17 +3,21 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ViewConfigComponent } from './components/view-config/view-config.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
+import { ViewImagesComponent } from './components/view-images/view-images.component';
 import { ViewInfoComponent } from './components/view-info/view-info.component';
 import { ViewLoginComponent } from './components/view-login/view-login.component';
-import { ViewSettingsUsernameComponent } from './components/view-settings-username/view-settings-username.component';
 import { ViewSettingsPasswordComponent } from './components/view-settings-password/view-settings-password.component';
 import { ViewSettingsProfileComponent } from './components/view-settings-profile/view-settings-profile.component';
+import { ViewSettingsUsernameComponent } from './components/view-settings-username/view-settings-username.component';
 import { ViewSettingsComponent } from './components/view-settings/view-settings.component';
 import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
 
 const routes: Routes = [{
   path: 'config',
   component: ViewConfigComponent
+}, {
+  path: 'images',
+  component: ViewImagesComponent
 }, {
   path: 'info',
   component: ViewInfoComponent
