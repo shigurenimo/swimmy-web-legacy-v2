@@ -51,6 +51,10 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'onDeletePost') {
   exports.onDeletePost = require('./lib/firestore/onDeletePost')
 }
 
+if (!FUNCTION_NAME || FUNCTION_NAME === 'onUpdatePost') {
+  exports.onUpdatePost = require('./lib/firestore/onUpdatePost')
+}
+
 if (!FUNCTION_NAME || FUNCTION_NAME === 'onUpdateUser') {
   exports.onUpdateUser = require('./lib/firestore/onUpdateUser')
 }
