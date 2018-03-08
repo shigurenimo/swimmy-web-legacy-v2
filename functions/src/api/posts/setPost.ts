@@ -1,7 +1,6 @@
 import * as admin from 'firebase-admin';
 
 import { POSTS, TAGS } from '../../constants/index';
-import { COUNT } from '../../constants/tags';
 import { getPhotoURL } from '../microservices/getPhotoURL';
 
 /**
@@ -54,20 +53,16 @@ export const setPost = async (postId, input, owner) => {
 
   const tagQuerySnapshot = await admin.firestore()
     .collection(TAGS)
-    .orderBy(COUNT)
+    .where('name', '==', 'スキ')
     .limit(1)
     .get();
 
   const snapshot = tagQuerySnapshot.docs[0];
 
   if (snapshot) {
-    const data = snapshot.data();
-
     newPost.tags[snapshot.id] = {
-      name: data.name,
-      count: 0,
-      createdAt: createdAt,
-      updatedAt: createdAt
+      name: 'スキ',
+      count: 0
     };
   }
 

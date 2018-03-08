@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const queryPosts = gql`
   query posts {
-    posts {
+    posts(limit: 40) {
       nodes {
         id
         content

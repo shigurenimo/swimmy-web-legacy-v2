@@ -85,6 +85,7 @@ type Post implements Node {
   createdAt: DateTime
   ownerId: Boolean
   owner: Owner
+  photoCount: Int
   photoURLs: [String]
   photoURL: String
   repliedPostCount: Int
@@ -101,11 +102,9 @@ type PostConnection implements Connection {
 type PostTag implements Node {
   id: ID!
   count: Int
-  createdAt: DateTime
   name: String
   postId: String
   tagId: String
-  updatedAt: DateTime
 }
 
 type PhotoURL {
@@ -155,6 +154,10 @@ type User implements Node {
   uid: String
 }
 
+type UploadObjectResult {
+  lastObjectId: ID!
+}
+
 type Viewer {
   user: User
 }
@@ -172,7 +175,7 @@ type Query {
 type Mutation {
   hello: String
   addPost(input: AddPostInput!): Post
-  refactorPostObjects(startAfter: ID): String
+  uploadPostObjects(startAfter: ID): UploadObjectResult
   updatePostTag(input: UpdatePostTagInput!): Post
   updateUser(id: ID!, input: UpdateUserInput!): User
 }

@@ -2,30 +2,28 @@ import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
 
-export const updateObjects = (name, documents) => {
+export const updateObjects = async (name, objects) => {
   if (!name) {
     throw new Error('name not found');
   }
 
-  if (!documents) {
-    throw new Error('documents not found');
+  if (!objects) {
+    throw new Error('objects not found');
+  }
+
+  if (!objects.length) {
+    console.log('objects.length == 0');
+    return;
   }
 
   const client = algoliasearch(config.algolia.appId, config.algolia.key);
 
   const index = client.initIndex(name);
 
-  const objects = documents.map((document) => {
-    return { ...document, objectID: document.id }
-  })
-
-  return new Promise((resolve, reject) => {
-    index.saveObjects(objects, (err) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve();
-    });
-  });
+  try {
+    await index.saveObjects(objects);
+  } catch (e) {
+    console.log('ERROR!');
+    e;
+  }
 };

@@ -4,7 +4,10 @@ import { Kind } from 'graphql/language';
 export const DateTime = new GraphQLScalarType({
   name: 'DateTime',
   serialize (value) {
-    return value.toJSON();
+    if (typeof value === 'object') {
+      return value.toJSON();
+    }
+    return value;
   },
   parseValue (value) {
     return parseDate(value);

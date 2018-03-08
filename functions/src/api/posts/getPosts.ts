@@ -1,12 +1,8 @@
 import * as admin from 'firebase-admin';
 
-import { POSTS } from '../../constants/index';
+import { POSTS } from '../../constants';
 import { DESC } from '../../constants/query';
 
-/**
- * Get /posts
- * @return {Promise}
- */
 export const getPosts = async (args) => {
   const {
     limit = 15,
@@ -35,7 +31,7 @@ export const getPosts = async (args) => {
 
   if (startAfter) {
     const prevSnapshot = await admin.firestore().collection(POSTS).doc(startAfter).get();
-    ref = ref.startAfter(prevSnapshot)
+    ref = ref.startAfter(prevSnapshot);
   }
 
   ref = ref.limit(limit);

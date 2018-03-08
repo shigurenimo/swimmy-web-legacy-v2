@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-import { updatePostObject } from '../api/algolia/updatePostObject';
+import { updatePostObject } from '../api/posts/updatePostObject';
 import { setUserPost } from '../api/users-posts/setUserPost';
 
 import { failureLog } from '../helpers/failureLog';

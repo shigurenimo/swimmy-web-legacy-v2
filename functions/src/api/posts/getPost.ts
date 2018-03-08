@@ -1,12 +1,7 @@
 import * as admin from 'firebase-admin';
 
-import { POSTS } from '../../constants/index';
+import { POSTS } from '../../constants';
 
-/**
- * Get /posts/{postId}
- * @param {string} postId
- * @return {Promise}
- */
 export const getPost = (postId) => {
   if (!postId) {
     throw new Error('postId not found');

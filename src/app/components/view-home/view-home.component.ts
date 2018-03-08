@@ -24,6 +24,7 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
   private onChangeAuthState () {
     const posts$ = this.postsService.observePosts();
     this.posts$$ = posts$.subscribe(({ data }) => {
+      console.log(data.posts.nodes);
       this.posts = data.posts.nodes;
     });
   }

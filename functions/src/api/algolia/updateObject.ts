@@ -2,9 +2,9 @@ import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
 
-export const updateObject = (name, objectID, document) => {
-  if (!objectID) {
-    throw new Error('objectID not found');
+export const updateObject = async (name, object) => {
+  if (!object) {
+    throw new Error('object not found');
   }
 
   if (!name) {
@@ -15,15 +15,10 @@ export const updateObject = (name, objectID, document) => {
 
   const index = client.initIndex(name);
 
-  const object = { ...document, objectID };
-
-  return new Promise((resolve, reject) => {
-    index.saveObject(object, (err) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve();
-    });
-  });
+  try {
+    await index.saveObject(object);
+  } catch (e) {
+    console.log('ERROR!');
+    e;
+  }
 };

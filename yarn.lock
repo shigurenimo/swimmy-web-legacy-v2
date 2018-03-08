@@ -823,6 +823,10 @@
     semver "^5.3.0"
     semver-intersect "^1.1.2"
 
+"@types/algoliasearch@^3.24.9":
+  version "3.24.9"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.24.9.tgz#a4346f0ce0cd74cc9e6669652b93bdad2c05e48b"
+
 "@types/async@2.0.47":
   version "2.0.47"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.47.tgz#f49ba1dd1f189486beb6e1d070a850f6ab4bd521"

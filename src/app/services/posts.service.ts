@@ -34,7 +34,7 @@ export class PostsService {
   public observePosts () {
     return this.apollo.watchQuery<PostsResult>({
       query: queryPosts,
-      pollInterval: 5000
+      pollInterval: 20000
     }).valueChanges;
   }
 

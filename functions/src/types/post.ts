@@ -6,10 +6,10 @@ export const Post = {
     return root.content;
   },
   createdAt (root) {
-    return root.createdAt;
+    return new Date(root.createdAt);
   },
   ownerId (root, args, context) {
-    if (context.user) {
+    if (context && context.user) {
       return context.user.uid === root.ownerId;
     } else {
       return root.ownerId;
@@ -18,13 +18,14 @@ export const Post = {
   owner (root) {
     return root.owner;
   },
+  photoCount (root) {
+    return root.photoCount;
+  },
   photoURLs (root) {
-    return Object.keys(root.photoURLs).map((id) => {
-      return root.photoURLs[id].photoURL;
-    });
+    return root.photoURLs;
   },
   photoURL (root) {
-    return root.photoURL
+    return root.photoURL || null;
   },
   repliedPostCount (root) {
     return root.repliedPostCount;
@@ -33,17 +34,20 @@ export const Post = {
     return root.replyPostId;
   },
   tags (root) {
-    return Object.keys(root.tags).filter((tagId) => {
-      return root.tags[tagId].count;
-    }).map((tagId) => {
-      return Object.assign(root.tags[tagId], {
-        id: `${root.id}-${tagId}`,
+    const tags = root.tags.filter((tag) => {
+      return tag.count;
+    }).map((tag) => {
+      return {
+        id: tag.id,
         postId: root.id,
-        tagId: tagId
-      });
+        tagId: tag.tagId,
+        name: tag.name,
+        count: tag.count
+      };
     });
+    return tags;
   },
   updatedAt (root) {
-    return root.updatedAt;
+    return new Date(root.updatedAt);
   }
 };
