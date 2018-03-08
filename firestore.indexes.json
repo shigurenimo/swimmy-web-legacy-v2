@@ -9,7 +9,7 @@
         },
         {
           "fieldPath": "repliedPostCount",
-          "mode": "ASCENDING"
+          "mode": "DESCENDING"
         }
       ]
     },
@@ -22,7 +22,7 @@
         },
         {
           "fieldPath": "photoURL",
-          "mode": "ASCENDING"
+          "mode": "DESCENDING"
         }
       ]
     }

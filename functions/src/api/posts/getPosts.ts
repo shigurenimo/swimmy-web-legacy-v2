@@ -14,7 +14,8 @@ export const getPosts = async (args) => {
       direction: 'DESC',
       field: 'createdAt'
     },
-    type = 'NONE'
+    type = 'NONE',
+    startAfter
   } = args;
 
   let ref = admin.firestore().collection(POSTS) as any;
@@ -23,13 +24,18 @@ export const getPosts = async (args) => {
 
   switch (type) {
     case 'THREAD': {
-      ref = ref.orderBy('repliedPostCount', 'ASC')
+      ref = ref.orderBy('repliedPostCount', 'DESC');
       break;
     }
     case 'PHOTO': {
-      ref = ref.orderBy('photoURL', 'ASC')
+      ref = ref.orderBy('photoURL', 'ASC');
       break;
     }
+  }
+
+  if (startAfter) {
+    const prevSnapshot = await admin.firestore().collection(POSTS).doc(startAfter).get();
+    ref = ref.startAfter(prevSnapshot)
   }
 
   ref = ref.limit(limit);
@@ -42,6 +48,16 @@ export const getPosts = async (args) => {
 
   const posts = querySnapshots.docs.map((snapshot) => {
     const data = snapshot.data();
+
+    const tagIds = Object.keys(data.tags);
+
+    tagIds.forEach((tagId) => {
+      const tag = data.tags[tagId];
+      data.tags[tagId] = {
+        name: tag.name,
+        count: tag.count
+      };
+    });
 
     return { ...data, id: snapshot.id };
   });

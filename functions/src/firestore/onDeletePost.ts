@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 
 import { deletePostObject } from '../api/algolia/deletePostObject';
 import { deleteTags } from '../api/tags/deleteTags';
+import { deleteUserPost } from '../api/users-posts/deleteUserPost';
 import { failureLog } from '../helpers/failureLog';
 import { getEventData } from '../helpers/getEventData';
 
@@ -14,8 +15,10 @@ export = functions.firestore
 
     try {
       await Promise.all([
-        deleteTags(post.tags),
-        deletePostObject(postId)
+        post.ownerId &&
+        deleteUserPost(post.ownerId, postId),
+        deletePostObject(postId),
+        deleteTags(post.tags)
       ]);
     } catch (err) {
       failureLog(err);

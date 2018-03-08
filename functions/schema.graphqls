@@ -172,6 +172,7 @@ type Query {
 type Mutation {
   hello: String
   addPost(input: AddPostInput!): Post
+  refactorPostObjects(startAfter: ID): String
   updatePostTag(input: UpdatePostTagInput!): Post
   updateUser(id: ID!, input: UpdateUserInput!): User
 }

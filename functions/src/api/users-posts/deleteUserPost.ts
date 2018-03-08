@@ -1,25 +1,20 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { POSTS, USERS } from '../../constants/index'
+import { POSTS, USERS } from '../../constants/index';
 
 /**
  * Set /users/{uid}/posts/{postId}
  * @param {string} uid
  * @param {string} postId
- * @param {Object} post
  * @return {Promise}
  */
-export const setUserPost = (uid, postId, post) => {
-  if (!post) {
-    throw new Error('post not found')
-  }
-
+export const deleteUserPost = (uid, postId) => {
   if (!postId) {
-    throw new Error('postId not found')
+    throw new Error('postId not found');
   }
 
   if (!uid) {
-    throw new Error('uid not found')
+    throw new Error('uid not found');
   }
 
   return admin
@@ -28,5 +23,5 @@ export const setUserPost = (uid, postId, post) => {
     .doc(uid)
     .collection(POSTS)
     .doc(postId)
-    .set(post)
-}
+    .delete();
+};

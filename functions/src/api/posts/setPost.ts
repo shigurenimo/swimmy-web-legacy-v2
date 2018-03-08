@@ -20,6 +20,7 @@ export const setPost = async (postId, input, owner) => {
     createdAt: createdAt,
     ownerId: null,
     owner: null,
+    photoURL: null,
     photoURLs: {},
     repliedPostCount: 0,
     replyPostId: input.replyPostId || null,
@@ -48,6 +49,7 @@ export const setPost = async (postId, input, owner) => {
       const data = await getPhotoURL('posts', photoId, photoURL);
       newPost.photoURLs[photoId] = data;
     }
+    newPost.photoURL = newPost.photoURLs[0].photoURL;
   }
 
   const tagQuerySnapshot = await admin.firestore()
