@@ -69,7 +69,6 @@ export class ListItemPostComponent {
     });
 
     post$.subscribe(({ data }) => {
-      console.log(data);
       this.isEditNewTag = false;
       this.isMutation = false;
       this.newTag = '';
