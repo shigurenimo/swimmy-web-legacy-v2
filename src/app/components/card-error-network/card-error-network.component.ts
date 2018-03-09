@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-card-error-network',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./card-error-network.component.css']
 })
 export class CardErrorNetworkComponent implements OnInit {
+  @Input() error = null;
 
   constructor() { }
 

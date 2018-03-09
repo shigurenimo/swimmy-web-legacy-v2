@@ -4,7 +4,14 @@
   </ng-template>
 </app-header>
 
-<nz-content>
+<nz-content *ngIf='graphQLErrors.length || networkError'>
+  <app-card-error-graphql *ngIf='graphQLErrors.length' [errors]='graphQLErrors'>
+  </app-card-error-graphql>
+  <app-card-error-network *ngIf='networkError' [error]='networkError'>
+  </app-card-error-network>
+</nz-content>
+
+<nz-content *ngIf='!graphQLErrors.length && !networkError'>
   <app-list-item-post
     *ngFor='let node of posts'
     [content]='node.content'

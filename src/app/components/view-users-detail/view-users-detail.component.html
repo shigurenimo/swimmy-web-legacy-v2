@@ -1,6 +1,13 @@
 <app-header></app-header>
 
-<div>
+<nz-content *ngIf='graphQLErrors.length || networkError'>
+  <app-card-error-graphql *ngIf='graphQLErrors.length' [errors]='graphQLErrors'>
+  </app-card-error-graphql>
+  <app-card-error-network *ngIf='networkError' [error]='networkError'>
+  </app-card-error-network>
+</nz-content>
+
+<div *ngIf='!graphQLErrors.length && !networkError'>
   <div class='user-icon'>
     <nz-avatar nzIcon='code' [nzSrc]='photoURL'></nz-avatar>
   </div>

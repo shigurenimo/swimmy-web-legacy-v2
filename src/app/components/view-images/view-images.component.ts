@@ -15,9 +15,24 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
 
   public posts: Post[] = [];
 
+  // errors
+  public graphQLErrors = [];
+  public networkError = null;
+
   constructor (
     private postsService: PostsService,
     private afAuth: AngularFireAuth) {
+  }
+
+  private onCatchError ({ graphQLErrors, networkError }) {
+    if (graphQLErrors[0]) {
+      console.error(graphQLErrors);
+      this.graphQLErrors = graphQLErrors;
+    }
+    if (!networkError.ok) {
+      console.error(networkError);
+      this.networkError = networkError;
+    }
   }
 
   private onChangeAuthState () {
@@ -29,6 +44,8 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
         }, index * 400)
       });
       posts$$.unsubscribe();
+    }, (err) => {
+      this.onCatchError(err);
     });
   }
 

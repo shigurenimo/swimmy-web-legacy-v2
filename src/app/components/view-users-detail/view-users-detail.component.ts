@@ -2,8 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
-import { NzMessageService } from 'ng-zorro-antd';
 
 import { User } from '../../interfaces/User';
 import { UsersService } from '../../services/users.service';
@@ -15,68 +13,51 @@ import { UsersService } from '../../services/users.service';
 })
 export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   public createdAt;
-
   public description;
-
   public displayName = '読み込み中..';
-
   public followeeCount;
-
   public followerCount;
-
   public headerPhotoURL;
-
   public photoURL;
-
   public postCount;
-
   public file;
-
   public isLoading = true;
 
-  private uploadText = 'アップロード中..';
-
+  // subscriptions
   private params$$;
+
+  // errors
+  public graphQLErrors = [];
+  public networkError = null;
 
   constructor (
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
-    private nzMessage: NzMessageService,
     public afAuth: AngularFireAuth) {
   }
 
-  public onLogout () {
-    this.afAuth.auth
-      .signOut()
-      .then(() => {
-        const messageText = 'ログアウトしました';
-        this.nzMessage.info(messageText);
-      })
-      .catch((err) => {
-        console.error(err);
-        const messageText = 'ログアウトに失敗しました';
-        this.nzMessage.info(messageText);
-      });
+  private onCatchError ({ graphQLErrors, networkError }) {
+    if (graphQLErrors[0]) {
+      console.error(graphQLErrors);
+      this.graphQLErrors = graphQLErrors;
+    }
+    if (!networkError.ok) {
+      console.error(networkError);
+      this.networkError = networkError;
+    }
   }
 
-  public onUpload (e) {
-    if (!this.afAuth.app.auth().currentUser) {
-      return;
-    }
-    const uid = this.afAuth.app.auth().currentUser.uid;
-    if (this.activatedRoute.snapshot.params.uid !== uid) {
-      return;
-    }
-    const uploadMessageId =
-      this.nzMessage.loading(this.uploadText).messageId;
-    this.file = e.file;
-    const file = e.file.originFileObj;
-    const filePath = `icons/${uid}`;
-    const storageRef = firebase.storage().ref(filePath);
-    const task = storageRef.put(file)
-      .then(() => {
-        this.nzMessage.remove(uploadMessageId);
-      });
+  private onChangeUser ({ data }) {
+    const user = data.user as User;
+    this.createdAt = user.createdAt;
+    this.description = user.description;
+    this.displayName = user.displayName;
+    this.followeeCount = user.followeeCount;
+    this.followerCount = user.followerCount;
+    this.headerPhotoURL = user.headerPhotoURL;
+    this.photoURL = user.photoURL;
+    this.postCount = user.postCount;
+    this.isLoading = false;
   }
 
   public ngOnInit () {
@@ -95,17 +76,10 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
     const { username } = params;
     this.isLoading = true;
     const user$ = this.usersService.getUser(null, username);
-    user$.subscribe(({ data }) => {
-      const user = data.user as User;
-      this.createdAt = user.createdAt;
-      this.description = user.description;
-      this.displayName = user.displayName;
-      this.followeeCount = user.followeeCount;
-      this.followerCount = user.followerCount;
-      this.headerPhotoURL = user.headerPhotoURL;
-      this.photoURL = user.photoURL;
-      this.postCount = user.postCount;
-      this.isLoading = false;
+    user$.subscribe((data) => {
+      this.onChangeUser(data);
+    }, (err) => {
+      this.onCatchError(err);
     });
   }
 }

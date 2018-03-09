@@ -11,20 +11,39 @@ import { PostsService } from '../../services/posts.service';
   styleUrls: ['./view-home.component.css']
 })
 export class ViewHomeComponent implements OnInit, OnDestroy {
-  public posts$$;
-  public authState$$;
+  // subscriptions
+  private posts$$;
+  private authState$$;
 
+  // ui states
   public posts: Post[] = [];
+
+  // errors
+  public graphQLErrors = [];
+  public networkError = null;
 
   constructor (
     private postsService: PostsService,
     private afAuth: AngularFireAuth) {
   }
 
+  private onCatchError ({ graphQLErrors, networkError }) {
+    if (graphQLErrors[0]) {
+      console.error(graphQLErrors);
+      this.graphQLErrors = graphQLErrors;
+    }
+    if (!networkError.ok) {
+      console.error(networkError);
+      this.networkError = networkError;
+    }
+  }
+
   private onChangeAuthState () {
     const posts$ = this.postsService.observePosts();
     this.posts$$ = posts$.subscribe(({ data }) => {
       this.posts = data.posts.nodes;
+    }, (err) => {
+      this.onCatchError(err);
     });
   }
 
