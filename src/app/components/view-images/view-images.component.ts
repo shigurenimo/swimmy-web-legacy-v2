@@ -41,7 +41,7 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
       data.posts.nodes.forEach((node, index) => {
         setTimeout(() => {
           this.posts.push(node);
-        }, index * 400)
+        }, index * 50)
       });
       posts$$.unsubscribe();
     }, (err) => {
