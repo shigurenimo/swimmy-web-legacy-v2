@@ -36,6 +36,8 @@ import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
 import { ViewImagesComponent } from './components/view-images/view-images.component';
 import { CardImageComponent } from './components/card-image/card-image.component';
+import { CardErrorGraphqlComponent } from './components/card-error-graphql/card-error-graphql.component';
+import { CardErrorNetworkComponent } from './components/card-error-network/card-error-network.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import { CardImageComponent } from './components/card-image/card-image.component
     ViewSettingsProfileComponent,
     ResizePipe,
     ViewImagesComponent,
-    CardImageComponent
+    CardImageComponent,
+    CardErrorGraphqlComponent,
+    CardErrorNetworkComponent
   ],
   imports: [
     FirebaseModule,
