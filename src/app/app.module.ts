@@ -38,6 +38,7 @@ import { ViewImagesComponent } from './components/view-images/view-images.compon
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardErrorGraphqlComponent } from './components/card-error-graphql/card-error-graphql.component';
 import { CardErrorNetworkComponent } from './components/card-error-network/card-error-network.component';
+import { ViewThreadsComponent } from './components/view-threads/view-threads.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { CardErrorNetworkComponent } from './components/card-error-network/card-
     ViewImagesComponent,
     CardImageComponent,
     CardErrorGraphqlComponent,
-    CardErrorNetworkComponent
+    CardErrorNetworkComponent,
+    ViewThreadsComponent
   ],
   imports: [
     FirebaseModule,
