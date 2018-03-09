@@ -51,21 +51,6 @@ export const setPost = async (postId, input, owner) => {
     newPost.photoURL = newPost.photoURLs[0].photoURL;
   }
 
-  const tagQuerySnapshot = await admin.firestore()
-    .collection(TAGS)
-    .where('name', '==', 'スキ')
-    .limit(1)
-    .get();
-
-  const snapshot = tagQuerySnapshot.docs[0];
-
-  if (snapshot) {
-    newPost.tags[snapshot.id] = {
-      name: 'スキ',
-      count: 0
-    };
-  }
-
   await admin.firestore().collection(POSTS).doc(postId).set(newPost);
 
   return { ...newPost, id: postId };

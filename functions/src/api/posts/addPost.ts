@@ -1,17 +1,14 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { POSTS } from '../../constants/index'
+import { POSTS } from '../../constants/index';
+import { createPostObject } from './createPostObject';
 
-import { setPost } from './setPost'
+import { setPost } from './setPost';
 
-/**
- * Add /posts/{postId}
- * @param {Object} input
- * @param {Object} owner
- * @return {*}
- */
-export const addPost = (input, owner) => {
-  const postId = admin.firestore().collection(POSTS).doc().id
+export const addPost = async (input, owner) => {
+  const postId = admin.firestore().collection(POSTS).doc().id;
 
-  return setPost(postId, input, owner)
-}
+  const newPost = await setPost(postId, input, owner);
+
+  return createPostObject(newPost);
+};

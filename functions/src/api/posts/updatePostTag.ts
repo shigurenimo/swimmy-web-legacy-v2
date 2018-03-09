@@ -160,8 +160,6 @@ export const updatePostTag = (input, user) => {
 
       const newPost = createPostObject(post)
 
-      console.log(newPost);
-
       return { ...newPost, id: postSnapshot.id };
     });
   });

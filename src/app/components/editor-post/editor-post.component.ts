@@ -42,6 +42,10 @@ export class EditorPostComponent implements OnInit {
     private afStore: AngularFirestore) {
   }
 
+  private resetFormGroup () {
+    this.formGroup.reset({ content: '' });
+  }
+
   public get content () {
     return this.formGroup.get('content');
   }
@@ -59,7 +63,7 @@ export class EditorPostComponent implements OnInit {
 
     if (!this.fileList.length && !content) {
       this.isMutation = false;
-      return
+      return;
     }
 
     if (this.fileList.length) {
@@ -86,8 +90,9 @@ export class EditorPostComponent implements OnInit {
       });
     }
 
-    $mutation.subscribe((post) => {
-      this.content.setValue('');
+    $mutation.subscribe(() => {
+      console.log('reset');
+      this.resetFormGroup();
       this.isMutation = false;
     }, (err) => {
       console.error(err);
