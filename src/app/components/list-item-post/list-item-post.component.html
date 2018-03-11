@@ -1,4 +1,4 @@
-<div class='photoURLs' nz-row nzType='flex' nzAlign='middle' nzJustify='start'>
+<div *ngIf='photoURLs.length' class='photoURLs' nz-row nzType='flex' nzAlign='middle' nzJustify='start'>
   <div class='item' nz-col *ngFor='let photoURL of photoURLs'>
     <img [src]='photoURL|resize:resize'>
   </div>

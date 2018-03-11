@@ -14,9 +14,11 @@ export interface Post {
   content: string;
   createdAt: string;
   id: string;
+  photoCount: number;
   photoURLs: string[];
   ownerId: string;
   owner: Owner;
+  repliedPostCount: number;
   repliedPostIds: string[];
   replyPostIds: string[];
   tags: Tag[];

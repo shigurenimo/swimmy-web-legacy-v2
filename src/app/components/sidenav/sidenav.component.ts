@@ -21,7 +21,16 @@ export class SidenavComponent {
   };
 
   public links = [
-    {path: '/', icon: 'anticon anticon-home'}
+    {
+      routerLink: ['/'],
+      iconClass: 'anticon anticon-home'
+    }, {
+      routerLink: ['/images'],
+      iconClass: 'anticon anticon-camera'
+    }, {
+      routerLink: ['/threads'],
+      iconClass: 'anticon anticon-message'
+    }
   ];
 
   constructor(

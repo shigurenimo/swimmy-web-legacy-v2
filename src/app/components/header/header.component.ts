@@ -24,6 +24,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }, {
       routerLink: ['/images'],
       iconClass: 'anticon anticon-camera'
+    }, {
+      routerLink: ['/threads'],
+      iconClass: 'anticon anticon-message'
     }];
   public uid = null;
   public username = null;

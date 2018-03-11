@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,18 +16,24 @@ import { enUS, NgZorroAntdModule, NZ_LOCALE } from 'ng-zorro-antd';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CardErrorGraphqlComponent } from './components/card-error-graphql/card-error-graphql.component';
+import { CardErrorNetworkComponent } from './components/card-error-network/card-error-network.component';
+import { CardImageComponent } from './components/card-image/card-image.component';
+import { CardThreadComponent } from './components/card-thread/card-thread.component';
 import { EditorPostComponent } from './components/editor-post/editor-post.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ListItemPostComponent } from './components/list-item-post/list-item-post.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ViewConfigComponent } from './components/view-config/view-config.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
+import { ViewImagesComponent } from './components/view-images/view-images.component';
 import { ViewInfoComponent } from './components/view-info/view-info.component';
 import { ViewLoginComponent } from './components/view-login/view-login.component';
 import { ViewSettingsPasswordComponent } from './components/view-settings-password/view-settings-password.component';
 import { ViewSettingsProfileComponent } from './components/view-settings-profile/view-settings-profile.component';
 import { ViewSettingsUsernameComponent } from './components/view-settings-username/view-settings-username.component';
 import { ViewSettingsComponent } from './components/view-settings/view-settings.component';
+import { ViewThreadsComponent } from './components/view-threads/view-threads.component';
 import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
 import { ViewUsersComponent } from './components/view-users/view-users.component';
 import { FirebaseModule } from './firebase.module';
@@ -34,11 +41,6 @@ import { ResizePipe } from './pipes/resize.pipe';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
-import { ViewImagesComponent } from './components/view-images/view-images.component';
-import { CardImageComponent } from './components/card-image/card-image.component';
-import { CardErrorGraphqlComponent } from './components/card-error-graphql/card-error-graphql.component';
-import { CardErrorNetworkComponent } from './components/card-error-network/card-error-network.component';
-import { ViewThreadsComponent } from './components/view-threads/view-threads.component';
 
 @NgModule({
   declarations: [
@@ -60,11 +62,13 @@ import { ViewThreadsComponent } from './components/view-threads/view-threads.com
     ResizePipe,
     ViewImagesComponent,
     CardImageComponent,
+    CardThreadComponent,
     CardErrorGraphqlComponent,
     CardErrorNetworkComponent,
     ViewThreadsComponent
   ],
   imports: [
+    CommonModule,
     FirebaseModule,
     ApolloModule,
     AppRoutingModule,

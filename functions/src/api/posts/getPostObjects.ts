@@ -21,7 +21,7 @@ export const getPostObjects = async (args) => {
       index = client.initIndex(PHOTOS);
       break;
     case 'THREAD':
-      filters = 'repliedPostCount > 0';
+      filters = 'repliedPostCount > 0 AND photoCount = 0';
       index = client.initIndex(THREADS);
       break;
     default:

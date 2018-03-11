@@ -21,6 +21,7 @@ export const queryPosts = gql`
           name
           count
         }
+        updatedAt
       }
     }
   }
@@ -28,7 +29,7 @@ export const queryPosts = gql`
 
 export const queryThreadPosts = gql`
   query posts {
-    posts(type: THREAD) {
+    posts(type: THREAD, limit: 100) {
       nodes {
         id
         content
@@ -47,6 +48,7 @@ export const queryThreadPosts = gql`
           name
           count
         }
+        updatedAt
       }
     }
   }
@@ -73,6 +75,7 @@ export const queryPhotoPosts = gql`
           name
           count
         }
+        updatedAt
       }
     }
   }
@@ -98,6 +101,7 @@ export const queryPost = gql`
         name
         count
       }
+      updatedAt
     }
   }
 `;
@@ -122,6 +126,7 @@ export const mutationAddPost = gql`
         name
         count
       }
+      updatedAt
     }
   }
 `;

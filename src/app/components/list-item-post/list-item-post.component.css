@@ -3,6 +3,10 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+:host:hover {
+  background: rgba(0, 0, 0, 0.01);
+}
+
 /* Content */
 
 .content {
@@ -15,6 +19,8 @@
 
 .content .createdAt {
   padding-left: 10px;
+  font-size: 0.8rem;
+  opacity: 0.4;
 }
 
 :host ::ng-deep .ant-btn-circle {

@@ -10,6 +10,7 @@ import { ViewSettingsPasswordComponent } from './components/view-settings-passwo
 import { ViewSettingsProfileComponent } from './components/view-settings-profile/view-settings-profile.component';
 import { ViewSettingsUsernameComponent } from './components/view-settings-username/view-settings-username.component';
 import { ViewSettingsComponent } from './components/view-settings/view-settings.component';
+import { ViewThreadsComponent } from './components/view-threads/view-threads.component';
 import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
 
 const routes: Routes = [{
@@ -36,6 +37,9 @@ const routes: Routes = [{
 }, {
   path: 'settings',
   component: ViewSettingsComponent
+}, {
+  path: 'threads',
+  component: ViewThreadsComponent
 }, {
   path: ':username',
   component: ViewUsersDetailComponent

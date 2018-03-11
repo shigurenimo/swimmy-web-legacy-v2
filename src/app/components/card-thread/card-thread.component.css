@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:host:hover {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+/* Content */
+
+.content {
+  padding: 8px;
+}
+
+.content > p {
+  white-space: pre-wrap;
+}
+
+.content .createdAt {
+  opacity: 0.4;
+  font-size: 0.8rem;
+}
+
+.content .count {
+  padding-left: 10px;
+  color: #108ee9;
+}
