@@ -106,10 +106,11 @@ export class PostsService {
     }).valueChanges;
   }
 
-  public observeThreadPosts() {
+  public observeThreadPosts(variables) {
     return this.apollo.watchQuery<PostsResult>({
       query: queryThreadPosts,
-      pollInterval: 120000
+      pollInterval: 120000,
+      variables
     }).valueChanges;
   }
 

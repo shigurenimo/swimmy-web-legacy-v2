@@ -28,8 +28,8 @@ export const queryPosts = gql`
 `;
 
 export const queryThreadPosts = gql`
-  query posts {
-    posts(type: THREAD, limit: 100) {
+  query posts($query: String) {
+    posts(type: THREAD, limit: 20, query: $query) {
       nodes {
         id
         content

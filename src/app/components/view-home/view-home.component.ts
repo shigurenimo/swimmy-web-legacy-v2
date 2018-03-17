@@ -59,7 +59,11 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.authState$$.unsubscribe();
-    this.posts$$.unsubscribe();
+    if (this.authState$$) {
+      this.authState$$.unsubscribe();
+    }
+    if (this.posts$$) {
+      this.posts$$.unsubscribe();
+    }
   }
 }

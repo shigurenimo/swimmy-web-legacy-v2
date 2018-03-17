@@ -5,17 +5,17 @@ import { config } from '../../config';
 import { PHOTOS, POSTS, THREADS } from '../../constants';
 
 export const getPostObjects = async (args) => {
-  const {
+  let {
     limit = 15,
     type = 'NONE',
-    replyPostId = null
+    replyPostId = null,
+    query = ''
   } = args;
 
   const client = algoliasearch(config.algolia.appId, config.algolia.key);
 
   let index = null;
   let filters = '';
-  let query = '';
 
   switch (type) {
     case 'PHOTO':
@@ -35,6 +35,8 @@ export const getPostObjects = async (args) => {
       index = client.initIndex(POSTS);
       break;
   }
+
+  console.log(query);
 
   const posts = await index.search({
     query,

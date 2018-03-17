@@ -17,17 +17,19 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
 
   // ui states
   public posts: Post[] = [];
+  public searchText = '';
+  public placeHolder = 'スレッド検索';
 
   // errors
   public graphQLErrors = [];
   public networkError = null;
 
-  constructor (
+  constructor(
     private postsService: PostsService,
     private afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
+  private onCatchError({graphQLErrors, networkError}) {
     if (graphQLErrors[0]) {
       console.error(graphQLErrors);
       this.graphQLErrors = graphQLErrors;
@@ -38,23 +40,32 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onChangeAuthState () {
-    const posts$ = this.postsService.observeThreadPosts();
-    this.posts$$ = posts$.subscribe(({ data }) => {
+  private onChangeAuthState() {
+    this.onSearch();
+  }
+
+  public onSearch() {
+    if (this.posts$$) {
+      this.posts$$.unsubscribe();
+    }
+    const posts$ = this.postsService.observeThreadPosts({
+      query: this.searchText
+    });
+    this.posts$$ = posts$.subscribe(({data}) => {
       this.posts = data.posts.nodes || [];
     }, (err) => {
       this.onCatchError(err);
     });
   }
 
-  public ngOnInit () {
+  public ngOnInit() {
     const authState$ = this.afAuth.authState;
     this.authState$$ = authState$.subscribe(() => {
       this.onChangeAuthState();
     });
   }
 
-  public ngOnDestroy () {
+  public ngOnDestroy() {
     this.authState$$.unsubscribe();
     this.posts$$.unsubscribe();
   }

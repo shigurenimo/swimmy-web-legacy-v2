@@ -6,6 +6,23 @@
 .ant-layout-content {
   display: flex;
   flex-direction: column;
+  padding-bottom: 40px;
   height: 100%;
-  overflow: auto;
+  overflow-y: scroll;
+}
+
+/* Template Search */
+
+.template-search {
+  padding: 8px 8px 0 8px;
+}
+
+.template-search .text-input {
+  flex: 1;
+}
+
+/* Template Posts */
+
+.template-posts {
+  padding-top: 8px;
 }
