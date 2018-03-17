@@ -41,6 +41,7 @@ import { ResizePipe } from './pipes/resize.pipe';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
+import { ViewPostsDetailsComponent } from './components/view-posts-details/view-posts-details.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { UsersService } from './services/users.service';
     CardThreadComponent,
     CardErrorGraphqlComponent,
     CardErrorNetworkComponent,
-    ViewThreadsComponent
+    ViewThreadsComponent,
+    ViewPostsDetailsComponent
   ],
   imports: [
     CommonModule,
