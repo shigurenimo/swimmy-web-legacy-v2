@@ -1,14 +1,14 @@
-<div class='content'>
-  <p class='createdAt'>{{updatedAt|date:date}}</p>
-  <ng-container *ngIf='content'>
-    <p>{{content}}<span class='count'>+ {{repliedPostCount}}</span></p>
+<div class="content">
+  <p class="createdAt">{{updatedAt|date:date}}</p>
+  <ng-container *ngIf="content">
+    <p><a routerLink="/posts/{{id}}">{{content}}</a><span class="count">+ {{repliedPostCount}}</span></p>
   </ng-container>
-  <ng-container *ngIf='!content'>
-    <p><span class='count'>無名スレッド + {{repliedPostCount}}</span></p>
+  <ng-container *ngIf="!content">
+    <p><a routerLink="/posts/{{id}}">無名スレッド</a><span class="count">+ {{repliedPostCount}}</span></p>
   </ng-container>
 </div>
 
-<div class='reply-content' *ngIf='isOpenReply'>
+<div class="reply-content" *ngIf="isOpenReply">
   <nz-card>
     <ng-template #body>
       <p>リプライ機能は開発中です。</p>

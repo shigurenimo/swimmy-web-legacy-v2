@@ -17,6 +17,14 @@
   white-space: pre-wrap;
 }
 
+.content a {
+  color: inherit;
+}
+
+.content a:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 .content .createdAt {
   padding-left: 10px;
   font-size: 0.8rem;
