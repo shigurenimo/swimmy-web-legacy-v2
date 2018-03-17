@@ -1,3 +1,9 @@
 :host ::ng-deep .ant-layout-content {
   padding: 0 16px;
 }
+
+.reply-message {
+  padding-top: 32px;
+  text-align: center;
+  font-size: 16px;
+}

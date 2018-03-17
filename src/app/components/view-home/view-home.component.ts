@@ -23,12 +23,12 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
   public graphQLErrors = [];
   public networkError = null;
 
-  constructor (
+  constructor(
     private postsService: PostsService,
     private afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
+  private onCatchError({graphQLErrors, networkError}) {
     if (graphQLErrors[0]) {
       console.error(graphQLErrors);
       this.graphQLErrors = graphQLErrors;
@@ -39,26 +39,26 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onChangeAuthState (user) {
+  private onChangeAuthState(user) {
     if (user) {
-      this.isLogged = true
+      this.isLogged = true;
     }
     const posts$ = this.postsService.observePosts();
-    this.posts$$ = posts$.subscribe(({ data }) => {
+    this.posts$$ = posts$.subscribe(({data}) => {
       this.posts = data.posts.nodes;
     }, (err) => {
       this.onCatchError(err);
     });
   }
 
-  public ngOnInit () {
+  public ngOnInit() {
     const authState$ = this.afAuth.authState;
     this.authState$$ = authState$.subscribe((user) => {
       this.onChangeAuthState(user);
     });
   }
 
-  public ngOnDestroy () {
+  public ngOnDestroy() {
     this.authState$$.unsubscribe();
     this.posts$$.unsubscribe();
   }

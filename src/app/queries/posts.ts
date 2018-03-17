@@ -81,6 +81,33 @@ export const queryPhotoPosts = gql`
   }
 `;
 
+export const queryRepliedPosts = gql`
+  query posts($replyPostId: ID) {
+    posts(limit: 40, replyPostId: $replyPostId) {
+      nodes {
+        id
+        content
+        createdAt
+        ownerId
+        owner {
+          id
+          displayName
+          photoURL
+        }
+        photoURLs
+        repliedPostCount
+        replyPostId
+        tags {
+          id
+          name
+          count
+        }
+        updatedAt
+      }
+    }
+  }
+`;
+
 export const queryPost = gql`
   query post($id: ID!) {
     post(id: $id) {

@@ -16,8 +16,10 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
   private authState$$ = null;
   private params$$ = null;
   private posts$$ = null;
+  private repliedPosts$$ = null;
 
   public post = null;
+  public repliedPosts = [];
 
   // errors
   public graphQLErrors = [];
@@ -46,21 +48,20 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
 
   private onChangeParams(params) {
     const {postId} = params;
-    console.log(postId);
+
     const posts$ = this.posts.observePost(postId);
     this.posts$$ = posts$.subscribe(({data}) => {
       this.post = data.post;
     }, (err) => {
       this.onCatchError(err);
     });
-    /*
-    const user$ = this.usersService.getUser(null, username);
-    user$.subscribe((data) => {
-      this.onChangeUser(data);
+
+    const repliedPosts$ = this.posts.observeRepliedPosts(postId);
+    this.repliedPosts$$ = repliedPosts$.subscribe(({data}) => {
+      this.repliedPosts = data.posts.nodes
     }, (err) => {
       this.onCatchError(err);
     });
-    */
   }
 
   private onChangeAuthState(user) {

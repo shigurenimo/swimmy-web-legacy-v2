@@ -165,7 +165,7 @@ type Viewer {
 type Query {
   test: Test
   post (id: ID!): Post
-  posts (limit: Int, orderBy: PostOrderBy, type: PostType, limit: Int): PostConnection
+  posts (limit: Int, orderBy: PostOrderBy, type: PostType, replyPostId: ID, limit: Int): PostConnection
   tag (id: ID!): Tag
   tags (limit: Int orderBy: TagOrderBy): TagConnection
   user (id: ID, username: String): User

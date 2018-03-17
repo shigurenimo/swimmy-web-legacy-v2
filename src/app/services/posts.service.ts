@@ -8,6 +8,7 @@ import {
   queryPhotoPosts,
   queryPost,
   queryPosts,
+  queryRepliedPosts,
   queryThreadPosts
 } from '../queries/posts';
 import { mutationUpdatePostTag } from '../queries/updatePostTag';
@@ -15,32 +16,53 @@ import { mutationUpdatePostTag } from '../queries/updatePostTag';
 @Injectable()
 export class PostsService {
 
-  constructor (private apollo: Apollo) {
+  constructor(private apollo: Apollo) {
   }
 
-  public addPost (input) {
+  public addPost(input) {
     return this.apollo.mutate({
       mutation: mutationAddPost,
-      variables: { input },
-      update: (store, { data: { addPost: newPost } }) => {
-        const data = store.readQuery({ query: queryPosts }) as any;
+      variables: {input},
+      update: (store, {data: {addPost: newPost}}) => {
+        const data = store.readQuery({query: queryPosts}) as any;
         data.posts.nodes.unshift(newPost);
-        store.writeQuery({ query: queryPosts, data });
+        store.writeQuery({query: queryPosts, data});
       }
     });
   }
 
-  public updatePostTag (input) {
+  public updatePostTag(input) {
     return this.apollo.mutate({
       mutation: mutationUpdatePostTag,
-      variables: { input }
+      variables: {input}
     });
   }
 
-  public observePosts () {
+  public observePosts() {
     return this.apollo.watchQuery<PostsResult>({
       query: queryPosts,
       pollInterval: 20000
+    }).valueChanges;
+  }
+
+  public observeThreadPosts() {
+    return this.apollo.watchQuery<PostsResult>({
+      query: queryThreadPosts,
+      pollInterval: 120000
+    }).valueChanges;
+  }
+
+  public observeRepliedPosts(replyPostId) {
+    return this.apollo.watchQuery<PostsResult>({
+      query: queryRepliedPosts,
+      pollInterval: 20000,
+      variables: {replyPostId}
+    }).valueChanges;
+  }
+
+  public getPhotoPosts(startAt?) {
+    return this.apollo.watchQuery<PostsResult>({
+      query: queryPhotoPosts
     }).valueChanges;
   }
 
@@ -49,19 +71,6 @@ export class PostsService {
       query: queryPost,
       pollInterval: 120000,
       variables: {id}
-    }).valueChanges;
-  }
-
-  public observeThreadPosts () {
-    return this.apollo.watchQuery<PostsResult>({
-      query: queryThreadPosts,
-      pollInterval: 120000
-    }).valueChanges;
-  }
-
-  public getPhotoPosts (startAt?) {
-    return this.apollo.watchQuery<PostsResult>({
-      query: queryPhotoPosts
     }).valueChanges;
   }
 }
