@@ -1,27 +1,38 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
 :host ::ng-deep .ant-layout-content {
-  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+  padding: 0 8px 40px;
 }
 
 /* Template Post */
 
 .template-post {
   margin: 0 auto;
+  width: 100%;
   max-width: 800px;
 }
 
 /* Template Message */
 
 .template-message {
-  padding-top: 32px;
+  padding-top: 16px;
   text-align: center;
   font-size: 16px;
 }
 
-/* Template Card Editor */
+/* Template Editor */
 
-.template-card-editor {
+.template-editor {
   margin: 0 auto;
-  padding-top: 40px;
+  padding-top: 16px;
+  width: 100%;
   max-width: 800px;
 }
 
@@ -29,6 +40,7 @@
 
 .template-replied-posts {
   margin: 0 auto;
+  width: 100%;
   max-width: 800px;
 }
 

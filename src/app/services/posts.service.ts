@@ -5,7 +5,6 @@ import { PostsResult } from '../interfaces/Post';
 
 import {
   mutationAddPost,
-  queryPhotoPosts,
   queryPost,
   queryPosts,
   queryRepliedPosts,
@@ -36,7 +35,11 @@ export class PostsService {
       mutation: mutationAddPost,
       variables: {input: {...input, replyPostId}},
       update: (store, {data: {addPost: newPost}}) => {
-        console.log(newPost);
+        const query = queryRepliedPosts;
+        const variables = {replyPostId};
+        const data = store.readQuery({query, variables}) as any;
+        data.posts.nodes.unshift(newPost);
+        store.writeQuery({query, variables, data});
       }
     });
   }
@@ -67,12 +70,6 @@ export class PostsService {
       query: queryRepliedPosts,
       pollInterval: 20000,
       variables: {replyPostId}
-    }).valueChanges;
-  }
-
-  public getPhotoPosts(startAt?) {
-    return this.apollo.watchQuery<PostsResult>({
-      query: queryPhotoPosts
     }).valueChanges;
   }
 
