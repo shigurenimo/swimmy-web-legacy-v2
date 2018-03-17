@@ -1,6 +1,6 @@
-import { updatePostTag } from '../api/posts/updatePostTag'
+import { updatePostTag } from '../../api/posts/updatePostTag'
 
-import { failureLog } from '../helpers/failureLog'
+import { failureLog } from '../../helpers/failureLog'
 
 export default (root, args, context) => {
   console.log('mutation: updatePostTag')

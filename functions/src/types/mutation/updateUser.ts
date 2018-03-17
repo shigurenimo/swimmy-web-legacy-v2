@@ -1,4 +1,4 @@
-import { updateUser } from '../api/users/updateUser';
+import { updateUser } from '../../api/users/updateUser';
 
 export default async (root, { id, input }, context) => {
   console.log('mutation: updateUser');

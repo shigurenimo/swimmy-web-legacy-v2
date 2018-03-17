@@ -1,6 +1,6 @@
-import { updatePostObjects } from '../api/posts/updatePostObjects';
-import { getPosts } from '../api/posts/getPosts';
-import { updatePosts } from '../api/posts/updatePosts';
+import { updatePostObjects } from '../../api/posts/updatePostObjects';
+import { getPosts } from '../../api/posts/getPosts';
+import { updatePosts } from '../../api/posts/updatePosts';
 
 export default async (root, { startAfter = null }) => {
   console.log('mutation:refactorPostObjects');
