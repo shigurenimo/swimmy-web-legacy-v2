@@ -1,8 +1,6 @@
 import * as functions from 'firebase-functions';
 import { updatePostObject } from '../api/posts/updatePostObject';
 import { setUserPost } from '../api/users-posts/setUserPost';
-
-import { failureLog } from '../helpers/failureLog';
 import { getEventData } from '../helpers/getEventData';
 
 export = functions.firestore
@@ -12,13 +10,9 @@ export = functions.firestore
 
     const {current: post} = getEventData(event);
 
-    try {
-      await Promise.all([
-        post.ownerId &&
-        setUserPost(post.ownerId, postId, post),
-        updatePostObject(postId, post)
-      ]);
-    } catch (err) {
-      failureLog(err);
-    }
+    await Promise.all([
+      post.ownerId &&
+      setUserPost(post.ownerId, postId, post),
+      updatePostObject(postId, post)
+    ]);
   });
