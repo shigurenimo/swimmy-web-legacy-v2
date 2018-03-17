@@ -6,11 +6,11 @@ import { createdAt } from '../../helpers/createdAt';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
-  selector: 'app-list-item-post',
-  templateUrl: './list-item-post.component.html',
-  styleUrls: ['./list-item-post.component.css']
+  selector: 'app-card-post',
+  templateUrl: './card-post.component.html',
+  styleUrls: ['./card-post.component.css']
 })
-export class ListItemPostComponent {
+export class CardPostComponent {
   @Input() content: string;
   @Input() createdAt: string;
   @Input() id: string;
@@ -23,38 +23,35 @@ export class ListItemPostComponent {
   @Input() updatedAt: string;
 
   public nzShape = 'circle';
-
   public resize = 'post';
-
   public nzPlaceHolder = 'new';
   public isEditNewTag = false;
-
   public isOpenReply = false;
-
   public isMutation = false;
   public isDeleteMutate = false;
-
   public newTag = '';
 
-  constructor (
+  constructor(
     private posts: PostsService,
     public afa: AngularFireAuth) {
   }
 
-  public onOpenReply () {
+  public onOpenReply() {
     this.isOpenReply = !this.isOpenReply;
   }
 
-  public get createdAtStr () {
+  public get createdAtStr() {
     return createdAt(this.createdAt);
   }
 
-  public get isOwner () {
+  public get isOwner() {
     return !!this.ownerId;
   }
 
-  public onUpdateTag (name = 'スキ') {
-    if (!this.afa.auth.currentUser) { return; }
+  public onUpdateTag(name = 'スキ') {
+    if (!this.afa.auth.currentUser) {
+      return;
+    }
 
     if (name === '') {
       this.isEditNewTag = false;
@@ -63,12 +60,9 @@ export class ListItemPostComponent {
 
     this.isMutation = true;
 
-    const post$ = this.posts.updatePostTag({
-      postId: this.id,
-      name: name
-    });
+    const post$ = this.posts.updatePostTag({postId: this.id, name});
 
-    post$.subscribe(({ data }) => {
+    post$.subscribe(() => {
       this.isEditNewTag = false;
       this.isMutation = false;
       this.newTag = '';
@@ -78,13 +72,15 @@ export class ListItemPostComponent {
     });
   }
 
-  public onDelete () {
-    if (!this.isDeleteMutate) { return; }
+  public onDelete() {
+    if (!this.isDeleteMutate) {
+      return;
+    }
 
     this.isDeleteMutate = true;
   }
 
-  public editNewTag () {
+  public editNewTag() {
     this.isEditNewTag = true;
   }
 }

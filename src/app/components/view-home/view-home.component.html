@@ -12,7 +12,7 @@
 </nz-content>
 
 <nz-content *ngIf='!graphQLErrors.length && !networkError'>
-  <app-list-item-post
+  <app-card-post
     *ngFor='let node of posts'
     [content]='node.content'
     [createdAt]='node.createdAt'
@@ -24,5 +24,5 @@
     [replyPostIds]='node.replyPostIds'
     [tags]='node.tags'
     [updatedAt]='node.updatedAt'>
-  </app-list-item-post>
+  </app-card-post>
 </nz-content>

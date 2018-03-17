@@ -22,7 +22,7 @@ import { CardImageComponent } from './components/card-image/card-image.component
 import { CardThreadComponent } from './components/card-thread/card-thread.component';
 import { EditorPostComponent } from './components/editor-post/editor-post.component';
 import { HeaderComponent } from './components/header/header.component';
-import { ListItemPostComponent } from './components/list-item-post/list-item-post.component';
+import { CardPostComponent } from './components/card-post/card-post.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ViewConfigComponent } from './components/view-config/view-config.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
@@ -47,7 +47,7 @@ import { UsersService } from './services/users.service';
     AppComponent,
     EditorPostComponent,
     HeaderComponent,
-    ListItemPostComponent,
+    CardPostComponent,
     SidenavComponent,
     ViewConfigComponent,
     ViewHomeComponent,
