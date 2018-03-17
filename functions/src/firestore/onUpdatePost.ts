@@ -16,7 +16,7 @@ export = functions.firestore
       await Promise.all([
         post.ownerId &&
         setUserPost(post.ownerId, postId, post),
-        updatePostObject({...post, id: postId})
+        updatePostObject(postId, post)
       ]);
     } catch (err) {
       failureLog(err);

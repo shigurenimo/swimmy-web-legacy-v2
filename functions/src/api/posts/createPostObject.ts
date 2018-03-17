@@ -1,7 +1,7 @@
-export const createPostObject = (root) => {
+export const createPostObject = (objectID, root) => {
   return {
-    objectID: root.id,
-    id: root.id,
+    objectID: objectID,
+    id: objectID,
     content: root.content,
     createdAt: root.createdAt / 1,
     ownerId: root.ownerId || '',
@@ -16,7 +16,7 @@ export const createPostObject = (root) => {
     tags: Object.keys(root.tags).map((tagId) => {
       const tag = root.tags[tagId];
       return {
-        id: `${root.id}-${tagId}`,
+        id: `${objectID}-${tagId}`,
         tagId: tagId,
         name: tag.name,
         count: tag.count

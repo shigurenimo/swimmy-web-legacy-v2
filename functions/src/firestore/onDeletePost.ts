@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 
-import { deletePostObject } from '../api/algolia/deletePostObject';
+import { deletePostObject } from '../api/posts/deletePostObject';
 import { updatePostRepliedPostCount } from '../api/posts/updatePostRepliedPostCount';
 import { deleteTags } from '../api/tags/deleteTags';
 import { deleteUserPost } from '../api/users-posts/deleteUserPost';

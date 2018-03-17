@@ -1,9 +1,31 @@
-import { POSTS } from '../../constants/index';
-import { updateObjects } from '../algolia/updateObjects';
+import * as algoliasearch from 'algoliasearch';
+
+import { config } from '../../config';
+import { POSTS } from '../../constants';
 import { createPostObject } from './createPostObject';
 
 export const updatePostObjects = async (posts) => {
-  const objects = posts.map(createPostObject);
+  if (!posts) {
+    throw new Error('posts not found');
+  }
 
-  await updateObjects(POSTS, objects);
+  if (!posts.length) {
+    console.log('posts.length == 0');
+    return;
+  }
+
+  const objects = posts.map((post) => {
+    return createPostObject(post.id, post);
+  });
+
+  const client = algoliasearch(config.algolia.appId, config.algolia.key);
+
+  const index = client.initIndex(POSTS);
+
+  try {
+    await index.saveObjects(objects);
+  } catch (e) {
+    console.log('ERROR!');
+    e;
+  }
 };

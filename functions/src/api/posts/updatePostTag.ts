@@ -156,7 +156,7 @@ export const updatePostTag = (input, user) => {
         post.tags[i] = postTag;
       }
 
-      const newPost = createPostObject(post)
+      const newPost = createPostObject(postSnapshot.id, post)
 
       return { ...newPost, id: postSnapshot.id };
     });

@@ -10,5 +10,5 @@ export const addPost = async (input, owner) => {
 
   const newPost = await setPost(postId, input, owner);
 
-  return createPostObject(newPost);
+  return createPostObject(postId, newPost);
 };
