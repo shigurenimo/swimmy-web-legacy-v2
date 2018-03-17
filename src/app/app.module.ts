@@ -19,16 +19,17 @@ import { AppComponent } from './app.component';
 import { CardErrorGraphqlComponent } from './components/card-error-graphql/card-error-graphql.component';
 import { CardErrorNetworkComponent } from './components/card-error-network/card-error-network.component';
 import { CardImageComponent } from './components/card-image/card-image.component';
+import { CardPostComponent } from './components/card-post/card-post.component';
 import { CardThreadComponent } from './components/card-thread/card-thread.component';
 import { EditorPostComponent } from './components/editor-post/editor-post.component';
 import { HeaderComponent } from './components/header/header.component';
-import { CardPostComponent } from './components/card-post/card-post.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ViewConfigComponent } from './components/view-config/view-config.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
 import { ViewImagesComponent } from './components/view-images/view-images.component';
 import { ViewInfoComponent } from './components/view-info/view-info.component';
 import { ViewLoginComponent } from './components/view-login/view-login.component';
+import { ViewPostsDetailsComponent } from './components/view-posts-details/view-posts-details.component';
 import { ViewSettingsPasswordComponent } from './components/view-settings-password/view-settings-password.component';
 import { ViewSettingsProfileComponent } from './components/view-settings-profile/view-settings-profile.component';
 import { ViewSettingsUsernameComponent } from './components/view-settings-username/view-settings-username.component';
@@ -41,33 +42,32 @@ import { ResizePipe } from './pipes/resize.pipe';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
-import { ViewPostsDetailsComponent } from './components/view-posts-details/view-posts-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EditorPostComponent,
     HeaderComponent,
-    CardPostComponent,
     SidenavComponent,
     ViewConfigComponent,
     ViewHomeComponent,
+    ViewImagesComponent,
     ViewInfoComponent,
     ViewLoginComponent,
-    ViewUsersComponent,
-    ViewUsersDetailComponent,
-    ViewSettingsComponent,
-    ViewSettingsUsernameComponent,
+    ViewPostsDetailsComponent,
     ViewSettingsPasswordComponent,
     ViewSettingsProfileComponent,
+    ViewSettingsUsernameComponent,
+    ViewSettingsComponent,
+    ViewThreadsComponent,
+    ViewUsersDetailComponent,
+    ViewUsersComponent,
     ResizePipe,
-    ViewImagesComponent,
-    CardImageComponent,
-    CardThreadComponent,
     CardErrorGraphqlComponent,
     CardErrorNetworkComponent,
-    ViewThreadsComponent,
-    ViewPostsDetailsComponent
+    CardImageComponent,
+    CardPostComponent,
+    CardThreadComponent
   ],
   imports: [
     CommonModule,
@@ -89,7 +89,7 @@ import { ViewPostsDetailsComponent } from './components/view-posts-details/view-
     FunctionsService,
     PostsService,
     UsersService,
-    { provide: NZ_LOCALE, useValue: enUS }
+    {provide: NZ_LOCALE, useValue: enUS}
   ],
   bootstrap: [
     AppComponent
@@ -100,7 +100,7 @@ import { ViewPostsDetailsComponent } from './components/view-posts-details/view-
   ]
 })
 export class AppModule {
-  constructor (
+  constructor(
     private apollo: Apollo,
     private httpLink: HttpLink,
     private afAuth: AngularFireAuth) {
@@ -109,7 +109,7 @@ export class AppModule {
         const idToken = await this.afAuth.auth.currentUser.getIdToken();
         const bearer = `Bearer ${idToken}`;
         const headers = new HttpHeaders().set('authorization', bearer);
-        return { headers };
+        return {headers};
       } else {
         return {};
       }
