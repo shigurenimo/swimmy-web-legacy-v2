@@ -19,7 +19,7 @@ export class CardPostComponent {
   @Input() owner: object;
   @Input() ownerId: string;
   @Input() repliedPostIds: string[];
-  @Input() replyPostIds: string[];
+  @Input() replyPostId: string;
   @Input() tags;
   @Input() updatedAt: string;
   @Input() isLogged: boolean;
@@ -31,6 +31,7 @@ export class CardPostComponent {
   public isOpenReply = false;
   public isMutation = false;
   public isDeleteMutate = false;
+  public isDelete = false;
   public newTag = '';
 
   constructor(
@@ -38,16 +39,24 @@ export class CardPostComponent {
     public afa: AngularFireAuth) {
   }
 
+  public get deleteType() {
+    return this.isDelete ? 'danger' : null;
+  }
+
+  public get deleteShape() {
+    return this.isDelete ? null : 'circle';
+  }
+
   public onOpenReply() {
     this.isOpenReply = !this.isOpenReply;
   }
 
   public get isDefaultType() {
-    return this.type === 'default'
+    return this.type === 'default';
   }
 
   public get isListItemType() {
-    return this.type === 'listItem'
+    return this.type === 'listItem';
   }
 
   public get createdAtStr() {
@@ -65,7 +74,7 @@ export class CardPostComponent {
 
     if (this.isMutation) {
       this.isMutation = true;
-      return
+      return;
     }
 
     if (name === '') {
@@ -87,11 +96,25 @@ export class CardPostComponent {
   }
 
   public onDelete() {
-    if (!this.isDeleteMutate) {
+    if (!this.isDelete) {
+      this.isDelete = true;
+      return;
+    }
+
+    if (this.isDeleteMutate) {
       return;
     }
 
     this.isDeleteMutate = true;
+
+    if (this.replyPostId) {
+      const postId$ = this.posts.deleteReplyPost(this.id, this.replyPostId);
+      postId$.subscribe(() => {
+        this.isDeleteMutate = false;
+      }, (err) => {
+        this.isDeleteMutate = false;
+      });
+    }
   }
 
   public editNewTag() {

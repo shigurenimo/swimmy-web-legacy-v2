@@ -74,9 +74,13 @@
     <button
       *ngIf='ownerId'
       class='reply'
+      (click)='onDelete()'
+      [nzLoading]='isDeleteMutate'
       nz-button
-      [nzShape]='nzShape'>
+      [nzType]='deleteType'
+      [nzShape]='deleteShape'>
       <i class='anticon anticon-delete'></i>
+      <span *ngIf='isDelete'>削除する</span>
     </button>
   </div>
 </ng-template>

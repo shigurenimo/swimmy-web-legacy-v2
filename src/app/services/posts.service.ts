@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 
 import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+import update from 'immutability-helper';
 import { PostsResult } from '../interfaces/Post';
 
 import {
   mutationAddPost,
+  queryPhotoPosts,
   queryPost,
   queryPosts,
   queryRepliedPosts,
@@ -54,7 +57,7 @@ export class PostsService {
   public observePosts() {
     return this.apollo.watchQuery<PostsResult>({
       query: queryPosts,
-      pollInterval: 20000
+      pollInterval: 10000
     }).valueChanges;
   }
 
@@ -68,7 +71,7 @@ export class PostsService {
   public observeRepliedPosts(replyPostId) {
     return this.apollo.watchQuery<PostsResult>({
       query: queryRepliedPosts,
-      pollInterval: 20000,
+      pollInterval: 10000,
       variables: {replyPostId}
     }).valueChanges;
   }
@@ -79,5 +82,35 @@ export class PostsService {
       pollInterval: 120000,
       variables: {id}
     }).valueChanges;
+  }
+
+  public getPhotoPosts(startAt?) {
+    return this.apollo.watchQuery<PostsResult>({
+      query: queryPhotoPosts
+    }).valueChanges;
+  }
+
+  public deleteReplyPost(id, replyPostId) {
+    return this.apollo.mutate({
+      mutation: gql`
+        mutation deletePost($id: ID!) {
+          deletePost(id: $id)
+        }
+      `,
+      variables: {id},
+      update: (store, {data: {deletePost: nodeId}}) => {
+        const query = queryRepliedPosts;
+        const variables = {replyPostId};
+        const storeData = store.readQuery({query, variables}) as any;
+        console.log('storeData', storeData);
+        const index = storeData.posts.nodes.findIndex((node) => {
+          return node.id === nodeId;
+        });
+        const data = update(storeData, {
+          posts: {nodes: {$splice: [[index, 1]]}}
+        });
+        store.writeQuery({query, variables, data});
+      }
+    });
   }
 }

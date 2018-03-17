@@ -179,4 +179,5 @@ type Mutation {
   uploadPostObjects(startAfter: ID): UploadObjectResult
   updatePostTag(input: UpdatePostTagInput!): Post
   updateUser(id: ID!, input: UpdateUserInput!): User
+  deletePost(id: ID!): ID!
 }
