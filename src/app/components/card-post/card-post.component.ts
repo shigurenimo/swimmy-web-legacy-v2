@@ -21,6 +21,7 @@ export class CardPostComponent {
   @Input() replyPostIds: string[];
   @Input() tags;
   @Input() updatedAt: string;
+  @Input() isLogged: boolean;
 
   public nzShape = 'circle';
   public resize = 'post';

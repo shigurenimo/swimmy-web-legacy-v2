@@ -82,7 +82,7 @@ export const queryPhotoPosts = gql`
 `;
 
 export const queryPost = gql`
-  query post($id: ID) {
+  query post($id: ID!) {
     post(id: $id) {
       id
       content

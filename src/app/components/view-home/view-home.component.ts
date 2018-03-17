@@ -17,6 +17,7 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
 
   // ui states
   public posts: Post[] = [];
+  public isLogged = false;
 
   // errors
   public graphQLErrors = [];
@@ -38,7 +39,10 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onChangeAuthState () {
+  private onChangeAuthState (user) {
+    if (user) {
+      this.isLogged = true
+    }
     const posts$ = this.postsService.observePosts();
     this.posts$$ = posts$.subscribe(({ data }) => {
       this.posts = data.posts.nodes;
@@ -49,8 +53,8 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
 
   public ngOnInit () {
     const authState$ = this.afAuth.authState;
-    this.authState$$ = authState$.subscribe(() => {
-      this.onChangeAuthState();
+    this.authState$$ = authState$.subscribe((user) => {
+      this.onChangeAuthState(user);
     });
   }
 

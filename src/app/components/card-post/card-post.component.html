@@ -13,38 +13,39 @@
   </ng-container>
 </div>
 
-<div class="actions">
+<div class="actions" nz-row nzType='flex' nzAlign="middle">
   <nz-checkable-tag
     *ngFor="let tag of tags"
     class="tag"
+    nz-col
     [nzChecked]="false"
     (click)="onUpdateTag(tag.name)">
     {{tag.name}} {{tag.count}}
   </nz-checkable-tag>
 
-  <span *ngIf="afa.authState|async" class="edit">
-    <button
-      *ngIf="!isEditNewTag"
-      nz-button
-      [nzShape]="nzShape"
-      [disabled]="isMutation"
-      (click)="editNewTag()">
-      <i class="anticon anticon-plus"></i>
-    </button>
-    <nz-input
-      *ngIf="isEditNewTag"
-      nzType="text"
-      style="width: 140px;"
-      [(ngModel)]="newTag"
-      [nzReadonly]="isMutation"
-      [nzPlaceHolder]="nzPlaceHolder"
-      (nzBlur)="onUpdateTag(newTag)">
-      <ng-template #prefix>
-        <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
-        <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
-      </ng-template>
-    </nz-input>
-  </span>
+  <button
+    *ngIf="isLogged && !isEditNewTag"
+    nz-col
+    class="edit"
+    nz-button
+    [nzShape]="nzShape"
+    [disabled]="isMutation"
+    (click)="editNewTag()">
+    <i class="anticon anticon-plus"></i>
+  </button>
+  <nz-input
+    *ngIf="isLogged && isEditNewTag"
+    nz-col
+    style="width: 140px;"
+    [(ngModel)]="newTag"
+    [nzReadonly]="isMutation"
+    [nzPlaceHolder]="nzPlaceHolder"
+    (nzBlur)="onUpdateTag(newTag)">
+    <ng-template #prefix>
+      <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
+      <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
+    </ng-template>
+  </nz-input>
 
   <!--
   <button
@@ -55,15 +56,6 @@
     <i class='anticon anticon-delete'></i>
   </button>
   -->
-
-  <button
-    class="reply"
-    nz-button
-    [nzShape]="nzShape"
-    (click)="onOpenReply()">
-    <i *ngIf="isOpenReply" class="anticon anticon-up"></i>
-    <i *ngIf="!isOpenReply" class="anticon anticon-down"></i>
-  </button>
 
 </div>
 
