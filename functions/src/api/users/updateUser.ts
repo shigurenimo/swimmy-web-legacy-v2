@@ -34,7 +34,7 @@ export const updateUser = async (uid, input) => {
   newUser.photoURLs = {};
 
   if (input.photoURLs && input.photoURLs[0]) {
-    const { photoId, photoURL } = input.photoURLs[0];
+    const {photoId, photoURL} = input.photoURLs[0];
     const data = await getPhotoURL('users', photoId, photoURL);
     newUser.photoURLs[photoId] = data;
     newUser.photoURL = data.photoURL;
@@ -43,8 +43,8 @@ export const updateUser = async (uid, input) => {
   return admin.firestore()
     .collection(USERS)
     .doc(uid)
-    .set(newUser, { merge: true })
+    .set(newUser, {merge: true})
     .then(() => {
-      return { ...newUser, uid };
+      return {...newUser, uid};
     });
 };

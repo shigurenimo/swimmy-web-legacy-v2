@@ -1,4 +1,4 @@
-import { setUser } from './setUser'
+import { setUser } from './setUser';
 
 /**
  * Set User to users/{uid}
@@ -6,14 +6,14 @@ import { setUser } from './setUser'
  */
 export const addUser = (user) => {
   if (!user) {
-    throw new Error('user not found')
+    throw new Error('user not found');
   }
 
-  const uid = user.uid
+  const uid = user.uid;
 
   const input = {
     displayName: user.email.match(/^[^@]+/)[0]
-  }
+  };
 
-  return setUser(uid, input)
-}
+  return setUser(uid, input);
+};

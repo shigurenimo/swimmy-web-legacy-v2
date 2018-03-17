@@ -59,6 +59,7 @@
   flex: auto;
   width: 100px;
   max-width: 400px;
+  font-size: 0;
 }
 
 .photoURLs img {

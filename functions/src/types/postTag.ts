@@ -1,17 +1,17 @@
 export const PostTag = {
-  id (root) {
+  id(root) {
     return root.id;
   },
-  count (root) {
+  count(root) {
     return root.count;
   },
-  name (root) {
+  name(root) {
     return root.name;
   },
-  postId (root) {
+  postId(root) {
     return root.postId;
   },
-  tagId (root) {
+  tagId(root) {
     return root.tagId;
   }
 };

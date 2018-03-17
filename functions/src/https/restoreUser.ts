@@ -8,7 +8,7 @@ import { failureResponse } from '../helpers/failureResponse';
 import { successResponse } from '../helpers/successResponse';
 
 export = functions.https.onRequest((request, response) => {
-  return cors({ origin: true })(request, response, () => {
+  return cors({origin: true})(request, response, () => {
     const args = getArguments(request.body);
     return updateAuthentication(args.username, args.password).then((result) => {
       return successResponse(response, result);
@@ -36,13 +36,13 @@ const updateAuthentication = (username, password) => {
       const snapshot = snapshots.docs[0];
 
       if (!snapshot) {
-        return { valid: false, error: 'auth/user-disabled' };
+        return {valid: false, error: 'auth/user-disabled'};
       }
 
       const user = snapshot.data();
 
       if (!user.bycript) {
-        return { valid: false, error: 'auth/user-disabled' };
+        return {valid: false, error: 'auth/user-disabled'};
       }
 
       const sha512 = crypto.createHash('sha256');
@@ -53,14 +53,14 @@ const updateAuthentication = (username, password) => {
 
       return compare(hash, user.bycript).then((result) => {
         if (!result) {
-          return { valid: false, error: 'auth/wrong-password' };
+          return {valid: false, error: 'auth/wrong-password'};
         }
 
         return admin
           .auth()
-          .updateUser(user.uid, { password, disabled: false })
+          .updateUser(user.uid, {password, disabled: false})
           .then(() => {
-            return { valid: true, error: null };
+            return {valid: true, error: null};
           });
       });
     });

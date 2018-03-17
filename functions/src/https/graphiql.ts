@@ -25,7 +25,7 @@ const endpointURL = process.env.NODE_ENV === 'production'
   ? `https://us-central1-${process.env.GCP_PROJECT}.cloudfunctions.net/graphql/`
   : `/${process.env.GCP_PROJECT}/us-central1/graphql/`;
 
-const options = { endpointURL, query };
+const options = {endpointURL, query};
 
 const graphiql = graphiqlExpress(options);
 

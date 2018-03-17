@@ -1,6 +1,6 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { IMAGES } from '../../constants/index'
+import { IMAGES } from '../../constants/index';
 
 /**
  * Delete /images/{imageId}
@@ -8,7 +8,7 @@ import { IMAGES } from '../../constants/index'
  */
 export const deleteImage = (imageId) => {
   if (!imageId) {
-    throw new Error('imageId not found')
+    throw new Error('imageId not found');
   }
 
   return admin.firestore()
@@ -16,6 +16,6 @@ export const deleteImage = (imageId) => {
     .doc(imageId)
     .delete()
     .then(() => {
-      return imageId
-    })
-}
+      return imageId;
+    });
+};

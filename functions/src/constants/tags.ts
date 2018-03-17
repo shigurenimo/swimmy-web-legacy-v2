@@ -1,1 +1,1 @@
-export const COUNT = 'count'
+export const COUNT = 'count';

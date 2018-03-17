@@ -1,17 +1,17 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { USERS } from '../../constants/index'
+import { USERS } from '../../constants/index';
 
 export const setUser = (uid, input) => {
   if (!input) {
-    throw new Error('input not found')
+    throw new Error('input not found');
   }
 
   if (!uid) {
-    throw new Error('uid not found')
+    throw new Error('uid not found');
   }
 
-  const createdAt = new Date()
+  const createdAt = new Date();
 
   return admin
     .firestore()
@@ -31,5 +31,5 @@ export const setUser = (uid, input) => {
       photoURL: '',
       postCount: 0,
       updatedAt: createdAt
-    })
-}
+    });
+};

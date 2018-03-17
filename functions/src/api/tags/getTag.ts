@@ -1,6 +1,6 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { TAGS } from '../../constants/index'
+import { TAGS } from '../../constants/index';
 
 /**
  * Get /tags/{tagId}
@@ -9,7 +9,7 @@ import { TAGS } from '../../constants/index'
  */
 export const getTag = (tagId) => {
   if (!tagId) {
-    throw new Error('postId not found')
+    throw new Error('postId not found');
   }
 
   return admin
@@ -19,11 +19,11 @@ export const getTag = (tagId) => {
     .get()
     .then((snapshot) => {
       if (!snapshot.exists) {
-        throw new Error(`tag(${tagId}) not found`)
+        throw new Error(`tag(${tagId}) not found`);
       }
 
-      const data = snapshot.data()
+      const data = snapshot.data();
 
-      return Object.assign(data, {id: snapshot.id})
-    })
-}
+      return Object.assign(data, {id: snapshot.id});
+    });
+};

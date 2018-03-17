@@ -4,4 +4,4 @@ export const errorMessage = {
   TOKEN_NOT_FOUND: 'Unauthorized',
   TO_NOT_FOUND: 'To Not Found',
   TRANSACTION_FAILURE: 'Transaction failure'
-}
+};

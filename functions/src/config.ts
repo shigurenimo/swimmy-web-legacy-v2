@@ -6,4 +6,4 @@ export const config = {
     appId: null,
     key: null
   }
-}
+};

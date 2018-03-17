@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 import { config } from '../../config';
 
 export const deletePhotoURL = async (objectId) => {
-  const { projectId } = functions.config().firebase;
+  const {projectId} = functions.config().firebase;
 
   const bucket = `${projectId}.appspot.com`;
 
@@ -26,7 +26,7 @@ export const deletePhotoURL = async (objectId) => {
         bucketID: `${projectId}.appspot.com`,
         objectID: objectId
       }),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {'Content-Type': 'application/json'}
     });
   } catch (err) {
     console.error(err);

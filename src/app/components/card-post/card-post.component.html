@@ -17,13 +17,15 @@
   </div>
 </ng-container>
 
-<ng-template #templatePhotoURLs *ngIf="photoURLs.length">
-  <div class="template-photoURLs" nz-row nzType="flex" nzAlign="middle" nzJustify="start">
-    <div class="item" nz-col *ngFor="let photoURL of photoURLs">
-      <img *ngIf="isDefaultType" routerLink="/posts/{{id}}" [src]="photoURL|resize:resize">
-      <img *ngIf="isListItemType" [src]="photoURL|resize:resize">
+<ng-template #templatePhotoURLs>
+  <ng-container *ngIf="photoURLs.length">
+    <div class="template-photoURLs" nz-row nzType="flex" nzAlign="middle" nzJustify="start">
+      <div class="item" nz-col *ngFor="let photoURL of photoURLs">
+        <img *ngIf="isDefaultType" [src]="photoURL|resize:resize">
+        <img *ngIf="isListItemType" routerLink="/posts/{{id}}" [src]="photoURL|resize:resize">
+      </div>
     </div>
-  </div>
+  </ng-container>
 </ng-template>
 
 <ng-template #templateContent>

@@ -21,7 +21,7 @@ export const getPhotoURL = async (collection, photoId, downloadURL) => {
     return simple;
   }
 
-  const { projectId } = functions.config().firebase;
+  const {projectId} = functions.config().firebase;
 
   const res = await fetch(config.service.images, {
     method: 'POST',
@@ -29,7 +29,7 @@ export const getPhotoURL = async (collection, photoId, downloadURL) => {
       bucketID: `${projectId}.appspot.com`,
       objectID: objectId
     }),
-    headers: { 'Content-Type': 'application/json' }
+    headers: {'Content-Type': 'application/json'}
   });
 
   if (!res.ok) {
@@ -37,7 +37,7 @@ export const getPhotoURL = async (collection, photoId, downloadURL) => {
   }
 
   try {
-    const { data } = await res.json();
+    const {data} = await res.json();
 
     const image = {
       objectId: objectId,

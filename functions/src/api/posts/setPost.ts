@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 
-import { POSTS, TAGS } from '../../constants/index';
+import { POSTS } from '../../constants/index';
 import { getPhotoURL } from '../microservices/getPhotoURL';
 
 /**
@@ -44,7 +44,7 @@ export const setPost = async (postId, input, owner) => {
 
   if (input.photoURLs[0]) {
     for (let i = 0; i < input.photoURLs.length; ++i) {
-      const { photoId, photoURL } = input.photoURLs[i];
+      const {photoId, photoURL} = input.photoURLs[i];
       const data = await getPhotoURL('posts', photoId, photoURL);
       newPost.photoURLs[photoId] = data;
     }
@@ -53,5 +53,5 @@ export const setPost = async (postId, input, owner) => {
 
   await admin.firestore().collection(POSTS).doc(postId).set(newPost);
 
-  return { ...newPost, id: postId };
+  return {...newPost, id: postId};
 };

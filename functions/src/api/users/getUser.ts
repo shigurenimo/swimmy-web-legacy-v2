@@ -19,6 +19,6 @@ export const getUser = (userId) => {
 
       const data = snapshot.data();
 
-      return { ...data, id: snapshot.id };
+      return {...data, id: snapshot.id};
     });
 };

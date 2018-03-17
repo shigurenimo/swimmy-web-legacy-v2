@@ -1,15 +1,15 @@
-export const CHANNELS = 'channels'
+export const CHANNELS = 'channels';
 
-export const PHOTOS = 'photos'
+export const PHOTOS = 'photos';
 
-export const POSTS = 'posts'
+export const POSTS = 'posts';
 
-export const THREADS = 'threads'
+export const THREADS = 'threads';
 
-export const POST_TAGS = 'post-tags'
+export const POST_TAGS = 'post-tags';
 
-export const TAGS = 'tags'
+export const TAGS = 'tags';
 
-export const USERS = 'users'
+export const USERS = 'users';
 
-export const IMAGES = 'images'
+export const IMAGES = 'images';

@@ -1,17 +1,17 @@
 export const PhotoURL = {
-  id (root) {
-    return root.id
+  id(root) {
+    return root.id;
   },
-  downloadURL (root) {
-    return root.downloadURL
+  downloadURL(root) {
+    return root.downloadURL;
   },
-  objectId (root) {
-    return root.objectId
+  objectId(root) {
+    return root.objectId;
   },
-  photoURL (root) {
-    return root.photoURL
+  photoURL(root) {
+    return root.photoURL;
   },
-  storageURL (root) {
-    return root.storageURL
+  storageURL(root) {
+    return root.storageURL;
   }
-}
+};

@@ -15,7 +15,9 @@ export const deleteTag = (tag) => {
       .where('name', '==', tag.name);
 
     return t.get(findRef).then((querySnapshot) => {
-      if (querySnapshot.empty) { return; }
+      if (querySnapshot.empty) {
+        return;
+      }
 
       const snapshot = querySnapshot.docs[0];
 

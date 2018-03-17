@@ -1,6 +1,6 @@
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
-import { IMAGES } from '../../constants/index'
+import { IMAGES } from '../../constants/index';
 
 /**
  * Set /apps/{appId}/issues/{issueId} to /users/{uid}/apps-issues/{issueId}
@@ -9,7 +9,7 @@ import { IMAGES } from '../../constants/index'
  */
 export const setImage = (imageId, image) => {
   if (!imageId) {
-    throw new Error('imageId not found')
+    throw new Error('imageId not found');
   }
 
   return admin.firestore()
@@ -17,6 +17,6 @@ export const setImage = (imageId, image) => {
     .doc(imageId)
     .set(image)
     .then(() => {
-      return { ...image, id: imageId }
-    })
-}
+      return {...image, id: imageId};
+    });
+};

@@ -54,8 +54,11 @@ export const updatePostTag = (input, user) => {
         .find((tagId) => postTags[tagId].name === input.name);
 
       const tagId = postTagExists
-        ? Object.keys(postTags).filter((tagId) => postTags[tagId].name === input.name)[0]
-        : newTagId;
+        ?
+        Object.keys(postTags)
+          .filter((tagId) => postTags[tagId].name === input.name)[0]
+        :
+        newTagId;
 
       const postTag = postTagExists
         ? postTags[tagId]
@@ -95,7 +98,7 @@ export const updatePostTag = (input, user) => {
             [tagId]: {
               createdAt: createdAt
             }
-          }, { merge: true });
+          }, {merge: true});
         }
 
         t.update(postRef, {
@@ -109,7 +112,7 @@ export const updatePostTag = (input, user) => {
           [tagId]: {
             createdAt: createdAt
           }
-        }, { merge: true });
+        }, {merge: true});
 
         postTags[tagId] = postTag;
 
@@ -152,13 +155,15 @@ export const updatePostTag = (input, user) => {
       postTag.tagId = tagId;
 
       for (let i = 0; i < post.tags.length; ++i) {
-        if (post.tags[i].name !== postTag.name) { continue; }
+        if (post.tags[i].name !== postTag.name) {
+          continue;
+        }
         post.tags[i] = postTag;
       }
 
-      const newPost = createPostObject(postSnapshot.id, post)
+      const newPost = createPostObject(postSnapshot.id, post);
 
-      return { ...newPost, id: postSnapshot.id };
+      return {...newPost, id: postSnapshot.id};
     });
   });
 };

@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 export const getCntext = (request) => {
-  const { authorization } = request.headers;
+  const {authorization} = request.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     throw new Error('Bearer not found');

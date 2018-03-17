@@ -30,7 +30,10 @@ export const getPosts = async (args) => {
   }
 
   if (startAfter) {
-    const prevSnapshot = await admin.firestore().collection(POSTS).doc(startAfter).get();
+    const prevSnapshot = await admin.firestore()
+      .collection(POSTS)
+      .doc(startAfter)
+      .get();
     ref = ref.startAfter(prevSnapshot);
   }
 
@@ -55,7 +58,7 @@ export const getPosts = async (args) => {
       };
     });
 
-    return { ...data, id: snapshot.id };
+    return {...data, id: snapshot.id};
   });
 
   return posts;
