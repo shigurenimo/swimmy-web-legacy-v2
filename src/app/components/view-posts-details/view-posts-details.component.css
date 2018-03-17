@@ -1,9 +1,27 @@
 :host ::ng-deep .ant-layout-content {
-  padding: 0 16px;
+  padding: 0 8px;
 }
 
-.reply-message {
+.template-post {
+  margin: 0 auto;
+  padding-top: 40px;
+  max-width: 800px;
+}
+
+.template-message {
   padding-top: 32px;
   text-align: center;
   font-size: 16px;
+}
+
+.template-card-editor {
+  margin: 0 auto;
+  padding-top: 40px;
+  max-width: 800px;
+}
+
+.template-replied-posts {
+  margin: 0 auto;
+  padding-top: 16px;
+  max-width: 800px;
 }

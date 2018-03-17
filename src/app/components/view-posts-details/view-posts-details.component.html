@@ -5,25 +5,31 @@
 </app-header>
 
 <nz-content *ngIf="post && !graphQLErrors.length && !networkError">
-  <app-card-post
-    [content]="post.content"
-    [createdAt]="post.createdAt"
-    [id]="post.id"
-    [photoURLs]="post.photoURLs"
-    [ownerId]="post.ownerId"
-    [owner]="post.owner"
-    [repliedPostIds]="post.repliedPostIds"
-    [replyPostIds]="post.replyPostIds"
-    [tags]="post.tags"
-    [updatedAt]="post.updatedAt"
-    [isLogged]="isLogged">
-  </app-card-post>
+  <div class="template-post">
+    <app-card-post
+      [content]="post.content"
+      [createdAt]="post.createdAt"
+      [id]="post.id"
+      [photoURLs]="post.photoURLs"
+      [ownerId]="post.ownerId"
+      [owner]="post.owner"
+      [repliedPostIds]="post.repliedPostIds"
+      [replyPostIds]="post.replyPostIds"
+      [tags]="post.tags"
+      [updatedAt]="post.updatedAt"
+      [isLogged]="isLogged">
+    </app-card-post>
+  </div>
 
-  <div *ngIf='repliedPosts.length' class='reply-message'>
+  <div *ngIf="repliedPosts.length" class="template-message">
     <i class="anticon anticon-up"></i>
   </div>
 
-  <div class="replied-posts">
+  <div class="template-editor">
+    <app-card-reply-new></app-card-reply-new>
+  </div>
+
+  <div class="template-replied-posts">
     <app-card-post
       *ngFor="let node of repliedPosts"
       [content]="node.content"
