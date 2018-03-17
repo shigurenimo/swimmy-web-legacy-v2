@@ -11,8 +11,13 @@ import { PostsService } from '../../services/posts.service';
   styleUrls: ['./view-posts-details.component.css']
 })
 export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
-  private params$$ = null
-  private posts$$ = null
+  public isLogged = false;
+
+  private authState$$ = null;
+  private params$$ = null;
+  private posts$$ = null;
+
+  public post = null;
 
   // errors
   public graphQLErrors = [];
@@ -20,10 +25,11 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private posts: PostsService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
+  private onCatchError({graphQLErrors, networkError}) {
     if (graphQLErrors[0]) {
       console.error(graphQLErrors);
       this.graphQLErrors = graphQLErrors;
@@ -39,14 +45,14 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
   }
 
   private onChangeParams(params) {
-    const {postId} = params
+    const {postId} = params;
     console.log(postId);
-    const posts$ = this.posts.observePost(postId)
+    const posts$ = this.posts.observePost(postId);
     this.posts$$ = posts$.subscribe(({data}) => {
-      console.log(data)
+      this.post = data.post;
     }, (err) => {
-      this.onCatchError(err)
-    })
+      this.onCatchError(err);
+    });
     /*
     const user$ = this.usersService.getUser(null, username);
     user$.subscribe((data) => {
@@ -57,15 +63,26 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
     */
   }
 
+  private onChangeAuthState(user) {
+    if (user) {
+      this.isLogged = true;
+    }
+    this.params$$ = this.activatedRoute.params.subscribe((params) => {
+      this.onChangeParams(params);
+    });
+  }
+
   public ngOnDestroy() {
     if (this.params$$) {
       this.params$$.unsubscribe();
     }
+    this.authState$$.unsubscribe();
   }
 
   public ngOnInit() {
-    this.params$$ = this.activatedRoute.params.subscribe((params) => {
-      this.onChangeParams(params);
+    const authState$ = this.afAuth.authState;
+    this.authState$$ = authState$.subscribe((user) => {
+      this.onChangeAuthState(user);
     });
   }
 }

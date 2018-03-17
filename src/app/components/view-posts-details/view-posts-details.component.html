@@ -1,3 +1,21 @@
-<p>
-  view-posts-details works!
-</p>
+<app-header [goBack]='true'>
+  <ng-template #title *ngIf='post'>
+    {{post.id}}
+  </ng-template>
+</app-header>
+
+<nz-content *ngIf="post && !graphQLErrors.length && !networkError">
+  <app-card-post
+    [content]="post.content"
+    [createdAt]="post.createdAt"
+    [id]="post.id"
+    [photoURLs]="post.photoURLs"
+    [ownerId]="post.ownerId"
+    [owner]="post.owner"
+    [repliedPostIds]="post.repliedPostIds"
+    [replyPostIds]="post.replyPostIds"
+    [tags]="post.tags"
+    [updatedAt]="post.updatedAt"
+    [isLogged]="isLogged">
+  </app-card-post>
+</nz-content>

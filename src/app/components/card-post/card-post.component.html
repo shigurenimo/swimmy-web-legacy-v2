@@ -1,68 +1,94 @@
-<div *ngIf="photoURLs.length" class="photoURLs" nz-row nzType="flex" nzAlign="middle" nzJustify="start">
-  <div class="item" nz-col *ngFor="let photoURL of photoURLs">
-    <img routerLink="/posts/{{id}}" [src]="photoURL|resize:resize">
-  </div>
-</div>
-
-<div class="content">
-  <ng-container *ngIf="content">
-    <p><a routerLink="/posts/{{id}}">{{content}}</a><span class="createdAt">- {{createdAtStr}}</span></p>
-  </ng-container>
-  <ng-container *ngIf="!content">
-    <p><span class="createdAt">- {{createdAtStr}}</span></p>
-  </ng-container>
-</div>
-
-<div class="actions" nz-row nzType='flex' nzAlign="middle">
-  <nz-checkable-tag
-    *ngFor="let tag of tags"
-    class="tag"
-    nz-col
-    [nzChecked]="false"
-    (click)="onUpdateTag(tag.name)">
-    {{tag.name}} {{tag.count}}
-  </nz-checkable-tag>
-
-  <button
-    *ngIf="isLogged && !isEditNewTag"
-    nz-col
-    class="edit"
-    nz-button
-    [nzShape]="nzShape"
-    [disabled]="isMutation"
-    (click)="editNewTag()">
-    <i class="anticon anticon-plus"></i>
-  </button>
-  <nz-input
-    *ngIf="isLogged && isEditNewTag"
-    nz-col
-    style="width: 140px;"
-    [(ngModel)]="newTag"
-    [nzReadonly]="isMutation"
-    [nzPlaceHolder]="nzPlaceHolder"
-    (nzBlur)="onUpdateTag(newTag)">
-    <ng-template #prefix>
-      <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
-      <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
-    </ng-template>
-  </nz-input>
-
-  <!--
-  <button
-    *ngIf='ownerId'
-    class='reply'
-    nz-button
-    [nzShape]='nzShape'>
-    <i class='anticon anticon-delete'></i>
-  </button>
-  -->
-
-</div>
-
-<div class="reply-content" *ngIf="isOpenReply">
-  <nz-card>
+<ng-container *ngIf='type === "default"'>
+  <nz-card class="template-card">
     <ng-template #body>
-      <p>リプライ機能は開発中です。</p>
+      <ng-container *ngTemplateOutlet="templatePhotoURLs;"></ng-container>
+      <ng-container *ngTemplateOutlet="templateContent;"></ng-container>
+      <ng-container *ngTemplateOutlet="templateActions;"></ng-container>
     </ng-template>
   </nz-card>
-</div>
+</ng-container>
+
+<ng-container *ngIf='type === "listItem"'>
+  <div class="template-list-item">
+    <ng-container *ngTemplateOutlet="templatePhotoURLs;"></ng-container>
+    <ng-container *ngTemplateOutlet="templateContent;"></ng-container>
+    <ng-container *ngTemplateOutlet="templateActions;"></ng-container>
+    <ng-container *ngTemplateOutlet="templateReply;"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #templatePhotoURLs *ngIf="photoURLs.length">
+  <div class="template-photoURLs" nz-row nzType="flex" nzAlign="middle" nzJustify="start">
+    <div class="item" nz-col *ngFor="let photoURL of photoURLs">
+      <img *ngIf='isDefaultType' routerLink="/posts/{{id}}" [src]="photoURL|resize:resize">
+      <img *ngIf='isListItemType' [src]="photoURL|resize:resize">
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateContent>
+  <div class="template-content">
+    <ng-container *ngIf="content">
+      <p *ngIf='isDefaultType'>{{content}}<span class="createdAt">- {{createdAtStr}}</span></p>
+      <p *ngIf='isListItemType'><a routerLink="/posts/{{id}}">{{content}}</a><span class="createdAt">- {{createdAtStr}}</span></p>
+    </ng-container>
+    <ng-container *ngIf="!content">
+      <p><span class="createdAt">- {{createdAtStr}}</span></p>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #templateActions>
+  <div class="template-actions" nz-row nzType="flex" nzAlign="middle">
+    <nz-checkable-tag
+      *ngFor="let tag of tags"
+      class="tag"
+      nz-col
+      [nzChecked]="false"
+      (click)="onUpdateTag(tag.name)">
+      {{tag.name}} {{tag.count}}
+    </nz-checkable-tag>
+    <button
+      *ngIf="isLogged && !isEditNewTag"
+      nz-col
+      class="edit"
+      nz-button
+      [nzShape]="nzShape"
+      [disabled]="isMutation"
+      (click)="editNewTag()">
+      <i class="anticon anticon-plus"></i>
+    </button>
+    <nz-input
+      *ngIf="isLogged && isEditNewTag"
+      nz-col
+      style="width: 140px;"
+      [(ngModel)]="newTag"
+      [nzReadonly]="isMutation"
+      [nzPlaceHolder]="nzPlaceHolder"
+      (nzBlur)="onUpdateTag(newTag)">
+      <ng-template #prefix>
+        <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
+        <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
+      </ng-template>
+    </nz-input>
+    <!--
+    <button
+      *ngIf='ownerId'
+      class='reply'
+      nz-button
+      [nzShape]='nzShape'>
+      <i class='anticon anticon-delete'></i>
+    </button>
+    -->
+  </div>
+</ng-template>
+
+<ng-template #templateReply>
+  <div class="template-reply" *ngIf="isOpenReply">
+    <nz-card>
+      <ng-template #body>
+        <p>リプライ機能は開発中です。</p>
+      </ng-template>
+    </nz-card>
+  </div>
+</ng-template>

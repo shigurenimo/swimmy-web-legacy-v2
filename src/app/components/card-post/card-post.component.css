@@ -1,39 +1,62 @@
 :host {
   display: block;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 :host:hover {
   background: rgba(0, 0, 0, 0.01);
 }
 
-/* Content */
-
-.content {
-  padding: 8px;
-}
-
-.content > p {
-  white-space: pre-wrap;
-}
-
-.content a {
+:host a {
   color: inherit;
 }
 
-.content a:hover {
+:host a:hover {
   background: rgba(0, 0, 0, 0.05);
 }
 
-.content .createdAt {
-  padding-left: 10px;
-  font-size: 0.8rem;
-  opacity: 0.4;
+:host ::ng-deep .ant-tag-root .ant-tag {
+  margin-right: 0;
+  margin-left: 5px;
 }
 
 :host ::ng-deep .ant-btn-circle {
   border: none;
 }
+
+:host ::ng-deep .ant-card-body {
+  padding: 8px;
+}
+
+/* Template Card */
+
+.template-card {
+  margin: 40px auto 0;
+  max-width: 800px;
+}
+
+/* Template List Item */
+
+.template-list-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Template Content */
+
+.template-content {
+  padding: 8px;
+}
+
+.template-content > p {
+  white-space: pre-wrap;
+}
+
+.template-content .createdAt {
+  padding-left: 10px;
+  font-size: 0.8rem;
+  opacity: 0.4;
+}
+
+/* Template PhotoURLs */
 
 .photoURLs {
   padding: 8px 8px 0 8px;
@@ -49,32 +72,29 @@
   width: 100%;
 }
 
-/* Actions */
+/* Template Actions */
 
-.actions {
+.template-actions {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
   padding: 0 10px 5px;
 }
 
-.actions .tag {
+.template-actions .tag {
   padding: 5px 0;
 }
 
-.actions .edit {
+.template-actions .edit {
   margin-left: 10px;
 }
 
-.actions .reply {
+.template-actions .reply {
   margin-left: 5px;
 }
 
-.reply-content {
+/* Template Reply */
+
+.template-reply {
   padding: 0 10px 10px;
-}
-
-:host ::ng-deep .ant-tag-root .ant-tag {
-  margin-right: 0;
-  margin-left: 5px;
 }

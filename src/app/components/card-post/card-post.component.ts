@@ -11,6 +11,7 @@ import { PostsService } from '../../services/posts.service';
   styleUrls: ['./card-post.component.css']
 })
 export class CardPostComponent {
+  @Input() type = 'default';
   @Input() content: string;
   @Input() createdAt: string;
   @Input() id: string;
@@ -39,6 +40,14 @@ export class CardPostComponent {
 
   public onOpenReply() {
     this.isOpenReply = !this.isOpenReply;
+  }
+
+  public get isDefaultType() {
+    return this.type === 'default'
+  }
+
+  public get isListItemType() {
+    return this.type === 'listItem'
   }
 
   public get createdAtStr() {

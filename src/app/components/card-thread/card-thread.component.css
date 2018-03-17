@@ -7,6 +7,14 @@
   background: rgba(0, 0, 0, 0.01);
 }
 
+:host a {
+  color: inherit;
+}
+
+:host a:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 /* Content */
 
 .content {
