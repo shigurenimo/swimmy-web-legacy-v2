@@ -132,28 +132,3 @@ export const queryPost = gql`
     }
   }
 `;
-
-export const mutationAddPost = gql`
-  mutation addPost($input: AddPostInput!) {
-    addPost(input: $input) {
-      id
-      content
-      createdAt
-      ownerId
-      owner {
-        id
-        displayName
-        photoURL
-      }
-      photoURLs
-      repliedPostCount
-      replyPostId
-      tags {
-        id
-        name
-        count
-      }
-      updatedAt
-    }
-  }
-`;

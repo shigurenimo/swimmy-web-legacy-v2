@@ -12,7 +12,7 @@
   <div class="template-list-item">
     <ng-container *ngTemplateOutlet="templatePhotoURLs;"></ng-container>
     <ng-container *ngTemplateOutlet="templateContent;"></ng-container>
-    <ng-container *ngTemplateOutlet="templateActions;"></ng-container>
+    <ng-container *ngTemplateOutlet="templateListItemActions;"></ng-container>
     <ng-container *ngTemplateOutlet="templateReply;"></ng-container>
   </div>
 </ng-container>
@@ -20,8 +20,8 @@
 <ng-template #templatePhotoURLs *ngIf="photoURLs.length">
   <div class="template-photoURLs" nz-row nzType="flex" nzAlign="middle" nzJustify="start">
     <div class="item" nz-col *ngFor="let photoURL of photoURLs">
-      <img *ngIf='isDefaultType' routerLink="/posts/{{id}}" [src]="photoURL|resize:resize">
-      <img *ngIf='isListItemType' [src]="photoURL|resize:resize">
+      <img *ngIf="isDefaultType" routerLink="/posts/{{id}}" [src]="photoURL|resize:resize">
+      <img *ngIf="isListItemType" [src]="photoURL|resize:resize">
     </div>
   </div>
 </ng-template>
@@ -29,12 +29,60 @@
 <ng-template #templateContent>
   <div class="template-content">
     <ng-container *ngIf="content">
-      <p *ngIf='isDefaultType'>{{content}}<span class="createdAt">- {{createdAtStr}}</span></p>
-      <p *ngIf='isListItemType'><a routerLink="/posts/{{id}}">{{content}}</a><span class="createdAt">- {{createdAtStr}}</span></p>
+      <p *ngIf="isDefaultType">{{content}}<span class="createdAt">- {{createdAtStr}}</span></p>
+      <p *ngIf="isListItemType"><a routerLink="/posts/{{id}}">{{content}}</a><span
+        class="createdAt">- {{createdAtStr}}</span></p>
     </ng-container>
     <ng-container *ngIf="!content">
       <p><span class="createdAt">- {{createdAtStr}}</span></p>
     </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #templateListItemActions>
+  <div class="template-actions" nz-row nzType="flex" nzAlign="middle">
+    <nz-checkable-tag
+      *ngFor="let tag of tags"
+      class="tag"
+      nz-col
+      [nzChecked]="false"
+      (click)="onUpdateTag(tag.name)">
+      {{tag.name}} {{tag.count}}
+    </nz-checkable-tag>
+    <button
+      *ngIf="isLogged && !isEditNewTag"
+      nz-col
+      class="edit"
+      nz-button
+      [nzShape]="nzShape"
+      [disabled]="isMutation"
+      (click)="editNewTag()">
+      <i class="anticon anticon-plus"></i>
+    </button>
+    <nz-input
+      *ngIf="isLogged && isEditNewTag"
+      nz-col
+      style="width: 140px;"
+      [(ngModel)]="newTag"
+      [nzReadonly]="isMutation"
+      [nzPlaceHolder]="nzPlaceHolder"
+      (nzBlur)="onUpdateTag(newTag)">
+      <ng-template #prefix>
+        <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
+        <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
+      </ng-template>
+    </nz-input>
+    <!--
+    <button
+      class="reply"
+      nz-button
+      nzSize="default"
+      nzShape="circle"
+      (click)="onOpenReply()">
+      <i *ngIf="isOpenReply" class="anticon anticon-up"></i>
+      <i *ngIf="!isOpenReply" class="anticon anticon-down"></i>
+    </button>
+    -->
   </div>
 </ng-template>
 
@@ -72,15 +120,15 @@
       </ng-template>
     </nz-input>
     <button
-      *ngIf='ownerId'
-      class='reply'
-      (click)='onDelete()'
-      [nzLoading]='isDeleteMutate'
+      *ngIf="ownerId"
+      class="reply"
+      (click)="onDelete()"
+      [nzLoading]="isDeleteMutate"
       nz-button
-      [nzType]='deleteType'
-      [nzShape]='deleteShape'>
-      <i class='anticon anticon-delete'></i>
-      <span *ngIf='isDelete'>削除する</span>
+      [nzType]="deleteType"
+      [nzShape]="deleteShape">
+      <i class="anticon anticon-delete"></i>
+      <span *ngIf="isDelete">削除する</span>
     </button>
   </div>
 </ng-template>

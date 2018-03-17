@@ -6,7 +6,6 @@ import update from 'immutability-helper';
 import { PostsResult } from '../interfaces/Post';
 
 import {
-  mutationAddPost,
   queryPhotoPosts,
   queryPost,
   queryPosts,
@@ -23,7 +22,30 @@ export class PostsService {
 
   public addPost(input) {
     return this.apollo.mutate({
-      mutation: mutationAddPost,
+      mutation: gql`
+        mutation addPost($input: AddPostInput!) {
+          addPost(input: $input) {
+            id
+            content
+            createdAt
+            ownerId
+            owner {
+              id
+              displayName
+              photoURL
+            }
+            photoURLs
+            repliedPostCount
+            replyPostId
+            tags {
+              id
+              name
+              count
+            }
+            updatedAt
+          }
+        }
+      `,
       variables: {input},
       update: (store, {data: {addPost: newPost}}) => {
         const data = store.readQuery({query: queryPosts}) as any;
@@ -35,7 +57,30 @@ export class PostsService {
 
   public addReplyPost(replyPostId, input) {
     return this.apollo.mutate({
-      mutation: mutationAddPost,
+      mutation: gql`
+        mutation addPost($input: AddPostInput!) {
+          addPost(input: $input) {
+            id
+            content
+            createdAt
+            ownerId
+            owner {
+              id
+              displayName
+              photoURL
+            }
+            photoURLs
+            repliedPostCount
+            replyPostId
+            tags {
+              id
+              name
+              count
+            }
+            updatedAt
+          }
+        }
+      `,
       variables: {input: {...input, replyPostId}},
       update: (store, {data: {addPost: newPost}}) => {
         const query = queryRepliedPosts;
@@ -102,7 +147,6 @@ export class PostsService {
         const query = queryRepliedPosts;
         const variables = {replyPostId};
         const storeData = store.readQuery({query, variables}) as any;
-        console.log('storeData', storeData);
         const index = storeData.posts.nodes.findIndex((node) => {
           return node.id === nodeId;
         });
