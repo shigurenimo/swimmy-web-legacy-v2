@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 
 import { updateAuthDisplayName } from '../api/authentications/updateAuthDisplayName';
 import { deleteImage } from '../api/images/deleteImage';
+import { updateUserObject } from '../api/users/updateUserObject';
 import { getEventData } from '../helpers/getEventData';
 import { isUnchangedOwner } from '../helpers/isUnchangedOwner';
 
@@ -29,7 +30,7 @@ export = functions.firestore
       photoURL: user.photoURL
     };
 
-    await Promise.all([
-      updateAuthDisplayName(uid, owner)
-    ]);
+    await updateAuthDisplayName(uid, owner);
+
+    await updateUserObject(uid, user);
   });

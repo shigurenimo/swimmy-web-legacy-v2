@@ -16,9 +16,10 @@ export = functions.firestore
     await Promise.all([
       post.ownerId &&
       deleteUserPost(post.ownerId, postId),
-      deletePostObject(postId),
       deleteTags(post.tags),
       post.replyPostId &&
       updatePostRepliedPostCount(post.replyPostId, -1)
     ]);
+
+    await deletePostObject(postId);
   })
