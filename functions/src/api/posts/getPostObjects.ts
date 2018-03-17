@@ -8,18 +8,14 @@ export const getPostObjects = async (args) => {
   const {
     limit = 15,
     type = 'NONE',
-    replyPostId = null,
+    replyPostId = null
   } = args;
 
   const client = algoliasearch(config.algolia.appId, config.algolia.key);
 
   let index = null;
   let filters = '';
-  let query = ''
-
-  if (replyPostId) {
-    query = replyPostId
-  }
+  let query = '';
 
   switch (type) {
     case 'PHOTO':
@@ -30,7 +26,12 @@ export const getPostObjects = async (args) => {
       filters = 'repliedPostCount > 0 AND photoCount = 0';
       index = client.initIndex(THREADS);
       break;
+    case 'REPLY':
+      query = replyPostId;
+      index = client.initIndex(POSTS);
+      break;
     default:
+      filters = 'NOT typeReply:true';
       index = client.initIndex(POSTS);
       break;
   }

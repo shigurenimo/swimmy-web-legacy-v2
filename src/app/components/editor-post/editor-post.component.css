@@ -14,15 +14,15 @@
 }
 
 .images {
-  padding-top: 10px;
+  padding-top: 8px;
 }
 
 .images .image-avater {
   display: inline-block;
   vertical-align: top;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .error {
-  padding-top: 10px;
+  padding-top: 8px;
 }

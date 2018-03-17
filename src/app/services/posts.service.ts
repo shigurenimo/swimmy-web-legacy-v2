@@ -31,6 +31,16 @@ export class PostsService {
     });
   }
 
+  public addReplyPost(replyPostId, input) {
+    return this.apollo.mutate({
+      mutation: mutationAddPost,
+      variables: {input: {...input, replyPostId}},
+      update: (store, {data: {addPost: newPost}}) => {
+        console.log(newPost);
+      }
+    });
+  }
+
   public updatePostTag(input) {
     return this.apollo.mutate({
       mutation: mutationUpdatePostTag,

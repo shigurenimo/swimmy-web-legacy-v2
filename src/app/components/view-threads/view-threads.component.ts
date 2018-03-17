@@ -42,7 +42,6 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
     const posts$ = this.postsService.observeThreadPosts();
     this.posts$$ = posts$.subscribe(({ data }) => {
       this.posts = data.posts.nodes || [];
-      console.log(this.posts)
     }, (err) => {
       this.onCatchError(err);
     });

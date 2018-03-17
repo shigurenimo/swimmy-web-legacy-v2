@@ -1,6 +1,32 @@
+:host ::ng-deep .ant-card-body {
+  padding: 8px;
+}
+
 /* Template Card */
 
 .template-card {
   margin: 40px auto 0;
   max-width: 800px;
+}
+
+/* Template Actions */
+
+.template-actions {
+  padding-top: 8px;
+}
+
+.template-actions .input {
+  margin-left: 8px;
+}
+
+/* Template Image */
+
+.template-images {
+  padding-top: 8px;
+}
+
+.template-images .image-avater {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 8px;
 }

@@ -63,12 +63,16 @@ export class CardPostComponent {
       return;
     }
 
-    if (name === '') {
-      this.isEditNewTag = false;
-      return;
+    if (this.isMutation) {
+      this.isMutation = true;
+      return
     }
 
-    this.isMutation = true;
+    if (name === '') {
+      this.isEditNewTag = false;
+      this.isMutation = false;
+      return;
+    }
 
     const post$ = this.posts.updatePostTag({postId: this.id, name});
 

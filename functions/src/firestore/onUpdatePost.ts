@@ -8,15 +8,15 @@ import { getEventData } from '../helpers/getEventData';
 export = functions.firestore
   .document('posts/{postId}')
   .onUpdate(async (event) => {
-    const { postId } = event.params;
+    const {postId} = event.params;
 
-    const { current: post } = getEventData(event);
+    const {current: post} = getEventData(event);
 
     try {
       await Promise.all([
         post.ownerId &&
         setUserPost(post.ownerId, postId, post),
-        updatePostObject({ ...post, id: postId })
+        updatePostObject({...post, id: postId})
       ]);
     } catch (err) {
       failureLog(err);

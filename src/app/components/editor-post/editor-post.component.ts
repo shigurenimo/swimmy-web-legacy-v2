@@ -7,8 +7,6 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { UploadFile } from 'ng-zorro-antd';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, mergeMap } from 'rxjs/operators';
-
-import { FunctionsService } from '../../services/functions.service';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
@@ -17,24 +15,13 @@ import { PostsService } from '../../services/posts.service';
   styleUrls: ['./editor-post.component.css']
 })
 export class EditorPostComponent implements OnInit {
-  private messageId = null;
-
   public formGroup: FormGroup;
-
-  public nzAutosize = { minRows: 1, maxRows: 6 };
-
+  public nzAutosize = {minRows: 1, maxRows: 6};
   public nzPlaceHolder = 'もしもし';
-
-  public uploadText = 'アップロード中..';
-
-  public mutateText = '送信中..';
-
   public fileList: UploadFile[] = [];
-
   public isMutation = false;
 
-  constructor (
-    private fns: FunctionsService,
+  constructor(
     private formBuilder: FormBuilder,
     private posts: PostsService,
     public afAuth: AngularFireAuth,
@@ -42,16 +29,19 @@ export class EditorPostComponent implements OnInit {
     private afStore: AngularFirestore) {
   }
 
-  private resetFormGroup () {
-    this.formGroup.reset({ content: '' });
+  private resetFormGroup() {
+    this.formGroup.reset({content: ''});
+    this.fileList = [];
   }
 
-  public get content () {
+  public get content() {
     return this.formGroup.get('content');
   }
 
-  public onAddPost () {
-    if (this.isMutation) { return; }
+  public onAddPost() {
+    if (this.isMutation) {
+      return;
+    }
 
     this.isMutation = true;
 
@@ -100,25 +90,25 @@ export class EditorPostComponent implements OnInit {
     });
   }
 
-  public uploadImage (file) {
+  public uploadImage(file) {
     const originFileObj = file.originFileObj;
     const photoId = this.afStore.createId();
     const filePath = `posts/${photoId}`;
     const task = this.afStorage.upload(filePath, originFileObj);
     const downloadURL$ = task.downloadURL();
     const map$ = map((photoURL) => {
-      return { photoURL, photoId };
+      return {photoURL, photoId};
     });
     return downloadURL$.pipe(map$);
   }
 
-  public ngOnInit () {
+  public ngOnInit() {
     this.formGroup = this.formBuilder.group({
       content: ['', [Validators.maxLength(200)]]
     });
   }
 
-  private markAsDirty () {
+  private markAsDirty() {
     this.formGroup.controls.content.markAsDirty();
   }
 }

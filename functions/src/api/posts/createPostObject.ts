@@ -22,6 +22,7 @@ export const createPostObject = (root) => {
         count: tag.count
       };
     }),
+    typeReply: !!root.replyPostId,
     typeThread: root.repliedPostCount > 0,
     typePhoto: Object.keys(root.photoURLs || []).length > 0,
     updatedAt: root.updatedAt / 1

@@ -70,8 +70,6 @@ export const updatePostTag = (input, user) => {
         !!userPostTagsSnapshot.data() &&
         !!userPostTagsSnapshot.data()[tagId];
 
-      console.log('userPostTagExists', userPostTagExists);
-
       // Postに同じ名前のタグが存在する
       if (postTagExists) {
         // 既にユーザが持っている

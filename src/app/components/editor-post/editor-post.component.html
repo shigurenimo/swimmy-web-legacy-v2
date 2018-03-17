@@ -1,7 +1,8 @@
 <form nz-form [formGroup]='formGroup'>
 
   <div nz-form-control>
-    <nz-input formControlName='content'
+    <nz-input
+      formControlName='content'
       nzType='textarea'
       [nzAutosize]='nzAutosize'
       [nzPlaceHolder]='nzPlaceHolder'
@@ -33,7 +34,6 @@
   </div>
 
   <div *ngIf='fileList[0]' class='images'>
-
     <nz-avatar
       *ngFor='let file of fileList'
       class='image-avater'
@@ -41,7 +41,5 @@
       nzSize='large'
       [nzSrc]='file.thumbUrl'>
     </nz-avatar>
-
   </div>
-
 </form>

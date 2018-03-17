@@ -58,7 +58,8 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
 
     const repliedPosts$ = this.posts.observeRepliedPosts(postId);
     this.repliedPosts$$ = repliedPosts$.subscribe(({data}) => {
-      this.repliedPosts = data.posts.nodes
+      if (!data.posts) return;
+      this.repliedPosts = data.posts.nodes;
     }, (err) => {
       this.onCatchError(err);
     });
@@ -78,6 +79,8 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
       this.params$$.unsubscribe();
     }
     this.authState$$.unsubscribe();
+    this.posts$$.unsubscribe();
+    this.repliedPosts$$.unsubscribe();
   }
 
   public ngOnInit() {

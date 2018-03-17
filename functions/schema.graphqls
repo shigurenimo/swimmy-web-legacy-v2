@@ -19,6 +19,7 @@ enum PostOrderField {
 enum PostType {
   THREAD
   PHOTO
+  REPLY
   NONE
 }
 

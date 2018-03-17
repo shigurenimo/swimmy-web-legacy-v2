@@ -83,7 +83,7 @@ export const queryPhotoPosts = gql`
 
 export const queryRepliedPosts = gql`
   query posts($replyPostId: ID) {
-    posts(limit: 40, replyPostId: $replyPostId) {
+    posts(type: REPLY, limit: 40, replyPostId: $replyPostId) {
       nodes {
         id
         content

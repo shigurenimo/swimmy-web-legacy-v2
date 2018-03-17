@@ -1,6 +1,6 @@
 <app-header [goBack]="true">
   <ng-template #title *ngIf="post">
-    {{post.id}}
+    スレッド
   </ng-template>
 </app-header>
 
@@ -26,23 +26,25 @@
   </div>
 
   <div class="template-editor">
-    <app-card-reply-new></app-card-reply-new>
+    <app-card-reply-new [repliedPostId]="post.id">
+    </app-card-reply-new>
   </div>
 
   <div class="template-replied-posts">
-    <app-card-post
-      *ngFor="let node of repliedPosts"
-      [content]="node.content"
-      [createdAt]="node.createdAt"
-      [id]="node.id"
-      [photoURLs]="node.photoURLs"
-      [ownerId]="node.ownerId"
-      [owner]="node.owner"
-      [repliedPostIds]="node.repliedPostIds"
-      [replyPostIds]="node.replyPostIds"
-      [tags]="node.tags"
-      [updatedAt]="node.updatedAt"
-      [isLogged]="isLogged">
-    </app-card-post>
+    <div class="card" *ngFor="let node of repliedPosts">
+      <app-card-post
+        [content]="node.content"
+        [createdAt]="node.createdAt"
+        [id]="node.id"
+        [photoURLs]="node.photoURLs"
+        [ownerId]="node.ownerId"
+        [owner]="node.owner"
+        [repliedPostIds]="node.repliedPostIds"
+        [replyPostIds]="node.replyPostIds"
+        [tags]="node.tags"
+        [updatedAt]="node.updatedAt"
+        [isLogged]="isLogged">
+      </app-card-post>
+    </div>
   </div>
 </nz-content>
