@@ -11,6 +11,7 @@ export const getUserByUsername = (username) => {
     .firestore()
     .collection(USERS)
     .where('username', '==', username)
+    .limit(1)
     .get()
     .then((querySnapshot) => {
       if (querySnapshot.empty) {

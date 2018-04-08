@@ -3,12 +3,12 @@ const { readFileSync } = require('fs')
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 
-const {config} = require('./lib/config')
+const { config } = require('./lib/config')
 
 try {
   const dataStr = readFileSync('./config.json', 'utf-8')
   const data = JSON.parse(dataStr)
-  const { projectId } = functions.config().firebase
+  const projectId = process.env.GCLOUD_PROJECT
 
   config.algolia = data[projectId].algolia
   config.service = data[projectId].service

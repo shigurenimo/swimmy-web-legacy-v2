@@ -40,10 +40,10 @@ export const setPost = async (postId, input, owner) => {
 
   newPost.photoURLs = {};
 
-  input.photoURLs = input.photoURLs || [];
+  const photoURLLength = input.photoURLs.length
 
-  if (input.photoURLs[0]) {
-    for (let i = 0; i < input.photoURLs.length; ++i) {
+  if (photoURLLength) {
+    for (let i = 0; i < photoURLLength; ++i) {
       const {photoId, photoURL} = input.photoURLs[i];
       const data = await getPhotoURL('posts', photoId, photoURL);
       newPost.photoURLs[photoId] = data;
