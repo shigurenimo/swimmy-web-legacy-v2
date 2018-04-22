@@ -10,5 +10,6 @@ export const environment = {
     messagingSenderId: '105044844269'
   },
   function: 'https://us-central1-swimmy-171720.cloudfunctions.net',
-  graphql: 'https://us-central1-swimmy-171720.cloudfunctions.net/graphql/'
+  graphql: 'https://us-central1-swimmy-171720.cloudfunctions.net/graphql/',
+  enablePersistence: true
 };

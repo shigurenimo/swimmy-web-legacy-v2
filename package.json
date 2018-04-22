@@ -9,7 +9,7 @@
     "fns:serve": "firebase serve --only functions",
     "fns:shell": "firebase experimental:functions:shell",
     "ng": "ng",
-    "ng:build": "ng build --prod -cc -vc -ec --aot",
+    "ng:build": "ng build --prod --aot",
     "ng:e2e": "ng e2e",
     "ng:lint": "ng lint",
     "ng:serve": "ng serve --hmr -e=hmr --host=0.0.0.0",

@@ -18,7 +18,9 @@ if (!firebase.apps.length) {
   imports: [
     AngularFireAuthModule,
     AngularFireStorageModule,
-    AngularFirestoreModule,
+    environment.enablePersistence
+      ? AngularFirestoreModule.enablePersistence()
+      : AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase)
   ]
 })

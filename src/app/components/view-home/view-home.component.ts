@@ -7,7 +7,37 @@ import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-view-home',
-  templateUrl: './view-home.component.html',
+  template: `
+    <app-header>
+      <ng-template #body>
+        <app-editor-post></app-editor-post>
+      </ng-template>
+    </app-header>
+
+    <nz-content *ngIf="graphQLErrors.length || networkError">
+      <app-card-error-graphql *ngIf="graphQLErrors.length" [errors]="graphQLErrors">
+      </app-card-error-graphql>
+      <app-card-error-network *ngIf="networkError" [error]="networkError">
+      </app-card-error-network>
+    </nz-content>
+
+    <nz-content *ngIf="!graphQLErrors.length && !networkError">
+      <app-card-post
+        *ngFor="let node of posts"
+        type="listItem"
+        [content]="node.content"
+        [createdAt]="node.createdAt"
+        [id]="node.id"
+        [photoURLs]="node.photoURLs"
+        [ownerId]="node.ownerId"
+        [owner]="node.owner"
+        [repliedPostIds]="node.repliedPostIds"
+        [tags]="node.tags"
+        [updatedAt]="node.updatedAt"
+        [isLogged]="isLogged">
+      </app-card-post>
+    </nz-content>
+  `,
   styleUrls: ['./view-home.component.css']
 })
 export class ViewHomeComponent implements OnInit, OnDestroy {
@@ -43,9 +73,11 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     if (user) {
       this.isLogged = true;
     }
-    const posts$ = this.postsService.observePosts();
-    this.posts$$ = posts$.subscribe(({data}) => {
-      this.posts = data.posts.nodes;
+    const posts$ = this.postsService.observePosts((ref) => {
+      return ref.limit(70).orderBy('createdAt', 'desc')
+    })
+    this.posts$$ = posts$.subscribe((docs) => {
+      this.posts = docs;
     }, (err) => {
       this.onCatchError(err);
     });
