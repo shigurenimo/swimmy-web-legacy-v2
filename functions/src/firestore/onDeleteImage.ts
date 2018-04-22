@@ -1,12 +1,11 @@
 import * as functions from 'firebase-functions';
 
 import { deletePhotoURL } from '../api/microservices/deletePhotoURL';
-import { getEventData } from '../helpers/getEventData';
 
-export = functions.firestore
-  .document('images/{imageId}')
-  .onDelete(async (event) => {
-    const images = getEventData(event);
+const document = functions.firestore.document('images/{imageId}');
 
-    await deletePhotoURL(images.objectId);
-  })
+export = document.onDelete(async (snapshot) => {
+  const images = snapshot.data();
+
+  await deletePhotoURL(images.objectId);
+})

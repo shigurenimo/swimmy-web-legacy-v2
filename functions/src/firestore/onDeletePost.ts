@@ -4,22 +4,21 @@ import { deletePostObject } from '../api/posts/deletePostObject';
 import { updatePostRepliedPostCount } from '../api/posts/updatePostRepliedPostCount';
 import { deleteTags } from '../api/tags/deleteTags';
 import { deleteUserPost } from '../api/users-posts/deleteUserPost';
-import { getEventData } from '../helpers/getEventData';
 
-export = functions.firestore
-  .document('posts/{postId}')
-  .onDelete(async (event) => {
-    const post = getEventData(event);
+const document = functions.firestore.document('posts/{postId}');
 
-    const {postId} = event.params;
+export = document.onDelete(async (snapshot, context) => {
+  const post = snapshot.data();
 
-    await Promise.all([
-      post.ownerId &&
-      deleteUserPost(post.ownerId, postId),
-      deleteTags(post.tags),
-      post.replyPostId &&
-      updatePostRepliedPostCount(post.replyPostId, -1)
-    ]);
+  const { postId } = context.params;
 
-    await deletePostObject(postId);
-  })
+  await Promise.all([
+    post.ownerId &&
+    deleteUserPost(post.ownerId, postId),
+    deleteTags(post.tags),
+    post.replyPostId &&
+    updatePostRepliedPostCount(post.replyPostId, -1)
+  ]);
+
+  await deletePostObject(postId);
+})

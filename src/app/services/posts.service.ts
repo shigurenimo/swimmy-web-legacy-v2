@@ -102,7 +102,7 @@ export class PostsService {
   public observePosts() {
     return this.apollo.watchQuery<PostsResult>({
       query: queryPosts,
-      pollInterval: 10000
+      pollInterval: 120000
     }).valueChanges;
   }
 
@@ -117,7 +117,7 @@ export class PostsService {
   public observeRepliedPosts(replyPostId) {
     return this.apollo.watchQuery<PostsResult>({
       query: queryRepliedPosts,
-      pollInterval: 10000,
+      pollInterval: 120000,
       variables: {replyPostId}
     }).valueChanges;
   }

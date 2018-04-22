@@ -1,14 +1,13 @@
 import * as functions from 'firebase-functions';
 import { updatePostObject } from '../api/posts/updatePostObject';
 import { setUserPost } from '../api/users-posts/setUserPost';
-import { getEventData } from '../helpers/getEventData';
 
 export = functions.firestore
   .document('posts/{postId}')
-  .onUpdate(async (event) => {
-    const {postId} = event.params;
+  .onUpdate(async (snapshot, context) => {
+    const { postId } = context.params;
 
-    const {current: post} = getEventData(event);
+    const post = snapshot.after.data();
 
     await Promise.all([
       post.ownerId &&
