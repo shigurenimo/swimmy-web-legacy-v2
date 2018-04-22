@@ -55,6 +55,7 @@ const filter = (request, response, next) => {
       }
     }
   }
+
   next();
 };
 

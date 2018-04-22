@@ -65,10 +65,6 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./lib/https/graphql')
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'graphiql') {
-  exports.graphiql = require('./lib/https/graphiql')
-}
-
 if (!FUNCTION_NAME || FUNCTION_NAME === 'restoreUser') {
   exports.restoreUser = require('./lib/https/restoreUser')
 }
