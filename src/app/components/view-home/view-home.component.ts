@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { Post } from '../../interfaces/Post';
+import { Post } from '../../interfaces/post';
 import { PostsService } from '../../services/posts.service';
 
 @Component({

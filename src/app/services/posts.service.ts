@@ -5,7 +5,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
 import { Post } from '../interfaces/post';
-import { PostsResult } from '../interfaces/Post';
+import { PostsResult } from '../interfaces/post';
 
 import { queryPhotoPosts, queryPost, queryPosts, queryRepliedPosts, queryThreadPosts } from '../queries/posts';
 import { mutationUpdatePostTag } from '../queries/updatePostTag';
