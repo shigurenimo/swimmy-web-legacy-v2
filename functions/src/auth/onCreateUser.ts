@@ -6,7 +6,6 @@ const document = functions.auth.user();
 
 export = document.onCreate(async (user) => {
   if (user.disabled) {
-    console.log('user.disabled');
     return Promise.resolve();
   }
 

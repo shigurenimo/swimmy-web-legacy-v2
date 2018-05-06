@@ -58,11 +58,13 @@ export class PostsService {
         }
       `,
       variables: { input },
+      /*
       update: (store, { data: { addPost: newPost } }) => {
         const data = store.readQuery({ query: queryPosts }) as any;
         data.posts.nodes.unshift(newPost);
         store.writeQuery({ query: queryPosts, data });
       }
+      */
     });
   }
 
@@ -93,6 +95,7 @@ export class PostsService {
         }
       `,
       variables: { input: { ...input, replyPostId } },
+      /*
       update: (store, { data: { addPost: newPost } }) => {
         const query = queryRepliedPosts;
         const variables = { replyPostId };
@@ -100,6 +103,7 @@ export class PostsService {
         data.posts.nodes.unshift(newPost);
         store.writeQuery({ query, variables, data });
       }
+      */
     });
   }
 
@@ -161,6 +165,7 @@ export class PostsService {
         }
       `,
       variables: { id },
+      /*
       update: (store, { data: { deletePost: nodeId } }) => {
         const query = queryRepliedPosts;
         const variables = { replyPostId };
@@ -173,6 +178,7 @@ export class PostsService {
         });
         store.writeQuery({ query, variables, data });
       }
+      */
     });
   }
 }

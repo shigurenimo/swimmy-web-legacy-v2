@@ -25,7 +25,7 @@ export const updatePostObjects = async (posts) => {
   try {
     await index.saveObjects(objects);
   } catch (e) {
-    console.log('ERROR!');
+    console.error('ERROR!');
     e;
   }
 };

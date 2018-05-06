@@ -153,7 +153,6 @@ export class EditorPostComponent implements OnInit {
     }
 
     $mutation.subscribe(() => {
-      console.log('reset');
       this.resetFormGroup();
       this.isMutation = false;
     }, (err) => {
