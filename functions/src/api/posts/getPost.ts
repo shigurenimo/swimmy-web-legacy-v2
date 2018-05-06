@@ -1,24 +1,21 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
 import { POSTS } from '../../constants';
 
-export const getPost = (postId) => {
-  if (!postId) {
+export const getPost = async (postId: string) => {
+  if (typeof postId === 'undefined') {
     throw new Error('postId not found');
   }
 
-  return admin
-    .firestore()
-    .collection(POSTS)
-    .doc(postId)
-    .get()
-    .then((snapshot) => {
-      if (!snapshot.exists) {
-        throw new Error(`post(${postId}) not found`);
-      }
+  const ref = firestore().collection(POSTS).doc(postId);
 
-      const data = snapshot.data();
+  const snapshot = await ref.get();
 
-      return {...data, id: snapshot.id};
-    });
+  if (!snapshot.exists) {
+    throw new Error(`post(${postId}) not found`);
+  }
+
+  const data = snapshot.data();
+
+  return { ...data, id: snapshot.id };
 };

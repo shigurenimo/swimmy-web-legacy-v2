@@ -1,29 +1,21 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
 import { TAGS } from '../../constants/index';
 
-/**
- * Get /tags/{tagId}
- * @param {string} tagId
- * @return {Promise}
- */
-export const getTag = (tagId) => {
-  if (!tagId) {
+export const getTag = async (tagId: string) => {
+  if (typeof tagId === 'undefined') {
     throw new Error('postId not found');
   }
 
-  return admin
-    .firestore()
-    .collection(TAGS)
-    .doc(tagId)
-    .get()
-    .then((snapshot) => {
-      if (!snapshot.exists) {
-        throw new Error(`tag(${tagId}) not found`);
-      }
+  const ref = firestore().collection(TAGS).doc(tagId);
 
-      const data = snapshot.data();
+  const snapshot = await ref.get();
 
-      return Object.assign(data, {id: snapshot.id});
-    });
+  if (!snapshot.exists) {
+    throw new Error(`tag(${tagId}) not found`);
+  }
+
+  const data = snapshot.data();
+
+  return { ...data, id: snapshot.id };
 };

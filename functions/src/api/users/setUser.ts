@@ -1,8 +1,8 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-import { USERS } from '../../constants/index';
+import { USERS } from '../../constants';
 
-export const setUser = (uid, input) => {
+export const setUser = (uid: string, input) => {
   if (!input) {
     throw new Error('input not found');
   }
@@ -13,23 +13,21 @@ export const setUser = (uid, input) => {
 
   const createdAt = new Date();
 
-  return admin
-    .firestore()
-    .collection(USERS)
-    .doc(uid)
-    .set({
-      uid: uid,
-      comment: '',
-      createdAt: createdAt,
-      description: '',
-      username: input.email.match(/^[^@]+/)[0],
-      displayName: input.email.match(/^[^@]+/)[0],
-      followeeCount: 0,
-      followerCount: 0,
-      headerPhotoURL: '',
-      links: [],
-      photoURL: '',
-      postCount: 0,
-      updatedAt: createdAt
-    });
+  const ref = firestore().collection(USERS).doc(uid);
+
+  ref.set({
+    uid: uid,
+    comment: '',
+    createdAt: createdAt,
+    description: '',
+    username: input.email.match(/^[^@]+/)[0],
+    displayName: input.email.match(/^[^@]+/)[0],
+    followeeCount: 0,
+    followerCount: 0,
+    headerPhotoURL: '',
+    links: [],
+    photoURL: '',
+    postCount: 0,
+    updatedAt: createdAt
+  });
 };

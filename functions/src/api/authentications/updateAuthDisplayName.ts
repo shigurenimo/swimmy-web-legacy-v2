@@ -1,6 +1,11 @@
-import * as admin from 'firebase-admin';
+import { auth } from 'firebase-admin';
 
-export const updateAuthDisplayName = (uid, input) => {
+interface Input {
+  displayName: string,
+  photoURL: string
+}
+
+export const updateAuthDisplayName = async (uid: string, input: Input): Promise<void> => {
   if (!input) {
     throw new Error('input not found');
   }
@@ -13,11 +18,11 @@ export const updateAuthDisplayName = (uid, input) => {
     throw new Error('input.photoURL not found');
   }
 
-  if (!uid) {
+  if (typeof uid === 'undefined') {
     throw new Error('uid not found');
   }
 
-  return admin.auth().updateUser(uid, {
+  await auth().updateUser(uid, {
     displayName: input.displayName,
     photoURL: input.photoURL
   });

@@ -1,7 +1,7 @@
 import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
-import { USERS } from '../../constants/index';
+import { USERS } from '../../constants';
 import { createUserObject } from './createUserObject';
 
 export const updateUserObject = async (objectID, user) => {

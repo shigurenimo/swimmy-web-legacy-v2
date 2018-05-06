@@ -1,4 +1,4 @@
-export const createPostObject = (objectID, root) => {
+export const createPostObject = (objectID: string, root) => {
   return {
     objectID: objectID,
     id: objectID,

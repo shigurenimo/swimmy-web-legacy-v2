@@ -9,9 +9,7 @@ const document = functions.firestore.document('users/{uid}');
 
 export = document.onUpdate(async (snaphost, context) => {
   const { uid } = context.params;
-
   const user = snaphost.after.data();
-
   const userBefore = snaphost.before.data();
 
   if (isUnchangedOwner(user, userBefore)) {

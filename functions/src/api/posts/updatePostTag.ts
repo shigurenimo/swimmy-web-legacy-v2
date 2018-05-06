@@ -1,38 +1,17 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-import { POST_TAGS, POSTS, TAGS, USERS } from '../../constants/index';
+import { POST_TAGS, POSTS, TAGS, USERS } from '../../constants';
 import { createPostObject } from './createPostObject';
 
-/**
- * Update /posts/{postId}-tags
- * @param {Object} input
- * @param {Object} user
- * @return {Promise<any> | *}
- */
 export const updatePostTag = (input, user) => {
-  return admin.firestore().runTransaction((t) => {
-    const newTagId = admin
-      .firestore()
-      .collection(TAGS)
-      .doc()
-      .id;
+  return firestore().runTransaction((t) => {
+    const newTagId = firestore().collection(TAGS).doc().id;
 
-    const postRef = admin
-      .firestore()
-      .collection(POSTS)
-      .doc(input.postId);
+    const postRef = firestore().collection(POSTS).doc(input.postId);
 
-    const userPostTagsRef = admin
-      .firestore()
-      .collection(USERS)
-      .doc(user.uid)
-      .collection(POST_TAGS)
-      .doc(input.postId);
+    const userPostTagsRef = firestore().collection(USERS).doc(user.uid).collection(POST_TAGS).doc(input.postId);
 
-    const tagNameRef = admin
-      .firestore()
-      .collection(TAGS)
-      .where('name', '==', input.name);
+    const tagNameRef = firestore().collection(TAGS).where('name', '==', input.name);
 
     return Promise.all([
       t.get(postRef),
@@ -85,7 +64,7 @@ export const updatePostTag = (input, user) => {
           }
 
           t.update(userPostTagsRef, {
-            [tagId]: admin.firestore.FieldValue.delete()
+            [tagId]: firestore.FieldValue.delete()
           });
         }
 
@@ -98,7 +77,7 @@ export const updatePostTag = (input, user) => {
             [tagId]: {
               createdAt: createdAt
             }
-          }, {merge: true});
+          }, { merge: true });
         }
 
         t.update(postRef, {
@@ -112,7 +91,7 @@ export const updatePostTag = (input, user) => {
           [tagId]: {
             createdAt: createdAt
           }
-        }, {merge: true});
+        }, { merge: true });
 
         postTags[tagId] = postTag;
 
@@ -124,10 +103,7 @@ export const updatePostTag = (input, user) => {
       // タグが存在する
       if (tagExists) {
         const tag = tagSnapshot.data();
-        const tagRef = admin
-          .firestore()
-          .collection(TAGS)
-          .doc(tagSnapshot.id);
+        const tagRef = firestore().collection(TAGS).doc(tagSnapshot.id);
         const count = tag.count + (userPostTagExists ? -1 : 1);
         if (count < 1) {
           if (tag.name !== 'スキ') {
@@ -143,10 +119,7 @@ export const updatePostTag = (input, user) => {
 
       // タグが存在しない
       if (!tagExists) {
-        const tagRef = admin
-          .firestore()
-          .collection(TAGS)
-          .doc(tagId);
+        const tagRef = firestore().collection(TAGS).doc(tagId);
         t.set(tagRef, postTag);
       }
 
@@ -163,7 +136,7 @@ export const updatePostTag = (input, user) => {
 
       const newPost = createPostObject(postSnapshot.id, post);
 
-      return {...newPost, id: postSnapshot.id};
+      return { ...newPost, id: postSnapshot.id };
     });
   });
 };

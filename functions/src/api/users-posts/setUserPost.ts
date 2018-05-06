@@ -1,15 +1,8 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-import { POSTS, USERS } from '../../constants/index';
+import { POSTS, USERS } from '../../constants';
 
-/**
- * Set /users/{uid}/posts/{postId}
- * @param {string} uid
- * @param {string} postId
- * @param {Object} post
- * @return {Promise}
- */
-export const setUserPost = (uid, postId, post) => {
+export const setUserPost = async (uid: string, postId: string, post) => {
   if (!post) {
     throw new Error('post not found');
   }
@@ -22,11 +15,7 @@ export const setUserPost = (uid, postId, post) => {
     throw new Error('uid not found');
   }
 
-  return admin
-    .firestore()
-    .collection(USERS)
-    .doc(uid)
-    .collection(POSTS)
-    .doc(postId)
-    .set(post);
+  const ref = firestore().collection(USERS).doc(uid).collection(POSTS).doc(postId);
+
+  await ref.set(post);
 };

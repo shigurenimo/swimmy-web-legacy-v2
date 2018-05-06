@@ -1,15 +1,14 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-const {USERS} = require('../../constants/index');
+import { USERS } from '../../constants';
 
-export const getUsers = (query) => {
-  return admin.firestore()
-    .collection(USERS)
-    .get()
-    .then(({docs}) => {
-      return docs.map((snapshot) => {
-        const doc = snapshot.data();
-        return Object.assign(doc, {id: snapshot.id});
-      });
-    });
+export const getUsers = async (query) => {
+  const ref = firestore().collection(USERS);
+
+  const { docs } = await ref.get();
+
+  return docs.map((snapshot) => {
+    const doc = snapshot.data();
+    return Object.assign(doc, { id: snapshot.id });
+  });
 };

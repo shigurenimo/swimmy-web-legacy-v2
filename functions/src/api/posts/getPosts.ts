@@ -1,4 +1,4 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
 import { POSTS } from '../../constants';
 import { DESC } from '../../constants/query';
@@ -10,11 +10,11 @@ export const getPosts = async (args) => {
       direction: 'DESC',
       field: 'createdAt'
     },
-    type = 'NONE',
+    type,
     startAfter
   } = args;
 
-  let ref = admin.firestore().collection(POSTS) as any;
+  let ref = firestore().collection(POSTS) as any;
 
   ref = ref.orderBy(orderBy.field, orderBy.direction);
 
@@ -30,10 +30,7 @@ export const getPosts = async (args) => {
   }
 
   if (startAfter) {
-    const prevSnapshot = await admin.firestore()
-      .collection(POSTS)
-      .doc(startAfter)
-      .get();
+    const prevSnapshot = await firestore().collection(POSTS).doc(startAfter).get();
     ref = ref.startAfter(prevSnapshot);
   }
 
@@ -58,7 +55,7 @@ export const getPosts = async (args) => {
       };
     });
 
-    return {...data, id: snapshot.id};
+    return { ...data, id: snapshot.id };
   });
 
   return posts;

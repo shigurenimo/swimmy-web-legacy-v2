@@ -9,7 +9,6 @@ const document = functions.firestore.document('posts/{postId}');
 
 export = document.onDelete(async (snapshot, context) => {
   const post = snapshot.data();
-
   const { postId } = context.params;
 
   await Promise.all([

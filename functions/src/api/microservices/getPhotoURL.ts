@@ -5,7 +5,7 @@ import { config } from '../../config';
 import { getStorageURL } from '../../helpers/getStorageURL';
 import { setImage } from '../images/setImage';
 
-export const getPhotoURL = async (collection, photoId, downloadURL) => {
+export const getPhotoURL = async (collection: string, photoId: string, downloadURL: string) => {
   const objectId = `${collection}/${photoId}`;
 
   const storageURL = getStorageURL(objectId);
@@ -21,7 +21,7 @@ export const getPhotoURL = async (collection, photoId, downloadURL) => {
     return simple;
   }
 
-  const {projectId} = functions.config().firebase;
+  const { projectId } = functions.config().firebase;
 
   const res = await fetch(config.service.images, {
     method: 'POST',
@@ -29,29 +29,23 @@ export const getPhotoURL = async (collection, photoId, downloadURL) => {
       bucketID: `${projectId}.appspot.com`,
       objectID: objectId
     }),
-    headers: {'Content-Type': 'application/json'}
+    headers: { 'Content-Type': 'application/json' }
   });
 
   if (!res.ok) {
     return simple;
   }
 
-  try {
-    const {data} = await res.json();
+  const { data } = await res.json();
 
-    const image = {
-      objectId: objectId,
-      photoURL: data,
-      downloadURL,
-      storageURL
-    };
+  const image = {
+    objectId: objectId,
+    photoURL: data,
+    downloadURL,
+    storageURL
+  };
 
-    await setImage(photoId, image);
+  await setImage(photoId, image);
 
-    return image;
-  } catch (err) {
-    console.error(err);
-  }
-
-  return simple;
+  return image;
 };

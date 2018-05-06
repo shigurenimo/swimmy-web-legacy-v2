@@ -1,27 +1,22 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-import { USERS } from '../../constants/index';
+import { USERS } from '../../constants';
 
-export const getUserByUsername = (username) => {
+export const getUserByUsername = async (username) => {
   if (!username) {
     throw new Error('username not found');
   }
 
-  return admin
-    .firestore()
-    .collection(USERS)
-    .where('username', '==', username)
-    .limit(1)
-    .get()
-    .then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        throw new Error(`user (${username}) not found`);
-      }
+  const ref = firestore().collection(USERS).where('username', '==', username).limit(1);
 
-      const snapshot = querySnapshot.docs[0];
+  const querySnapshot = await ref.get();
+  if (querySnapshot.empty) {
+    throw new Error(`user (${username}) not found`);
+  }
 
-      const data = snapshot.data();
+  const snapshot = querySnapshot.docs[0];
 
-      return {...data, id: snapshot.id};
-    });
+  const data = snapshot.data();
+
+  return { ...data, id: snapshot.id };
 };

@@ -1,21 +1,15 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
 import { IMAGES } from '../../constants/index';
 
-/**
- * Delete /images/{imageId}
- * @param {string} imageId
- */
-export const deleteImage = (imageId) => {
-  if (!imageId) {
+export const deleteImage = async (imageId: string): Promise<string> => {
+  if (typeof imageId === 'undefined') {
     throw new Error('imageId not found');
   }
 
-  return admin.firestore()
-    .collection(IMAGES)
-    .doc(imageId)
-    .delete()
-    .then(() => {
-      return imageId;
-    });
+  const ref = firestore().collection(IMAGES).doc(imageId);
+
+  await ref.delete();
+
+  return imageId;
 };

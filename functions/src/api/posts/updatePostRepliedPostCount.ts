@@ -1,16 +1,13 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 import { POSTS } from '../../constants';
 
-export const updatePostRepliedPostCount = async (postId, count = 1) => {
+export const updatePostRepliedPostCount = async (postId: string, count = 1) => {
   if (!postId) {
     throw new Error('postId not found');
   }
 
-  await admin.firestore().runTransaction(async (t) => {
-    const postRef = admin
-      .firestore()
-      .collection(POSTS)
-      .doc(postId);
+  await firestore().runTransaction(async (t) => {
+    const postRef = firestore().collection(POSTS).doc(postId);
 
     const postSnapshot = await t.get(postRef);
 
@@ -19,6 +16,6 @@ export const updatePostRepliedPostCount = async (postId, count = 1) => {
     const post = postSnapshot.data();
     const repliedPostCount = post.repliedPostCount + count;
 
-    t.update(postRef, {repliedPostCount});
+    t.update(postRef, { repliedPostCount });
   });
 };

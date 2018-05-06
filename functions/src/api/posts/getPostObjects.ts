@@ -1,7 +1,6 @@
 import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
-
 import { PHOTOS, POSTS, THREADS } from '../../constants';
 
 export const getPostObjects = async (args) => {
@@ -35,8 +34,6 @@ export const getPostObjects = async (args) => {
       index = client.initIndex(POSTS);
       break;
   }
-
-  console.log(query);
 
   const posts = await index.search({
     query,

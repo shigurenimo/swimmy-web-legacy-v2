@@ -13,10 +13,11 @@ import { resolvers } from '../resolvers';
 
 const typeDefsFile = join(__dirname, '..', '..', 'schema.graphqls');
 const typeDefs = readFileSync(typeDefsFile, 'utf-8');
-const schema = makeExecutableSchema({typeDefs, resolvers});
+const resolverValidationOptions = { requireResolversForResolveType: false };
+const schema = makeExecutableSchema({ typeDefs, resolvers, resolverValidationOptions });
 
 const graphql = graphqlExpress(async (request, response) => {
-  const {authorization} = request.headers as any;
+  const { authorization } = request.headers as any;
 
   if (authorization) {
     try {
@@ -28,13 +29,13 @@ const graphql = graphqlExpress(async (request, response) => {
         uid: decodedToken.uid,
         email: decodedToken.email || ''
       };
-      return {schema, context: {user}};
+      return { schema, context: { user } };
     } catch (err) {
       failureResponse(response, err);
     }
   }
 
-  return {schema, context: {}};
+  return { schema, context: {} };
 });
 
 const filter = (request, response, next) => {

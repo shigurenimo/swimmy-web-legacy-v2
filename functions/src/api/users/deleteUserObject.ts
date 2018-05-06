@@ -1,7 +1,7 @@
 import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
-import { USERS } from '../../constants/index';
+import { USERS } from '../../constants';
 
 export const deleteUserObject = async (userId) => {
   const client = algoliasearch(config.algolia.appId, config.algolia.key);

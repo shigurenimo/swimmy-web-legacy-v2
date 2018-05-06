@@ -1,14 +1,8 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-import { POSTS } from '../../constants/index';
+import { POSTS } from '../../constants';
 
-/**
- * Delete /posts/{postId}
- * @param {string} postId
- * @param {Object} post
- * @param {Object} owner
- */
-export const deletePost = async (postId, post, owner) => {
+export const deletePost = async (postId: string, post, owner) => {
   if (!owner) {
     throw new Error('owner not found');
   }
@@ -25,5 +19,7 @@ export const deletePost = async (postId, post, owner) => {
     throw new Error('post.ownerId !== owner.uid');
   }
 
-  await admin.firestore().collection(POSTS).doc(postId).delete();
+  const ref = firestore().collection(POSTS).doc(postId);
+
+  await ref.delete();
 };

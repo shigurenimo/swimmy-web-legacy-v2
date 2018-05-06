@@ -1,7 +1,7 @@
 import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
-import { POSTS } from '../../constants/index';
+import { POSTS } from '../../constants';
 import { createPostObject } from './createPostObject';
 
 export const updatePostObject = async (objectID, post) => {

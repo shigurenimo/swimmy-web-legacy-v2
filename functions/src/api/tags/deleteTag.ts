@@ -1,39 +1,28 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-import { TAGS } from '../../constants/index';
+import { TAGS } from '../../constants';
 
-/**
- * Delete /tags/{tagId}
- * @param {Object} tag
- * @return {Promise}
- */
 export const deleteTag = (tag) => {
-  return admin.firestore().runTransaction((t) => {
-    const findRef = admin
-      .firestore()
-      .collection(TAGS)
-      .where('name', '==', tag.name);
+  return firestore().runTransaction(async (t) => {
+    const findRef = firestore().collection(TAGS).where('name', '==', tag.name);
 
-    return t.get(findRef).then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        return;
-      }
+    const querySnapshot = await t.get(findRef);
 
-      const snapshot = querySnapshot.docs[0];
+    if (querySnapshot.empty) {
+      return;
+    }
 
-      const data = snapshot.data();
+    const snapshot = querySnapshot.docs[0];
 
-      const ref = admin
-        .firestore()
-        .collection(TAGS)
-        .doc(snapshot.id);
+    const data = snapshot.data();
 
-      t.set(ref, {
-        name: tag.name,
-        count: Number(data.count || 0) - 1
-      }, {
-        merge: true
-      });
+    const ref = firestore().collection(TAGS).doc(snapshot.id);
+
+    t.set(ref, {
+      name: tag.name,
+      count: Number(data.count || 0) - 1
+    }, {
+      merge: true
     });
   });
 };

@@ -1,24 +1,19 @@
-import * as admin from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
-import { TAGS } from '../../constants/index';
+import { TAGS } from '../../constants';
 import { DESC } from '../../constants/query';
 
-/**
- * Get /tags
- * @return {Promise}
- */
-export const getTags = ({limit}) => {
-  return admin
-    .firestore()
+export const getTags = async ({ limit }) => {
+  const ref = firestore()
     .collection(TAGS)
     .orderBy('createdAt', DESC)
-    .limit(limit)
-    .get()
-    .then((snapshots) => {
-      return snapshots.docs.map((snapshot) => {
-        const data = snapshot.data();
+    .limit(limit);
 
-        return Object.assign(data, {id: snapshot.id});
-      });
-    });
+  const snapshots = await ref.get();
+
+  return snapshots.docs.map((snapshot) => {
+    const data = snapshot.data();
+
+    return { ...data, id: snapshot.id };
+  });
 };
