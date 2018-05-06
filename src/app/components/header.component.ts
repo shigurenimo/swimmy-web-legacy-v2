@@ -29,7 +29,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
             routerLinkActive='ant-menu-item-selected'>
             <span [class]='link.iconClass'></span>
           </li>
-
           <li
             *ngIf='uid'
             nz-menu-item
@@ -39,22 +38,17 @@ import { AngularFireAuth } from 'angularfire2/auth';
             <span class='anticon anticon-user'></span>
           </li>
         </ul>
-
         <span class='flex-space'></span>
-
-        <!-- ログインしている -->
         <span nz-col class='user' routerLink='/settings' *ngIf='uid'>
-      <button nz-button nzShape='circle' nzSize='large'>
-        <span class='anticon anticon-setting'></span>
-      </button>
-    </span>
-
-        <!-- ログインしていない -->
+        <button nz-button nzShape='circle' nzSize='large'>
+          <span class='anticon anticon-setting'></span>
+        </button>
+        </span>
         <span nz-col class='user' routerLink='/login' *ngIf='!uid'>
-      <button nz-button nzShape='circle' nzSize='large'>
-        <span class='anticon anticon-poweroff'></span>
-      </button>
-    </span>
+          <button nz-button nzShape='circle' nzSize='large'>
+            <span class='anticon anticon-poweroff'></span>
+          </button>
+        </span>
       </div>
     </div>
 
@@ -140,13 +134,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     {
       routerLink: ['/'],
       iconClass: 'anticon anticon-home'
-    }, {
+    } /*, {
       routerLink: ['/images'],
       iconClass: 'anticon anticon-camera'
     }, {
       routerLink: ['/threads'],
       iconClass: 'anticon anticon-message'
-    }];
+    }
+    */
+  ];
   public uid = null;
   public username = null;
 
