@@ -2,7 +2,7 @@ import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
 import { POSTS } from '../../constants';
-import { getTime } from '../../helpers/getTime';
+import { getTime } from '../../utils/getTime';
 
 export const getPostObject = async (id: string) => {
   const client = algoliasearch(config.algolia.appId, config.algolia.key);

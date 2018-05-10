@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin';
 
 import { POST_TAGS, POSTS, TAGS, USERS } from '../../constants';
-import { createPostObject } from './createPostObject';
+import { createPostObject } from '../../models/posts/createPostObject';
 
 export const updatePostTag = (input, user) => {
   return firestore().runTransaction((t) => {

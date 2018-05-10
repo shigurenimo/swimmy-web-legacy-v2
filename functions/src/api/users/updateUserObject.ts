@@ -2,7 +2,7 @@ import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
 import { USERS } from '../../constants';
-import { createUserObject } from './createUserObject';
+import { createUserObject } from '../../models/users/createUserObject';
 
 export const updateUserObject = async (objectID, user) => {
   const object = createUserObject(objectID, user);

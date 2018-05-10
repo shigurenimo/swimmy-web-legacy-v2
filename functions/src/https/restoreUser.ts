@@ -4,8 +4,8 @@ import * as crypto from 'crypto';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import { failureResponse } from '../helpers/failureResponse';
-import { successResponse } from '../helpers/successResponse';
+import { failureResponse } from '../utils/failureResponse';
+import { successResponse } from '../utils/successResponse';
 
 export = functions.https.onRequest((request, response) => {
   return cors({origin: true})(request, response, () => {

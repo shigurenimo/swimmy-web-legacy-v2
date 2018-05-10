@@ -1,4 +1,4 @@
-import { getPhotoURL } from '../microservices/getPhotoURL';
+import { getPhotoURL } from '../../api/microservices/getPhotoURL';
 
 export const createUpdateUser = (uid: string, input) => {
   const updatedAt = new Date();

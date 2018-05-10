@@ -1,14 +1,14 @@
-import { createPost } from '../api/posts/createPost';
-import { createPostObject } from '../api/posts/createPostObject';
+import { createPost } from '../models/posts/createPost';
+import { createPostObject } from '../models/posts/createPostObject';
 import { deletePost } from '../api/posts/deletePost';
 import { getPost } from '../api/posts/getPost';
 import { getPosts } from '../api/posts/getPosts';
 import { setPost } from '../api/posts/setPost';
 import { updatePostObjects } from '../api/posts/updatePostObjects';
 import { updatePostTag } from '../api/posts/updatePostTag';
-import { createUpdateUser } from '../api/users/createUpdateUser';
+import { createUpdateUser } from '../models/users/createUpdateUser';
 import { updateUser } from '../api/users/updateUser';
-import { createId } from '../helpers/createId';
+import { createId } from '../utils/createId';
 
 export const Mutation = {
   async addPost (root, { input }, context) {

@@ -2,7 +2,7 @@ import * as algoliasearch from 'algoliasearch';
 
 import { config } from '../../config';
 import { POSTS } from '../../constants';
-import { createPostObject } from './createPostObject';
+import { createPostObject } from '../../models/posts/createPostObject';
 
 export const updatePostObjects = async (posts) => {
   if (!posts) {

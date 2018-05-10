@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import { updateAuthDisplayName } from '../api/authentications/updateAuthDisplayName';
 import { deleteImage } from '../api/images/deleteImage';
 import { updateUserObject } from '../api/users/updateUserObject';
-import { isUnchangedOwner } from '../helpers/isUnchangedOwner';
+import { isUnchangedOwner } from '../utils/isUnchangedOwner';
 
 const document = functions.firestore.document('users/{uid}');
 

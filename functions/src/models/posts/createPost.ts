@@ -1,4 +1,4 @@
-import { getPhotoURL } from '../microservices/getPhotoURL';
+import { getPhotoURL } from '../../api/microservices/getPhotoURL';
 
 export const createPost = async (postId: string, input, owner) => {
   const createdAt = new Date();

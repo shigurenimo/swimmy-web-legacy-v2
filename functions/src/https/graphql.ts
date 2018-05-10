@@ -8,7 +8,7 @@ import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
 import { join } from 'path';
 
-import { failureResponse } from '../helpers/failureResponse';
+import { failureResponse } from '../utils/failureResponse';
 import { resolvers } from '../resolvers';
 
 const typeDefsFile = join(__dirname, '..', '..', 'schema.graphqls');

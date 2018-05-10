@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import fetch from 'node-fetch';
 
 import { config } from '../../config';
-import { getStorageURL } from '../../helpers/getStorageURL';
+import { getStorageURL } from '../../utils/getStorageURL';
 import { setImage } from '../images/setImage';
 
 export const getPhotoURL = async (collection: string, photoId: string, downloadURL: string) => {

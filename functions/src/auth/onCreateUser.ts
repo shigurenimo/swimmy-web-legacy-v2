@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import { updateAuthDisplayName } from '../api/authentications/updateAuthDisplayName';
-import { createUser } from '../api/users/createUser';
+import { createUser } from '../models/users/createUser';
 import { setUser } from '../api/users/setUser';
 
 const document = functions.auth.user();
