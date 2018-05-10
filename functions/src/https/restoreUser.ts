@@ -1,20 +1,22 @@
 import * as bcrypt from 'bcrypt';
 import * as cors from 'cors';
 import * as crypto from 'crypto';
-import * as admin from 'firebase-admin';
+import { auth, firestore } from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
 import { failureResponse } from '../utils/failureResponse';
 import { successResponse } from '../utils/successResponse';
 
 export = functions.https.onRequest((request, response) => {
-  return cors({origin: true})(request, response, () => {
+  return cors({ origin: true })(request, response, async () => {
     const args = getArguments(request.body);
-    return updateAuthentication(args.username, args.password).then((result) => {
-      return successResponse(response, result);
-    }).catch((err) => {
-      return failureResponse(response, err);
-    });
+
+    try {
+      const result = await updateAuthentication(args.username, args.password);
+      successResponse(response, result);
+    } catch (err) {
+      failureResponse(response, err);
+    }
   });
 })
 
@@ -25,45 +27,38 @@ const getArguments = (body) => {
   };
 };
 
-const updateAuthentication = (username, password) => {
-  return admin
-    .firestore()
-    .collection('users')
-    .where('username', '==', username)
-    .limit(1)
-    .get()
-    .then((snapshots) => {
-      const snapshot = snapshots.docs[0];
+const updateAuthentication = async (username, password) => {
+  const usersRef = firestore().collection('users');
 
-      if (!snapshot) {
-        return {valid: false, error: 'auth/user-disabled'};
-      }
+  const snapshots = await usersRef.where('username', '==', username).limit(1).get();
 
-      const user = snapshot.data();
+  const snapshot = snapshots.docs[0];
 
-      if (!user.bycript) {
-        return {valid: false, error: 'auth/user-disabled'};
-      }
+  if (!snapshot) {
+    return { valid: false, error: 'auth/user-disabled' };
+  }
 
-      const sha512 = crypto.createHash('sha256');
+  const user = snapshot.data();
 
-      sha512.update(password);
+  if (!user.bycript) {
+    return { valid: false, error: 'auth/user-disabled' };
+  }
 
-      const hash = sha512.digest('hex');
+  const sha512 = crypto.createHash('sha256');
 
-      return compare(hash, user.bycript).then((result) => {
-        if (!result) {
-          return {valid: false, error: 'auth/wrong-password'};
-        }
+  sha512.update(password);
 
-        return admin
-          .auth()
-          .updateUser(user.uid, {password, disabled: false})
-          .then(() => {
-            return {valid: true, error: null};
-          });
-      });
-    });
+  const hash = sha512.digest('hex');
+
+  const result = await compare(hash, user.bycript);
+
+  if (!result) {
+    return { valid: false, error: 'auth/wrong-password' };
+  }
+
+  await auth().updateUser(user.uid, { password, disabled: false });
+
+  return { valid: true, error: null };
 };
 
 const compare = (hash, bcryptHash) => {
