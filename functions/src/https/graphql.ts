@@ -3,13 +3,13 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as express from 'express';
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
+import { https } from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
 import { join } from 'path';
+import { resolvers } from '../resolvers';
 
 import { failureResponse } from '../utils/failureResponse';
-import { resolvers } from '../resolvers';
 
 const typeDefsFile = join(__dirname, '..', '..', 'schema.graphqls');
 const typeDefs = readFileSync(typeDefsFile, 'utf-8');
@@ -66,4 +66,4 @@ const app = express()
   .use(filter)
   .use(graphql);
 
-export = functions.https.onRequest(app)
+export = https.onRequest(app)

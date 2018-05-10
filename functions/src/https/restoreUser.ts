@@ -2,12 +2,12 @@ import * as bcrypt from 'bcrypt';
 import * as cors from 'cors';
 import * as crypto from 'crypto';
 import { auth, firestore } from 'firebase-admin';
-import * as functions from 'firebase-functions';
+import { https } from 'firebase-functions';
 
 import { failureResponse } from '../utils/failureResponse';
 import { successResponse } from '../utils/successResponse';
 
-export = functions.https.onRequest((request, response) => {
+export = https.onRequest((request, response) => {
   return cors({ origin: true })(request, response, async () => {
     const args = getArguments(request.body);
 

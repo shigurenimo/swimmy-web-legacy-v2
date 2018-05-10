@@ -7,7 +7,7 @@ export const createUser = (user) => {
 
   const input = {
     displayName: user.email.match(/^[^@]+/)[0]
-  };
+  } as any;
 
   const createdAt = new Date();
 

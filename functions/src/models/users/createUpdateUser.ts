@@ -1,6 +1,6 @@
 import { getPhotoURL } from '../../api/microservices/getPhotoURL';
 
-export const createUpdateUser = (uid: string, input) => {
+export const createUpdateUser = async (uid: string, input) => {
   const updatedAt = new Date();
 
   const newUser = {
@@ -23,8 +23,7 @@ export const createUpdateUser = (uid: string, input) => {
 
   if (input.photoURLs && input.photoURLs[0]) {
     const { photoId, photoURL } = input.photoURLs[0];
-    const data = await;
-    getPhotoURL('users', photoId, photoURL);
+    const data = await getPhotoURL('users', photoId, photoURL);
     newUser.photoURLs[photoId] = data;
     newUser.photoURL = data.photoURL;
   }

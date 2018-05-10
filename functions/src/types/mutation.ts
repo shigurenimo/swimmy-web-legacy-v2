@@ -1,21 +1,22 @@
-import { createPost } from '../models/posts/createPost';
-import { createPostObject } from '../models/posts/createPostObject';
 import { deletePost } from '../api/posts/deletePost';
 import { getPost } from '../api/posts/getPost';
 import { getPosts } from '../api/posts/getPosts';
 import { setPost } from '../api/posts/setPost';
 import { updatePostObjects } from '../api/posts/updatePostObjects';
 import { updatePostTag } from '../api/posts/updatePostTag';
-import { createUpdateUser } from '../models/users/createUpdateUser';
 import { updateUser } from '../api/users/updateUser';
+import { createPost } from '../models/posts/createPost';
+import { createPostObject } from '../models/posts/createPostObject';
+import { createUpdateUser } from '../models/users/createUpdateUser';
 import { createId } from '../utils/createId';
 
 export const Mutation = {
   async addPost (root, { input }, context) {
     console.log('mutation:addPost');
 
+    const owner = context.user;
     const postId = createId();
-    const newPost = createPost(postId, input, owner)
+    const newPost = createPost(postId, input, owner);
     await setPost(postId, newPost);
 
     return createPostObject(postId, newPost);
@@ -47,7 +48,7 @@ export const Mutation = {
       throw new Error('not authenticated');
     }
 
-    const newUser = createUpdateUser(uid, input);
+    const newUser = createUpdateUser(context.user.uid, input);
 
     await updateUser(id, newUser);
 

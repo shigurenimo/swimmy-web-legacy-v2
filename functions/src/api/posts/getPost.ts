@@ -17,5 +17,5 @@ export const getPost = async (postId: string) => {
 
   const data = snapshot.data();
 
-  return { ...data, id: snapshot.id };
+  return { ...data, id: snapshot.id } as any;
 };
