@@ -4,9 +4,9 @@ import { setUserPost } from '../api/users-posts/setUserPost';
 
 const document = firestore.document('posts/{postId}');
 
-export = document.onUpdate(async (snapshot, context) => {
+export = document.onUpdate(async (change, context) => {
   const { postId } = context.params;
-  const post = snapshot.after.data();
+  const post = change.after.data();
 
   await Promise.all([
     post.ownerId &&
