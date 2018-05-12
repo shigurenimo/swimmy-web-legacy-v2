@@ -2,7 +2,7 @@ import { graphqlExpress } from 'apollo-server-express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as express from 'express';
-import * as admin from 'firebase-admin';
+import { auth } from 'firebase-admin';
 import { https } from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
@@ -22,7 +22,7 @@ const graphql = graphqlExpress(async (request, response) => {
   if (authorization) {
     try {
       const idToken = authorization.split('Bearer ')[1];
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const decodedToken = await auth().verifyIdToken(idToken);
       const user = {
         displayName: decodedToken.name || '',
         photoURL: decodedToken.picture || '',

@@ -1,11 +1,11 @@
-import * as functions from 'firebase-functions';
+import { firestore } from 'firebase-functions';
 
 import { updateAuthDisplayName } from '../api/authentications/updateAuthDisplayName';
 import { deleteImage } from '../api/images/deleteImage';
 import { updateUserObject } from '../api/users/updateUserObject';
 import { isUnchangedOwner } from '../utils/isUnchangedOwner';
 
-const document = functions.firestore.document('users/{uid}');
+const document = firestore.document('users/{uid}');
 
 export = document.onUpdate(async (snaphost, context) => {
   const { uid } = context.params;

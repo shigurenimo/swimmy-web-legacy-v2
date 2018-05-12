@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import { firestore } from 'firebase-functions';
 
 import { setPostAsPhoto } from '../api/posts/setPostAsPhoto';
 import { setPostAsThread } from '../api/posts/setPostAsThread';
@@ -8,7 +8,7 @@ import { setUserPost } from '../api/users-posts/setUserPost';
 import { isPostAsPhoto } from '../utils/isPostAsPhoto';
 import { isPostAsThread } from '../utils/isPostAsThread';
 
-const document = functions.firestore.document('posts/{postId}');
+const document = firestore.document('posts/{postId}');
 
 export = document.onCreate(async (snapshot, context) => {
   const post = snapshot.data();
