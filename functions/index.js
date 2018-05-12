@@ -7,7 +7,7 @@ const { config } = require('./lib/config')
 try {
   const dataStr = readFileSync('./config.json', 'utf-8')
   const data = JSON.parse(dataStr)
-  const projectId = process.env.GCLOUD_PROJECT
+  const {projectId} = JSON.parse(process.env.FIREBASE_CONFIG);
 
   config.algolia = data[projectId].algolia
   config.service = data[projectId].service

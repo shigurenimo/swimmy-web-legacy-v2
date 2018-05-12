@@ -3,7 +3,7 @@ import { firestore } from 'firebase-admin';
 import { POSTS } from '../../constants/index';
 
 export const setPost = async (postId: string, newPost) => {
-  await firestore().collection(POSTS).doc(postId).set(newPost);
+  const postRef = firestore().collection(POSTS).doc(postId)
 
-  return { ...newPost, id: postId };
+  await postRef.set(newPost);
 };

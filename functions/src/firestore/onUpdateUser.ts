@@ -2,7 +2,6 @@ import { firestore } from 'firebase-functions';
 
 import { updateAuthDisplayName } from '../api/authentications/updateAuthDisplayName';
 import { deleteImage } from '../api/images/deleteImage';
-import { updateUserObject } from '../api/users/updateUserObject';
 import { isUnchangedOwner } from '../utils/isUnchangedOwner';
 
 const document = firestore.document('users/{uid}');
@@ -31,5 +30,5 @@ export = document.onUpdate(async (snaphost, context) => {
 
   await updateAuthDisplayName(uid, owner);
 
-  await updateUserObject(uid, user);
+  // await updateUserObject(uid, user);
 });

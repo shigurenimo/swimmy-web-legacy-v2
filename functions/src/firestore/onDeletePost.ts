@@ -1,9 +1,12 @@
 import { firestore } from 'firebase-functions';
 
-import { deletePostObject } from '../api/posts/deletePostObject';
+import { deletePostAsPhoto } from '../api/posts/deletePostAsPhoto';
+import { deletePostAsThread } from '../api/posts/deletePostAsThread';
 import { updatePostRepliedPostCount } from '../api/posts/updatePostRepliedPostCount';
 import { deleteTags } from '../api/tags/deleteTags';
 import { deleteUserPost } from '../api/users-posts/deleteUserPost';
+import { isPostAsPhoto } from '../utils/isPostAsPhoto';
+import { isPostAsThread } from '../utils/isPostAsThread';
 
 const document = firestore.document('posts/{postId}');
 
@@ -16,8 +19,12 @@ export = document.onDelete(async (snapshot, context) => {
     deleteUserPost(post.ownerId, postId),
     deleteTags(post.tags),
     post.replyPostId &&
-    updatePostRepliedPostCount(post.replyPostId, -1)
+    updatePostRepliedPostCount(post.replyPostId, -1),
+    isPostAsPhoto(post) &&
+    deletePostAsPhoto(postId),
+    isPostAsThread(post) &&
+    deletePostAsThread(postId)
   ]);
 
-  await deletePostObject(postId);
+  // await deletePostObject(postId);
 })

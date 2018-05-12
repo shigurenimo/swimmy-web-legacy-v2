@@ -16,7 +16,7 @@ export const Mutation = {
 
     const owner = context.user;
     const postId = createId();
-    const newPost = createPost(postId, input, owner);
+    const newPost = await createPost(postId, input, owner);
     await setPost(postId, newPost);
 
     return createPostObject(postId, newPost);
@@ -48,7 +48,7 @@ export const Mutation = {
       throw new Error('not authenticated');
     }
 
-    const newUser = createUpdateUser(context.user.uid, input);
+    const newUser = await createUpdateUser(context.user.uid, input);
 
     await updateUser(id, newUser);
 
