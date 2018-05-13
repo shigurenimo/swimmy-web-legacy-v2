@@ -13,6 +13,7 @@ export const createPost = async (postId: string, input, owner) => {
     photoURLs: {},
     repliedPostCount: 0,
     replyPostId: input.replyPostId || null,
+    repliedPostIds: [],
     tags: {},
     updatedAt: createdAt
   };

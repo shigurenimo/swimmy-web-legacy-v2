@@ -1,4 +1,5 @@
 import { firestore } from 'firebase-functions';
+import { deletePostAsAnonymous } from '../api/posts-as -anonymous/deletePostAsAnonymous';
 
 import { deletePostAsPhoto } from '../api/posts-as-photo/deletePostAsPhoto';
 import { deletePostAsThread } from '../api/posts-as-thread/deletePostAsThread';
@@ -15,18 +16,22 @@ export = document.onDelete(async (snapshot, context) => {
   const { postId } = context.params;
 
   await Promise.all([
-    post.ownerId &&
-    deleteUserPost(post.ownerId, postId),
+    deletePostAsAnonymous(postId),
+    isPostAsPhoto(post) &&
+    deletePostAsPhoto(postId),
+    isPostAsThread(post) &&
+    deletePostAsThread(postId)
+  ]);
+
+  await Promise.all([
     deleteTags(post.tags),
     post.replyPostId &&
     updatePostRepliedPostCount(post.replyPostId, -1)
   ]);
 
   await Promise.all([
-    isPostAsPhoto(post) &&
-    deletePostAsPhoto(postId),
-    isPostAsThread(post) &&
-    deletePostAsThread(postId)
+    post.ownerId &&
+    deleteUserPost(post.ownerId, postId)
   ]);
 
   // await deletePostObject(postId);

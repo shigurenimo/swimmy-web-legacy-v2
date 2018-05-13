@@ -1,4 +1,5 @@
 import { firestore } from 'firebase-functions';
+import { setPostAsAnonymous } from '../api/posts-as -anonymous/setPostAsAnonymous';
 
 import { deletePostAsPhoto } from '../api/posts-as-photo/deletePostAsPhoto';
 import { setPostAsPhoto } from '../api/posts-as-photo/setPostAsPhoto';
@@ -15,20 +16,21 @@ export = document.onUpdate(async (change, context) => {
   const { postId } = context.params;
   const post = change.after.data();
 
-  await Promise.all([
-    post.ownerId &&
-    setUserPost(post.ownerId, postId, post)
-  ]);
-
   const publicPost = createPostAsAnonymous(post);
 
   await Promise.all([
+    setPostAsAnonymous(postId, publicPost),
     isPostAsPhoto(post)
       ? setPostAsPhoto(postId, publicPost)
       : deletePostAsPhoto(postId),
     isPostAsThread(post)
       ? setPostAsThread(postId, publicPost)
       : deletePostAsThread(postId)
+  ]);
+
+  await Promise.all([
+    post.ownerId &&
+    setUserPost(post.ownerId, postId, post)
   ]);
 
   // await updatePostObject(postId, post);
