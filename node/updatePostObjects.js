@@ -1,11 +1,9 @@
-import { getPosts } from '../functions/src/api/posts/getPosts'
-
-import { updatePostObjects } from '../functions/lib/api/posts/updatePostObjects'
+const { readPosts } = require('./readers/readPosts')
 
 const main = async () => {
-  const posts = await getPosts({ limit: 3000 })
+  const posts = await readPosts({ limit: 3000 })
 
-  await updatePostObjects(posts)
+  // await updatePostObjects(posts)
 }
 
 main().catch((err) => {

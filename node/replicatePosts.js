@@ -9,7 +9,7 @@ const LIMIT = 20000
 const main = async () => {
   console.time('all')
 
-  const posts = await readPosts(LIMIT)
+  const posts = await readPosts({limit: LIMIT})
 
   await writeUserPosts_(posts)
   await writePhotoPosts_(posts)
