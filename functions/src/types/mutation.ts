@@ -62,16 +62,5 @@ export const Mutation = {
     await deletePost(postId, post.onwerId, user.id);
 
     return postId;
-  },
-  async uploadPostObjects (root, { startAfter = null }) {
-    console.log('mutation:refactorPostObjects');
-
-    const posts = await getPosts({ limit: 3000, startAfter });
-
-    await updatePostObjects(posts);
-
-    return {
-      lastObjectId: posts.length ? posts[posts.length - 1].id : ''
-    };
   }
 };
