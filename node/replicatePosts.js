@@ -5,7 +5,7 @@ const writePostsAsPhoto = require('./writers/writePostsAsPhoto')
 const writePostsAsThread = require('./writers/writePostsAsThread')
 const writeUserPosts = require('./writers/writeUserPosts')
 
-const LIMIT = 20000
+const LIMIT = 40000
 
 const main = async () => {
   console.time('all')

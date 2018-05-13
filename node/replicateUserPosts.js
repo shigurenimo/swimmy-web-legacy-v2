@@ -2,7 +2,7 @@ require('./init')
 const readPosts = require('./readers/readPosts')
 const writeUserPosts = require('./writers/writeUserPosts')
 
-const LIMIT = 20000
+const LIMIT = 40000
 
 const main = async () => {
   console.time('all')

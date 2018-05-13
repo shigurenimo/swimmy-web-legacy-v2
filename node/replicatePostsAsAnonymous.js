@@ -2,7 +2,7 @@ require('./init')
 const readPosts = require('./readers/readPosts')
 const writePostsAsAnonymous = require('./writers/writePostsAsAnonymous')
 
-const LIMIT = 20000
+const LIMIT = 40000
 
 const main = async () => {
   console.time('all')
