@@ -1,10 +1,11 @@
 import { firestore } from 'firebase-functions';
 
-import { deletePostAsPhoto } from '../api/posts/deletePostAsPhoto';
-import { deletePostAsThread } from '../api/posts/deletePostAsThread';
-import { setPostAsPhoto } from '../api/posts/setPostAsPhoto';
-import { setPostAsThread } from '../api/posts/setPostAsThread';
+import { deletePostAsPhoto } from '../api/posts-as-photo/deletePostAsPhoto';
+import { setPostAsPhoto } from '../api/posts-as-photo/setPostAsPhoto';
+import { deletePostAsThread } from '../api/posts-as-thread/deletePostAsThread';
+import { setPostAsThread } from '../api/posts-as-thread/setPostAsThread';
 import { setUserPost } from '../api/users-posts/setUserPost';
+import { createPostAsAnonymous } from '../models/posts/createPostAsAnonymous';
 import { isPostAsPhoto } from '../utils/isPostAsPhoto';
 import { isPostAsThread } from '../utils/isPostAsThread';
 
@@ -16,12 +17,17 @@ export = document.onUpdate(async (change, context) => {
 
   await Promise.all([
     post.ownerId &&
-    setUserPost(post.ownerId, postId, post),
+    setUserPost(post.ownerId, postId, post)
+  ]);
+
+  const publicPost = createPostAsAnonymous(post);
+
+  await Promise.all([
     isPostAsPhoto(post)
-      ? setPostAsPhoto(postId, post)
+      ? setPostAsPhoto(postId, publicPost)
       : deletePostAsPhoto(postId),
     isPostAsThread(post)
-      ? setPostAsThread(postId, post)
+      ? setPostAsThread(postId, publicPost)
       : deletePostAsThread(postId)
   ]);
 

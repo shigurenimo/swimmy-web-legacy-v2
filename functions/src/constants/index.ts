@@ -8,6 +8,8 @@ export const POSTS_AS_PHOTO = 'posts-as-photo';
 
 export const POSTS_AS_THREAD = 'posts-as-thread';
 
+export const POSTS_AS_ANONYMOUS = 'posts-as-anonymous';
+
 export const THREADS = 'threads';
 
 export const POST_TAGS = 'post-tags';

@@ -2,8 +2,8 @@ const { firestore } = require('firebase-admin')
 
 const { createTasks } = require('../libs/createTasks')
 
-const writePhotoPosts = async (allPosts) => {
-  const posts = allPosts.filter((post) => post.photoURL)
+module.exports = async (allPosts) => {
+  const posts = allPosts
 
   const tasks = createTasks(posts)
 
@@ -15,7 +15,11 @@ const writePhotoPosts = async (allPosts) => {
     const batch = store.batch()
 
     posts.forEach((post) => {
-      const ref = store.collection('posts-as-photo').doc(post.id)
+      const ref = store.collection('posts-as-anonymous').doc(post.id)
+
+      if (!posts.owner) {
+        post.ownerId = null
+      }
 
       batch.set(ref, post)
     })
@@ -23,7 +27,9 @@ const writePhotoPosts = async (allPosts) => {
     return batch.commit()
   })
 
-  return Promise.all(promises)
-}
+  console.time('writePostsAsAnonymous')
 
-exports.writePhotoPosts = writePhotoPosts
+  await Promise.all(promises)
+
+  console.timeEnd('writePostsAsAnonymous')
+}

@@ -2,7 +2,7 @@ const { firestore } = require('firebase-admin')
 
 const { createTasks } = require('../libs/createTasks')
 
-const writeThreadPosts = async (allPosts) => {
+module.exports = async (allPosts) => {
   const posts = allPosts.filter((post) => post.repliedPostCount > 0)
 
   const tasks = createTasks(posts)
@@ -17,13 +17,19 @@ const writeThreadPosts = async (allPosts) => {
     posts.forEach((post) => {
       const ref = store.collection('posts-as-thread').doc(post.id)
 
+      if (!posts.owner) {
+        post.ownerId = null
+      }
+
       batch.set(ref, post)
     })
 
     return batch.commit()
   })
 
-  return Promise.all(promises)
-}
+  console.time('writeThreadPosts')
 
-exports.writeThreadPosts = writeThreadPosts
+  await Promise.all(promises)
+
+  console.timeEnd('writeThreadPosts')
+}

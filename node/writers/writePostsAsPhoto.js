@@ -3,7 +3,7 @@ const { firestore } = require('firebase-admin')
 const { createTasks } = require('../libs/createTasks')
 
 module.exports = async (allPosts) => {
-  const posts = allPosts.filter((post) => post.ownerId)
+  const posts = allPosts.filter((post) => post.photoURL)
 
   const tasks = createTasks(posts)
 
@@ -15,8 +15,11 @@ module.exports = async (allPosts) => {
     const batch = store.batch()
 
     posts.forEach((post) => {
-      const userRef = store.collection('users').doc(post.ownerId)
-      const ref = userRef.collection('posts').doc(post.id)
+      const ref = store.collection('posts-as-photo').doc(post.id)
+
+      if (!posts.owner) {
+        post.ownerId = null
+      }
 
       batch.set(ref, post)
     })
@@ -24,9 +27,9 @@ module.exports = async (allPosts) => {
     return batch.commit()
   })
 
-  console.time('writeUserPosts')
+  console.time('writePhotoPosts')
 
   await Promise.all(promises)
 
-  console.timeEnd('writeUserPosts')
+  console.timeEnd('writePhotoPosts')
 }

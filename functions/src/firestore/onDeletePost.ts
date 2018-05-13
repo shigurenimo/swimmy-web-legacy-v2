@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-functions';
 
-import { deletePostAsPhoto } from '../api/posts/deletePostAsPhoto';
-import { deletePostAsThread } from '../api/posts/deletePostAsThread';
+import { deletePostAsPhoto } from '../api/posts-as-photo/deletePostAsPhoto';
+import { deletePostAsThread } from '../api/posts-as-thread/deletePostAsThread';
 import { updatePostRepliedPostCount } from '../api/posts/updatePostRepliedPostCount';
 import { deleteTags } from '../api/tags/deleteTags';
 import { deleteUserPost } from '../api/users-posts/deleteUserPost';
@@ -19,7 +19,10 @@ export = document.onDelete(async (snapshot, context) => {
     deleteUserPost(post.ownerId, postId),
     deleteTags(post.tags),
     post.replyPostId &&
-    updatePostRepliedPostCount(post.replyPostId, -1),
+    updatePostRepliedPostCount(post.replyPostId, -1)
+  ]);
+
+  await Promise.all([
     isPostAsPhoto(post) &&
     deletePostAsPhoto(postId),
     isPostAsThread(post) &&
