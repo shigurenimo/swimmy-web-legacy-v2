@@ -1,4 +1,4 @@
-![Sw](https://github.com/uufish/Sw/blob/master/src/assets/icon-512x512.png?raw=true)
+![Sw](https://raw.githubusercontent.com/uufish/Sw/master/src/assets/icon-152x152.png)
 
 ## Development
 
