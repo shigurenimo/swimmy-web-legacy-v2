@@ -1,6 +1,7 @@
 export const environment = {
+  name: 'default',
   production: false,
-  hmr: false,
+  hmr: true,
   firebase: {
     apiKey: 'AIzaSyBmZ8J8ThdpIlxGirqm9bTZocT-s9pqVMs',
     authDomain: 'swimmy-171720.firebaseapp.com',
@@ -9,7 +10,7 @@ export const environment = {
     storageBucket: 'swimmy-171720.appspot.com',
     messagingSenderId: '105044844269'
   },
-  function: 'http://localhost:5000/swimmy-171720/us-central1',
-  graphql: 'http://localhost:5000/swimmy-171720/us-central1/graphql/',
+  function: 'https://us-central1-swimmy-171720.cloudfunctions.net',
+  graphql: 'https://us-central1-swimmy-171720.cloudfunctions.net/graphql/',
   enablePersistence: true
 };

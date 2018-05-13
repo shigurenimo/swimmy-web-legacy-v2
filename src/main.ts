@@ -9,6 +9,10 @@ if (environment.production) {
   enableProdMode();
 }
 
+if (!environment.production) {
+  console.info(environment);
+}
+
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
 
 if (environment.hmr) {
@@ -16,6 +20,8 @@ if (environment.hmr) {
     hmrBootstrap(module, bootstrap);
   }
 } else {
-  bootstrap();
+  bootstrap().catch((err) => {
+    console.log(err);
+  });
 }
 
