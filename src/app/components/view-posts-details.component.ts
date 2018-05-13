@@ -121,15 +121,8 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
     private afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
-    if (graphQLErrors[0]) {
-      console.error(graphQLErrors);
-      this.graphQLErrors = graphQLErrors;
-    }
-    if (!networkError.ok) {
-      console.error(networkError);
-      this.networkError = networkError;
-    }
+  private onCatchError (err) {
+    console.log(err)
   }
 
   private onChangePost () {
@@ -140,16 +133,17 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
     const { postId } = params;
 
     const posts$ = this.posts.observePost(postId);
-    this.posts$$ = posts$.subscribe(({ data }) => {
-      this.post = data.post;
+    this.posts$$ = posts$.subscribe((doc) => {
+      console.log('doc', doc)
+      this.post = doc;
     }, (err) => {
       this.onCatchError(err);
     });
 
     const repliedPosts$ = this.posts.observeRepliedPosts(postId);
-    this.repliedPosts$$ = repliedPosts$.subscribe(({ data }) => {
-      if (!data.posts) return;
-      this.repliedPosts = data.posts.nodes;
+    this.repliedPosts$$ = repliedPosts$.subscribe((docs) => {
+      console.log('docs', docs)
+      this.repliedPosts = docs;
     }, (err) => {
       this.onCatchError(err);
     });

@@ -98,17 +98,6 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
     private afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
-    if (graphQLErrors[0]) {
-      console.error(graphQLErrors);
-      this.graphQLErrors = graphQLErrors;
-    }
-    if (!networkError.ok) {
-      console.error(networkError);
-      this.networkError = networkError;
-    }
-  }
-
   private onChangeAuthState () {
     this.onSearch();
   }
@@ -117,14 +106,14 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
     if (this.posts$$) {
       this.posts$$.unsubscribe();
     }
-    const posts$ = this.postsService.observeThreadPosts({
+    /*
+    const posts$ = this.postsService.observePostsAsThread({
       query: this.searchText
     });
     this.posts$$ = posts$.subscribe(({ data }) => {
       this.posts = data.posts.nodes || [];
-    }, (err) => {
-      this.onCatchError(err);
     });
+    */
   }
 
   public ngOnInit () {

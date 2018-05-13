@@ -13,15 +13,8 @@ import { PostsService } from '../services/posts.service';
         <app-editor-post></app-editor-post>
       </ng-template>
     </app-header>
-
-    <nz-content *ngIf="graphQLErrors.length || networkError">
-      <app-card-error-graphql *ngIf="graphQLErrors.length" [errors]="graphQLErrors">
-      </app-card-error-graphql>
-      <app-card-error-network *ngIf="networkError" [error]="networkError">
-      </app-card-error-network>
-    </nz-content>
-
-    <nz-content *ngIf="!graphQLErrors.length && !networkError">
+    
+    <nz-content>
       <app-card-post
         *ngFor="let node of posts"
         type="listItem"
@@ -31,6 +24,7 @@ import { PostsService } from '../services/posts.service';
         [photoURLs]="node.photoURLs"
         [ownerId]="node.ownerId"
         [owner]="node.owner"
+        [replyPostId]="node.replyPostId"
         [repliedPostIds]="node.repliedPostIds"
         [tags]="node.tags"
         [updatedAt]="node.updatedAt"
@@ -71,17 +65,6 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     private afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
-    if (graphQLErrors[0]) {
-      console.error(graphQLErrors);
-      this.graphQLErrors = graphQLErrors;
-    }
-    if (!networkError.ok) {
-      console.error(networkError);
-      this.networkError = networkError;
-    }
-  }
-
   private onChangeAuthState (user) {
     if (user) {
       this.isLogged = true;
@@ -91,8 +74,6 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     });
     this.posts$$ = posts$.subscribe((docs) => {
       this.posts = docs;
-    }, (err) => {
-      this.onCatchError(err);
     });
   }
 

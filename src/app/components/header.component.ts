@@ -134,10 +134,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     {
       routerLink: ['/'],
       iconClass: 'anticon anticon-home'
-    } /*, {
+    }, {
       routerLink: ['/images'],
       iconClass: 'anticon anticon-camera'
-    }, {
+    }, /* {
       routerLink: ['/threads'],
       iconClass: 'anticon anticon-message'
     }

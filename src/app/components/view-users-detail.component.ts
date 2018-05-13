@@ -86,27 +86,20 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
     public afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
-    if (graphQLErrors[0]) {
-      console.error(graphQLErrors);
-      this.graphQLErrors = graphQLErrors;
-    }
-    if (!networkError.ok) {
-      console.error(networkError);
-      this.networkError = networkError;
-    }
+  private onCatchError (err) {
   }
 
-  private onChangeUser ({ data }) {
-    const user = data.user as User;
-    this.createdAt = user.createdAt;
-    this.description = user.description;
-    this.displayName = user.displayName;
-    this.followeeCount = user.followeeCount;
-    this.followerCount = user.followerCount;
-    this.headerPhotoURL = user.headerPhotoURL;
-    this.photoURL = user.photoURL;
-    this.postCount = user.postCount;
+  private onChangeUser (user) {
+    if (user) {
+      this.createdAt = user.createdAt;
+      this.description = user.description;
+      this.displayName = user.displayName;
+      this.followeeCount = user.followeeCount;
+      this.followerCount = user.followerCount;
+      this.headerPhotoURL = user.headerPhotoURL;
+      this.photoURL = user.photoURL;
+      this.postCount = user.postCount;
+    }
     this.isLoading = false;
   }
 
@@ -125,7 +118,7 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   private onChangeParams (params) {
     const { username } = params;
     this.isLoading = true;
-    const user$ = this.usersService.getUser(null, username);
+    const user$ = this.usersService.getUser(username);
     user$.subscribe((data) => {
       this.onChangeUser(data);
     }, (err) => {

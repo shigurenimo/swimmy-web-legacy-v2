@@ -84,10 +84,10 @@ export class SidenavComponent {
     }, {
       routerLink: ['/images'],
       iconClass: 'anticon anticon-camera'
-    }, {
+    }, /* {
       routerLink: ['/threads'],
       iconClass: 'anticon anticon-message'
-    }
+    } */
   ];
 
   constructor (

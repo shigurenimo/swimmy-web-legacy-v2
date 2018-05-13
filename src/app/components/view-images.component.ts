@@ -55,28 +55,17 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
     private afAuth: AngularFireAuth) {
   }
 
-  private onCatchError ({ graphQLErrors, networkError }) {
-    if (graphQLErrors[0]) {
-      console.error(graphQLErrors);
-      this.graphQLErrors = graphQLErrors;
-    }
-    if (!networkError.ok) {
-      console.error(networkError);
-      this.networkError = networkError;
-    }
-  }
-
   private onChangeAuthState () {
-    const posts$ = this.postsService.getPhotoPosts();
-    const posts$$ = posts$.subscribe(({ data }) => {
-      data.posts.nodes.forEach((node, index) => {
+    const posts$ = this.postsService.getPostsAsPhoto((ref) => {
+      return ref.limit(50).orderBy('createdAt', 'desc');
+    });
+    const posts$$ = posts$.subscribe((docs) => {
+      docs.forEach((node, index) => {
         setTimeout(() => {
           this.posts.push(node);
         }, index * 50);
       });
       posts$$.unsubscribe();
-    }, (err) => {
-      this.onCatchError(err);
     });
   }
 

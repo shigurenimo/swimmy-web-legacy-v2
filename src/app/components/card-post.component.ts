@@ -11,21 +11,30 @@ import { PostsService } from '../services/posts.service';
     <ng-container *ngIf='type === "default"'>
       <nz-card>
         <ng-template #body>
-          <ng-container *ngTemplateOutlet="templatePhotoURLs;"></ng-container>
-          <ng-container *ngTemplateOutlet="templateContent;"></ng-container>
-          <ng-container *ngTemplateOutlet="templateActions;"></ng-container>
+          <ng-container *ngTemplateOutlet="templatePhotoURLs"></ng-container>
+          <ng-container *ngTemplateOutlet="templateContent"></ng-container>
+          <ng-container *ngTemplateOutlet="templateActions"></ng-container>
         </ng-template>
       </nz-card>
     </ng-container>
 
     <ng-container *ngIf='type === "listItem"'>
       <div class="template-list-item">
-        <ng-container *ngTemplateOutlet="templatePhotoURLs;"></ng-container>
-        <ng-container *ngTemplateOutlet="templateContent;"></ng-container>
-        <ng-container *ngTemplateOutlet="templateListItemActions;"></ng-container>
-        <ng-container *ngTemplateOutlet="templateReply;"></ng-container>
+        <ng-container *ngIf='replyPostId'>
+          <ng-container *ngTemplateOutlet="templateReplyPostId"></ng-container>
+        </ng-container>
+        <ng-container *ngTemplateOutlet="templatePhotoURLs"></ng-container>
+        <ng-container *ngTemplateOutlet="templateContent"></ng-container>
+        <ng-container *ngTemplateOutlet="templateListItemActions"></ng-container>
+        <ng-container *ngTemplateOutlet="templateReply"></ng-container>
       </div>
     </ng-container>
+
+    <ng-template #templateReplyPostId>
+      <div class="template-replyPostId">
+        <a routerLink="/posts/{{replyPostId}}">{{replyPostId}}</a>
+      </div>
+    </ng-template>
 
     <ng-template #templatePhotoURLs>
       <ng-container *ngIf="photoURLs.length">
@@ -42,8 +51,10 @@ import { PostsService } from '../services/posts.service';
       <div class="template-content">
         <ng-container *ngIf="content">
           <p *ngIf="isDefaultType">{{content}}<span class="createdAt">- {{createdAtStr}}</span></p>
-          <p *ngIf="isListItemType"><a routerLink="/posts/{{id}}">{{content}}</a><span
-            class="createdAt">- {{createdAtStr}}</span></p>
+          <p *ngIf="isListItemType">
+            <a class='text' routerLink="/posts/{{id}}">{{content}}</a>
+            <span class="createdAt">- {{createdAtStr}}</span>
+          </p>
         </ng-container>
         <ng-container *ngIf="!content">
           <p><span class="createdAt">- {{createdAtStr}}</span></p>
@@ -169,12 +180,12 @@ import { PostsService } from '../services/posts.service';
     }
 
     :host a:hover {
-      background: rgba(0, 0, 0, 0.05);
+      background: rgba(0, 0, 0, 0.08);
     }
 
     :host ::ng-deep .ant-tag-root .ant-tag {
       margin-right: 0;
-      margin-left: 5px;
+      margin-left: 4px;
     }
 
     :host ::ng-deep .ant-btn-circle {
@@ -185,6 +196,19 @@ import { PostsService } from '../services/posts.service';
       padding: 0;
     }
 
+    .template-replyPostId {
+      padding: 8px;
+    }
+
+    .template-replyPostId a {
+      color: tomato;
+      cursor: pointer;
+    }
+    
+    .template-replyPostId a::before {
+      content: '> ';
+    }
+
     .template-list-item {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
@@ -193,7 +217,7 @@ import { PostsService } from '../services/posts.service';
       padding: 8px;
     }
 
-    .template-content > p {
+    .template-content .text {
       white-space: pre-wrap;
     }
 
@@ -222,23 +246,23 @@ import { PostsService } from '../services/posts.service';
       display: flex;
       justify-content: flex-end;
       flex-wrap: wrap;
-      padding: 0 10px 5px;
+      padding: 0 8px 4px;
     }
 
     .template-actions .tag {
-      padding: 5px 0;
+      padding: 4px 0;
     }
 
     .template-actions .edit {
-      margin-left: 10px;
+      margin-left: 8px;
     }
 
     .template-actions .reply {
-      margin-left: 5px;
+      margin-left: 4px;
     }
 
     .template-reply {
-      padding: 0 10px 10px;
+      padding: 0 8px 8px;
     }
   `]
 })

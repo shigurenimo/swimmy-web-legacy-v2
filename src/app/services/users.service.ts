@@ -1,24 +1,32 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-
-import { queryUser } from '../queries/users';
+import { User } from '../interfaces/user';
 
 @Injectable()
 export class UsersService {
 
-  constructor(private apollo: Apollo) {
+  constructor (
+    private apollo: Apollo,
+    private afs: AngularFirestore) {
   }
 
-  public getUser(id?, username?) {
-    return this.apollo.watchQuery<any>({
-      query: queryUser,
-      variables: {id, username}
-    }).valueChanges;
+  public getUser (username) {
+    const query = (ref) => {
+      return ref
+        .where('username', '==', username)
+        .limit(1);
+    };
+    return this.afs.collection<User>('users', query)
+      .valueChanges()
+      .map((docs) => {
+        return docs ? docs[0] : null;
+      });
   }
 
-  public updateUser(id, input) {
+  public updateUser (id, input) {
     return this.apollo.mutate<any>({
       mutation: gql`
         mutation updateUser($id: ID!, $input: UpdateUserInput!) {
@@ -32,7 +40,7 @@ export class UsersService {
           }
         }
       `,
-      variables: {id, input}
+      variables: { id, input }
     });
   }
 }
