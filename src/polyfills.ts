@@ -66,3 +66,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
 import 'rxjs/add/operator/let';
+
+(window as any).process = {
+  env: { DEBUG: undefined },
+};

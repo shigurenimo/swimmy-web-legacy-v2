@@ -10,13 +10,6 @@ import { PostsService } from '../services/posts.service';
   template: `
     <app-header></app-header>
 
-    <nz-content *ngIf="graphQLErrors.length || networkError">
-      <app-card-error-graphql *ngIf="graphQLErrors.length" [errors]="graphQLErrors">
-      </app-card-error-graphql>
-      <app-card-error-network *ngIf="networkError" [error]="networkError">
-      </app-card-error-network>
-    </nz-content>
-
     <nz-content *ngIf="!graphQLErrors.length && !networkError">
       <ng-container *ngTemplateOutlet="templateSearch;"></ng-container>
       <div class="template-posts">
@@ -103,17 +96,10 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
   }
 
   public onSearch () {
-    if (this.posts$$) {
-      this.posts$$.unsubscribe();
-    }
-    /*
-    const posts$ = this.postsService.observePostsAsThread({
-      query: this.searchText
+    const posts$ = this.postsService.getPostsAsThread(this.searchText);
+    this.posts$$ = posts$.subscribe((res) => {
+      this.posts = res.hits
     });
-    this.posts$$ = posts$.subscribe(({ data }) => {
-      this.posts = data.posts.nodes || [];
-    });
-    */
   }
 
   public ngOnInit () {

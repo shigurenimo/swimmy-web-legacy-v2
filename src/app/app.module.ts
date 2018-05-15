@@ -39,6 +39,7 @@ import { ViewUsersDetailComponent } from './components/view-users-detail.compone
 import { ViewUsersComponent } from './components/view-users.component';
 import { FirebaseModule } from './firebase.module';
 import { ResizePipe } from './pipes/resize.pipe';
+import { AlgoliaService } from './services/algolia.service';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
@@ -91,6 +92,7 @@ import { CardReplyNewComponent } from './components/card-reply-new.component';
     FunctionsService,
     PostsService,
     UsersService,
+    AlgoliaService,
     {provide: NZ_LOCALE, useValue: enUS}
   ],
   bootstrap: [

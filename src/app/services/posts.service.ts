@@ -3,15 +3,18 @@ import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Post } from '../interfaces/post';
 import { mutationUpdatePostTag } from '../queries/updatePostTag';
+import { AlgoliaService } from './algolia.service';
 
 @Injectable()
 export class PostsService {
 
   constructor (
     private afs: AngularFirestore,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private algoliaService: AlgoliaService
   ) {
   }
 
@@ -83,6 +86,8 @@ export class PostsService {
   }
 
   public getPostsAsThread (query) {
+    const promise = this.algoliaService.postsAsThread.search(query)
+    return fromPromise(promise)
   }
 
   public observePostsAsThread (query) {
@@ -99,8 +104,8 @@ export class PostsService {
 
   public observeRepliedPosts (replyPostId) {
     const query = (ref) => {
-      return ref.where('replyPostId', '==', replyPostId)
-    }
+      return ref.where('replyPostId', '==', replyPostId);
+    };
     return this.afs.collection<Post>('posts', query)
       .valueChanges()
       .map(this.fixPosts);
