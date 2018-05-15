@@ -70,13 +70,16 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "sw:build",
-            "hmrWarning": false
+            "hmrWarning": false,
+            "hmr": true,
           },
           "configurations": {
             "hmr": {
+              "hmr": true,
               "browserTarget": "sw:build:hmr"
             },
             "production": {
+              "hmr": false,
               "browserTarget": "sw:build:production"
             }
           }

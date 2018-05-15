@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "ng serve -c --hmr --host=0.0.0.0",
+    "start": "ng serve --host=0.0.0.0",
     "fns:build": "tsc --project functions/tsconfig.json",
     "fns:watch": "tsc --watch --project functions/tsconfig.json",
     "fns:logs": "firebase functions:log",
@@ -13,7 +13,7 @@
     "ng:build": "ng build --prod",
     "ng:e2e": "ng e2e",
     "ng:lint": "ng lint",
-    "ng:serve": "ng serve -c --hmr --host=0.0.0.0",
+    "ng:serve": "ng serve -c hmr --host=0.0.0.0",
     "ng:start": "ng serve",
     "ng:test": "ng test",
     "reset": "rm ~/.config/gcloud/application_default_credentials.json"

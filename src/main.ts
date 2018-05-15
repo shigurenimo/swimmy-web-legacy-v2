@@ -9,10 +9,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-if (!environment.production) {
-  console.info(environment);
-}
-
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
 
 if (environment.hmr) {
