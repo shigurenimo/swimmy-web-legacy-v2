@@ -10,11 +10,9 @@ import { PostsService } from '../services/posts.service';
   template: `
     <ng-container *ngIf='type === "default"'>
       <nz-card>
-        <ng-template #body>
-          <ng-container *ngTemplateOutlet="templatePhotoURLs"></ng-container>
-          <ng-container *ngTemplateOutlet="templateContent"></ng-container>
-          <ng-container *ngTemplateOutlet="templateActions"></ng-container>
-        </ng-template>
+        <ng-container *ngTemplateOutlet="templatePhotoURLs"></ng-container>
+        <ng-container *ngTemplateOutlet="templateContent"></ng-container>
+        <ng-container *ngTemplateOutlet="templateActions"></ng-container>
       </nz-card>
     </ng-container>
 
@@ -99,7 +97,6 @@ import { PostsService } from '../services/posts.service';
         <button
           class="reply"
           nz-button
-          nzSize="default"
           nzShape="circle"
           (click)="onOpenReply()">
           <i *ngIf="isOpenReply" class="anticon anticon-up"></i>
@@ -365,7 +362,7 @@ export class CardPostComponent {
     this.isDeleteMutate = true;
 
     if (this.replyPostId) {
-      const postId$ = this.posts.deleteReplyPost(this.id, this.replyPostId);
+      const postId$ = this.posts.deleteReplyPost(this.id);
       postId$.subscribe(() => {
         this.isDeleteMutate = false;
       }, (err) => {

@@ -13,8 +13,8 @@ import { PostsService } from '../services/posts.service';
         <span>スレッド</span>
       </ng-template>
     </app-header>
-
-    <nz-content *ngIf="post && !graphQLErrors.length && !networkError">
+    
+    <nz-content *ngIf="post">
       <div class="template-post">
         <app-card-post
           [content]="post.content"
@@ -112,8 +112,6 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
   public isLogged = false;
   public post = null;
   public repliedPosts = [];
-  public graphQLErrors = [];
-  public networkError = null;
 
   constructor (
     private posts: PostsService,

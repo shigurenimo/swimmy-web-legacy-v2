@@ -20,7 +20,7 @@ export interface Post {
   owner: Owner;
   repliedPostCount: number;
   repliedPostIds: string[];
-  replyPostIds: string[];
+  replyPostId: string;
   tags: Tag[];
   updatedAt: string;
 }

@@ -8,7 +8,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
     <div class='header'>
       <div class='row' nz-row nzType='flex' nzAlign='middle' *ngIf='goBack'>
         <span nz-col class='user'>
-          <button nz-button nzShape='circle' nzSize='large' (click)='onGoBack()'>
+          <button nz-button nzShape='circle' (click)='onGoBack()'>
             <span class='anticon anticon-left'></span>
           </button>
         </span>
@@ -40,12 +40,12 @@ import { AngularFireAuth } from 'angularfire2/auth';
         </ul>
         <span class='flex-space'></span>
         <span nz-col class='user' routerLink='/settings' *ngIf='uid'>
-        <button nz-button nzShape='circle' nzSize='large'>
+        <button nz-button nzShape='circle'>
           <span class='anticon anticon-setting'></span>
         </button>
         </span>
         <span nz-col class='user' routerLink='/login' *ngIf='!uid'>
-          <button nz-button nzShape='circle' nzSize='large'>
+          <button nz-button nzShape='circle'>
             <span class='anticon anticon-poweroff'></span>
           </button>
         </span>

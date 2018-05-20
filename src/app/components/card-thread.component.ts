@@ -72,7 +72,6 @@ export class CardThreadComponent {
   @Input() ownerId: string;
   @Input() repliedPostCount: number;
   @Input() repliedPostIds: string[];
-  @Input() replyPostIds: string[];
   @Input() tags;
   @Input() updatedAt: string;
 

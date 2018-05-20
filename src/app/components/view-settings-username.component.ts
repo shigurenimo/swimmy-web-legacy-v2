@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 
 import { NzMessageService } from 'ng-zorro-antd';
 import { fromPromise } from 'rxjs/observable/fromPromise';
@@ -19,105 +19,85 @@ import { UsersService } from '../services/users.service';
       </ng-template>
     </app-header>
 
-    <div>
-      <ng-container *ngIf='!isQuery && !isNotFound'>
-        <div class='description'>
-          <p>
-            識別子はログインやプロフィールのURLに使用されます。<br />
-            他のユーザと同じ識別子は使用できません。
-          </p>
-        </div>
-        <div class='form'>
-          <form nz-form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
-            <div nz-form-item>
-              <div nz-form-label nz-col>
-                <label>現在の識別子</label>
-              </div>
-              <div>
-                <nz-input
-                  formControlName='currentUsername'
-                  [nzReadonly]='true'
-                  [nzSize]='nzSize'>
-                  <ng-template #prefix>
-                    <i class='anticon anticon-code-o'></i>
-                  </ng-template>
-                </nz-input>
-              </div>
-              <p class='form-helper'>
-                変更するとこの識別子でログインすることはできなくなります。
-              </p>
-            </div>
-            <div class='down'>
-              <i class='anticon anticon-down'></i>
-            </div>
-            <div nz-form-item>
-              <div nz-form-label nz-col>
-                <label nz-form-item-required>新しい識別子</label>
-              </div>
-              <div nz-form-control nzHasFeedback>
-                <nz-input
+    <div *ngIf='!isLoadingQuery && !isNotFound'>
+      <div class='description'>
+        <p>
+          識別子はログインやプロフィールのURLに使用されます。<br />
+          他のユーザと同じ識別子は使用できません。
+        </p>
+      </div>
+      <div class='form'>
+        <form nz-form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
+          <nz-form-item>
+            <nz-form-label>現在の識別子</nz-form-label>
+            <nz-input-group nzPrefixIcon="anticon anticon-code-o">
+              <input
+                nz-input
+                formControlName='currentUsername'
+                [readonly]='true'
+              >
+            </nz-input-group>
+          </nz-form-item>
+          <div class='down'>
+            <i class='anticon anticon-down'></i>
+          </div>
+          <nz-form-item>
+            <nz-form-label nzRequired>新しい識別子</nz-form-label>
+            <nz-form-control nzHasFeedback>
+              <nz-input-group nzPrefixIcon="anticon anticon-code-o">
+                <input
+                  nz-input
                   formControlName='newUsername'
-                  [nzPlaceHolder]='usernamePlaceHolder'
-                  [nzSize]='nzSize'>
-                  <ng-template #prefix>
-                    <i class='anticon anticon-code-o'></i>
-                  </ng-template>
-                </nz-input>
-              </div>
-              <p class='form-helper'>
-                この識別子でログインします。
-              </p>
-            </div>
-            <div nz-row nzType='flex' nzJustify='end'>
-          <span nz-col>
-            <button nz-button (click)='onMutate()'>変更する</button>
-          </span>
-            </div>
-          </form>
-        </div>
-        <nz-modal
-          *ngIf='loginFormGroup'
-          [nzVisible]='isShowModal'
-          [nzTitle]='nzTitle'
-          [nzContent]='content'
-          [nzFooter]='footer'
-          (nzOnCancel)='onCancelLogin()'>
-          <ng-template #content>
-            <form nz-form [formGroup]='loginFormGroup' (ngSubmit)='onLogin()'>
-              <div nz-form-item>
-                <div nz-form-label nz-col>
-                  <label nz-form-item-required>ユーザネーム</label>
-                </div>
-                <div nz-form-control>
-                  <nz-input formControlName='username' [nzSize]='nzSize' [nzReadonly]='true'>
-                    <ng-template #prefix>
-                      <i class='anticon anticon-mail'></i>
-                    </ng-template>
-                  </nz-input>
-                </div>
-              </div>
-              <div nz-form-item>
-                <div nz-form-label nz-col>
-                  <label nz-form-item-required>パスワード</label>
-                </div>
-                <div nz-form-control>
-                  <nz-input formControlName='password' [nzSize]='nzSize' nzType='password'>
-                    <ng-template #prefix>
-                      <i class='anticon anticon-key'></i>
-                    </ng-template>
-                  </nz-input>
-                </div>
-              </div>
-            </form>
-          </ng-template>
-          <ng-template #footer>
-            <div>
-              <button nz-button [nzSize]='nzSize' (click)='onLogin()'>ログイン</button>
-            </div>
-          </ng-template>
-        </nz-modal>
-      </ng-container>
+                  placeholder='username'
+                >
+              </nz-input-group>
+            </nz-form-control>
+            <p class='form-helper'>
+              この識別子でログインします。
+            </p>
+          </nz-form-item>
+          <nz-form-item nz-row nzType='flex' nzJustify='end'>
+            <span nz-col>
+              <button nz-button (click)='onMutate()'>変更する</button>
+            </span>
+          </nz-form-item>
+        </form>
+      </div>
     </div>
+
+    <nz-modal
+      *ngIf='loginFormGroup'
+      [nzVisible]='isShowModal'
+      nzTitle='重要な変更'
+      [nzContent]='content'
+      [nzFooter]='footer'
+      (nzOnCancel)='onCancelLogin()'>
+      <ng-template #content>
+        <form nz-form [formGroup]='loginFormGroup' (ngSubmit)='onLogin()'>
+          <nz-form-item>
+            <nz-form-label nzRequired>ユーザネーム</nz-form-label>
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="anticon anticon-mail">
+                <input nz-input formControlName='username' [readonly]='true'>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired>パスワード</nz-form-label>
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="anticon anticon-key">
+                <input nz-input formControlName='password' type='password'>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </ng-template>
+      <ng-template #footer>
+        <div>
+          <button nz-button (click)='onLogin()'>ログイン</button>
+        </div>
+      </ng-template>
+    </nz-modal>
   `,
   styles: [`
     :host > div {
@@ -149,122 +129,21 @@ import { UsersService } from '../services/users.service';
   `]
 })
 export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
+  private authState$$ = null;
+
   public formGroup: FormGroup;
   public loginFormGroup: FormGroup;
-  public nzSize = 'large';
-  public nzTitle = '重要な変更';
-  public usernamePlaceHolder = 'username';
   public isShowModal = false;
-  public isQuery = true;
   public isNotFound = false;
-  public isMutate = false;
-  public isMutateLogin = false;
-
-  private authState$$ = null;
+  public isLoadingQuery = true;
+  public isLoadingMutatation = false;
+  public isLoadingLogin = false;
 
   constructor (
     private afAuth: AngularFireAuth,
     private formBuilder: FormBuilder,
     private usersService: UsersService,
     private message: NzMessageService) {
-  }
-
-  public onMutate () {
-    if (this.isMutate) { return; }
-
-    this.isMutate = true;
-
-    this.formGroup.controls.newUsername.markAsDirty();
-
-    if (!this.formGroup.valid) {
-      this.isMutate = false;
-      return;
-    }
-
-    const currentUser = this.afAuth.auth.currentUser;
-    const { newUsername } = this.formGroup.value;
-    const messageId = this.message.loading(UPDATE_DATA_LOADING).messageId;
-
-    const newEmail = `${newUsername}@swimmy.io`;
-
-    const email$ = fromPromise(currentUser.updateEmail(newEmail));
-
-    const user$ = mergeMap(() => {
-      return this.usersService.updateUser(currentUser.uid, {
-        username: newUsername
-      });
-    });
-
-    return email$.pipe(user$).subscribe(() => {
-      this.message.remove(messageId);
-      this.message.success(UPDATE_DATA_SUCCESS);
-      this.resetFormGroup();
-      this.isMutate = false;
-    }, (err) => {
-      if (err.code === 'auth/requires-recent-login') {
-        this.setLoginForm();
-        this.isShowModal = true;
-      } else {
-        this.message.error(UPDATE_DATA_ERROR);
-      }
-      this.message.remove(messageId);
-      this.isMutate = false;
-    });
-  }
-
-  public onLogin () {
-    if (this.isMutateLogin) { return; }
-
-    this.isMutateLogin = true;
-
-    this.loginFormGroup.controls.username.markAsDirty();
-
-    if (!this.loginFormGroup.valid) { return; }
-
-    const currentUser = this.afAuth.auth.currentUser;
-    const { username, password } = this.loginFormGroup.value;
-    const { newUsername } = this.formGroup.value;
-
-    const email = `${username}@swimmy.io`;
-    const newEmail = `${newUsername}@swimmy.io`;
-
-    const credential = firebase.auth.EmailAuthProvider.credential(email, password);
-
-    const username$ = mergeMap(() => {
-      return fromPromise(currentUser.updateEmail(newEmail));
-    });
-
-    const credential$ = fromPromise(currentUser.reauthenticateWithCredential(credential));
-
-    const user$ = mergeMap(() => {
-      return this.usersService.updateUser(currentUser.uid, {
-        username: newUsername
-      });
-    });
-
-    credential$.pipe(username$).pipe(user$).subscribe(() => {
-      this.message.success(UPDATE_DATA_SUCCESS);
-      this.resetFormGroup();
-      this.isShowModal = false;
-      this.isMutateLogin = false;
-    }, (err) => {
-      this.message.error(LOGIN_ERROR);
-      this.isMutateLogin = false;
-    });
-  }
-
-  public onCancelLogin (e) {
-    this.isShowModal = false;
-  }
-
-  ngOnInit () {
-    this.authState$$ = this.afAuth.authState.subscribe((data) => {
-      this.onAuthState(data);
-    });
-  }
-
-  ngOnDestroy () {
-    this.authState$$.unsubscribe();
   }
 
   private setLoginForm () {
@@ -300,9 +179,107 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   private onAuthState (user) {
     if (user) {
       this.setFormGroup();
-      this.isQuery = false;
+      this.isLoadingQuery = false;
     } else {
       this.isNotFound = true;
     }
+  }
+
+  public onMutate () {
+    if (this.isLoadingMutatation) { return; }
+
+    this.isLoadingMutatation = true;
+
+    this.formGroup.controls.newUsername.markAsDirty();
+
+    if (!this.formGroup.valid) {
+      this.isLoadingMutatation = false;
+      return;
+    }
+
+    const currentUser = this.afAuth.auth.currentUser;
+    const { newUsername } = this.formGroup.value;
+    const messageId = this.message.loading(UPDATE_DATA_LOADING).messageId;
+
+    const newEmail = `${newUsername}@swimmy.io`;
+
+    const email$ = fromPromise(currentUser.updateEmail(newEmail));
+
+    const user$ = mergeMap(() => {
+      return this.usersService.updateUser(currentUser.uid, {
+        username: newUsername
+      });
+    });
+
+    return email$.pipe(user$).subscribe(() => {
+      this.message.remove(messageId);
+      this.message.success(UPDATE_DATA_SUCCESS);
+      this.resetFormGroup();
+      this.isLoadingMutatation = false;
+    }, (err) => {
+      if (err.code === 'auth/requires-recent-login') {
+        this.setLoginForm();
+        this.isShowModal = true;
+      } else {
+        this.message.error(UPDATE_DATA_ERROR);
+      }
+      this.message.remove(messageId);
+      this.isLoadingMutatation = false;
+    });
+  }
+
+  public onLogin () {
+    if (this.isLoadingLogin) { return; }
+
+    this.isLoadingLogin = true;
+
+    this.loginFormGroup.controls.username.markAsDirty();
+
+    if (!this.loginFormGroup.valid) { return; }
+
+    const currentUser = this.afAuth.auth.currentUser;
+    const { username, password } = this.loginFormGroup.value;
+    const { newUsername } = this.formGroup.value;
+
+    const email = `${username}@swimmy.io`;
+    const newEmail = `${newUsername}@swimmy.io`;
+
+    const credential = firebase.auth.EmailAuthProvider.credential(email, password);
+
+    const username$ = mergeMap(() => {
+      return fromPromise(currentUser.updateEmail(newEmail));
+    });
+
+    const credential$ = fromPromise(currentUser.reauthenticateWithCredential(credential));
+
+    const user$ = mergeMap(() => {
+      return this.usersService.updateUser(currentUser.uid, {
+        username: newUsername
+      });
+    });
+
+    credential$.pipe(username$).pipe(user$).subscribe(() => {
+      this.message.success(UPDATE_DATA_SUCCESS);
+      this.resetFormGroup();
+      this.isShowModal = false;
+      this.isLoadingLogin = false;
+    }, (err) => {
+      this.message.error(LOGIN_ERROR);
+      this.isLoadingLogin = false;
+    });
+  }
+
+  public onCancelLogin (e) {
+    this.isShowModal = false;
+  }
+
+  ngOnInit () {
+    this.authState$$ = this.afAuth.authState.subscribe((data) => {
+      this.onAuthState(data);
+    });
+  }
+
+  ngOnDestroy () {
+    this.authState$$.unsubscribe();
   }
 }

@@ -11,7 +11,7 @@ import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
-import { enUS, NgZorroAntdModule, NZ_LOCALE } from 'ng-zorro-antd';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -92,8 +92,7 @@ import { CardReplyNewComponent } from './components/card-reply-new.component';
     FunctionsService,
     PostsService,
     UsersService,
-    AlgoliaService,
-    {provide: NZ_LOCALE, useValue: enUS}
+    AlgoliaService
   ],
   bootstrap: [
     AppComponent

@@ -7,6 +7,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { UploadFile } from 'ng-zorro-antd';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, mergeMap } from 'rxjs/operators';
+import { Photo } from '../interfaces/input';
 
 import { PostsService } from '../services/posts.service';
 
@@ -14,51 +15,48 @@ import { PostsService } from '../services/posts.service';
   selector: 'app-card-reply-new',
   template: `
     <nz-card>
-      <ng-template #body>
-        <form nz-form [formGroup]="formGroup">
-          <nz-input
-            formControlName="content"
-            nzType="textarea"
-            [nzDisabled]="isMutation"
-            [nzAutosize]="true"
-            [nzPlaceHolder]="placeHolder">
-          </nz-input>
-        </form>
+      <form nz-form [formGroup]="formGroup">
+        <textarea
+          nz-input
+          formControlName="content"
+          [disabled]="isLoadingMutation"
+          [nzAutosize]="true"
+          [placeholder]="textareaPlaceholder">
+        </textarea>
+      </form>
 
-        <div class="template-actions" nz-form-control>
-          <div nz-row nzType="flex" nzJustify="end" nzAlign="middle" [nzGutter]="8">
-        <span nz-col>
-          <nz-upload
-            *ngIf="afAuth.authState|async"
-            [nzShowUploadList]="false"
-            [(nzFileList)]="fileList">
-            <button nz-button>
-              <i class="anticon anticon-link"></i>
-              <span>画像</span>
+      <div class="template-actions" nz-form-control>
+        <div nz-row nzType="flex" nzJustify="end" nzAlign="middle" [nzGutter]="8">
+          <span nz-col>
+            <nz-upload
+              *ngIf="afAuth.authState|async"
+              [nzShowUploadList]="false"
+              [(nzFileList)]="fileList">
+              <button nz-button>
+                <i class="anticon anticon-link"></i>
+                <span>画像</span>
+              </button>
+            </nz-upload>
+          </span>
+          <span nz-col>
+            <button
+              nz-button
+              (click)="onAddPost()"
+              [nzLoading]="isLoadingMutation">
+              <span>リプライ</span>
             </button>
-          </nz-upload>
-        </span>
-            <span nz-col>
-          <button
-            nz-button
-            (click)="onAddPost()"
-            [nzLoading]="isMutation">
-            <span>リプライ</span>
-          </button>
-        </span>
-          </div>
+          </span>
         </div>
+      </div>
 
-        <div *ngIf="fileList[0]" class="template-images">
-          <nz-avatar
-            *ngFor="let file of fileList"
-            class="image-avater"
-            nzShape="square"
-            nzSize="large"
-            [nzSrc]="file.thumbUrl">
-          </nz-avatar>
-        </div>
-      </ng-template>
+      <div *ngIf="fileList[0]" class="template-images">
+        <nz-avatar
+          *ngFor="let file of fileList"
+          class="image-avater"
+          nzShape="square"
+          [nzSrc]="file.thumbUrl">
+        </nz-avatar>
+      </div>
     </nz-card>
   `,
   styles: [`
@@ -89,9 +87,9 @@ export class CardReplyNewComponent implements OnInit {
   @Input() repliedPostId: string;
 
   public formGroup: FormGroup;
-  public placeHolder = 'リプライすることができます';
+  public textareaPlaceholder = 'リプライすることができます';
   public fileList: UploadFile[] = [];
-  public isMutation = false;
+  public isLoadingMutation = false;
 
   constructor (
     private formBuilder: FormBuilder,
@@ -115,11 +113,11 @@ export class CardReplyNewComponent implements OnInit {
       return;
     }
 
-    if (this.isMutation) {
+    if (this.isLoadingMutation) {
       return;
     }
 
-    this.isMutation = true;
+    this.isLoadingMutation = true;
 
     this.markAsDirty();
 
@@ -128,7 +126,7 @@ export class CardReplyNewComponent implements OnInit {
     let $mutation = null;
 
     if (!this.fileList.length && !content) {
-      this.isMutation = false;
+      this.isLoadingMutation = false;
       return;
     }
 
@@ -139,27 +137,29 @@ export class CardReplyNewComponent implements OnInit {
 
       const uploadImages$ = combineLatest(uploadImageMap$);
 
-      const post$ = mergeMap((photoURLs) => {
-        return this.posts.addReplyPost(this.repliedPostId, {
+      const post$ = mergeMap((photos: Photo[]) => {
+        return this.posts.addReplyPost({
           content: content,
-          photoURLs: photoURLs
+          photos: photos,
+          replyPostId: this.repliedPostId
         });
       });
 
       $mutation = uploadImages$.pipe(post$);
     } else {
-      $mutation = this.posts.addReplyPost(this.repliedPostId, {
+      $mutation = this.posts.addReplyPost( {
         content: content,
-        photoURLs: []
+        photos: [],
+        replyPostId: this.repliedPostId
       });
     }
 
     $mutation.subscribe(() => {
       this.resetFormGroup();
-      this.isMutation = false;
+      this.isLoadingMutation = false;
     }, (err) => {
       console.error(err);
-      this.isMutation = false;
+      this.isLoadingMutation = false;
     });
   }
 
@@ -168,9 +168,9 @@ export class CardReplyNewComponent implements OnInit {
     const photoId = this.afStore.createId();
     const filePath = `posts/${photoId}`;
     const task = this.afStorage.upload(filePath, originFileObj);
-    const downloadURL$ = task.downloadURL();
-    const map$ = map((photoURL) => {
-      return { photoURL, photoId };
+    const downloadURL$ = task.snapshotChanges();
+    const map$ = map(({ downloadURL }) => {
+      return { downloadURL, photoId };
     });
     return downloadURL$.pipe(map$);
   }

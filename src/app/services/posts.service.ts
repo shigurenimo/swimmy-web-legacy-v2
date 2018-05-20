@@ -4,7 +4,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { AddPostInput } from '../interfaces/mutation';
+import { AddPostInput, UpdatePostTagInput } from '../interfaces/mutation';
 import { Post } from '../interfaces/post';
 import { mutationUpdatePostTag } from '../queries/updatePostTag';
 import { AlgoliaService } from './algolia.service';
@@ -29,7 +29,7 @@ export class PostsService {
     return doc;
   }
 
-  private fixPosts (docs) {
+  private fixPosts (docs: any[]) {
     return docs.map((doc) => {
       doc.photoURLs = Object.keys(doc.photoURLs).map((id) => {
         return doc.photoURLs[id].photoURL;
@@ -54,7 +54,7 @@ export class PostsService {
     });
   }
 
-  public addReplyPost (replyPostId, input) {
+  public addReplyPost (input: AddPostInput) {
     return this.apollo.mutate({
       mutation: gql`
         mutation addPost($input: AddPostInput!) {
@@ -63,47 +63,47 @@ export class PostsService {
           }
         }
       `,
-      variables: { input: { ...input, replyPostId } }
+      variables: { input }
     });
   }
 
-  public updatePostTag (input) {
+  public updatePostTag (input: UpdatePostTagInput) {
     return this.apollo.mutate({
       mutation: mutationUpdatePostTag,
       variables: { input }
     });
   }
 
-  public observePost (postId) {
-    return this.afs.doc<Post>(`posts/${postId}`)
+  public observePost (postId: string) {
+    return this.afs.doc<Post>(`posts-as-anonymous/${postId}`)
       .valueChanges()
       .map(this.fixPost);
   }
 
-  public observePosts (query) {
+  public observePosts (query: (ref: any) => any) {
     return this.afs.collection<Post>('posts-as-anonymous', query)
       .valueChanges()
       .map(this.fixPosts);
   }
 
-  public getPostsAsThread (query) {
-    const promise = this.algoliaService.postsAsThread.search(query)
-    return fromPromise(promise)
+  public getPostsAsThread (query: string) {
+    const promise = this.algoliaService.postsAsThread.search(query);
+    return fromPromise(promise);
   }
 
-  public observePostsAsThread (query) {
+  public observePostsAsThread (query: (ref: any) => any) {
     return this.afs.collection<Post>('posts-as-thread', query)
       .valueChanges()
       .map(this.fixPosts);
   }
 
-  public getPostsAsPhoto (query) {
+  public getPostsAsPhoto (query: (ref: any) => any) {
     return this.afs.collection<Post>('posts-as-photo', query)
       .valueChanges()
       .map(this.fixPosts);
   }
 
-  public observeRepliedPosts (replyPostId) {
+  public observeRepliedPosts (replyPostId: string) {
     const query = (ref) => {
       return ref.where('replyPostId', '==', replyPostId);
     };
@@ -112,7 +112,7 @@ export class PostsService {
       .map(this.fixPosts);
   }
 
-  public deleteReplyPost (id, replyPostId) {
+  public deleteReplyPost (id: string) {
     return this.apollo.mutate({
       mutation: gql`
         mutation deletePost($id: ID!) {

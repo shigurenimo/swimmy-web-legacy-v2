@@ -4,10 +4,9 @@ import { AngularFireAuth } from 'angularfire2/auth';
 @Component({
   selector: 'app-sidenav',
   template: `
-    <ul nz-menu [nzTheme]='nzTheme' [nzMode]='nzMode'>
+    <ul nz-menu [nzTheme]='nzTheme' [nzMode]='nzMode' nzInlineIndent='16'>
       <li *ngIf='uid'
         nz-menu-item
-        class='auth'
         [routerLinkActiveOptions]='routerLinkActiveOptions'
         routerLinkActive='ant-menu-item-selected'
         routerLink='/settings'>

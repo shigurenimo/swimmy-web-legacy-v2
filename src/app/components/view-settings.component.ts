@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import { NzMessageService } from 'ng-zorro-antd';
 
 import { LOGOUT_ERROR, LOGOUT_SUCCESS } from '../constants/messages';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-settings',
@@ -12,10 +12,10 @@ import { Router } from '@angular/router';
     <app-header></app-header>
 
     <div>
-      <div *ngIf='!isQuery && isNotFound'>
+      <div *ngIf='!isLoadingQuery && isNotFound'>
         <p>ログインが必要です</p>
       </div>
-      <ng-container *ngIf='!isQuery && !isNotFound'>
+      <ng-container *ngIf='!isLoadingQuery && !isNotFound'>
         <div class='profile' nz-row nzType='flex' nzGutter='16' nzAlign='middle'>
           <span nz-col>
             <nz-avatar class='icon' nzText='?' [nzSrc]='photoURL|resize'></nz-avatar>
@@ -46,9 +46,9 @@ import { Router } from '@angular/router';
     <nz-modal
       [nzVisible]='isShowModal'
       [nzContent]='content'
-      [nzClosable]='nzClosable'
-      [nzOkText]='nzOkText'
-      [nzCancelText]='nzCancelText'
+      [nzClosable]='false'
+      nzOkText='ログアウト'
+      nzCancelText='キャンセル'
       (nzOnOk)='onLogout()'
       (nzOnCancel)='onCancelLogoutModal()'>
       <ng-template #content>
@@ -95,21 +95,29 @@ import { Router } from '@angular/router';
   `]
 })
 export class ViewSettingsComponent implements OnInit, OnDestroy {
+  private authState$$ = null;
+
   public displayName = null;
   public photoURL = null;
   public isShowModal = false;
-  public nzClosable = false;
-  public nzOkText = 'ログアウト';
-  public nzCancelText = 'キャンセル';
-  public isQuery = true;
+  public isLoadingQuery = true;
   public isNotFound = false;
-
-  private authState$$ = null;
 
   constructor (
     private afAuth: AngularFireAuth,
     private message: NzMessageService,
-    private router: Router) { }
+    private router: Router
+  ) {}
+
+  private onAuthState (user) {
+    if (user) {
+      this.displayName = user.displayName;
+      this.photoURL = user.photoURL;
+    } else {
+      this.isNotFound = true;
+    }
+    this.isLoadingQuery = false;
+  }
 
   public onLogoutModal () {
     this.isShowModal = true;
@@ -138,15 +146,5 @@ export class ViewSettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy () {
     this.authState$$.unsubscribe();
-  }
-
-  private onAuthState (user) {
-    if (user) {
-      this.displayName = user.displayName;
-      this.photoURL = user.photoURL;
-    } else {
-      this.isNotFound = true;
-    }
-    this.isQuery = false;
   }
 }

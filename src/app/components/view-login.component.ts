@@ -20,59 +20,42 @@ import { FunctionsService } from '../services/functions.service';
       </div>
       <div class="form">
         <form nz-form [formGroup]="formGroup">
-          <div nz-form-item>
-            <div nz-form-control nzHasFeedback>
-              <nz-input
-                formControlName="username"
-                [nzPlaceHolder]="usernamePlaceHolder"
-                [nzSize]="nzSize">
-                <ng-template #prefix>
-                  <i class="anticon anticon-user"></i>
-                </ng-template>
-              </nz-input>
-              <div *ngIf="emailError" nz-form-explain>
-                {{emailError}}
-              </div>
-            </div>
-          </div>
-          <div nz-form-item>
-            <div nz-form-control nzHasFeedback>
-              <nz-input
-                formControlName="password"
-                nzType="password"
-                [nzPlaceHolder]="passwordPlaceHolder"
-                [nzSize]="nzSize">
-                <ng-template #prefix>
-                  <i class="anticon anticon-lock"></i>
-                </ng-template>
-              </nz-input>
-              <div *ngIf="passwordError" nz-form-explain>
-                {{passwordError}}
-              </div>
-            </div>
-          </div>
-          <div nz-form-item>
-            <div nz-form-control [nzValidateStatus]="isMutate">
+          <nz-form-item>
+            <nz-form-control nzHasFeedback>
+              <nz-input-group nzPrefixIcon="anticon anticon-user">
+                <input
+                  nz-input
+                  formControlName="username"
+                  placeholder="ユーザネーム">
+              </nz-input-group>
+              <nz-form-explain *ngIf="emailError">{{emailError}}</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzHasFeedback>
+              <nz-input-group nzPrefixIcon="anticon anticon-lock">
+                <input
+                  nz-input
+                  formControlName="password"
+                  type="password"
+                  placeholder="パスワード">
+              </nz-input-group>
+              <nz-form-explain *ngIf="passwordError">{{passwordError}}</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control>
               <div nz-row nzType="flex" nzAlign="middle" nzGutter="8" nzJustify="end">
-            <span nz-col>
-              <button
-                nz-button
-                [nzSize]="nzSize"
-                [disabled]="isMutate"
-                (click)="onSignUp($event)">登録</button>
-            </span>
+                <span nz-col>
+                  <button nz-button [disabled]="isLoading" (click)="onSignUp($event)">登録</button>
+                </span>
                 <span class="or">or</span>
                 <span nz-col>
-              <button
-                nz-button
-                nzType="primary"
-                [nzSize]="nzSize"
-                [disabled]="isMutate"
-                (click)="onSignIn($event)">ログイン</button>
-            </span>
+                  <button nz-button [disabled]="isLoading" (click)="onSignIn($event)">ログイン</button>
+                </span>
               </div>
-            </div>
-          </div>
+            </nz-form-control>
+          </nz-form-item>
         </form>
       </div>
     </div>
@@ -112,90 +95,13 @@ import { FunctionsService } from '../services/functions.service';
 })
 export class ViewLoginComponent implements OnInit {
   public formGroup: FormGroup;
-  public isMutate = false;
-  public nzSize = 'large';
-  public usernamePlaceHolder = 'ユーザネーム';
-  public passwordPlaceHolder = 'パスワード';
-
-  public get emailError () {
-    if (this.username.hasError('required')) {
-      return MSG_INPUT_EMAIL;
-    }
-    if (this.username.hasError('auth/invalid-email')) {
-      return ERROR_INVALID_USERNAME;
-    }
-    if (this.username.hasError('auth/email-already-in-use')) {
-      return ERROR_USERNAME_ALREADY_IN_USE;
-    }
-    if (this.username.hasError('auth/user-not-found')) {
-      return USER_NOT_FOUND;
-    }
-    if (this.username.hasError('auth/user-disabled')) {
-      return 'このユーザは現在使用できません';
-    }
-    return '';
-  }
-
-  public get passwordError () {
-    if (this.password.hasError('required')) {
-      return 'パスワードを入力してください';
-    }
-    if (this.password.hasError('auth/wrong-password')) {
-      return 'パスワードが間違っています';
-    }
-    if (this.password.hasError('auth/too-many-request')) {
-      return '試行回数が多すぎます';
-    }
-    if (this.password.hasError('auth/weak-password')) {
-      return 'パスワードが弱すぎます';
-    }
-    return '';
-  }
-
-  public get username () {
-    return this.formGroup.controls.username;
-  }
-
-  public get password () {
-    return this.formGroup.controls.password;
-  }
+  public isLoading = false;
 
   constructor (
     private afa: AngularFireAuth,
     private router: Router,
     private formBuilder: FormBuilder,
     private functionsService: FunctionsService) {
-  }
-
-  public onSignUp (event) {
-    event.preventDefault();
-
-    if (this.isMutate) {
-      return;
-    }
-
-    this.isMutate = true;
-
-    this.mutateSignUp();
-  }
-
-  public onSignIn (event) {
-    event.preventDefault();
-
-    if (this.isMutate) {
-      return;
-    }
-
-    this.isMutate = true;
-
-    this.mutateSignIn();
-  }
-
-  public ngOnInit () {
-    this.formGroup = this.formBuilder.group({
-      username: [null, [Validators.required]],
-      password: [null, [Validators.required]]
-    });
   }
 
   private mutateSignUp () {
@@ -261,7 +167,7 @@ export class ViewLoginComponent implements OnInit {
   }
 
   private catchErrorCode (code) {
-    this.isMutate = false;
+    this.isLoading = false;
     switch (code) {
       case 'auth/user-not-found':
       case 'auth/invalid-email':
@@ -275,5 +181,79 @@ export class ViewLoginComponent implements OnInit {
         this.password.setErrors({ [code]: true });
         break;
     }
+  }
+
+  public get emailError () {
+    if (this.username.hasError('required')) {
+      return MSG_INPUT_EMAIL;
+    }
+    if (this.username.hasError('auth/invalid-email')) {
+      return ERROR_INVALID_USERNAME;
+    }
+    if (this.username.hasError('auth/email-already-in-use')) {
+      return ERROR_USERNAME_ALREADY_IN_USE;
+    }
+    if (this.username.hasError('auth/user-not-found')) {
+      return USER_NOT_FOUND;
+    }
+    if (this.username.hasError('auth/user-disabled')) {
+      return 'このユーザは現在使用できません';
+    }
+    return '';
+  }
+
+  public get passwordError () {
+    if (this.password.hasError('required')) {
+      return 'パスワードを入力してください';
+    }
+    if (this.password.hasError('auth/wrong-password')) {
+      return 'パスワードが間違っています';
+    }
+    if (this.password.hasError('auth/too-many-request')) {
+      return '試行回数が多すぎます';
+    }
+    if (this.password.hasError('auth/weak-password')) {
+      return 'パスワードが弱すぎます';
+    }
+    return '';
+  }
+
+  public get username () {
+    return this.formGroup.controls.username;
+  }
+
+  public get password () {
+    return this.formGroup.controls.password;
+  }
+
+  public onSignUp (event) {
+    event.preventDefault();
+
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.mutateSignUp();
+  }
+
+  public onSignIn (event) {
+    event.preventDefault();
+
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.mutateSignIn();
+  }
+
+  public ngOnInit () {
+    this.formGroup = this.formBuilder.group({
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]]
+    });
   }
 }

@@ -21,59 +21,53 @@ import { UsersService } from '../services/users.service';
     </app-header>
 
     <div>
-      <ng-container *ngIf='isQuery'>
+      <ng-container *ngIf='isLoadingQuery'>
         <div class='spinner'>
-          <nz-spin [nzTip]='nzTip' nzSize='large'></nz-spin>
+          <nz-spin [nzTip]='nzTip'></nz-spin>
         </div>
       </ng-container>
-      <ng-container *ngIf='!isQuery && !isNotFound'>
+      <ng-container *ngIf='!isLoadingQuery && !isNotFound'>
         <div class='icon'>
           <nz-upload
             nzName='avatar'
             [nzShowUploadList]='false'
-            (nzChange)='onUpload($event)'>
+            (nzChange)='onUpload($event)'
+          >
             <nz-avatar nzIcon='user' [nzSrc]='nzSrc'></nz-avatar>
           </nz-upload>
         </div>
         <div class='form'>
           <form nz-form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
-            <div nz-form-item>
-              <div nz-form-label nz-col>
-                <label nz-form-item-required>ディスプレイネーム</label>
-              </div>
-              <div nz-form-control nzHasFeedback>
-                <nz-input
-                  formControlName='displayName'
-                  [nzPlaceHolder]='displayNamePlaceHolder'
-                  [nzSize]='nzSize'
-                  (nzBlur)='onMutate()'
-                >
-                  <ng-template #prefix>
-                    <i class='anticon anticon-user'></i>
-                  </ng-template>
-                </nz-input>
-              </div>
-            </div>
-            <div nz-form-item>
-              <div nz-form-label nz-col>
-                <label>自己紹介</label>
-              </div>
-              <div nz-form-control nzHasFeedback>
-                <nz-input
+            <nz-form-item>
+              <nz-form-label nzRequired>ディスプレイネーム</nz-form-label>
+              <nz-form-control nzHasFeedback>
+                <nz-input-group nzPrefixIcon="anticon anticon-user">
+                  <input
+                    nz-input
+                    formControlName='displayName'
+                    placeholder='uufish'
+                    (nzBlur)='onMutate()'
+                  >
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>自己紹介</nz-form-label>
+              <nz-form-control nzHasFeedback>
+                <textarea
+                  nz-input
                   formControlName='description'
-                  [nzPlaceHolder]='descriptionPlaceHolder'
-                  nzType='textarea'
-                  [nzSize]='nzSize'
+                  placeholder='あなたの自己紹介'
                   nzAutosize
                   (nzBlur)='onMutate()'
                 >
-                </nz-input>
-              </div>
-            </div>
+                </textarea>
+              </nz-form-control>
+            </nz-form-item>
           </form>
         </div>
       </ng-container>
-      <div *ngIf='!isQuery && isNotFound'>
+      <div *ngIf='!isLoadingQuery && isNotFound'>
         <p>データの取得に失敗しました</p>
       </div>
     </div>
@@ -131,26 +125,15 @@ import { UsersService } from '../services/users.service';
   `]
 })
 export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
-  // form state
+  private authState$$ = null;
+
   public formGroup: FormGroup;
   public photoURL = '';
-
-  // ui state
-  public nzSize = 'large';
   public nzTip = '読み込み中..';
-  public displayNamePlaceHolder = 'uufish';
-  public descriptionPlaceHolder = 'あなたの自己紹介';
   public file = null;
-
-  // http
-  public isQuery = true;
+  public isLoadingQuery = true;
   public isNotFound = false;
-
-  // state
-  public isMutate = false;
-
-  // subscription
-  private authState$$ = null;
+  public isLoadingMutation = false;
 
   constructor (
     private afAuth: AngularFireAuth,
@@ -169,14 +152,14 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
   }
 
   public onMutate () {
-    if (this.isMutate) { return; }
+    if (this.isLoadingMutation) { return; }
 
-    this.isMutate = true;
+    this.isLoadingMutation = true;
 
     this.markAsDirty();
 
     if (!this.formGroup.valid) {
-      this.isMutate = false;
+      this.isLoadingMutation = false;
       return;
     }
 
@@ -186,18 +169,18 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
 
     const mutation$ = this.usersService.updateUser(uid, {
       displayName: displayName,
-      photoURLs: null,
+      photos: null,
       description: description
     });
 
     mutation$.subscribe(() => {
       this.messageService.success(UPDATE_DATA_SUCCESS);
       this.messageService.remove(messageId);
-      this.isMutate = false;
+      this.isLoadingMutation = false;
     }, () => {
       this.messageService.error(UPDATE_DATA_ERROR);
       this.messageService.remove(messageId);
-      this.isMutate = false;
+      this.isLoadingMutation = false;
     });
   }
 
@@ -211,12 +194,11 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
 
     const messageId = this.messageService.loading(UPLOAD_LOADING).messageId;
 
-    const downloadURL$ = task.downloadURL();
+    const downloadURL$ = task.snapshotChanges();
 
-    const mutation$ = mergeMap((photoURL) => {
-      this.photoURL = photoURL as string;
-      const photoURLs = [{ photoURL, photoId }];
-      return this.usersService.updateUser(uid, { photoURLs });
+    const mutation$ = mergeMap(({ downloadURL }) => {
+      const photos = [{ downloadURL, photoId }];
+      return this.usersService.updateUser(uid, { photos });
     });
 
     downloadURL$.pipe(mutation$).subscribe((photoURL) => {
@@ -235,14 +217,13 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     this.authState$$.unsubscribe();
   }
 
-  private onGetUser (res) {
-    const { user } = res.data;
+  private onGetUser (user) {
     this.formGroup = this.formBuilder.group({
       displayName: [user.displayName || '', [Validators.required]],
       description: [user.description || '', []]
     });
     this.photoURL = user.photoURL;
-    this.isQuery = false;
+    this.isLoadingQuery = false;
   }
 
   private onAuthState (user) {

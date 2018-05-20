@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { NzMessageService } from 'ng-zorro-antd';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { mergeMap } from 'rxjs/operators';
@@ -19,64 +19,49 @@ import { UsersService } from '../services/users.service';
       </ng-template>
     </app-header>
 
-    <div *ngIf='!isQuery && !isNotFound'>
+    <div *ngIf='!isLoadingQuery && !isNotFound'>
       <div class='form'>
         <form nz-form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
-          <div nz-form-item>
-            <div nz-form-label nz-col>
-              <label>現在のパスワード</label>
-            </div>
-            <div>
-              <nz-input
+          <nz-form-item>
+            <nz-form-label>現在のパスワード</nz-form-label>
+            <nz-input-group nzPrefixIcon="anticon anticon-key">
+              <input
+                nz-input
                 formControlName='currentPassword'
-                nzType='password'
-                [nzSize]='nzSize'>
-                <ng-template #prefix>
-                  <i class='anticon anticon-key'></i>
-                </ng-template>
-              </nz-input>
-              <div
-                nz-form-explain
-                *ngIf="password.dirty && password.hasError('auth/weak-password')"
-              >
-                パスワードが弱すぎます
-              </div>
-            </div>
+                nzType='password'>
+            </nz-input-group>
+            <nz-form-explain *ngIf="password.dirty && password.hasError('auth/weak-password')">
+              パスワードが弱すぎます
+            </nz-form-explain>
             <p class='form-helper'>
               現在のパスワードを入力してください。
             </p>
-          </div>
+          </nz-form-item>
           <div class='down'>
             <i class='anticon anticon-down'></i>
           </div>
-          <div nz-form-item>
-            <div nz-form-label nz-col>
-              <label nz-form-item-required>新しいパスワード</label>
-            </div>
-            <div nz-form-control nzHasFeedback>
-              <nz-input
-                formControlName='password'
-                [nzPlaceHolder]='passwordPlaceHolder'
-                nzType='password'
-                [nzSize]='nzSize'>
-                <ng-template #prefix>
-                  <i class='anticon anticon-key'></i>
-                </ng-template>
-              </nz-input>
-              <div
-                nz-form-explain
-                *ngIf="password.dirty && password.hasError('auth/weak-password')">
+          <nz-form-item>
+            <nz-form-label nzRequired>新しいパスワード</nz-form-label>
+            <nz-form-control nzHasFeedback>
+              <nz-input-group nzPrefixIcon="anticon anticon-key">
+                <input
+                  nz-input
+                  formControlName='password'
+                  [placeholder]='passwordPlaceHolder'
+                  nzType='password'>
+              </nz-input-group>
+              <nz-form-explain *ngIf="password.dirty && password.hasError('auth/weak-password')">
                 パスワードが弱すぎます
-              </div>
-            </div>
+              </nz-form-explain>
+            </nz-form-control>
             <p class='form-helper'>
               このパスワードでログインします。
             </p>
-          </div>
+          </nz-form-item>
           <div nz-row nzType='flex' nzJustify='end'>
-          <span nz-col>
-            <button nz-button [nzSize]='nzSize' (click)='onMutate()'>変更する</button>
-          </span>
+            <span nz-col>
+              <button nz-button (click)='onMutate()'>変更する</button>
+            </span>
           </div>
         </form>
       </div>
@@ -108,66 +93,19 @@ import { UsersService } from '../services/users.service';
   `]
 })
 export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
-  public formGroup: FormGroup;
-  public nzSize = 'large';
-  public passwordPlaceHolder = Math.random().toString(36).slice(-16);
-  public isQuery = true;
-  public isNotFound = false;
-  public isMutate = false;
-
   private authState$$ = null;
+
+  public formGroup: FormGroup;
+  public passwordPlaceHolder = Math.random().toString(36).slice(-16);
+  public isLoadingQuery = true;
+  public isNotFound = false;
+  public isLoadingMutatation = false;
 
   constructor (
     private afAuth: AngularFireAuth,
     private formBuilder: FormBuilder,
     private usersService: UsersService,
     private message: NzMessageService) {
-  }
-
-  public get password () {
-    return this.formGroup.controls.password;
-  }
-
-  public onMutate () {
-    if (this.isMutate) { return; }
-
-    this.isMutate = true;
-
-    this.password.markAsDirty();
-
-    if (!this.formGroup.valid) {
-      this.isMutate = false;
-      return;
-    }
-
-    const currentUser = this.afAuth.auth.currentUser;
-    const { password } = this.formGroup.value;
-
-    fromPromise(currentUser.updatePassword(password)).subscribe(() => {
-      this.message.success(UPDATE_DATA_SUCCESS);
-      this.resetFormGroup();
-    }, (err) => {
-      switch (err.code) {
-        case 'auth/requires-recent-login':
-          this.login();
-          break;
-        case 'auth/weak-password':
-          this.password.setErrors({ [err.code]: true });
-          this.isMutate = false;
-          break;
-        default:
-      }
-    });
-  }
-
-  ngOnInit () {
-    this.authState$$ = this.afAuth.authState.subscribe((data) => {
-      this.onAuthState(data);
-    });
-  }
-
-  ngOnDestroy () {
-    this.authState$$.unsubscribe();
   }
 
   private setFormGroup () {
@@ -195,19 +133,65 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
     ).subscribe(() => {
       this.message.success(UPDATE_DATA_SUCCESS);
       this.resetFormGroup();
-      this.isMutate = false;
+      this.isLoadingMutatation = false;
     }, () => {
       this.message.error(UPDATE_ERROR);
-      this.isMutate = false;
+      this.isLoadingMutatation = false;
     });
   }
 
   private onAuthState (user) {
     if (user) {
       this.setFormGroup();
-      this.isQuery = false;
+      this.isLoadingQuery = false;
     } else {
       this.isNotFound = true;
     }
+  }
+
+  public get password () {
+    return this.formGroup.controls.password;
+  }
+
+  public onMutate () {
+    if (this.isLoadingMutatation) { return; }
+
+    this.isLoadingMutatation = true;
+
+    this.password.markAsDirty();
+
+    if (!this.formGroup.valid) {
+      this.isLoadingMutatation = false;
+      return;
+    }
+
+    const currentUser = this.afAuth.auth.currentUser;
+    const { password } = this.formGroup.value;
+
+    fromPromise(currentUser.updatePassword(password)).subscribe(() => {
+      this.message.success(UPDATE_DATA_SUCCESS);
+      this.resetFormGroup();
+    }, (err) => {
+      switch (err.code) {
+        case 'auth/requires-recent-login':
+          this.login();
+          break;
+        case 'auth/weak-password':
+          this.password.setErrors({ [err.code]: true });
+          this.isLoadingMutatation = false;
+          break;
+        default:
+      }
+    });
+  }
+
+  ngOnInit () {
+    this.authState$$ = this.afAuth.authState.subscribe((data) => {
+      this.onAuthState(data);
+    });
+  }
+
+  ngOnDestroy () {
+    this.authState$$.unsubscribe();
   }
 }

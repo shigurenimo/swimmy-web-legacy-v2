@@ -2,36 +2,27 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-
-import { User } from '../interfaces/user';
 import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-view-users-detail',
   template: `
     <app-header></app-header>
-
-    <nz-content *ngIf='graphQLErrors.length || networkError'>
-      <app-card-error-graphql *ngIf='graphQLErrors.length' [errors]='graphQLErrors'>
-      </app-card-error-graphql>
-      <app-card-error-network *ngIf='networkError' [error]='networkError'>
-      </app-card-error-network>
-    </nz-content>
-
-    <div *ngIf='!graphQLErrors.length && !networkError'>
-      <div class='user-icon'>
-        <nz-avatar nzIcon='code' [nzSrc]='photoURL'></nz-avatar>
-      </div>
-      <div class='displayName'>
-        <h1 class='mat-h1'>{{displayName}}</h1>
-      </div>
-      <div class='profile'>
-        <nz-card>
-          <ng-template #body>
-            <p>ここにはプロフィール機能が追加される予定です。</p>
-          </ng-template>
-        </nz-card>
-      </div>
+    
+    <div class='user-icon'>
+      <nz-avatar nzIcon='code' [nzSrc]='photoURL'></nz-avatar>
+    </div>
+    
+    <div class='displayName'>
+      <h1 class='mat-h1'>{{displayName}}</h1>
+    </div>
+    
+    <div class='profile'>
+      <nz-card>
+        <ng-template #body>
+          <p>ここにはプロフィール機能が追加される予定です。</p>
+        </ng-template>
+      </nz-card>
     </div>
   `,
   styles: [`
@@ -66,6 +57,8 @@ import { UsersService } from '../services/users.service';
   `]
 })
 export class ViewUsersDetailComponent implements OnInit, OnDestroy {
+  private params$$;
+
   public createdAt;
   public description;
   public displayName = '読み込み中..';
@@ -76,9 +69,6 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   public postCount;
   public file;
   public isLoading = true;
-  private params$$;
-  public graphQLErrors = [];
-  public networkError = null;
 
   constructor (
     private activatedRoute: ActivatedRoute,
@@ -118,7 +108,7 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   private onChangeParams (params) {
     const { username } = params;
     this.isLoading = true;
-    const user$ = this.usersService.getUser(username);
+    const user$ = this.usersService.getUserByUsername(username);
     user$.subscribe((data) => {
       this.onChangeUser(data);
     }, (err) => {

@@ -15,16 +15,16 @@ import { PostsService } from '../services/posts.service';
   selector: 'app-editor-post',
   template: `
     <form nz-form [formGroup]='formGroup'>
-      <div nz-form-control>
-        <nz-input
+      <nz-form-control>
+        <textarea
+          nz-input
           formControlName='content'
-          nzType='textarea'
+          [disabled]="isLoadingMutation"
           [nzAutosize]='nzAutosize'
-          [nzPlaceHolder]='nzPlaceHolder'
-          [nzDisabled]='isMutation'>
-        </nz-input>
-      </div>
-      <div class='actions' nz-form-control>
+          [placeholder]='textareaPlaceholder'>
+        </textarea>
+      </nz-form-control>
+      <nz-form-control class='actions'>
         <div nz-row nzType="flex" nzJustify="end" nzAlign="middle">
           <nz-upload
             *ngIf='afAuth.authState|async'
@@ -41,17 +41,16 @@ import { PostsService } from '../services/posts.service';
             class='input'
             nz-button
             (click)='onAddPost()'
-            [nzLoading]='isMutation'>
+            [nzLoading]='isLoadingMutation'>
             <span>送信</span>
           </button>
         </div>
-      </div>
+      </nz-form-control>
       <div *ngIf='fileList[0]' class='images'>
         <nz-avatar
           *ngFor='let file of fileList'
           class='image-avater'
           nzShape='square'
-          nzSize='large'
           [nzSrc]='file.thumbUrl'>
         </nz-avatar>
       </div>
@@ -91,9 +90,9 @@ import { PostsService } from '../services/posts.service';
 export class EditorPostComponent implements OnInit {
   public formGroup: FormGroup;
   public nzAutosize = { minRows: 1, maxRows: 6 };
-  public nzPlaceHolder = 'もしもし';
+  public textareaPlaceholder = 'もしもし';
   public fileList: UploadFile[] = [];
-  public isMutation = false;
+  public isLoadingMutation = false;
 
   constructor (
     private formBuilder: FormBuilder,
@@ -113,11 +112,11 @@ export class EditorPostComponent implements OnInit {
   }
 
   public onAddPost (): void {
-    if (this.isMutation) {
+    if (this.isLoadingMutation) {
       return;
     }
 
-    this.isMutation = true;
+    this.isLoadingMutation = true;
 
     this.markAsDirty();
 
@@ -126,7 +125,7 @@ export class EditorPostComponent implements OnInit {
     let $mutation = null;
 
     if (!this.fileList.length && !content) {
-      this.isMutation = false;
+      this.isLoadingMutation = false;
       return;
     }
 
@@ -156,10 +155,10 @@ export class EditorPostComponent implements OnInit {
 
     $mutation.subscribe(() => {
       this.resetFormGroup();
-      this.isMutation = false;
+      this.isLoadingMutation = false;
     }, (err) => {
       console.error(err);
-      this.isMutation = false;
+      this.isLoadingMutation = false;
     });
   }
 
@@ -168,10 +167,19 @@ export class EditorPostComponent implements OnInit {
     const photoId = this.afStore.createId();
     const filePath = `posts/${photoId}`;
     const task = this.afStorage.upload(filePath, originFileObj);
+
+    const downloadURL$ = task.snapshotChanges();
+    const map$ = map(({downloadURL}): Photo => {
+      return { downloadURL, photoId };
+    });
+
+    /*
     const downloadURL$ = task.downloadURL();
     const map$ = map((downloadURL: string): Photo => {
       return { downloadURL, photoId };
     });
+    */
+
     return downloadURL$.pipe(map$);
   }
 

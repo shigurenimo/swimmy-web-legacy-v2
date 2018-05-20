@@ -10,37 +10,32 @@ import { PostsService } from '../services/posts.service';
   template: `
     <app-header></app-header>
 
-    <nz-content *ngIf="!graphQLErrors.length && !networkError">
-      <ng-container *ngTemplateOutlet="templateSearch;"></ng-container>
-      <div class="template-posts">
-        <app-card-thread
-          *ngFor="let node of posts"
-          [content]="node.content"
-          [createdAt]="node.createdAt"
-          [id]="node.id"
-          [photoURLs]="node.photoURLs"
-          [ownerId]="node.ownerId"
-          [owner]="node.owner"
-          [repliedPostCount]="node.repliedPostCount"
-          [repliedPostIds]="node.repliedPostIds"
-          [replyPostIds]="node.replyPostIds"
-          [tags]="node.tags"
-          [updatedAt]="node.updatedAt">
-        </app-card-thread>
-      </div>
-    </nz-content>
+    <ng-container *ngTemplateOutlet="templateSearch;"></ng-container>
+
+    <div class="template-posts">
+      <app-card-thread
+        *ngFor="let node of posts"
+        [content]="node.content"
+        [createdAt]="node.createdAt"
+        [id]="node.id"
+        [photoURLs]="node.photoURLs"
+        [ownerId]="node.ownerId"
+        [owner]="node.owner"
+        [repliedPostCount]="node.repliedPostCount"
+        [repliedPostIds]="node.repliedPostIds"
+        [tags]="node.tags"
+        [updatedAt]="node.updatedAt">
+      </app-card-thread>
+    </div>
 
     <ng-template #templateSearch>
       <div class="template-search">
         <div nz-row nzType="flex" [nzGutter]="8">
       <span nz-col class="text-input">
-        <nz-input [(ngModel)]="searchText" [nzPlaceHolder]="placeHolder">
-        </nz-input>
+        <input nz-input [(ngModel)]="searchText" placeholder="スレッド検索">
       </span>
           <span nz-col>
-        <button
-          nz-button
-          (click)="onSearch()">
+        <button nz-button (click)="onSearch()">
           <i class="anticon anticon-search"></i>
           <span>探す</span>
         </button>
@@ -82,9 +77,6 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
 
   public posts: Post[] = [];
   public searchText = '';
-  public placeHolder = 'スレッド検索';
-  public graphQLErrors = [];
-  public networkError = null;
 
   constructor (
     private postsService: PostsService,
@@ -98,18 +90,18 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
   public onSearch () {
     const posts$ = this.postsService.getPostsAsThread(this.searchText);
     this.posts$$ = posts$.subscribe((res) => {
-      this.posts = res.hits
+      this.posts = res.hits;
     });
   }
 
-  public ngOnInit () {
+  ngOnInit () {
     const authState$ = this.afAuth.authState;
     this.authState$$ = authState$.subscribe(() => {
       this.onChangeAuthState();
     });
   }
 
-  public ngOnDestroy () {
+  ngOnDestroy () {
     this.authState$$.unsubscribe();
     this.posts$$.unsubscribe();
   }

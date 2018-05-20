@@ -3,6 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { UpdateUserInput } from '../interfaces/mutation';
 import { User } from '../interfaces/user';
 
 @Injectable()
@@ -13,7 +14,11 @@ export class UsersService {
     private afs: AngularFirestore) {
   }
 
-  public getUser (username) {
+  public getUser (uid) {
+    return this.afs.doc(`users/${uid}`).valueChanges()
+  }
+
+  public getUserByUsername (username) {
     const query = (ref) => {
       return ref
         .where('username', '==', username)
@@ -26,7 +31,7 @@ export class UsersService {
       });
   }
 
-  public updateUser (id, input) {
+  public updateUser (id: string, input: UpdateUserInput) {
     return this.apollo.mutate<any>({
       mutation: gql`
         mutation updateUser($id: ID!, $input: UpdateUserInput!) {
