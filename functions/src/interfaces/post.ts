@@ -6,7 +6,7 @@ export interface Post {
   id: string;
   content: string
   createdAt: Date | number;
-  ownerId?: string ;
+  ownerId?: string;
   owner?: Owner;
   photoCount?: number;
   photoURL: string;

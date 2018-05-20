@@ -20,10 +20,10 @@ export = document.onCreate(async (snapshot, context) => {
     updatePostRepliedPostCount(post.replyPostId)
   ]);
 
-  const publicPost = createPostAsAnonymous(post);
+  const anonymousPost = createPostAsAnonymous(post);
 
   await Promise.all([
     isPostAsPhoto(post) &&
-    setPostAsPhoto(postId, publicPost)
+    setPostAsPhoto(postId, anonymousPost)
   ]);
 })

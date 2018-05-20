@@ -1,39 +1,39 @@
 export const Post = {
-  id(root) {
+  id (root) {
     return root.id;
   },
-  content(root) {
+  content (root) {
     return root.content;
   },
-  createdAt(root) {
+  createdAt (root) {
     return new Date(root.createdAt);
   },
-  ownerId(root, args, context) {
+  ownerId (root, args, context) {
     if (context && context.user) {
       return context.user.uid === root.ownerId ? root.ownerId : null;
     } else {
       return null;
     }
   },
-  owner(root) {
+  owner (root) {
     return root.owner;
   },
-  photoCount(root) {
+  photoCount (root) {
     return root.photoCount;
   },
-  photoURLs(root) {
+  photoURLs (root) {
     return root.photoURLs;
   },
-  photoURL(root) {
+  photoURL (root) {
     return root.photoURL || null;
   },
-  repliedPostCount(root) {
+  repliedPostCount (root) {
     return root.repliedPostCount;
   },
-  replyPostId(root) {
+  replyPostId (root) {
     return root.replyPostId;
   },
-  tags(root) {
+  tags (root) {
     const tags = root.tags.filter((tag) => {
       return tag.count;
     }).map((tag) => {
@@ -47,7 +47,7 @@ export const Post = {
     });
     return tags;
   },
-  updatedAt(root) {
+  updatedAt (root) {
     return new Date(root.updatedAt);
   }
 };

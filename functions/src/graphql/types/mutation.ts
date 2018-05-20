@@ -6,7 +6,6 @@ import { getPost } from '../../api/posts/getPost';
 import { setPost } from '../../api/posts/setPost';
 import { updatePostTag } from '../../api/posts/updatePostTag';
 import { updateUser } from '../../api/users/updateUser';
-import { createPhotoURL, createPhotoURLs } from '../../models/images/photoURL';
 import { createPost } from '../../models/posts/createPost';
 import { createPostAsAnonymous } from '../../models/posts/createPostAsAnonymous';
 import { createPostObject } from '../../models/posts/createPostObject';
@@ -20,16 +19,16 @@ export const Mutation = {
 
     const postId = createId();
 
-    const photoURLs = {}
+    const photoURLs = {};
 
-    for (let i = 0; i < input.photoURLs.length; ++i ) {
-      const { photoId, photoURL: downloadURL } = input.photoURLs[i]
+    for (let i = 0; i < input.photoURLs.length; ++i) {
+      const { photoId, photoURL: downloadURL } = input.photoURLs[i];
       const photoURL = await getPhotoURL('posts', photoId, downloadURL);
-      photoURLs[photoId] = photoURL
+      photoURLs[photoId] = photoURL;
       await setImage(photoId, photoURL);
     }
 
-    input.photoURL = Object.keys(photoURLs).length ? photoURLs[0].photoURL : null
+    input.photoURL = Object.keys(photoURLs).length ? photoURLs[0].photoURL : null;
 
     const newPost = await createPost(postId, input, owner);
     const newPostAsAnonymous = createPostAsAnonymous(newPost);
@@ -62,16 +61,16 @@ export const Mutation = {
       throw new Error('not authenticated');
     }
 
-    const photoURLs = {}
+    const photoURLs = {};
 
-    for (let i = 0; i < input.photoURLs.length; ++i ) {
-      const { photoId, photoURL: downloadURL } = input.photoURLs[i]
+    for (let i = 0; i < input.photoURLs.length; ++i) {
+      const { photoId, photoURL: downloadURL } = input.photoURLs[i];
       const photoURL = await getPhotoURL('posts', photoId, downloadURL);
-      photoURLs[photoId] = photoURL
+      photoURLs[photoId] = photoURL;
       await setImage(photoId, photoURL);
     }
 
-    input.photoURL = Object.keys(photoURLs).length ? photoURLs[0].photoURL : null
+    input.photoURL = Object.keys(photoURLs).length ? photoURLs[0].photoURL : null;
 
     const newUser = await createUpdateUser(user.uid, input);
 
@@ -82,7 +81,7 @@ export const Mutation = {
   async deletePost (root, { id: postId }, { user }) {
     const post = await getPost(postId);
 
-    checkOwner(post, user)
+    checkOwner(post, user);
 
     await deletePost(postId);
 

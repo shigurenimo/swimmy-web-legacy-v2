@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import { updateAuthDisplayName } from '../api/authentications/updateAuthDisplayName';
-import { createUser } from '../models/users/createUser';
 import { setUser } from '../api/users/setUser';
+import { createUser } from '../models/users/createUser';
 
 const document = functions.auth.user();
 
@@ -10,7 +10,7 @@ export = document.onCreate(async (user) => {
     return Promise.resolve();
   }
 
-  const newUser = createUser(user)
+  const newUser = createUser(user);
 
   await Promise.all([
     updateAuthDisplayName(user.uid, user),

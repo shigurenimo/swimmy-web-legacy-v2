@@ -1,4 +1,4 @@
-import { User, UserForUpdate } from '../../interfaces/user';
+import { UserForUpdate } from '../../interfaces/user';
 import { PhotoURLs } from '../../types/photoURL';
 
 interface Input {

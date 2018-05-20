@@ -1,14 +1,14 @@
 export const Owner = {
-  id(root) {
+  id (root) {
     return root.uid;
   },
-  displayName(root) {
+  displayName (root) {
     return root.displayName;
   },
-  photoURL(root) {
+  photoURL (root) {
     return root.photoURL;
   },
-  uid(root) {
+  uid (root) {
     return root.uid;
   }
 };
