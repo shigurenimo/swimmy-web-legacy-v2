@@ -28,14 +28,14 @@ enum TagOrderField {
   UPDATED_AT
 }
 
-input PhotoURLInput {
-  photoURL: String
+input PhotoInput {
+  downloadURL: String
   photoId: String
 }
 
 input AddPostInput {
   content: String
-  photoURLs: [PhotoURLInput]
+  photos: [PhotoInput]
   replyPostId: String
 }
 
@@ -61,7 +61,7 @@ input UpdatePostTagInput {
 input UpdateUserInput {
   description: String
   displayName: String
-  photoURLs: [PhotoURLInput]
+  photos: [PhotoInput]
   username: String
 }
 
@@ -106,14 +106,6 @@ type PostTag implements Node {
   name: String
   postId: String
   tagId: String
-}
-
-type PhotoURL {
-  id: String
-  downloadURL: String
-  objectId: String
-  photoURL: String
-  storageURL: String
 }
 
 type Hello {

@@ -5,8 +5,10 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { UploadFile } from 'ng-zorro-antd';
+import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, mergeMap } from 'rxjs/operators';
+import { Photo } from '../interfaces/input';
 import { PostsService } from '../services/posts.service';
 
 @Component({
@@ -110,7 +112,7 @@ export class EditorPostComponent implements OnInit {
     return this.formGroup.get('content');
   }
 
-  public onAddPost () {
+  public onAddPost (): void {
     if (this.isMutation) {
       return;
     }
@@ -135,10 +137,10 @@ export class EditorPostComponent implements OnInit {
 
       const uploadImages$ = combineLatest(uploadImageMap$);
 
-      const post$ = mergeMap((photoURLs) => {
+      const post$ = mergeMap((photoURLs: Photo[]) => {
         return this.posts.addPost({
           content: content,
-          photoURLs: photoURLs,
+          photos: photoURLs,
           replyPostId: null
         });
       });
@@ -147,7 +149,7 @@ export class EditorPostComponent implements OnInit {
     } else {
       $mutation = this.posts.addPost({
         content: content,
-        photoURLs: [],
+        photos: [],
         replyPostId: null
       });
     }
@@ -161,14 +163,14 @@ export class EditorPostComponent implements OnInit {
     });
   }
 
-  public uploadImage (file) {
+  public uploadImage (file): Observable<Photo> {
     const originFileObj = file.originFileObj;
     const photoId = this.afStore.createId();
     const filePath = `posts/${photoId}`;
     const task = this.afStorage.upload(filePath, originFileObj);
     const downloadURL$ = task.downloadURL();
-    const map$ = map((photoURL) => {
-      return { photoURL, photoId };
+    const map$ = map((downloadURL: string): Photo => {
+      return { downloadURL, photoId };
     });
     return downloadURL$.pipe(map$);
   }

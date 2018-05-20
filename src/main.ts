@@ -17,6 +17,6 @@ if (environment.hmr) {
   }
 } else {
   bootstrap().catch((err) => {
-    console.log(err);
+    console.error(err);
   });
 }

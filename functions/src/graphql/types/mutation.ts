@@ -6,6 +6,8 @@ import { getPost } from '../../api/posts/getPost';
 import { setPost } from '../../api/posts/setPost';
 import { updatePostTag } from '../../api/posts/updatePostTag';
 import { updateUser } from '../../api/users/updateUser';
+import { Context } from '../../interfaces/graphql';
+import { AddPostArgs, DeletePostArgs, UpdatePostTagArgs, UpdateUserArgs } from '../../interfaces/mutation';
 import { createPost } from '../../models/posts/createPost';
 import { createPostAsAnonymous } from '../../models/posts/createPostAsAnonymous';
 import { createPostObject } from '../../models/posts/createPostObject';
@@ -14,23 +16,31 @@ import { checkOwner } from '../../utils/checkOwner';
 import { createId } from '../../utils/createId';
 
 export const Mutation = {
-  async addPost (root, { input }, context) {
-    const owner = context.user;
+  async addPost (root, { input }: AddPostArgs, { user }: Context) {
+    const owner = user;
 
     const postId = createId();
 
     const photoURLs = {};
 
-    for (let i = 0; i < input.photoURLs.length; ++i) {
-      const { photoId, photoURL: downloadURL } = input.photoURLs[i];
+    for (let i = 0; i < input.photos.length; ++i) {
+      const { photoId, downloadURL } = input.photos[i];
       const photoURL = await getPhotoURL('posts', photoId, downloadURL);
       photoURLs[photoId] = photoURL;
       await setImage(photoId, photoURL);
     }
 
-    input.photoURL = Object.keys(photoURLs).length ? photoURLs[0].photoURL : null;
+    const photoIds = Object.keys(photoURLs)
 
-    const newPost = await createPost(postId, input, owner);
+    const photoURL = photoIds.length ? photoURLs[photoIds[0]].photoURL : null;
+
+    const createPostInput = {
+      ...input,
+      photoURLs,
+      photoURL
+    };
+
+    const newPost = await createPost(postId, createPostInput, owner);
     const newPostAsAnonymous = createPostAsAnonymous(newPost);
 
     await setPostAsAnonymous(postId, newPostAsAnonymous);
@@ -41,18 +51,14 @@ export const Mutation = {
   hello (root, args, context) {
     return 'hello';
   },
-  async updatePostTag (root, args, context) {
-    args.name = args.name || 'スキ';
-
-    if (!context.user) {
+  async updatePostTag (root, { input }: UpdatePostTagArgs, { user }: Context) {
+    if (!user) {
       throw new Error('context.user not found');
     }
 
-    const input = args.input;
-
-    await updatePostTag(input, context.user);
+    await updatePostTag(input, user);
   },
-  async updateUser (root, { id, input }, { user }) {
+  async updateUser (root, { id, input }: UpdateUserArgs, { user }: Context) {
     if (!user) {
       throw new Error('context.user not found');
     }
@@ -63,22 +69,30 @@ export const Mutation = {
 
     const photoURLs = {};
 
-    for (let i = 0; i < input.photoURLs.length; ++i) {
-      const { photoId, photoURL: downloadURL } = input.photoURLs[i];
+    for (let i = 0; i < input.photos.length; ++i) {
+      const { photoId, downloadURL } = input.photos[i];
       const photoURL = await getPhotoURL('posts', photoId, downloadURL);
       photoURLs[photoId] = photoURL;
       await setImage(photoId, photoURL);
     }
 
-    input.photoURL = Object.keys(photoURLs).length ? photoURLs[0].photoURL : null;
+    const photoIds = Object.keys(photoURLs)
 
-    const newUser = await createUpdateUser(user.uid, input);
+    const photoURL = photoIds.length ? photoURLs[photoIds[0]].photoURL : null;
+
+    const createUpdateUserInput = {
+      ...input,
+      photoURLs,
+      photoURL
+    };
+
+    const newUser = await createUpdateUser(user.uid, createUpdateUserInput);
 
     await updateUser(id, newUser);
 
     return newUser;
   },
-  async deletePost (root, { id: postId }, { user }) {
+  async deletePost (root, { id: postId }: DeletePostArgs, { user }: Context) {
     const post = await getPost(postId);
 
     checkOwner(post, user);

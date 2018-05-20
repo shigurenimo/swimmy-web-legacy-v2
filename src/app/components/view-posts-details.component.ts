@@ -122,7 +122,7 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
   }
 
   private onCatchError (err) {
-    console.log(err)
+    console.error(err)
   }
 
   private onChangePost () {
@@ -134,7 +134,6 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
 
     const posts$ = this.posts.observePost(postId);
     this.posts$$ = posts$.subscribe((doc) => {
-      console.log('doc', doc)
       this.post = doc;
     }, (err) => {
       this.onCatchError(err);
@@ -142,7 +141,6 @@ export class ViewPostsDetailsComponent implements OnInit, OnDestroy {
 
     const repliedPosts$ = this.posts.observeRepliedPosts(postId);
     this.repliedPosts$$ = repliedPosts$.subscribe((docs) => {
-      console.log('docs', docs)
       this.repliedPosts = docs;
     }, (err) => {
       this.onCatchError(err);

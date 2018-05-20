@@ -6,7 +6,6 @@ import { DateTime } from './scalars/dateTime';
 import { Hello } from './types/hello';
 import { Mutation } from './types/mutation';
 import { Owner } from './types/owner';
-import { PhotoURL } from './types/photoURL';
 import { Post } from './types/post';
 import { PostConnection } from './types/postConnection';
 import { PostTag } from './types/postTag';
@@ -23,7 +22,6 @@ export const resolvers = {
   Query,
   DateTime,
   Owner,
-  PhotoURL,
   Post,
   PostConnection,
   PostTag,

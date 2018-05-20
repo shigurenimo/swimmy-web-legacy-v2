@@ -25,7 +25,7 @@ export const getPhotoURL = async (
     return simple;
   }
 
-  const { projectId } = functions.config().firebase;
+  const { projectId } = JSON.parse(process.env.FIREBASE_CONFIG);
 
   const res = await fetch(config.service.images, {
     method: 'POST',

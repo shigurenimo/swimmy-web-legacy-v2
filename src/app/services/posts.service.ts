@@ -4,6 +4,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { AddPostInput } from '../interfaces/mutation';
 import { Post } from '../interfaces/post';
 import { mutationUpdatePostTag } from '../queries/updatePostTag';
 import { AlgoliaService } from './algolia.service';
@@ -40,7 +41,7 @@ export class PostsService {
     });
   }
 
-  public addPost (input) {
+  public addPost (input: AddPostInput) {
     return this.apollo.mutate({
       mutation: gql`
         mutation addPost($input: AddPostInput!) {

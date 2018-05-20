@@ -21,8 +21,6 @@ const main = async () => {
 
   const index = client.initIndex('posts-as-thread')
 
-  console.log('objects.length', objects.length)
-
   await index.saveObjects(objects)
 }
 

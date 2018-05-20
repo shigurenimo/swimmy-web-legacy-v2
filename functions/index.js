@@ -17,7 +17,7 @@ try {
 
   admin.initializeApp({ credential })
 } catch (e) {
-  admin.initializeApp(functions.config().firebase)
+  admin.initializeApp()
 
   if (process.env.NODE_ENV !== 'development') {
     console.error(e)
