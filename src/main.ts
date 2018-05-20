@@ -20,4 +20,3 @@ if (environment.hmr) {
     console.log(err);
   });
 }
-

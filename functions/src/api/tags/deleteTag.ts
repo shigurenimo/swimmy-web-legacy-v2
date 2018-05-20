@@ -1,9 +1,10 @@
 import { firestore } from 'firebase-admin';
 
 import { TAGS } from '../../constants';
+import { Tag } from '../../interfaces/tag';
 
-export const deleteTag = (tag) => {
-  return firestore().runTransaction(async (t) => {
+export const deleteTag = async (tag: Tag): Promise<void> => {
+  await firestore().runTransaction(async (t) => {
     const findRef = firestore().collection(TAGS).where('name', '==', tag.name);
 
     const querySnapshot = await t.get(findRef);
@@ -18,11 +19,11 @@ export const deleteTag = (tag) => {
 
     const ref = firestore().collection(TAGS).doc(snapshot.id);
 
-    t.set(ref, {
+    const newTag = {
       name: tag.name,
       count: Number(data.count || 0) - 1
-    }, {
-      merge: true
-    });
+    };
+
+    t.set(ref, newTag, { merge: true });
   });
 };

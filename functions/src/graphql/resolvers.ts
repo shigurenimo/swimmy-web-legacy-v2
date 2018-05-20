@@ -11,7 +11,7 @@ import { PostConnection } from './types/postConnection';
 import { PostTag } from './types/postTag';
 import { Query } from './types/query';
 import { Tag } from './types/tag';
-import { Test } from './types/test';
+import { Hello } from './types/hello';
 import { User } from './types/user';
 
 export const resolvers = {
@@ -28,6 +28,6 @@ export const resolvers = {
   PostConnection,
   PostTag,
   Tag,
-  Test,
+  Hello,
   User
 };

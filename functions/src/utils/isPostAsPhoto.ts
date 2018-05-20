@@ -1,3 +1,5 @@
-export const isPostAsPhoto = (post: any) => {
-  return post.photoURL
+import { Post } from '../interfaces/post';
+
+export const isPostAsPhoto = (post: Post): boolean => {
+  return !!post.photoURL
 }

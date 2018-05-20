@@ -2,8 +2,14 @@ import { firestore } from 'firebase-admin';
 
 import { POSTS } from '../../constants';
 import { DESC } from '../../constants/query';
+import { DocsQuery } from '../../interfaces/doc';
+import { Post } from '../../interfaces/post';
 
-export const getPosts = async (args) => {
+interface PostDocsQuery extends DocsQuery {
+  type: string;
+}
+
+export const getPosts = async (docsQuery: PostDocsQuery): Promise<Post[]> => {
   const {
     limit = 15,
     orderBy = {
@@ -12,7 +18,7 @@ export const getPosts = async (args) => {
     },
     type,
     startAfter
-  } = args;
+  } = docsQuery;
 
   let ref = firestore().collection(POSTS) as any;
 
@@ -42,7 +48,7 @@ export const getPosts = async (args) => {
     return [];
   }
 
-  const posts = querySnapshots.docs.map((snapshot) => {
+  return querySnapshots.docs.map((snapshot) => {
     const data = snapshot.data();
 
     const tagIds = Object.keys(data.tags);
@@ -57,6 +63,4 @@ export const getPosts = async (args) => {
 
     return { ...data, id: snapshot.id };
   });
-
-  return posts;
 };

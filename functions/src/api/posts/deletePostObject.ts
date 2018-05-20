@@ -3,7 +3,7 @@ import * as algoliasearch from 'algoliasearch';
 import { config } from '../../config';
 import { POSTS } from '../../constants';
 
-export const deletePostObject = async (postId: string) => {
+export const deletePostObject = async (postId: string): Promise<void> => {
   const client = algoliasearch(config.algolia.appId, config.algolia.key);
 
   const index = client.initIndex(POSTS);

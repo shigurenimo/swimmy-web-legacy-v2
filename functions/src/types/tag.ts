@@ -1,17 +1,5 @@
-export const Tag = {
-  id(root) {
-    return root.id;
-  },
-  count(root) {
-    return root.count;
-  },
-  createdAt(root) {
-    return root.createdAt;
-  },
-  name(root) {
-    return root.name;
-  },
-  updatedAt(root) {
-    return root.updatedAt;
-  }
-};
+import { Tag } from '../interfaces/tag';
+
+export type TagId = string;
+
+export type Tags = Tag[] | { [key: string]: Tag };

@@ -1,46 +1,33 @@
-import { getPhotoURL } from '../../api/microservices/getPhotoURL';
+import { Owner } from '../../interfaces/owner';
+import { Post } from '../../interfaces/post';
+import { PhotoURLs } from '../../types/photoURL';
 
-export const createPost = async (postId: string, input, owner) => {
+interface Input {
+  content: string;
+  replyPostId: string;
+  photoURL: string;
+  photoURLs: PhotoURLs
+}
+
+export const createPost = async (
+  postId: string,
+  input: Input,
+  owner: Owner
+): Promise<Post> => {
   const createdAt = new Date();
 
-  const newPost = {
+  return {
     id: postId,
     content: input.content,
     createdAt: createdAt,
-    ownerId: null,
+    ownerId: owner ? owner.uid : null,
     owner: null,
-    photoURL: null,
-    photoURLs: {},
     repliedPostCount: 0,
     replyPostId: input.replyPostId || null,
     repliedPostIds: [],
     tags: {},
+    photoURL: input.photoURL,
+    photoURLs: input.photoURLs,
     updatedAt: createdAt
   };
-
-  if (owner) {
-    newPost.ownerId = owner.uid;
-    /*
-    newPost.owner = {
-      uid: owner.uid,
-      displayName: owner.displayName,
-      photoURL: owner.photoURL
-    };
-    */
-  }
-
-  newPost.photoURLs = {};
-
-  const photoURLLength = input.photoURLs.length;
-
-  if (photoURLLength) {
-    for (let i = 0; i < photoURLLength; ++i) {
-      const { photoId, photoURL } = input.photoURLs[i];
-      const data = await getPhotoURL('posts', photoId, photoURL);
-      newPost.photoURLs[photoId] = data;
-    }
-    newPost.photoURL = newPost.photoURLs[0].photoURL;
-  }
-
-  return newPost;
 };

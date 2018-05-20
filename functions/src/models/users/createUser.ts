@@ -1,12 +1,15 @@
-export const createUser = (user) => {
-  if (!user) {
-    throw new Error('user not found');
+import { auth } from 'firebase-admin';
+import { User } from '../../interfaces/user';
+
+export const createUser = (userRecord: auth.UserRecord): User => {
+  if (!userRecord) {
+    throw new Error('userRecord not found');
   }
 
-  const uid = user.uid;
+  const uid = userRecord.uid;
 
   const input = {
-    displayName: user.email.match(/^[^@]+/)[0]
+    displayName: userRecord.email.match(/^[^@]+/)[0]
   } as any;
 
   const createdAt = new Date();
@@ -23,6 +26,7 @@ export const createUser = (user) => {
     headerPhotoURL: '',
     links: [],
     photoURL: '',
+    photoURLs: {},
     postCount: 0,
     updatedAt: createdAt
   };

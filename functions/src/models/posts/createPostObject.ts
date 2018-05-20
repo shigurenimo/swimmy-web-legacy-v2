@@ -1,9 +1,11 @@
-export const createPostObject = (objectID: string, root) => {
+import { Post, PostObject } from '../../interfaces/post';
+
+export const createPostObject = (objectID: string, root: Post): PostObject => {
   return {
     objectID: objectID,
     id: objectID,
     content: root.content,
-    createdAt: root.createdAt / 1,
+    createdAt: root.createdAt as any / 1,
     ownerId: root.ownerId || '',
     owner: root.owner || null,
     photoCount: Object.keys(root.photoURLs || []).length,
@@ -13,6 +15,7 @@ export const createPostObject = (objectID: string, root) => {
     photoURL: root.photoURL || '',
     repliedPostCount: root.repliedPostCount || 0,
     replyPostId: root.replyPostId || '',
+    repliedPostIds: root.repliedPostIds,
     tags: Object.keys(root.tags).map((tagId) => {
       const tag = root.tags[tagId];
       return {
@@ -22,9 +25,6 @@ export const createPostObject = (objectID: string, root) => {
         count: tag.count
       };
     }),
-    typeReply: !!root.replyPostId,
-    typeThread: root.repliedPostCount > 0,
-    typePhoto: Object.keys(root.photoURLs || []).length > 0,
-    updatedAt: root.updatedAt / 1
+    updatedAt: root.updatedAt as any / 1
   };
 };

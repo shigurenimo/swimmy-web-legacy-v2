@@ -1,11 +1,7 @@
 import { firestore } from 'firebase-admin';
 import { POSTS } from '../../constants';
 
-export const updatePostRepliedPostCount = async (postId: string, count = 1) => {
-  if (!postId) {
-    throw new Error('postId not found');
-  }
-
+export const updatePostRepliedPostCount = async (postId: string, count: number = 1): Promise<void> => {
   await firestore().runTransaction(async (t) => {
     const postRef = firestore().collection(POSTS).doc(postId);
 

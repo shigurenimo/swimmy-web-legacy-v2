@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 
 import { config } from '../../config';
 
-export const deletePhotoURL = async (objectId: string) => {
+export const deletePhotoURL = async (objectId: string): Promise<void> => {
   const { projectId } = JSON.parse(process.env.FIREBASE_CONFIG);
 
   const bucket = `${projectId}.appspot.com`;

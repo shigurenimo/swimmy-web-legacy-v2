@@ -1,6 +1,6 @@
-export const getTime = () => {
+export const getTime = (): () => number => {
   const a = new Date().getTime();
-  return () => {
+  return (): number => {
     const b = new Date().getTime();
     return b - a;
   };

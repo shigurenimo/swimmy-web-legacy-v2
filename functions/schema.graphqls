@@ -84,7 +84,7 @@ type Post implements Node {
   id: ID!
   content: String
   createdAt: DateTime
-  ownerId: Boolean
+  ownerId: String
   owner: Owner
   photoCount: Int
   photoURLs: [String]
@@ -116,7 +116,7 @@ type PhotoURL {
   storageURL: String
 }
 
-type Test {
+type Hello {
   hello: String
 }
 
@@ -164,9 +164,7 @@ type Viewer {
 }
 
 type Query {
-  test: Test
-  post (id: ID!): Post
-  posts (query: String, limit: Int, orderBy: PostOrderBy, type: PostType, replyPostId: ID): PostConnection
+  hello: Hello
   tag (id: ID!): Tag
   tags (limit: Int orderBy: TagOrderBy): TagConnection
   user (id: ID, username: String): User

@@ -1,8 +1,9 @@
 import { firestore } from 'firebase-admin';
 
 import { USERS } from '../../constants';
+import { User } from '../../interfaces/user';
 
-export const getUser = async (userId: string) => {
+export const getUser = async (userId: string): Promise<User> => {
   if (!userId) {
     throw new Error('userId not found');
   }
@@ -17,5 +18,5 @@ export const getUser = async (userId: string) => {
 
   const data = snapshot.data();
 
-  return { ...data, id: snapshot.id };
+  return { ...data, id: snapshot.id } as User;
 };

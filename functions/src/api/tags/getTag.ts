@@ -1,8 +1,9 @@
 import { firestore } from 'firebase-admin';
 
 import { TAGS } from '../../constants/index';
+import { Tag } from '../../interfaces/tag';
 
-export const getTag = async (tagId: string) => {
+export const getTag = async (tagId: string): Promise<Tag> => {
   if (typeof tagId === 'undefined') {
     throw new Error('postId not found');
   }
@@ -17,5 +18,5 @@ export const getTag = async (tagId: string) => {
 
   const data = snapshot.data();
 
-  return { ...data, id: snapshot.id };
+  return { ...data, id: snapshot.id } as Tag;
 };

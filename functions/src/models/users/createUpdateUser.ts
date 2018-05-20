@@ -1,6 +1,15 @@
-import { getPhotoURL } from '../../api/microservices/getPhotoURL';
+import { User, UserForUpdate } from '../../interfaces/user';
+import { PhotoURLs } from '../../types/photoURL';
 
-export const createUpdateUser = async (uid: string, input) => {
+interface Input {
+  description: string;
+  displayName: string;
+  username: string;
+  photoURLs: PhotoURLs;
+  photoURL: string | null;
+}
+
+export const createUpdateUser = (uid: string, input: Input): Promise<UserForUpdate> => {
   const updatedAt = new Date();
 
   const newUser = {
@@ -19,13 +28,12 @@ export const createUpdateUser = async (uid: string, input) => {
     newUser.username = input.username;
   }
 
-  newUser.photoURLs = {};
+  if (Object.keys(input.photoURLs)) {
+    newUser.photoURLs = input.photoURLs;
+  }
 
-  if (input.photoURLs && input.photoURLs[0]) {
-    const { photoId, photoURL } = input.photoURLs[0];
-    const data = await getPhotoURL('users', photoId, photoURL);
-    newUser.photoURLs[photoId] = data;
-    newUser.photoURL = data.photoURL;
+  if (input.photoURL) {
+    newUser.photoURL = input.photoURL;
   }
 
   return newUser;

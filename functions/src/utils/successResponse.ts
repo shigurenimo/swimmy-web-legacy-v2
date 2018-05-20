@@ -1,4 +1,4 @@
-export const successResponse = (res, result?) => {
+export const successResponse = (res, result?): void => {
   if (typeof result !== 'undefined') {
     if (typeof result === 'string') {
       res.end(result);

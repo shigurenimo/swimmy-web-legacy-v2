@@ -2,10 +2,14 @@ import * as functions from 'firebase-functions';
 import fetch from 'node-fetch';
 
 import { config } from '../../config';
+import { PhotoURL } from '../../interfaces/photoURL';
 import { getStorageURL } from '../../utils/getStorageURL';
-import { setImage } from '../images/setImage';
 
-export const getPhotoURL = async (collection: string, photoId: string, downloadURL: string) => {
+export const getPhotoURL = async (
+  collection: string,
+  photoId: string,
+  downloadURL: string
+): Promise<PhotoURL> => {
   const objectId = `${collection}/${photoId}`;
 
   const storageURL = getStorageURL(objectId);
@@ -38,14 +42,10 @@ export const getPhotoURL = async (collection: string, photoId: string, downloadU
 
   const { data } = await res.json();
 
-  const image = {
+  return {
     objectId: objectId,
     photoURL: data,
     downloadURL,
     storageURL
   };
-
-  await setImage(photoId, image);
-
-  return image;
 };

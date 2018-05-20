@@ -2,14 +2,15 @@ import { firestore } from 'firebase-functions';
 
 import { updateAuthDisplayName } from '../api/authentications/updateAuthDisplayName';
 import { deleteImage } from '../api/images/deleteImage';
+import { User } from '../interfaces/user';
 import { isUnchangedOwner } from '../utils/isUnchangedOwner';
 
 const document = firestore.document('users/{uid}');
 
 export = document.onUpdate(async (snaphost, context) => {
   const { uid } = context.params;
-  const user = snaphost.after.data();
-  const userBefore = snaphost.before.data();
+  const user = snaphost.after.data() as User;
+  const userBefore = snaphost.before.data() as User;
 
   if (isUnchangedOwner(user, userBefore)) {
     return {};
@@ -29,6 +30,4 @@ export = document.onUpdate(async (snaphost, context) => {
   };
 
   await updateAuthDisplayName(uid, owner);
-
-  // await updateUserObject(uid, user);
 });

@@ -2,7 +2,7 @@ import { firestore } from 'firebase-admin';
 
 import { POSTS, USERS } from '../../constants';
 
-export const deleteUserPost = async (uid: string, postId: string) => {
+export const deleteUserPost = async (uid: string, postId: string): Promise<void> => {
   if (!postId) {
     throw new Error('postId not found');
   }

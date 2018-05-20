@@ -1,3 +1,5 @@
-export const isPostAsThread = (post: any) => {
-  return post.repliedPostCount > 0
-}
+import { Post } from '../interfaces/post';
+
+export const isPostAsThread = (post: Post): boolean => {
+  return post.repliedPostCount > 0;
+};

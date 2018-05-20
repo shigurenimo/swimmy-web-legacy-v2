@@ -6,13 +6,15 @@ import { deletePostAsThread } from '../api/posts-as-thread/deletePostAsThread';
 import { updatePostRepliedPostCount } from '../api/posts/updatePostRepliedPostCount';
 import { deleteTags } from '../api/tags/deleteTags';
 import { deleteUserPost } from '../api/users-posts/deleteUserPost';
+import { Post } from '../interfaces/post';
 import { isPostAsPhoto } from '../utils/isPostAsPhoto';
 import { isPostAsThread } from '../utils/isPostAsThread';
 
 const document = firestore.document('posts/{postId}');
 
 export = document.onDelete(async (snapshot, context) => {
-  const post = snapshot.data();
+  const post = snapshot.data() as Post;
+
   const { postId } = context.params;
 
   await Promise.all([
@@ -33,6 +35,4 @@ export = document.onDelete(async (snapshot, context) => {
     post.ownerId &&
     deleteUserPost(post.ownerId, postId)
   ]);
-
-  // await deletePostObject(postId);
 })

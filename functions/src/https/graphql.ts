@@ -7,7 +7,7 @@ import { https } from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
 import { join } from 'path';
-import { resolvers } from '../resolvers';
+import { resolvers } from '../graphql/resolvers';
 
 import { failureResponse } from '../utils/failureResponse';
 

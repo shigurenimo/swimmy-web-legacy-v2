@@ -1,17 +1,5 @@
-export const PhotoURL = {
-  id(root) {
-    return root.id;
-  },
-  downloadURL(root) {
-    return root.downloadURL;
-  },
-  objectId(root) {
-    return root.objectId;
-  },
-  photoURL(root) {
-    return root.photoURL;
-  },
-  storageURL(root) {
-    return root.storageURL;
-  }
-};
+import { PhotoURL, PhotoURLForClient } from '../interfaces/photoURL';
+
+export type PhotoURLs = PhotoURL[] | { [key: string]: PhotoURL }
+
+type PhotoURLsForClient = PhotoURLForClient[]

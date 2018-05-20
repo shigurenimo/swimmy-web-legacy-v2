@@ -1,9 +1,10 @@
+import { Tags } from '../../types/tag';
 import { toArray } from '../../utils/toArray';
 
 import { deleteTag } from './deleteTag';
 
-export const deleteTags = (tags) => {
+export const deleteTags = async (tags: Tags): Promise<void> => {
   const promises = toArray(tags).map(deleteTag);
 
-  return Promise.all(promises);
+  await Promise.all(promises);
 };

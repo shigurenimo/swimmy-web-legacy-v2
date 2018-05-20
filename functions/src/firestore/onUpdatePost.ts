@@ -6,6 +6,7 @@ import { setPostAsPhoto } from '../api/posts-as-photo/setPostAsPhoto';
 import { deletePostAsThread } from '../api/posts-as-thread/deletePostAsThread';
 import { setPostAsThread } from '../api/posts-as-thread/setPostAsThread';
 import { setUserPost } from '../api/users-posts/setUserPost';
+import { Post } from '../interfaces/post';
 import { createPostAsAnonymous } from '../models/posts/createPostAsAnonymous';
 import { isPostAsPhoto } from '../utils/isPostAsPhoto';
 import { isPostAsThread } from '../utils/isPostAsThread';
@@ -13,8 +14,9 @@ import { isPostAsThread } from '../utils/isPostAsThread';
 const document = firestore.document('posts/{postId}');
 
 export = document.onUpdate(async (change, context) => {
+  const post = change.after.data() as Post;
+
   const { postId } = context.params;
-  const post = change.after.data();
 
   const publicPost = createPostAsAnonymous(post);
 

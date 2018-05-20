@@ -1,8 +1,9 @@
 import { firestore } from 'firebase-admin';
 
 import { USERS } from '../../constants';
+import { User } from '../../interfaces/user';
 
-export const getUserByUsername = async (username) => {
+export const getUserByUsername = async (username: string): Promise<User> => {
   if (!username) {
     throw new Error('username not found');
   }
@@ -18,5 +19,5 @@ export const getUserByUsername = async (username) => {
 
   const data = snapshot.data();
 
-  return { ...data, id: snapshot.id };
+  return { ...data, id: snapshot.id } as User;
 };
