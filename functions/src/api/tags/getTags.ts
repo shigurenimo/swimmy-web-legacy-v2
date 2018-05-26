@@ -4,7 +4,11 @@ import { TAGS } from '../../constants';
 import { DESC } from '../../constants/query';
 import { Tag } from '../../interfaces/tag';
 
-export const getTags = async ({ limit }): Promise<Tag[]> => {
+interface Query {
+  limit: number
+}
+
+export const getTags = async ({ limit }: Query): Promise<Tag[]> => {
   const tagsRef = firestore().collection(TAGS);
   const ref = tagsRef.orderBy('createdAt', DESC).limit(limit);
 
