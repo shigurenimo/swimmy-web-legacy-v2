@@ -811,13 +811,19 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-angular-link-http@1.0.0:
+apollo-angular-link-http-common@~1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-angular-link-http/-/apollo-angular-link-http-1.0.0.tgz#89fbce6fa5fc211314558f6b932934b71086f156"
+  resolved "https://registry.yarnpkg.com/apollo-angular-link-http-common/-/apollo-angular-link-http-common-1.0.0.tgz#bb15ab9844335531572b44f259c360c36c4bb1e7"
 
-apollo-angular@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-1.0.0.tgz#52a292437acf039de7658eaf131b8a1d88d8f0d7"
+apollo-angular-link-http@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/apollo-angular-link-http/-/apollo-angular-link-http-1.0.3.tgz#e884c63f25771d645feca0ef18d732dc43caed38"
+  dependencies:
+    apollo-angular-link-http-common "~1.0.0"
+
+apollo-angular@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-1.0.1.tgz#2a48bd4c550be417d2902adcd859493282cd939a"
 
 apollo-cache-inmemory@^1.1.12:
   version "1.2.1"

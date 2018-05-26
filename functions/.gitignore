@@ -1,9 +1,13 @@
+# Sw
+/config.json
+/lib
+
 # Node.js
 yarn-error.log
 
 # Firebase
-public
 firebase-debug.log
+cloud-functions-emulator.log
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
