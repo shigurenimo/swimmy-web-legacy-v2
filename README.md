@@ -7,6 +7,13 @@ $ yarn
 $ yarn start
 ```
 
+## Documentation
+
+```bash
+$ yarn
+$ yarn docs
+```
+
 ## Contribution
 
 ### [GitHub Issue](https://github.com/uufish/Sw/issues)
