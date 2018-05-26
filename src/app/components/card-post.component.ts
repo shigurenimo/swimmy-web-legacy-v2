@@ -62,37 +62,33 @@ import { PostsService } from '../services/posts.service';
 
     <ng-template #templateListItemActions>
       <div class="template-actions" nz-row nzType="flex" nzAlign="middle">
-        <nz-checkable-tag
+        <nz-tag
           *ngFor="let tag of tags"
           class="tag"
+          nzMode="checkable"
           nz-col
           [nzChecked]="false"
           (click)="onUpdateTag(tag.name)">
           {{tag.name}} {{tag.count}}
-        </nz-checkable-tag>
+        </nz-tag>
         <button
           *ngIf="isLogged && !isEditNewTag"
           nz-col
           class="edit"
           nz-button
-          [nzShape]="nzShape"
-          [disabled]="isMutation"
-          (click)="editNewTag()">
+          nzShape="circle"
+          [disabled]="isLoadingMutation"
+          (click)="onEditNewTag()">
           <i class="anticon anticon-plus"></i>
         </button>
-        <nz-input
-          *ngIf="isLogged && isEditNewTag"
-          nz-col
-          style="width: 140px;"
-          [(ngModel)]="newTag"
-          [nzReadonly]="isMutation"
-          [nzPlaceHolder]="nzPlaceHolder"
-          (nzBlur)="onUpdateTag(newTag)">
-          <ng-template #prefix>
-            <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
-            <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
-          </ng-template>
-        </nz-input>
+        <nz-input-group [nzSuffix]="suffixInputTag" *ngIf="isLogged && isEditNewTag" nz-col style="width: 140px;">
+          <input
+            nz-input
+            [(ngModel)]="newTag"
+            [readonly]="isLoadingMutation"
+            placeholder="new"
+            (blur)="onUpdateTag(newTag)">
+        </nz-input-group>
         <!--
         <button
           class="reply"
@@ -108,37 +104,33 @@ import { PostsService } from '../services/posts.service';
 
     <ng-template #templateActions>
       <div class="template-actions" nz-row nzType="flex" nzAlign="middle">
-        <nz-checkable-tag
+        <nz-tag
           *ngFor="let tag of tags"
           class="tag"
           nz-col
+          nzMode="checkable"
           [nzChecked]="false"
           (click)="onUpdateTag(tag.name)">
           {{tag.name}} {{tag.count}}
-        </nz-checkable-tag>
+        </nz-tag>
         <button
           *ngIf="isLogged && !isEditNewTag"
           nz-col
           class="edit"
           nz-button
-          [nzShape]="nzShape"
-          [disabled]="isMutation"
-          (click)="editNewTag()">
+          nzShape="circle"
+          [disabled]="isLoadingMutation"
+          (click)="onEditNewTag()">
           <i class="anticon anticon-plus"></i>
         </button>
-        <nz-input
-          *ngIf="isLogged && isEditNewTag"
-          nz-col
-          style="width: 140px;"
-          [(ngModel)]="newTag"
-          [nzReadonly]="isMutation"
-          [nzPlaceHolder]="nzPlaceHolder"
-          (nzBlur)="onUpdateTag(newTag)">
-          <ng-template #prefix>
-            <i *ngIf="isMutation" class="anticon anticon-loading anticon-spin"></i>
-            <i *ngIf="!isMutation" class="anticon anticon-plus"></i>
-          </ng-template>
-        </nz-input>
+        <nz-input-group *ngIf="isLogged && isEditNewTag" nz-col [nzSuffix]="suffixInputTag" style="width: 140px;">
+          <input
+            nz-input
+            [(ngModel)]="newTag"
+            [readonly]="isLoadingMutation"
+            placeholder="new"
+            (blur)="onUpdateTag(newTag)">
+        </nz-input-group>
         <button
           *ngIf="ownerId"
           class="reply"
@@ -151,6 +143,11 @@ import { PostsService } from '../services/posts.service';
           <span *ngIf="isDelete">削除する</span>
         </button>
       </div>
+    </ng-template>
+
+    <ng-template #suffixInputTag>
+      <i *ngIf="isLoadingMutation" class="anticon anticon-loading anticon-spin"></i>
+      <i *ngIf="!isLoadingMutation" class="anticon anticon-plus"></i>
     </ng-template>
 
     <ng-template #templateReply>
@@ -201,7 +198,7 @@ import { PostsService } from '../services/posts.service';
       color: tomato;
       cursor: pointer;
     }
-    
+
     .template-replyPostId a::before {
       content: '> ';
     }
@@ -277,12 +274,10 @@ export class CardPostComponent {
   @Input() updatedAt: string;
   @Input() isLogged: boolean;
 
-  public nzShape = 'circle';
   public resize = 'post';
-  public nzPlaceHolder = 'new';
   public isEditNewTag = false;
   public isOpenReply = false;
-  public isMutation = false;
+  public isLoadingMutation = false;
   public isDeleteMutate = false;
   public isDelete = false;
   public newTag = '';
@@ -325,15 +320,15 @@ export class CardPostComponent {
       return;
     }
 
-    if (this.isMutation) {
+    if (this.isLoadingMutation) {
       return;
     }
 
-    this.isMutation = true;
+    this.isLoadingMutation = true;
 
     if (name === '') {
       this.isEditNewTag = false;
-      this.isMutation = false;
+      this.isLoadingMutation = false;
       return;
     }
 
@@ -341,11 +336,11 @@ export class CardPostComponent {
 
     post$.subscribe((res) => {
       this.isEditNewTag = false;
-      this.isMutation = false;
+      this.isLoadingMutation = false;
       this.newTag = '';
     }, (err) => {
       console.error(err);
-      this.isMutation = false;
+      this.isLoadingMutation = false;
     });
   }
 
@@ -371,7 +366,7 @@ export class CardPostComponent {
     }
   }
 
-  public editNewTag () {
+  public onEditNewTag () {
     this.isEditNewTag = true;
   }
 }

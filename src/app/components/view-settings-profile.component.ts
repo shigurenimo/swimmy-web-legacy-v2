@@ -46,7 +46,7 @@ import { UsersService } from '../services/users.service';
                     nz-input
                     formControlName='displayName'
                     placeholder='uufish'
-                    (nzBlur)='onMutate()'
+                    (blur)='onMutate()'
                   >
                 </nz-input-group>
               </nz-form-control>
@@ -59,7 +59,7 @@ import { UsersService } from '../services/users.service';
                   formControlName='description'
                   placeholder='あなたの自己紹介'
                   nzAutosize
-                  (nzBlur)='onMutate()'
+                  (blur)='onMutate()'
                 >
                 </textarea>
               </nz-form-control>
