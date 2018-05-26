@@ -9,8 +9,6 @@ $ yarn start
 
 ## Contribution
 
-一緒に開発してくれるヒトを探しています。
-
 ### [GitHub Issue](https://github.com/uufish/Sw/issues)
 
 自由に作成してください。

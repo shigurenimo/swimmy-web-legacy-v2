@@ -4,12 +4,12 @@
   "license": "MIT",
   "scripts": {
     "build": "ng build --prod",
+    "docs": "vuepress dev docs",
     "e2e": "ng e2e",
     "lint": "ng lint",
     "serve": "ng serve -c hmr --host=0.0.0.0",
-    "test": "ng test",
-    "reset": "rm ~/.config/gcloud/application_default_credentials.json",
-    "start": "ng serve --host=0.0.0.0"
+    "start": "ng serve --host=0.0.0.0",
+    "test": "ng test"
   },
   "dependencies": {
     "@angular/animations": "^5.2.9",
@@ -70,7 +70,8 @@
     "standard": "^11.0.1",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
-    "typescript": "2.6.2"
+    "typescript": "2.6.2",
+    "vuepress": "^0.10.0"
   },
   "private": true,
   "standard": {

@@ -6,6 +6,7 @@
     "deploy": "firebase deploy --only functions",
     "lint": "tslint --project tsconfig.json",
     "logs": "firebase functions:log",
+    "reset": "rm ~/.config/gcloud/application_default_credentials.json",
     "serve": "firebase serve --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run serve",
@@ -26,12 +27,12 @@
     "graphql-type-json": "^0.2.1",
     "node-fetch": "^2.1.2"
   },
-  "private": true,
   "devDependencies": {
     "@firebase/app-types": "^0.3.2",
     "@types/graphql": "^0.13.1",
     "firebase-tools": "^3.18.5",
     "tslint": "^5.8.0",
     "typescript": "^2.5.3"
-  }
+  },
+  "private": true
 }
