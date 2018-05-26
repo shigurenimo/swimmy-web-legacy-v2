@@ -64,10 +64,6 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'hello') {
   exports.hello = require('./lib/https/hello')
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'restoreUser') {
-  exports.addPost = require('./lib/https/addPost')
-}
-
 if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./lib/https/graphql')
 }
