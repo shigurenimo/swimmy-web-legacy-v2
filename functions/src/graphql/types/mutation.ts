@@ -23,11 +23,11 @@ export const Mutation = {
 
     const photoURLs = {};
 
-    for (let i = 0; i < input.photos.length; ++i) {
-      const { photoId, downloadURL } = input.photos[i];
-      const photoURL = await getPhotoURL('posts', photoId, downloadURL);
-      photoURLs[photoId] = photoURL;
-      await setImage(photoId, photoURL);
+    for (const photo of input.photos) {
+      const { photoId, downloadURL } = photo;
+      const photoObject = await getPhotoURL('posts', photoId, downloadURL);
+      photoURLs[photoId] = photoObject;
+      await setImage(photoId, photoObject);
     }
 
     const photoIds = Object.keys(photoURLs)
@@ -69,11 +69,11 @@ export const Mutation = {
 
     const photoURLs = {};
 
-    for (let i = 0; i < input.photos.length; ++i) {
-      const { photoId, downloadURL } = input.photos[i];
-      const photoURL = await getPhotoURL('posts', photoId, downloadURL);
-      photoURLs[photoId] = photoURL;
-      await setImage(photoId, photoURL);
+    for (const photo of input.photos) {
+      const { photoId, downloadURL } = photo;
+      const photoObject = await getPhotoURL('posts', photoId, downloadURL);
+      photoURLs[photoId] = photoObject;
+      await setImage(photoId, photoObject);
     }
 
     const photoIds = Object.keys(photoURLs)

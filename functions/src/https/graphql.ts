@@ -1,4 +1,4 @@
-import { graphqlExpress } from 'apollo-server-express';
+import { ExpressGraphQLOptionsFunction, graphqlExpress } from 'apollo-server-express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as express from 'express';
@@ -6,6 +6,7 @@ import { auth } from 'firebase-admin';
 import { https } from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
+import { IncomingHttpHeaders } from 'http';
 import { join } from 'path';
 import { resolvers } from '../graphql/resolvers';
 
@@ -13,11 +14,18 @@ import { failureResponse } from '../utils/failureResponse';
 
 const typeDefsFile = join(__dirname, '..', '..', 'schema.graphqls');
 const typeDefs = readFileSync(typeDefsFile, 'utf-8');
-const resolverValidationOptions = { requireResolversForResolveType: false };
-const schema = makeExecutableSchema({ typeDefs, resolvers, resolverValidationOptions });
+const resolverValidationOptions = {requireResolversForResolveType: false};
+const schema = makeExecutableSchema({typeDefs, resolvers, resolverValidationOptions});
 
-const graphql = graphqlExpress(async (request, response) => {
-  const { authorization } = request.headers as any;
+interface Headers extends IncomingHttpHeaders {
+  authorization: string
+}
+
+const handler: ExpressGraphQLOptionsFunction = async (
+  request: express.Request,
+  response: express.Response,
+) => {
+  const {authorization} = request.headers as Headers;
 
   if (authorization) {
     try {
@@ -27,18 +35,20 @@ const graphql = graphqlExpress(async (request, response) => {
         displayName: decodedToken.name || '',
         photoURL: decodedToken.picture || '',
         uid: decodedToken.uid,
-        email: decodedToken.email || ''
+        email: decodedToken.email || '',
       };
-      return { schema, context: { user } };
+      return {schema, context: {user}};
     } catch (err) {
       failureResponse(response, err);
     }
   }
 
-  return { schema, context: {} };
-});
+  return {schema, context: {}};
+}
 
-const filter = (request, response, next) => {
+const graphql = graphqlExpress(handler);
+
+const filter = (request: express.Request, response: express.Response, next: any) => {
   if (request.method === 'OPTIONS') {
     response.sendStatus(200);
     return;

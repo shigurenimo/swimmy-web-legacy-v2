@@ -2,9 +2,6 @@ export const Post = {
   id (root) {
     return root.id;
   },
-  content (root) {
-    return root.content;
-  },
   createdAt (root) {
     return new Date(root.createdAt);
   },
@@ -15,26 +12,11 @@ export const Post = {
       return null;
     }
   },
-  owner (root) {
-    return root.owner;
-  },
-  photoCount (root) {
-    return root.photoCount;
-  },
-  photoURLs (root) {
-    return root.photoURLs;
-  },
   photoURL (root) {
     return root.photoURL || null;
   },
-  repliedPostCount (root) {
-    return root.repliedPostCount;
-  },
-  replyPostId (root) {
-    return root.replyPostId;
-  },
   tags (root) {
-    const tags = root.tags.filter((tag) => {
+    return root.tags.filter((tag) => {
       return tag.count;
     }).map((tag) => {
       return {
@@ -45,7 +27,6 @@ export const Post = {
         count: tag.count
       };
     });
-    return tags;
   },
   updatedAt (root) {
     return new Date(root.updatedAt);
