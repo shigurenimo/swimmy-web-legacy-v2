@@ -1,0 +1,30 @@
+:host > div {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 8px;
+}
+
+.title {
+  padding-top: 80px;
+}
+
+.title h1 {
+  text-align: center;
+  letter-spacing: 4px;
+  color: #108ee9;
+}
+
+.title .line {
+  color: gray;
+}
+
+.form {
+  margin: 0 auto;
+  padding-top: 40px;
+  max-width: 280px;
+}
+
+.or {
+  letter-spacing: 1px;
+  padding: 0 5px;
+}

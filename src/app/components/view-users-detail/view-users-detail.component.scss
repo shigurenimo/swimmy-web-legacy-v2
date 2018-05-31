@@ -1,0 +1,28 @@
+:host > div {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 8px;
+}
+
+.user-icon ::ng-deep .ant-avatar {
+  margin: 0 auto;
+  display: block;
+  height: 200px;
+  font-size: 100px;
+  width: 200px;
+  background: white;
+  color: gray;
+}
+
+.user-icon ::ng-deep .anticon {
+  line-height: 200px;
+}
+
+.displayName {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.profile {
+  padding-top: 40px;
+}

@@ -1,0 +1,97 @@
+:host {
+  display: block;
+}
+
+:host:hover {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+:host a {
+  color: inherit;
+}
+
+:host a:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+:host ::ng-deep .ant-tag-root .ant-tag {
+  margin-right: 0;
+  margin-left: 4px;
+}
+
+:host ::ng-deep .ant-btn-circle {
+  border: none;
+}
+
+:host ::ng-deep .ant-card-body {
+  padding: 0;
+}
+
+.template-replyPostId {
+  padding: 8px;
+}
+
+.template-replyPostId a {
+  color: tomato;
+  cursor: pointer;
+}
+
+.template-replyPostId a::before {
+  content: '> ';
+}
+
+.template-list-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.template-content {
+  padding: 8px;
+}
+
+.template-content .text {
+  white-space: pre-wrap;
+}
+
+.template-content .createdAt {
+  padding-left: 10px;
+  font-size: 0.8rem;
+  opacity: 0.4;
+}
+
+.photoURLs {
+  padding: 8px 8px 0 8px;
+}
+
+.photoURLs .item {
+  flex: auto;
+  width: 100px;
+  max-width: 400px;
+  font-size: 0;
+}
+
+.photoURLs img {
+  width: 100%;
+}
+
+.template-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding: 0 8px 4px;
+}
+
+.template-actions .tag {
+  padding: 4px 0;
+}
+
+.template-actions .edit {
+  margin-left: 8px;
+}
+
+.template-actions .reply {
+  margin-left: 4px;
+}
+
+.template-reply {
+  padding: 0 8px 8px;
+}

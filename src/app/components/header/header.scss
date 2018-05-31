@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.header {
+  width: 100%;
+  background: white;
+}
+
+@media screen and (min-width: 769px) {
+  .menu {
+    display: none;
+  }
+}
+
+.row {
+  height: 48px;
+}
+
+.ant-menu-item ::ng-deep .anticon {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 768px) {
+  .ant-menu-item ::ng-deep .anticon {
+    margin-right: 0;
+  }
+
+  .name {
+    display: none;
+  }
+}
+
+.center {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  line-height: 48px;
+  height: 48px;
+  width: 200px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.user {
+  margin: 0 10px 0 10px;
+}
+
+.user ::ng-deep .ant-btn {
+  border: none;
+}
+
+.header-space {
+  height: 48px;
+}
+
+.flex-space {
+  flex: 1 1 auto;
+}

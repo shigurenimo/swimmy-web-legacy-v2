@@ -1,0 +1,35 @@
+:host > div {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 8px;
+}
+
+.profile {
+  padding-top: 40px;
+}
+
+.profile .icon {
+  height: 50px;
+  font-size: 25px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.profile .icon ::ng-deep .ant-avatar-string {
+  line-height: 50px;
+}
+
+.menu {
+  padding-top: 40px;
+}
+
+.menu li {
+  display: block;
+  padding: 16px 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.menu li:hover {
+  background: rgba(0, 0, 0, 0.1);
+}

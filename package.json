@@ -28,7 +28,7 @@
     "@firebase/app-types": "^0.1.0",
     "algoliasearch": "^3.27.1",
     "angularfire2": "5.0.0-rc.6",
-    "antd": "^3.5.3",
+    "antd": "^3.5.4",
     "apollo-angular": "1.0.1",
     "apollo-angular-link-http": "1.0.3",
     "apollo-cache-inmemory": "^1.1.12",
@@ -66,6 +66,7 @@
     "karma-coverage-istanbul-reporter": "^1.4.2",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^1.0.0",
+
     "protractor": "~5.3.1",
     "standard": "^11.0.1",
     "ts-node": "~5.0.1",
