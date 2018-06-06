@@ -33,9 +33,13 @@
               }
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/antd/dist/antd.css"
+              "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
@@ -72,7 +76,7 @@
           "options": {
             "browserTarget": "sw:build",
             "hmrWarning": false,
-            "hmr": true,
+            "hmr": true
           },
           "configurations": {
             "hmr": {
@@ -100,7 +104,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "assets": [
               {
@@ -165,8 +169,11 @@
   "cli": {},
   "schematics": {
     "@schematics/angular:component": {
+      "inlineTemplate": true,
       "prefix": "app",
-      "styleext": "css"
+      "styleext": "scss",
+      "spec": false,
+      "module": "app"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
