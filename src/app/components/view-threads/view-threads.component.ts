@@ -1,83 +1,77 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { Post } from '../../interfaces/post';
+import { BrowserService } from '../../services/browser.service';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-view-threads',
   template: `
-    <app-header></app-header>
-
-    <ng-container *ngTemplateOutlet="templateSearch;"></ng-container>
+    <ng-container *ngTemplateOutlet="templateSearch"></ng-container>
 
     <div class="template-posts">
-      <app-card-thread
-        *ngFor="let node of posts"
-        [content]="node.content"
-        [createdAt]="node.createdAt"
-        [id]="node.id"
-        [photoURLs]="node.photoURLs"
-        [ownerId]="node.ownerId"
-        [owner]="node.owner"
-        [repliedPostCount]="node.repliedPostCount"
-        [repliedPostIds]="node.repliedPostIds"
-        [tags]="node.tags"
-        [updatedAt]="node.updatedAt">
-      </app-card-thread>
+      <div mdc-list two-line>
+        <ng-container *ngFor="let post of posts">
+          <app-list-item-thread [post]='post'></app-list-item-thread>
+          <div mdc-list-divider></div>
+        </ng-container>
+      </div>
     </div>
 
     <ng-template #templateSearch>
-      <div class="template-search">
-        <div nz-row nzType="flex" [nzGutter]="8">
-      <span nz-col class="text-input">
-        <input nz-input [(ngModel)]="searchText" placeholder="スレッド検索">
-      </span>
-          <span nz-col>
-        <button nz-button (click)="onSearch()">
-          <i class="anticon anticon-search"></i>
-          <span>探す</span>
-        </button>
-      </span>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+        <div mdc-text-field fullwidth withTrailingIcon class='text-field-search'>
+          <input mdc-text-field-input formControlName="text" placeholder='スレッド検索'>
+          <i mdc-text-field-icon role="button">search</i>
+          <div mdc-line-ripple></div>
         </div>
-      </div>
+      </form>
     </ng-template>
   `,
-  styleUrls: ['view-threads.scss']
+  styleUrls: ['view-threads.component.scss'],
 })
 export class ViewThreadsComponent implements OnInit, OnDestroy {
+  public searchForm;
+  public posts: Post[] = [];
+
   private posts$$;
   private authState$$;
 
-  public posts: Post[] = [];
-  public searchText = '';
-
-  constructor (
+  constructor(
     private postsService: PostsService,
-    private afAuth: AngularFireAuth) {
+    private afAuth: AngularFireAuth,
+    private browser: BrowserService,
+    private activatedRoute: ActivatedRoute,
+  ) {
   }
 
-  private onChangeAuthState () {
-    this.onSearch();
-  }
-
-  public onSearch () {
-    const posts$ = this.postsService.getPostsAsThread(this.searchText);
-    this.posts$$ = posts$.subscribe((res) => {
-      this.posts = res.hits;
-    });
-  }
-
-  ngOnInit () {
+  ngOnInit() {
     const authState$ = this.afAuth.authState;
+    this.searchForm = new FormGroup({text: new FormControl()});
     this.authState$$ = authState$.subscribe(() => {
       this.onChangeAuthState();
     });
+    this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.authState$$.unsubscribe();
     this.posts$$.unsubscribe();
+  }
+
+  private onChangeAuthState() {
+    this.onSearch();
+  }
+
+  public onSearch() {
+    const text = this.searchForm.get('text').value || '';
+    const posts$ = this.postsService.getPostsAsThread(text);
+    this.posts$$ = posts$.subscribe((res) => {
+      this.posts = res.hits;
+    });
   }
 }

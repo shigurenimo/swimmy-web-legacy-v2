@@ -14,56 +14,48 @@ import { PostsService } from '../../services/posts.service';
 @Component({
   selector: 'app-editor-post',
   template: `
-    <form nz-form [formGroup]='formGroup'>
-      <nz-form-control>
-        <textarea
-          nz-input
-          formControlName='content'
-          [disabled]="isLoadingMutation"
-          [nzAutosize]='nzAutosize'
-          [placeholder]='textareaPlaceholder'>
-        </textarea>
-      </nz-form-control>
-      <nz-form-control class='actions'>
-        <div nz-row nzType="flex" nzJustify="end" nzAlign="middle">
-          <nz-upload
-            *ngIf='afAuth.authState|async'
-            class='input'
-            [nzShowUploadList]='false'
-            [(nzFileList)]='fileList'>
-            <button nz-button>
-              <i class='anticon anticon-link'></i>
-              <span>画像</span>
-            </button>
-          </nz-upload>
-          <button
-            nz-col
-            class='input'
-            nz-button
-            (click)='onAddPost()'
-            [nzLoading]='isLoadingMutation'>
-            <span>送信</span>
-          </button>
-        </div>
-      </nz-form-control>
-      <div *ngIf='fileList[0]' class='images'>
-        <nz-avatar
-          *ngFor='let file of fileList'
-          class='image-avater'
-          nzShape='square'
-          [nzSrc]='file.thumbUrl'>
-        </nz-avatar>
+    <form [formGroup]='formGroup' (ngSubmit)='onAddPost()'>
+      <div mdc-text-field withTrailingIcon fullwidth [disabled]='isLoadingMutation' class='text-field'>
+        <input mdc-text-field-input formControlName='content' [placeholder]='textareaPlaceholder'>
+        <i mdc-text-field-icon role="button">create</i>
+        <div mdc-line-ripple></div>
       </div>
+      
+      <!--
+      <div class='actions'>
+        <input #file type="file" accept="image/*" (change)="onChangeFiles(file.files)">
+
+        <button #upload (click)="file.click()" mdc-button raised>
+          <i mdc-button-icon>link</i>
+          <span>画像</span>
+        </button>
+      </div>
+      -->
     </form>
+
+    <!--
+    <div *ngIf='previewFiles[0]' class='images'>
+      <ul mdc-image-list>
+        <ng-container *ngFor='let file of previewFiles'>
+          <li mdc-image-list-item>
+            <div mdc-image-list-image imageAspectContainer>
+              <img mdc-image-list-image [src]="file">
+            </div>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    -->
   `,
   styleUrls: ['editor-post.component.scss']
 })
 export class EditorPostComponent implements OnInit {
   public formGroup: FormGroup;
-  public nzAutosize = { minRows: 1, maxRows: 6 };
   public textareaPlaceholder = 'もしもし';
   public fileList: UploadFile[] = [];
   public isLoadingMutation = false;
+  public files = [];
+  public previewFiles = [];
 
   constructor (
     private formBuilder: FormBuilder,
@@ -71,6 +63,18 @@ export class EditorPostComponent implements OnInit {
     public afAuth: AngularFireAuth,
     private afStorage: AngularFireStorage,
     private afStore: AngularFirestore) {
+  }
+
+  public onChangeFiles (files) {
+    const [file] = files;
+    const reader = new FileReader();
+
+    reader.onload = (event: any) => {
+      this.previewFiles.push(event.target.result);
+      this.files.push(file);
+    };
+
+    reader.readAsDataURL(file);
   }
 
   private resetFormGroup () {
@@ -140,7 +144,7 @@ export class EditorPostComponent implements OnInit {
     const task = this.afStorage.upload(filePath, originFileObj);
 
     const downloadURL$ = task.snapshotChanges();
-    const map$ = map(({downloadURL}): Photo => {
+    const map$ = map(({ downloadURL }): Photo => {
       return { downloadURL, photoId };
     });
 

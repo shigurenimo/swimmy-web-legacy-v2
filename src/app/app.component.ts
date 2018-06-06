@@ -1,15 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+
+import { WindowService } from './services/window.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `
+    <app-top-app-bar></app-top-app-bar>
+
+    <sw-view>
+      <router-outlet></router-outlet>
+    </sw-view>
+    
+    <app-drawer></app-drawer>
+  `
 })
 export class AppComponent {
-  public isCollapsed = false;
+  constructor (private windowService: WindowService) {
+  }
 
-  public nzWidth = 64;
-
-  constructor() {
+  @HostListener('window:resize', [])
+  private onWindowResize () {
+    this.windowService.updateWidth();
   }
 }

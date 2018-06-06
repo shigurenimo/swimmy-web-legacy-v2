@@ -1,12 +1,18 @@
 :host {
-  display: block;
-  padding: 10px;
-  box-sizing: border-box;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+input[type='file'] {
+  display: none;
+}
+
+.text-field {
+  padding-left: 8px;
 }
 
 .actions {
-  padding-top: 10px;
+  padding: 8px 8px 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .actions .input {

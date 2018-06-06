@@ -1,55 +1,44 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { Post } from '../../interfaces/post';
+import { BrowserService } from '../../services/browser.service';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-view-home',
   template: `
-    <app-header>
-      <ng-template #body>
-        <app-editor-post></app-editor-post>
-      </ng-template>
-    </app-header>
-    
-    <nz-content>
-      <app-card-post
-        *ngFor="let node of posts"
-        type="listItem"
-        [content]="node.content"
-        [createdAt]="node.createdAt"
-        [id]="node.id"
-        [photoURLs]="node.photoURLs"
-        [ownerId]="node.ownerId"
-        [owner]="node.owner"
-        [replyPostId]="node.replyPostId"
-        [repliedPostIds]="node.repliedPostIds"
-        [tags]="node.tags"
-        [updatedAt]="node.updatedAt"
-        [isLogged]="isLogged">
-      </app-card-post>
-    </nz-content>
+    <app-editor-post></app-editor-post>
+
+    <ul mdc-list>
+      <ng-container *ngFor="let node of posts">
+        <app-card-post
+          [post]='node'
+          [isLogged]="isLogged"
+          type="listItem"
+        >
+        </app-card-post>
+        <div mdc-list-divider></div>
+      </ng-container>
+    </ul>
   `,
   styleUrls: ['view-home.component.scss']
 })
 export class ViewHomeComponent implements OnInit, OnDestroy {
-  // subscriptions
-  private posts$$;
-  private authState$$;
-
-  // ui states
   public posts: Post[] = [];
   public isLogged = false;
 
-  // errors
-  public graphQLErrors = [];
-  public networkError = null;
+  private posts$$;
+  private authState$$;
 
   constructor (
     private postsService: PostsService,
-    private afAuth: AngularFireAuth) {
+    private afAuth: AngularFireAuth,
+    private browser: BrowserService,
+    private activatedRoute: ActivatedRoute
+    ) {
   }
 
   private onChangeAuthState (user) {
@@ -69,6 +58,7 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     this.authState$$ = authState$.subscribe((user) => {
       this.onChangeAuthState(user);
     });
+    this.browser.updateSnapshot(this.activatedRoute.snapshot)
   }
 
   public ngOnDestroy () {

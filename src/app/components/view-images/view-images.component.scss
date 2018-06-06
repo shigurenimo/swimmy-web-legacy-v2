@@ -1,12 +1,3 @@
 :host {
-  display: flex;
-  flex-direction: column;
-}
-
-.ant-layout-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 8px;
-  overflow: auto;
+  flex: 1;
 }

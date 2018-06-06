@@ -14,50 +14,13 @@ import { PostsService } from '../../services/posts.service';
 @Component({
   selector: 'app-card-reply-new',
   template: `
-    <nz-card>
-      <form nz-form [formGroup]="formGroup">
-        <textarea
-          nz-input
-          formControlName="content"
-          [disabled]="isLoadingMutation"
-          [nzAutosize]="true"
-          [placeholder]="textareaPlaceholder">
-        </textarea>
-      </form>
-
-      <div class="template-actions" nz-form-control>
-        <div nz-row nzType="flex" nzJustify="end" nzAlign="middle" [nzGutter]="8">
-          <span nz-col>
-            <nz-upload
-              *ngIf="afAuth.authState|async"
-              [nzShowUploadList]="false"
-              [(nzFileList)]="fileList">
-              <button nz-button>
-                <i class="anticon anticon-link"></i>
-                <span>画像</span>
-              </button>
-            </nz-upload>
-          </span>
-          <span nz-col>
-            <button
-              nz-button
-              (click)="onAddPost()"
-              [nzLoading]="isLoadingMutation">
-              <span>リプライ</span>
-            </button>
-          </span>
-        </div>
+    <form [formGroup]="formGroup" (ngSubmit)="onAddPost()">
+      <div mdc-text-field withTrailingIcon fullwidth [disabled]='isLoadingMutation' class='mdc-text-field--padding'>
+        <input mdc-text-field-input formControlName='content' [placeholder]='textareaPlaceholder'>
+        <i mdc-text-field-icon role="button">reply</i>
+        <div mdc-line-ripple></div>
       </div>
-
-      <div *ngIf="fileList[0]" class="template-images">
-        <nz-avatar
-          *ngFor="let file of fileList"
-          class="image-avater"
-          nzShape="square"
-          [nzSrc]="file.thumbUrl">
-        </nz-avatar>
-      </div>
-    </nz-card>
+    </form>
   `,
   styleUrls: ['card-reply-new.component.scss']
 })
@@ -65,7 +28,7 @@ export class CardReplyNewComponent implements OnInit {
   @Input() repliedPostId: string;
 
   public formGroup: FormGroup;
-  public textareaPlaceholder = 'リプライすることができます';
+  public textareaPlaceholder = 'レス';
   public fileList: UploadFile[] = [];
   public isLoadingMutation = false;
 
@@ -125,7 +88,7 @@ export class CardReplyNewComponent implements OnInit {
 
       $mutation = uploadImages$.pipe(post$);
     } else {
-      $mutation = this.posts.addReplyPost( {
+      $mutation = this.posts.addReplyPost({
         content: content,
         photos: [],
         replyPostId: this.repliedPostId

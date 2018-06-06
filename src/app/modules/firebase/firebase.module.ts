@@ -8,7 +8,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
-import { environment } from '../environments/environment';
+import { environment } from '../../../environments/environment';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(environment.firebase);

@@ -56,7 +56,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
       <ng-template [ngTemplateOutlet]='body'></ng-template>
     </div>
   `,
-  styleUrls: ['header.scss']
+  styleUrls: ['header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Input() goBack;

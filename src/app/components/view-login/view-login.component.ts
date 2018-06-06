@@ -1,79 +1,121 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import {
-  ERROR_INVALID_USERNAME, ERROR_USERNAME_ALREADY_IN_USE, MSG_INPUT_EMAIL, USER_NOT_FOUND
+  ERROR_INVALID_USERNAME,
+  ERROR_USERNAME_ALREADY_IN_USE,
+  MSG_INPUT_EMAIL,
+  USER_NOT_FOUND,
 } from '../../constants/login';
+import { BrowserService } from '../../services/browser.service';
 
 import { FunctionsService } from '../../services/functions.service';
 
 @Component({
   selector: 'app-view-login',
-  template: `
-    <app-header></app-header>
+  template: `    
+    <form nz-form [formGroup]="formGroup">
+      <h2 mdc-typography headline6>ユーザネーム</h2>
+      <div
+        mdc-text-field
+        withTrailingIcon
+        fullwidth
+        class="mdc-text-field--padding"
+      >
+        <input mdc-text-field-input formControlName='username' placeholder="username">
+        <div mdc-line-ripple></div>
+      </div>
 
-    <div>
-      <div class="title">
-        <h1>S<span class="line">/</span>w</h1>
+      <ng-container *ngIf="isError('username')">
+        <ng-container *ngIf="hasError('username', 'required')">
+          <p sw-text-field-error class="mdc-text-field--padding">ユーザネームが必要です</p>
+        </ng-container>
+        <ng-container *ngIf="hasError('username', 'auth/invalid-email')">
+          <p sw-text-field-error class="mdc-text-field--padding">ユーザネームが正しくありません。</p>
+        </ng-container>
+        <ng-container *ngIf="hasError('username', 'auth/email-already-in-use')">
+          <p sw-text-field-error class="mdc-text-field--padding">このユーザネームは既に使われています。</p>
+        </ng-container>
+        <ng-container *ngIf="hasError('username', 'auth/user-not-found')">
+          <p sw-text-field-error class="mdc-text-field--padding">ユーザが見つかりません。</p>
+        </ng-container>
+        <ng-container *ngIf="hasError('username', 'auth/user-disabled')">
+          <p sw-text-field-error class="mdc-text-field--padding">このユーザは現在使用できません。</p>
+        </ng-container>
+      </ng-container>
+
+      <h2 mdc-typography headline6>パスワード</h2>
+      <div
+        mdc-text-field
+        withTrailingIcon
+        fullwidth
+        class="mdc-text-field--padding"
+      >
+        <input mdc-text-field-input type="password" formControlName='password' placeholder="password">
+        <div mdc-line-ripple></div>
       </div>
-      <div class="form">
-        <form nz-form [formGroup]="formGroup">
-          <nz-form-item>
-            <nz-form-control nzHasFeedback>
-              <nz-input-group nzPrefixIcon="anticon anticon-user">
-                <input
-                  nz-input
-                  formControlName="username"
-                  placeholder="ユーザネーム">
-              </nz-input-group>
-              <nz-form-explain *ngIf="emailError">{{emailError}}</nz-form-explain>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzHasFeedback>
-              <nz-input-group nzPrefixIcon="anticon anticon-lock">
-                <input
-                  nz-input
-                  formControlName="password"
-                  type="password"
-                  placeholder="パスワード">
-              </nz-input-group>
-              <nz-form-explain *ngIf="passwordError">{{passwordError}}</nz-form-explain>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control>
-              <div nz-row nzType="flex" nzAlign="middle" nzGutter="8" nzJustify="end">
-                <span nz-col>
-                  <button nz-button [disabled]="isLoading" (click)="onSignUp($event)">登録</button>
-                </span>
-                <span class="or">or</span>
-                <span nz-col>
-                  <button nz-button [disabled]="isLoading" (click)="onSignIn($event)">ログイン</button>
-                </span>
-              </div>
-            </nz-form-control>
-          </nz-form-item>
-        </form>
+
+      <ng-container *ngIf="isError('password')">
+        <ng-container *ngIf="hasError('password', 'required')">
+          <p sw-text-field-error class="mdc-text-field--padding">パスワードが必要です。</p>
+        </ng-container>
+        <ng-container *ngIf="hasError('password', 'auth/wrong-password')">
+          <p sw-text-field-error class="mdc-text-field--padding">パスワードが間違っています。</p>
+        </ng-container>
+        <ng-container *ngIf="hasError('password', 'auth/too-many-request')">
+          <p sw-text-field-error class="mdc-text-field--padding">リクエストが多すぎます。</p>
+        </ng-container>
+        <ng-container *ngIf="hasError('password', 'auth/weak-password')">
+          <p sw-text-field-error class="mdc-text-field--padding">パスワードが弱すぎます</p>
+        </ng-container>
+      </ng-container>
+
+      <div class='block-form-submut'>
+        <button mdc-button raised [disabled]='isLoading' (click)="onSignUp($event)">
+          <span>登録</span>
+        </button>
+        <button mdc-button raised [disabled]='isLoading' (click)="onSignIn($event)">
+          <span>ログイン</span>
+        </button>
       </div>
-    </div>
+    </form>
   `,
-  styleUrls: ['view-login.component.scss']
+  styleUrls: ['view-login.component.scss'],
 })
 export class ViewLoginComponent implements OnInit {
   public formGroup: FormGroup;
   public isLoading = false;
 
-  constructor (
+  constructor(
     private afa: AngularFireAuth,
     private router: Router,
     private formBuilder: FormBuilder,
-    private functionsService: FunctionsService) {
+    private functionsService: FunctionsService,
+    private browser: BrowserService,
+    private activatedRoute: ActivatedRoute,
+  ) {
   }
 
-  private mutateSignUp () {
+  public ngOnInit() {
+    this.formGroup = this.formBuilder.group({
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+    });
+    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+  }
+
+  public isError(name: string): boolean {
+    const input = this.formGroup.get(name);
+    return input.invalid && (input.dirty || input.touched);
+  }
+
+  public hasError(name: string, errorCode: string): boolean {
+    return this.formGroup.get(name).hasError(errorCode);
+  }
+
+  private mutateSignUp() {
     const username = this.username.value;
     const password = this.password.value;
     const email = username + '@swimmy.io';
@@ -88,7 +130,7 @@ export class ViewLoginComponent implements OnInit {
       });
   }
 
-  private mutateSignIn () {
+  private mutateSignIn() {
     const username = this.username.value;
     const password = this.password.value;
     const email = username + '@swimmy.io';
@@ -107,14 +149,14 @@ export class ViewLoginComponent implements OnInit {
       });
   }
 
-  private mutateRestore () {
+  private mutateRestore() {
     const username = this.username.value;
     const password = this.password.value;
     const email = username + '@swimmy.io';
 
     this.functionsService
-      .restoreUser({ username, password })
-      .subscribe(({ valid, error }) => {
+      .restoreUser({username, password})
+      .subscribe(({valid, error}) => {
         if (!valid) {
           this.catchErrorCode(error);
           return;
@@ -129,73 +171,38 @@ export class ViewLoginComponent implements OnInit {
       });
   }
 
-  private catchMutation () {
+  private catchMutation() {
     this.router.navigate(['/']).catch((err) => {
       console.error(err);
     });
   }
 
-  private catchErrorCode (code) {
+  private catchErrorCode(code) {
     this.isLoading = false;
     switch (code) {
       case 'auth/user-not-found':
       case 'auth/invalid-email':
       case 'auth/email-already-in-use':
       case 'auth/user-disabled':
-        this.username.setErrors({ [code]: true });
+        this.username.setErrors({[code]: true});
         break;
       case 'auth/wrong-password':
       case 'auth/too-many-requests':
       case 'auth/weak-password':
-        this.password.setErrors({ [code]: true });
+        this.password.setErrors({[code]: true});
         break;
     }
   }
 
-  public get emailError () {
-    if (this.username.hasError('required')) {
-      return MSG_INPUT_EMAIL;
-    }
-    if (this.username.hasError('auth/invalid-email')) {
-      return ERROR_INVALID_USERNAME;
-    }
-    if (this.username.hasError('auth/email-already-in-use')) {
-      return ERROR_USERNAME_ALREADY_IN_USE;
-    }
-    if (this.username.hasError('auth/user-not-found')) {
-      return USER_NOT_FOUND;
-    }
-    if (this.username.hasError('auth/user-disabled')) {
-      return 'このユーザは現在使用できません';
-    }
-    return '';
-  }
-
-  public get passwordError () {
-    if (this.password.hasError('required')) {
-      return 'パスワードを入力してください';
-    }
-    if (this.password.hasError('auth/wrong-password')) {
-      return 'パスワードが間違っています';
-    }
-    if (this.password.hasError('auth/too-many-request')) {
-      return '試行回数が多すぎます';
-    }
-    if (this.password.hasError('auth/weak-password')) {
-      return 'パスワードが弱すぎます';
-    }
-    return '';
-  }
-
-  public get username () {
+  public get username() {
     return this.formGroup.controls.username;
   }
 
-  public get password () {
+  public get password() {
     return this.formGroup.controls.password;
   }
 
-  public onSignUp (event) {
+  public onSignUp(event) {
     event.preventDefault();
 
     if (this.isLoading) {
@@ -207,7 +214,7 @@ export class ViewLoginComponent implements OnInit {
     this.mutateSignUp();
   }
 
-  public onSignIn (event) {
+  public onSignIn(event) {
     event.preventDefault();
 
     if (this.isLoading) {
@@ -217,12 +224,5 @@ export class ViewLoginComponent implements OnInit {
     this.isLoading = true;
 
     this.mutateSignIn();
-  }
-
-  public ngOnInit () {
-    this.formGroup = this.formBuilder.group({
-      username: [null, [Validators.required]],
-      password: [null, [Validators.required]]
-    });
   }
 }

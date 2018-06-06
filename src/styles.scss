@@ -1,0 +1,32 @@
+@import "./theme";
+@import "~@material/typography/mdc-typography";
+@import "~@material/button/mdc-button";
+@import "~@material/chips/mdc-chips";
+@import "~@material/textfield/mdc-text-field";
+@import "~@material/drawer/mdc-drawer";
+@import "~@material/list/mdc-list";
+@import "~@material/card/mdc-card";
+@import "~@material/tabs/mdc-tabs";
+@import "~@material/top-app-bar/mdc-top-app-bar";
+@import "~@material/image-list/mdc-image-list";
+@import "~@material/dialog/mdc-dialog";
+@import "~@material/elevation/mdc-elevation";
+@import "~@material/snackbar/mdc-snackbar";
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  outline: none;
+}
+
+html {
+  background: #ffffff; /* #f2f2f2; */
+}
+
+body {
+  margin: 0;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+}

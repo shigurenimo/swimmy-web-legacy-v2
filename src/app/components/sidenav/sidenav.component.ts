@@ -3,7 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-sidenav',
-  template: `
+  template: `    
     <ul nz-menu [nzTheme]='nzTheme' [nzMode]='nzMode' nzInlineIndent='16'>
       <li *ngIf='uid'
         nz-menu-item

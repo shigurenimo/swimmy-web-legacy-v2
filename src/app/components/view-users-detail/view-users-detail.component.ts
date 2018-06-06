@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
+import { BrowserService } from '../../services/browser.service';
 import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-view-users-detail',
   template: `
-    <app-header></app-header>
-
     <div class='user-icon'>
       <nz-avatar nzIcon='code' [nzSrc]='photoURL'></nz-avatar>
     </div>
@@ -25,7 +24,7 @@ import { UsersService } from '../../services/users.service';
       </nz-card>
     </div>
   `,
-  styleUrls: ['view-users-detail.component.scss']
+  styleUrls: ['view-users-detail.component.scss'],
 })
 export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   private params$$;
@@ -41,16 +40,31 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   public file;
   public isLoading = true;
 
-  constructor (
+  constructor(
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
-    public afAuth: AngularFireAuth) {
+    public afAuth: AngularFireAuth,
+    private browser: BrowserService,
+  ) {
   }
 
-  private onCatchError (err) {
+  public ngOnInit() {
+    this.params$$ = this.activatedRoute.params.subscribe((params) => {
+      this.onChangeParams(params);
+    });
+    this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  private onChangeUser (user) {
+  public ngOnDestroy() {
+    if (this.params$$) {
+      this.params$$.unsubscribe();
+    }
+  }
+
+  private onCatchError(err) {
+  }
+
+  private onChangeUser(user) {
     if (user) {
       this.createdAt = user.createdAt;
       this.description = user.description;
@@ -64,20 +78,8 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 
-  public ngOnInit () {
-    this.params$$ = this.activatedRoute.params.subscribe((params) => {
-      this.onChangeParams(params);
-    });
-  }
-
-  public ngOnDestroy () {
-    if (this.params$$) {
-      this.params$$.unsubscribe();
-    }
-  }
-
-  private onChangeParams (params) {
-    const { username } = params;
+  private onChangeParams(params) {
+    const {username} = params;
     this.isLoading = true;
     const user$ = this.usersService.getUserByUsername(username);
     user$.subscribe((data) => {

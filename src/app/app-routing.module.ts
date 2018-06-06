@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { ViewConfigComponent } from './components/view-config/view-config.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
 import { ViewImagesComponent } from './components/view-images/view-images.component';
 import { ViewInfoComponent } from './components/view-info/view-info.component';
@@ -16,46 +14,58 @@ import { ViewUsersDetailComponent } from './components/view-users-detail/view-us
 
 const routes: Routes = [
   {
-    path: 'config',
-    component: ViewConfigComponent
+    path: 'hello',
+    loadChildren: 'app/modules/hello/hello.module#HelloModule',
+    data: {title: 'hello'},
   }, {
     path: 'images',
-    component: ViewImagesComponent
+    component: ViewImagesComponent,
+    data: {title: 'ストレージ'},
   }, {
     path: 'info',
-    component: ViewInfoComponent
+    component: ViewInfoComponent,
+    data: {title: '情報'},
   }, {
     path: 'login',
-    component: ViewLoginComponent
+    component: ViewLoginComponent,
+    data: {title: 'こんにちは'},
   }, {
     path: 'posts/:postId',
-    component: ViewPostsDetailComponent
+    component: ViewPostsDetailComponent,
+    data: {title: 'スレッド'},
   }, {
     path: 'settings/username',
-    component: ViewSettingsUsernameComponent
+    component: ViewSettingsUsernameComponent,
+    data: {title: '設定 | ユーザネーム'},
   }, {
     path: 'settings/password',
-    component: ViewSettingsPasswordComponent
+    component: ViewSettingsPasswordComponent,
+    data: {title: '設定 | パスワード'},
   }, {
     path: 'settings/profile',
-    component: ViewSettingsProfileComponent
+    component: ViewSettingsProfileComponent,
+    data: {title: '設定 | プロフィール'},
   }, {
     path: 'settings',
-    component: ViewSettingsComponent
+    component: ViewSettingsComponent,
+    data: {title: '設定'},
   }, {
     path: 'threads',
-    component: ViewThreadsComponent
+    component: ViewThreadsComponent,
+    data: {title: 'スレッド検索'},
   }, {
     path: ':username',
-    component: ViewUsersDetailComponent
+    component: ViewUsersDetailComponent,
+    data: {title: 'ユーザ'},
   }, {
     path: '',
-    component: ViewHomeComponent
+    component: ViewHomeComponent,
+    data: {title: 'タイムライン'},
   }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {
 }

@@ -2,64 +2,45 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
+import { BrowserService } from '../../services/browser.service';
 
 import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-view-posts-details',
   template: `
-    <app-header [goBack]="true">
-      <ng-template #title>
-        <span>スレッド</span>
-      </ng-template>
-    </app-header>
-    
-    <nz-content *ngIf="post">
-      <div class="template-post">
+    <ng-container *ngIf="post">
+      <ul mdc-list>
         <app-card-post
-          [content]="post.content"
-          [createdAt]="post.createdAt"
-          [id]="post.id"
-          [photoURLs]="post.photoURLs"
-          [ownerId]="post.ownerId"
-          [owner]="post.owner"
-          [repliedPostIds]="post.repliedPostIds"
-          [replyPostId]="post.replyPostId"
-          [tags]="post.tags"
-          [updatedAt]="post.updatedAt"
-          [isLogged]="isLogged">
+          [post]='post'
+          [isLogged]="isLogged"
+          type="listItem"
+        >
         </app-card-post>
-      </div>
+        <div mdc-list-divider></div>
+      </ul>
 
       <div class="template-message">
-        <i class="anticon anticon-up"></i>
+        <i mdc-icon>keyboard_arrow_up</i>
       </div>
 
       <div class="template-editor">
-        <app-card-reply-new [repliedPostId]="post.id">
-        </app-card-reply-new>
+        <app-card-reply-new [repliedPostId]="post.id"></app-card-reply-new>
       </div>
 
-      <div class="template-replied-posts">
-        <div class="card" *ngFor="let node of repliedPosts">
+      <ul mdc-list>
+        <ng-container *ngFor="let post of repliedPosts">
           <app-card-post
-            [content]="node.content"
-            [createdAt]="node.createdAt"
-            [id]="node.id"
-            [photoURLs]="node.photoURLs"
-            [ownerId]="node.ownerId"
-            [owner]="node.owner"
-            [repliedPostIds]="node.repliedPostIds"
-            [replyPostId]="node.replyPostId"
-            [tags]="node.tags"
-            [updatedAt]="node.updatedAt"
-            [isLogged]="isLogged">
+            [post]='post'
+            [isLogged]="isLogged"
+          >
           </app-card-post>
-        </div>
-      </div>
-    </nz-content>
+          <div mdc-list-divider></div>
+        </ng-container>
+      </ul>
+    </ng-container>
   `,
-  styleUrls: ['view-posts-detail.component.scss']
+  styleUrls: ['view-posts-detail.component.scss'],
 })
 export class ViewPostsDetailComponent implements OnInit, OnDestroy {
   private authState$$ = null;
@@ -71,22 +52,40 @@ export class ViewPostsDetailComponent implements OnInit, OnDestroy {
   public post = null;
   public repliedPosts = [];
 
-  constructor (
+  constructor(
     private posts: PostsService,
+    private afAuth: AngularFireAuth,
+    private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
-    private afAuth: AngularFireAuth) {
+  ) {
   }
 
-  private onCatchError (err) {
-    console.error(err)
+  public ngOnInit() {
+    const authState$ = this.afAuth.authState;
+    this.authState$$ = authState$.subscribe((user) => {
+      this.onChangeAuthState(user);
+    });
+    this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  private onChangePost () {
-
+  public ngOnDestroy() {
+    if (this.params$$) {
+      this.params$$.unsubscribe();
+    }
+    this.authState$$.unsubscribe();
+    this.posts$$.unsubscribe();
+    this.repliedPosts$$.unsubscribe();
   }
 
-  private onChangeParams (params) {
-    const { postId } = params;
+  private onCatchError(err) {
+    console.error(err);
+  }
+
+  private onChangePost() {
+  }
+
+  private onChangeParams(params) {
+    const {postId} = params;
 
     const posts$ = this.posts.observePost(postId);
     this.posts$$ = posts$.subscribe((doc) => {
@@ -103,28 +102,12 @@ export class ViewPostsDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  private onChangeAuthState (user) {
+  private onChangeAuthState(user) {
     if (user) {
       this.isLogged = true;
     }
     this.params$$ = this.activatedRoute.params.subscribe((params) => {
       this.onChangeParams(params);
-    });
-  }
-
-  public ngOnDestroy () {
-    if (this.params$$) {
-      this.params$$.unsubscribe();
-    }
-    this.authState$$.unsubscribe();
-    this.posts$$.unsubscribe();
-    this.repliedPosts$$.unsubscribe();
-  }
-
-  public ngOnInit () {
-    const authState$ = this.afAuth.authState;
-    this.authState$$ = authState$.subscribe((user) => {
-      this.onChangeAuthState(user);
     });
   }
 }

@@ -1,0 +1,16 @@
+$mdc-theme-primary: #212121;
+$mdc-theme-secondary: #00e676;
+$mdc-theme-on-primary: #ffffff;
+$mdc-theme-on-secondary: #000000;
+
+.mdc-list-item.activated {
+  @extend .mdc-list-item--activated;
+}
+
+.mdc-tab.active {
+  @extend .mdc-tab--active;
+}
+
+.mdc-snackbar {
+  z-index: 400;
+}

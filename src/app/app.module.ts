@@ -1,7 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpHeaders } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -18,11 +16,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardPostComponent } from './components/card-post/card-post.component';
+import { CardReplyNewComponent } from './components/card-reply-new/card-reply-new.component';
 import { CardThreadComponent } from './components/card-thread/card-thread.component';
+import { ChipSetPostComponent } from './components/chip-set-post/chip-set-post.component';
+import { DrawerComponent } from './components/drawer/drawer.component';
 import { EditorPostComponent } from './components/editor-post/editor-post.component';
 import { HeaderComponent } from './components/header/header.component';
+import { ListItemThreadComponent } from './components/list-item-thread/list-item-thread.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { ViewConfigComponent } from './components/view-config/view-config.component';
+import { TabsComponent } from './components/tabs/tabs.component';
+import { TopAppBarComponent } from './components/top-app-bar/top-app-bar.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
 import { ViewImagesComponent } from './components/view-images/view-images.component';
 import { ViewInfoComponent } from './components/view-info/view-info.component';
@@ -34,14 +37,17 @@ import { ViewSettingsUsernameComponent } from './components/view-settings-userna
 import { ViewSettingsComponent } from './components/view-settings/view-settings.component';
 import { ViewThreadsComponent } from './components/view-threads/view-threads.component';
 import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
-import { ViewUsersComponent } from './components/view-users/view-users.component';
-import { FirebaseModule } from './firebase.module';
-import { ResizePipe } from './pipes/resize.pipe';
+import { CoreModule } from './modules/core/core.module';
+import { FirebaseModule } from './modules/firebase/firebase.module';
+import { SharedModule } from './modules/shared/shared.module';
+import { ElapsedDatePipe } from './pipes/elapsed-date.pipe';
 import { AlgoliaService } from './services/algolia.service';
+import { BrowserService } from './services/browser.service';
+import { DrawerService } from './services/drawer.service';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
 import { UsersService } from './services/users.service';
-import { CardReplyNewComponent } from './components/card-reply-new/card-reply-new.component';
+import { WindowService } from './services/window.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +55,6 @@ import { CardReplyNewComponent } from './components/card-reply-new/card-reply-ne
     EditorPostComponent,
     HeaderComponent,
     SidenavComponent,
-    ViewConfigComponent,
     ViewHomeComponent,
     ViewImagesComponent,
     ViewInfoComponent,
@@ -61,48 +66,52 @@ import { CardReplyNewComponent } from './components/card-reply-new/card-reply-ne
     ViewSettingsComponent,
     ViewThreadsComponent,
     ViewUsersDetailComponent,
-    ViewUsersComponent,
-    ResizePipe,
     CardImageComponent,
     CardPostComponent,
     CardThreadComponent,
-    CardReplyNewComponent
+    CardReplyNewComponent,
+    DrawerComponent,
+    TabsComponent,
+    TopAppBarComponent,
+    ListItemThreadComponent,
+    ChipSetPostComponent,
+    ElapsedDatePipe,
   ],
   imports: [
-    CommonModule,
+    CoreModule,
+    SharedModule,
     FirebaseModule,
     ApolloModule,
     AppRoutingModule,
     BrowserModule,
-    FormsModule,
-    HttpClientModule,
     HttpLinkModule,
     NgZorroAntdModule.forRoot(),
     NoopAnimationsModule,
-    ReactiveFormsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
-      enabled: environment.production
-    })
+      enabled: environment.production,
+    }),
   ],
   providers: [
+    AlgoliaService,
+    BrowserService,
+    DrawerService,
     FunctionsService,
+    WindowService,
     PostsService,
     UsersService,
-    AlgoliaService
   ],
   bootstrap: [
-    AppComponent
+    AppComponent,
   ],
   entryComponents: [],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ]
+  schemas: [],
 })
 export class AppModule {
   constructor(
     private apollo: Apollo,
     private httpLink: HttpLink,
-    private afAuth: AngularFireAuth) {
+    private afAuth: AngularFireAuth,
+  ) {
     const httpBearer = setContext(async () => {
       if (this.afAuth.auth.currentUser) {
         const idToken = await this.afAuth.auth.currentUser.getIdToken();
@@ -118,12 +127,12 @@ export class AppModule {
 
     const httpDefault = httpLink.create({
       uri: environment.graphql,
-      method: 'POST'
+      method: 'POST',
     });
 
     const httpServiceWorker = httpLink.create({
       uri: environment.graphql,
-      method: 'GET'
+      method: 'GET',
     });
 
     apollo.createDefault({
@@ -131,9 +140,9 @@ export class AppModule {
       cache: cache,
       defaultOptions: {
         watchQuery: {
-          errorPolicy: 'all'
-        }
-      }
+          errorPolicy: 'all',
+        },
+      },
     });
 
     apollo.createNamed('sw', {
@@ -141,9 +150,9 @@ export class AppModule {
       cache: cache,
       defaultOptions: {
         watchQuery: {
-          errorPolicy: 'all'
-        }
-      }
+          errorPolicy: 'all',
+        },
+      },
     });
   }
 }

@@ -16,7 +16,7 @@ import { checkOwner } from '../../utils/checkOwner';
 import { createId } from '../../utils/createId';
 
 export const Mutation = {
-  async addPost (root, { input }: AddPostArgs, { user }: Context) {
+  async addPost(root, {input}: AddPostArgs, {user}: Context) {
     const owner = user;
 
     const postId = createId();
@@ -24,20 +24,20 @@ export const Mutation = {
     const photoURLs = {};
 
     for (const photo of input.photos) {
-      const { photoId, downloadURL } = photo;
+      const {photoId, downloadURL} = photo;
       const photoObject = await getPhotoURL('posts', photoId, downloadURL);
       photoURLs[photoId] = photoObject;
       await setImage(photoId, photoObject);
     }
 
-    const photoIds = Object.keys(photoURLs)
+    const photoIds = Object.keys(photoURLs) || [];
 
     const photoURL = photoIds.length ? photoURLs[photoIds[0]].photoURL : null;
 
     const createPostInput = {
       ...input,
       photoURLs,
-      photoURL
+      photoURL,
     };
 
     const newPost = await createPost(postId, createPostInput, owner);
@@ -48,17 +48,17 @@ export const Mutation = {
 
     return createPostObject(postId, newPost);
   },
-  hello (root, args, context) {
+  hello(root, args, context) {
     return 'hello';
   },
-  async updatePostTag (root, { input }: UpdatePostTagArgs, { user }: Context) {
+  async updatePostTag(root, {input}: UpdatePostTagArgs, {user}: Context) {
     if (!user) {
       throw new Error('context.user not found');
     }
 
     await updatePostTag(input, user);
   },
-  async updateUser (root, { id, input }: UpdateUserArgs, { user }: Context) {
+  async updateUser(root, {id, input}: UpdateUserArgs, {user}: Context) {
     if (!user) {
       throw new Error('context.user not found');
     }
@@ -70,20 +70,20 @@ export const Mutation = {
     const photoURLs = {};
 
     for (const photo of input.photos) {
-      const { photoId, downloadURL } = photo;
+      const {photoId, downloadURL} = photo;
       const photoObject = await getPhotoURL('posts', photoId, downloadURL);
       photoURLs[photoId] = photoObject;
       await setImage(photoId, photoObject);
     }
 
-    const photoIds = Object.keys(photoURLs)
+    const photoIds = Object.keys(photoURLs) || [];
 
     const photoURL = photoIds.length ? photoURLs[photoIds[0]].photoURL : null;
 
     const createUpdateUserInput = {
       ...input,
       photoURLs,
-      photoURL
+      photoURL,
     };
 
     const newUser = await createUpdateUser(user.uid, createUpdateUserInput);
@@ -92,7 +92,7 @@ export const Mutation = {
 
     return newUser;
   },
-  async deletePost (root, { id: postId }: DeletePostArgs, { user }: Context) {
+  async deletePost(root, {id: postId}: DeletePostArgs, {user}: Context) {
     const post = await getPost(postId);
 
     checkOwner(post, user);
@@ -100,5 +100,5 @@ export const Mutation = {
     await deletePost(postId);
 
     return postId;
-  }
+  },
 };
