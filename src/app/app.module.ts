@@ -1,7 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -76,7 +75,6 @@ import { WindowService } from './services/window.service';
     AppRoutingModule,
     BrowserModule,
     HttpLinkModule,
-    NoopAnimationsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production,
     }),
