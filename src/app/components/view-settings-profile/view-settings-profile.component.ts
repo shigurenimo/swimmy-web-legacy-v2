@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { NzMessageService } from 'ng-zorro-antd';
 
 import { mergeMap } from 'rxjs/operators';
 import { UPDATE_DATA_ERROR, UPDATE_DATA_LOADING, UPDATE_DATA_SUCCESS, UPLOAD_LOADING } from '../../constants/messages';
@@ -90,7 +89,6 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     private afAuth: AngularFireAuth,
     private formBuilder: FormBuilder,
     private usersService: UsersService,
-    private messageService: NzMessageService,
     private afFirestore: AngularFirestore,
     private afStorage: AngularFireStorage,
     private browser: BrowserService,

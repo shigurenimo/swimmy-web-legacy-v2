@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { UploadFile } from 'ng-zorro-antd';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, mergeMap } from 'rxjs/operators';
 import { Photo } from '../../interfaces/input';
@@ -29,7 +28,7 @@ export class CardReplyNewComponent implements OnInit {
 
   public formGroup: FormGroup;
   public textareaPlaceholder = 'レス';
-  public fileList: UploadFile[] = [];
+  public files = [];
   public isLoadingMutation = false;
 
   constructor (
@@ -42,7 +41,7 @@ export class CardReplyNewComponent implements OnInit {
 
   private resetFormGroup () {
     this.formGroup.reset({ content: '' });
-    this.fileList = [];
+    this.files = [];
   }
 
   private markAsDirty () {
@@ -66,13 +65,13 @@ export class CardReplyNewComponent implements OnInit {
 
     let $mutation = null;
 
-    if (!this.fileList.length && !content) {
+    if (!this.files.length && !content) {
       this.isLoadingMutation = false;
       return;
     }
 
-    if (this.fileList.length) {
-      const uploadImageMap$ = this.fileList.map((file) => {
+    if (this.files.length) {
+      const uploadImageMap$ = this.files.map((file) => {
         return this.uploadImage(file);
       });
 

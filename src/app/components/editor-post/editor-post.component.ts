@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { UploadFile } from 'ng-zorro-antd';
 import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, mergeMap } from 'rxjs/operators';
@@ -52,7 +51,6 @@ import { PostsService } from '../../services/posts.service';
 export class EditorPostComponent implements OnInit {
   public formGroup: FormGroup;
   public textareaPlaceholder = 'もしもし';
-  public fileList: UploadFile[] = [];
   public isLoadingMutation = false;
   public files = [];
   public previewFiles = [];
@@ -79,7 +77,6 @@ export class EditorPostComponent implements OnInit {
 
   private resetFormGroup () {
     this.formGroup.reset({ content: '' });
-    this.fileList = [];
   }
 
   public get content () {
@@ -99,13 +96,13 @@ export class EditorPostComponent implements OnInit {
 
     let $mutation = null;
 
-    if (!this.fileList.length && !content) {
+    if (!this.files.length && !content) {
       this.isLoadingMutation = false;
       return;
     }
 
-    if (this.fileList.length) {
-      const uploadImageMap$ = this.fileList.map((file) => {
+    if (this.files.length) {
+      const uploadImageMap$ = this.files.map((file) => {
         return this.uploadImage(file);
       });
 

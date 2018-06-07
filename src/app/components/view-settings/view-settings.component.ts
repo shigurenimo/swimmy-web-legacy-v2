@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import { NzMessageService } from 'ng-zorro-antd';
+
 import { DialogComponent } from '../../modules/mdc/components/dialog/dialog.component';
 import { BrowserService } from '../../services/browser.service';
 
@@ -89,7 +89,6 @@ export class ViewSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private message: NzMessageService,
     private router: Router,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,

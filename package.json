@@ -29,7 +29,6 @@
     "@firebase/app-types": "^0.1.0",
     "algoliasearch": "^3.27.1",
     "angularfire2": "5.0.0-rc.6",
-    "antd": "^3.5.4",
     "apollo-angular": "1.0.1",
     "apollo-angular-link-http": "1.0.3",
     "apollo-cache-inmemory": "^1.1.12",
@@ -42,7 +41,6 @@
     "graphql-tag": "^2.8.0",
     "immutability-helper": "^2.6.6",
     "material-components-web": "^0.35.2",
-    "ng-zorro-antd": "^0.7.0",
     "rxjs": "^5.5.8",
     "zone.js": "^0.8.26"
   },
