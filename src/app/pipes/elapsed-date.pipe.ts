@@ -1,14 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import * as moment from 'moment';
-
 @Pipe({
   name: 'elapsedDate'
 })
 export class ElapsedDatePipe implements PipeTransform {
 
   transform (value: any, args?: any): any {
-    const diff = moment().diff(moment(value));
+    const diff = new Date().getTime() - value.getTime();
     const hours = Math.round(diff / (1000 * 60 * 60));
     if (hours < 1) {
       return Math.round(diff / (1000 * 60)) + '分前';
