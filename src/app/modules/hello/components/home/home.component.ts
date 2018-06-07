@@ -7,16 +7,16 @@ import { PostsService } from '../../../../services/posts.service';
     <p>
       feature.hello > home
     </p>
-    
-    <mdc-button></mdc-button>
+
+    <button mdc-button></button>
   `,
-  styleUrls: ['home.component.scss']
+  styleUrls: ['home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor (private posts: PostsService) {
-    console.log(this.posts)
+  constructor(private posts: PostsService) {
+    console.log(this.posts);
   }
 
-  ngOnInit () {
+  ngOnInit() {
   }
 }

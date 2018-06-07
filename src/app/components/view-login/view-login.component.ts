@@ -16,7 +16,7 @@ import { FunctionsService } from '../../services/functions.service';
 @Component({
   selector: 'app-view-login',
   template: `    
-    <form nz-form [formGroup]="formGroup">
+    <form [formGroup]="formGroup">
       <h2 mdc-typography headline6>ユーザネーム</h2>
       <div
         mdc-text-field

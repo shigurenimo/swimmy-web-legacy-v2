@@ -8,20 +8,12 @@ import { UsersService } from '../../services/users.service';
 @Component({
   selector: 'app-view-users-detail',
   template: `
-    <div class='user-icon'>
-      <nz-avatar nzIcon='code' [nzSrc]='photoURL'></nz-avatar>
-    </div>
-
-    <div class='displayName'>
-      <h1 class='mat-h1'>{{displayName}}</h1>
-    </div>
-
-    <div class='profile'>
-      <nz-card>
-        <ng-template #body>
-          <p>ここにはプロフィール機能が追加される予定です。</p>
-        </ng-template>
-      </nz-card>
+    <div *ngIf="!isLoading">
+      <div class='block-icon'>
+        <div class='icon' mdc-elevation z2>
+          <img [src]='user.photoURL' class='image'>
+        </div>
+      </div>
     </div>
   `,
   styleUrls: ['view-users-detail.component.scss'],
@@ -29,15 +21,7 @@ import { UsersService } from '../../services/users.service';
 export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   private params$$;
 
-  public createdAt;
-  public description;
-  public displayName = '読み込み中..';
-  public followeeCount;
-  public followerCount;
-  public headerPhotoURL;
-  public photoURL;
-  public postCount;
-  public file;
+  public user;
   public isLoading = true;
 
   constructor(
@@ -66,14 +50,8 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
 
   private onChangeUser(user) {
     if (user) {
-      this.createdAt = user.createdAt;
-      this.description = user.description;
-      this.displayName = user.displayName;
-      this.followeeCount = user.followeeCount;
-      this.followerCount = user.followerCount;
-      this.headerPhotoURL = user.headerPhotoURL;
-      this.photoURL = user.photoURL;
-      this.postCount = user.postCount;
+      console.log(user);
+      this.user = user;
     }
     this.isLoading = false;
   }

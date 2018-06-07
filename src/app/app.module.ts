@@ -9,7 +9,6 @@ import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -17,14 +16,10 @@ import { AppComponent } from './app.component';
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardPostComponent } from './components/card-post/card-post.component';
 import { CardReplyNewComponent } from './components/card-reply-new/card-reply-new.component';
-import { CardThreadComponent } from './components/card-thread/card-thread.component';
 import { ChipSetPostComponent } from './components/chip-set-post/chip-set-post.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { EditorPostComponent } from './components/editor-post/editor-post.component';
-import { HeaderComponent } from './components/header/header.component';
 import { ListItemThreadComponent } from './components/list-item-thread/list-item-thread.component';
-import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { TabsComponent } from './components/tabs/tabs.component';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
 import { ViewImagesComponent } from './components/view-images/view-images.component';
@@ -53,8 +48,6 @@ import { WindowService } from './services/window.service';
   declarations: [
     AppComponent,
     EditorPostComponent,
-    HeaderComponent,
-    SidenavComponent,
     ViewHomeComponent,
     ViewImagesComponent,
     ViewInfoComponent,
@@ -68,10 +61,8 @@ import { WindowService } from './services/window.service';
     ViewUsersDetailComponent,
     CardImageComponent,
     CardPostComponent,
-    CardThreadComponent,
     CardReplyNewComponent,
     DrawerComponent,
-    TabsComponent,
     TopAppBarComponent,
     ListItemThreadComponent,
     ChipSetPostComponent,
@@ -85,7 +76,6 @@ import { WindowService } from './services/window.service';
     AppRoutingModule,
     BrowserModule,
     HttpLinkModule,
-    NgZorroAntdModule.forRoot(),
     NoopAnimationsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production,

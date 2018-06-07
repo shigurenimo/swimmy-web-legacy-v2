@@ -20,6 +20,7 @@ import { DialogFooterButtonComponent } from './components/dialog-footer-button/d
 import { DialogFooterComponent } from './components/dialog-footer/dialog-footer.component';
 import { DialogHeaderTitleComponent } from './components/dialog-header-title/dialog-header-title.component';
 import { DialogHeaderComponent } from './components/dialog-header/dialog-header.component';
+import { DialogLabelComponent } from './components/dialog-label/dialog-label.component';
 import { DialogSurfaceComponent } from './components/dialog-surface/dialog-surface.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { DrawerContentComponent } from './components/drawer-content/drawer-content.component';
@@ -67,7 +68,7 @@ import { UtilsService } from './services/utils.service';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
   ],
   exports: [
     CommonModule,
@@ -91,6 +92,7 @@ import { UtilsService } from './services/utils.service';
     DialogFooterButtonComponent,
     DialogHeaderComponent,
     DialogHeaderTitleComponent,
+    DialogLabelComponent,
     DialogSurfaceComponent,
     DrawerComponent,
     DrawerContentComponent,
@@ -132,7 +134,7 @@ import { UtilsService } from './services/utils.service';
     TopAppBarRowComponent,
     TopAppBarSectionComponent,
     TopAppBarTitleComponent,
-    TypographyComponent
+    TypographyComponent,
   ],
   declarations: [
     ButtonIconComponent,
@@ -155,6 +157,7 @@ import { UtilsService } from './services/utils.service';
     DialogFooterButtonComponent,
     DialogHeaderComponent,
     DialogHeaderTitleComponent,
+    DialogLabelComponent,
     DialogSurfaceComponent,
     DrawerComponent,
     DrawerContentComponent,
@@ -196,10 +199,11 @@ import { UtilsService } from './services/utils.service';
     TopAppBarRowComponent,
     TopAppBarSectionComponent,
     TopAppBarTitleComponent,
-    TypographyComponent
+    TypographyComponent,
   ],
   providers: [
-    UtilsService
-  ]
+    UtilsService,
+  ],
 })
-export class MdcModule {}
+export class MdcModule {
+}

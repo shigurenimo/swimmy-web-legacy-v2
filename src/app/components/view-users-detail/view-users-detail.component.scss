@@ -1,28 +1,37 @@
-:host > div {
-  margin: 0 auto;
-  max-width: 600px;
-  padding: 8px;
+.mdc-typography {
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
-.user-icon ::ng-deep .ant-avatar {
-  margin: 0 auto;
-  display: block;
-  height: 200px;
-  font-size: 100px;
-  width: 200px;
-  background: white;
-  color: gray;
+.mdc-text-field--padding {
+  padding-left: 8px;
 }
 
-.user-icon ::ng-deep .anticon {
-  line-height: 200px;
+.block-form {
+  padding-top: 24px;
 }
 
-.displayName {
+.block-icon {
   padding-top: 40px;
-  text-align: center;
-}
 
-.profile {
-  padding-top: 40px;
+  .icon {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    cursor: pointer;
+    background: gray;
+  }
+
+  .icon .image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    width: 100%;
+  }
 }
