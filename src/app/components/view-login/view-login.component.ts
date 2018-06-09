@@ -91,6 +91,14 @@ export class ViewLoginComponent implements OnInit {
   ) {
   }
 
+  public get username() {
+    return this.formGroup.controls.username;
+  }
+
+  public get password() {
+    return this.formGroup.controls.password;
+  }
+
   public ngOnInit() {
     this.formGroup = this.formBuilder.group({
       username: [null, [Validators.required]],
@@ -106,6 +114,30 @@ export class ViewLoginComponent implements OnInit {
 
   public hasError(name: string, errorCode: string): boolean {
     return this.formGroup.get(name).hasError(errorCode);
+  }
+
+  public onSignUp(event) {
+    event.preventDefault();
+
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.mutateSignUp();
+  }
+
+  public onSignIn(event) {
+    event.preventDefault();
+
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.mutateSignIn();
   }
 
   private mutateSignUp() {
@@ -185,37 +217,5 @@ export class ViewLoginComponent implements OnInit {
         this.password.setErrors({[code]: true});
         break;
     }
-  }
-
-  public get username() {
-    return this.formGroup.controls.username;
-  }
-
-  public get password() {
-    return this.formGroup.controls.password;
-  }
-
-  public onSignUp(event) {
-    event.preventDefault();
-
-    if (this.isLoading) {
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.mutateSignUp();
-  }
-
-  public onSignIn(event) {
-    event.preventDefault();
-
-    if (this.isLoading) {
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.mutateSignIn();
   }
 }

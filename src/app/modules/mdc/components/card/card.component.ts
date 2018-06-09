@@ -5,10 +5,10 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./card.component.scss']
+  styleUrls: ['./card.component.scss'],
 })
 export class CardComponent implements OnInit {
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
   ngOnInit() {

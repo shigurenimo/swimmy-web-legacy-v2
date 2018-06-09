@@ -6,18 +6,18 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./list.component.scss']
+  styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
   @Input() 'two-line': string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utils: UtilsService
+    private utils: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-list');
 
     if (this.utils.toBool(this['two-line'])) {

@@ -9,7 +9,7 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./top-app-bar.component.scss']
+  styleUrls: ['./top-app-bar.component.scss'],
 })
 export class TopAppBarComponent implements OnInit, AfterContentInit, OnDestroy {
   @Input() fixed: string;
@@ -19,13 +19,13 @@ export class TopAppBarComponent implements OnInit, AfterContentInit, OnDestroy {
 
   public topAppBar;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utils: UtilsService
+    private utils: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-top-app-bar');
 
     if (this.utils.toBool(this.fixed)) {
@@ -45,11 +45,11 @@ export class TopAppBarComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  ngAfterContentInit () {
+  ngAfterContentInit() {
     this.topAppBar = new MDCTopAppBar(this.elementRef.nativeElement);
   }
 
-  ngOnDestroy () {
-    this.topAppBar.destroy()
+  ngOnDestroy() {
+    this.topAppBar.destroy();
   }
 }

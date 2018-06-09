@@ -7,23 +7,23 @@ import { MDCChipSet } from '@material/chips';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./chip-set.component.scss']
+  styleUrls: ['./chip-set.component.scss'],
 })
 export class ChipSetComponent implements OnInit, OnDestroy, AfterContentInit {
   public chipSet;
 
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-chip-set');
   }
 
-  ngAfterContentInit () {
+  ngAfterContentInit() {
     this.chipSet = new MDCChipSet(this.elementRef.nativeElement);
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.chipSet.destroy();
   }
 }

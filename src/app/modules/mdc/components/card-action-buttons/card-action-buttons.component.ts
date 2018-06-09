@@ -7,11 +7,12 @@ import { Component, OnInit } from '@angular/core';
       card-action-buttons works!
     </p>
   `,
-  styleUrls: ['./card-action-buttons.component.scss']
+  styleUrls: ['./card-action-buttons.component.scss'],
 })
 export class CardActionButtonsComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

@@ -60,6 +60,10 @@ export class FormPostNewComponent implements OnInit {
   ) {
   }
 
+  public get content() {
+    return this.formGroup.get('content');
+  }
+
   public onChangeFiles(files) {
     const [file] = files;
     const reader = new FileReader();
@@ -70,14 +74,6 @@ export class FormPostNewComponent implements OnInit {
     };
 
     reader.readAsDataURL(file);
-  }
-
-  private resetFormGroup() {
-    this.formGroup.reset({content: ''});
-  }
-
-  public get content() {
-    return this.formGroup.get('content');
   }
 
   public onAddPost(): void {
@@ -159,6 +155,10 @@ export class FormPostNewComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       content: ['', [Validators.maxLength(200)]],
     });
+  }
+
+  private resetFormGroup() {
+    this.formGroup.reset({content: ''});
   }
 
   private markAsDirty() {

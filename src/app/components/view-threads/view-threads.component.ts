@@ -62,15 +62,15 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
     this.posts$$.unsubscribe();
   }
 
-  private onChangeAuthState() {
-    this.onSearch();
-  }
-
   public onSearch() {
     const text = this.searchForm.get('text').value || '';
     const posts$ = this.postsService.getPostsAsThread(text);
     this.posts$$ = posts$.subscribe((res) => {
       this.posts = res.hits;
     });
+  }
+
+  private onChangeAuthState() {
+    this.onSearch();
   }
 }

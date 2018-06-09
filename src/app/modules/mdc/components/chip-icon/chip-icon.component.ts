@@ -6,19 +6,19 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./chip-icon.component.scss']
+  styleUrls: ['./chip-icon.component.scss'],
 })
 export class ChipIconComponent implements OnInit {
   @Input() leading: string;
   @Input() 'material-icons': string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-chip__icon');
 
     if (this.utilsService.toBool(this.leading)) {

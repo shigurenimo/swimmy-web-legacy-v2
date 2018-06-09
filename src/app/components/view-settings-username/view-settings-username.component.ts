@@ -117,6 +117,10 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  public get isDisabled() {
+    return !this.formGroup.get('newUsername').value;
+  }
+
   ngOnInit() {
     this.authState$$ = this.authService.authState().subscribe((data) => {
       this.onAuthState(data);
@@ -128,10 +132,6 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.authState$$.unsubscribe();
-  }
-
-  public get isDisabled() {
-    return !this.formGroup.get('newUsername').value;
   }
 
   public onMutate() {

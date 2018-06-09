@@ -9,7 +9,7 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./drawer.component.scss']
+  styleUrls: ['./drawer.component.scss'],
 })
 export class DrawerComponent implements OnInit, AfterContentInit, OnDestroy {
   @Input() persistent: string;
@@ -17,13 +17,13 @@ export class DrawerComponent implements OnInit, AfterContentInit, OnDestroy {
 
   public drawer;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utils: UtilsService
+    private utils: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-drawer');
 
     if (this.utils.toBool(this.persistent)) {
@@ -37,7 +37,7 @@ export class DrawerComponent implements OnInit, AfterContentInit, OnDestroy {
     this.elementRef.nativeElement.classList.add('mdc-typography');
   }
 
-  ngAfterContentInit () {
+  ngAfterContentInit() {
     if (this.utils.toBool(this.persistent)) {
       this.drawer = new MDCPersistentDrawer(this.elementRef.nativeElement);
       this.drawer.open = true;
@@ -48,7 +48,7 @@ export class DrawerComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.drawer.destroy();
   }
 }

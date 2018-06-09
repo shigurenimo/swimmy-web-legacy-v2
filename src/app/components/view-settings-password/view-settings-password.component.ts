@@ -67,14 +67,12 @@ import { BrowserService } from '../../services/browser.service';
   styleUrls: ['view-settings-password.component.scss'],
 })
 export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
-  private authState$$ = null;
-
   public formGroup: FormGroup;
   public passwordPlaceholder = Math.random().toString(36).slice(-16);
   public isLoadingQuery = true;
   public isNotFound = false;
   public isLoadingMutatation = false;
-
+  private authState$$ = null;
   @ViewChild(SnackbarComponent)
   private snackbarComponent: SnackbarComponent;
 
@@ -84,6 +82,14 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
   ) {
+  }
+
+  public get isDisabled() {
+    return !this.formGroup.get('password').value;
+  }
+
+  public get password() {
+    return this.formGroup.controls.password;
   }
 
   ngOnInit() {
@@ -97,10 +103,6 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
     this.authState$$.unsubscribe();
   }
 
-  public get isDisabled() {
-    return !this.formGroup.get('password').value;
-  }
-
   public isError(name: string): boolean {
     const input = this.formGroup.get(name);
     return input.invalid && (input.dirty || input.touched);
@@ -108,10 +110,6 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
 
   public hasError(name: string, errorCode: string): boolean {
     return this.formGroup.get(name).hasError(errorCode);
-  }
-
-  public get password() {
-    return this.formGroup.controls.password;
   }
 
   public onMutate() {

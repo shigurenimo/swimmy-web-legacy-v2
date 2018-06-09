@@ -5,7 +5,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./chip.component.scss']
+  styleUrls: ['./chip.component.scss'],
 })
 export class ChipComponent implements OnInit {
   constructor(private elementRef: ElementRef) {

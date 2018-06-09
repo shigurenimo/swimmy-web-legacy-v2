@@ -42,14 +42,13 @@ import { PostsService } from '../../services/posts.service';
   styleUrls: ['view-posts-detail.component.scss'],
 })
 export class ViewPostsDetailComponent implements OnInit, OnDestroy {
+  public isLogged = false;
+  public post = null;
+  public repliedPosts = [];
   private authState$$ = null;
   private params$$ = null;
   private posts$$ = null;
   private repliedPosts$$ = null;
-
-  public isLogged = false;
-  public post = null;
-  public repliedPosts = [];
 
   constructor(
     private posts: PostsService,

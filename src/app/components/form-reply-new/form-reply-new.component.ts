@@ -40,15 +40,6 @@ export class FormReplyNewComponent implements OnInit {
   ) {
   }
 
-  private resetFormGroup() {
-    this.formGroup.reset({content: ''});
-    this.files = [];
-  }
-
-  private markAsDirty() {
-    this.formGroup.controls.content.markAsDirty();
-  }
-
   public onAddPost() {
     if (!this.authService.currentUser) {
       return;
@@ -123,5 +114,14 @@ export class FormReplyNewComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       content: ['', [Validators.maxLength(200)]],
     });
+  }
+
+  private resetFormGroup() {
+    this.formGroup.reset({content: ''});
+    this.files = [];
+  }
+
+  private markAsDirty() {
+    this.formGroup.controls.content.markAsDirty();
   }
 }

@@ -22,15 +22,16 @@ import { Post } from '../../interfaces/post';
       </ng-container>
     </li>
   `,
-  styleUrls: ['./list-item-thread.component.scss']
+  styleUrls: ['./list-item-thread.component.scss'],
 })
 export class ListItemThreadComponent implements OnInit {
   @Input() post: Post;
 
   public date = 'yyyy年MM月dd日';
 
-  constructor () { }
+  constructor() {
+  }
 
-  ngOnInit () {
+  ngOnInit() {
   }
 }

@@ -7,12 +7,13 @@ import { Component, ElementRef, OnInit } from '@angular/core';
       snackbar-text works!
     </p>
   `,
-  styleUrls: ['./snackbar-text.component.scss']
+  styleUrls: ['./snackbar-text.component.scss'],
 })
 export class SnackbarTextComponent implements OnInit {
-  constructor (private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-snackbar__text');
   }
 }

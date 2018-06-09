@@ -40,18 +40,6 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  private onChangeAuthState(user) {
-    if (user) {
-      this.isLogged = true;
-    }
-    const posts$ = this.postsService.observePosts((ref) => {
-      return ref.limit(70).orderBy('createdAt', 'desc');
-    });
-    this.posts$$ = posts$.subscribe((docs) => {
-      this.posts = docs;
-    });
-  }
-
   public ngOnInit() {
     const authState$ = this.authService.authState();
     this.authState$$ = authState$.subscribe((user) => {
@@ -67,5 +55,17 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     if (this.posts$$) {
       this.posts$$.unsubscribe();
     }
+  }
+
+  private onChangeAuthState(user) {
+    if (user) {
+      this.isLogged = true;
+    }
+    const posts$ = this.postsService.observePosts((ref) => {
+      return ref.limit(70).orderBy('createdAt', 'desc');
+    });
+    this.posts$$ = posts$.subscribe((docs) => {
+      this.posts = docs;
+    });
   }
 }

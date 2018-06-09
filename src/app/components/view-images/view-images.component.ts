@@ -28,16 +28,6 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  private onChangeAuthState() {
-    const posts$ = this.postsService.getPostsAsPhoto((ref) => {
-      return ref.limit(50).orderBy('createdAt', 'desc');
-    });
-    const posts$$ = posts$.subscribe((docs) => {
-      this.posts = docs;
-      posts$$.unsubscribe();
-    });
-  }
-
   public ngOnInit() {
     const authState$ = this.authService.authState();
     this.authState$$ = authState$.subscribe(() => {
@@ -48,5 +38,15 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.authState$$.unsubscribe();
+  }
+
+  private onChangeAuthState() {
+    const posts$ = this.postsService.getPostsAsPhoto((ref) => {
+      return ref.limit(50).orderBy('createdAt', 'desc');
+    });
+    const posts$$ = posts$.subscribe((docs) => {
+      this.posts = docs;
+      posts$$.unsubscribe();
+    });
   }
 }

@@ -18,10 +18,9 @@ import { UsersService } from '../../services/users.service';
   styleUrls: ['view-users-detail.component.scss'],
 })
 export class ViewUsersDetailComponent implements OnInit, OnDestroy {
-  private params$$;
-
   public user;
   public isLoading = true;
+  private params$$;
 
   constructor(
     private activatedRoute: ActivatedRoute,

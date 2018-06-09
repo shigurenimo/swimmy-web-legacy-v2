@@ -5,13 +5,13 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./notched-outline-idle.component.scss']
+  styleUrls: ['./notched-outline-idle.component.scss'],
 })
 export class NotchedOutlineIdleComponent implements OnInit {
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-notched-outline__idle');
   }
 }

@@ -5,13 +5,13 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./icon.component.scss']
+  styleUrls: ['./icon.component.scss'],
 })
 export class IconComponent implements OnInit {
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('material-icons');
   }
 }

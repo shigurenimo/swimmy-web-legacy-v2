@@ -9,7 +9,7 @@ import { ResizePipe } from './pipes/resize.pipe';
 
 @NgModule({
   declarations: [
-    ResizePipe
+    ResizePipe,
   ],
   imports: [
     CommonModule,
@@ -17,7 +17,7 @@ import { ResizePipe } from './pipes/resize.pipe';
     HttpClientModule,
     ReactiveFormsModule,
     SwModule,
-    MdcModule
+    MdcModule,
   ],
   exports: [
     CommonModule,
@@ -26,7 +26,8 @@ import { ResizePipe } from './pipes/resize.pipe';
     ReactiveFormsModule,
     MdcModule,
     SwModule,
-    ResizePipe
-  ]
+    ResizePipe,
+  ],
 })
-export class SharedModule {}
+export class SharedModule {
+}

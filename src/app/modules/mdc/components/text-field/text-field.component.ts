@@ -8,7 +8,7 @@ import { MDCTextField } from '@material/textfield';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./text-field.component.scss']
+  styleUrls: ['./text-field.component.scss'],
 })
 export class TextFieldComponent implements OnInit, AfterContentInit, OnDestroy {
   @Input() upgraded: string;
@@ -23,10 +23,10 @@ export class TextFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 
   public textField;
 
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-text-field');
 
     if (this.toBool(this.upgraded)) {
@@ -58,15 +58,15 @@ export class TextFieldComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  ngAfterContentInit () {
+  ngAfterContentInit() {
     this.textField = new MDCTextField(this.elementRef.nativeElement);
   }
 
-  ngOnDestroy () {
-    this.textField.destroy()
+  ngOnDestroy() {
+    this.textField.destroy();
   }
 
-  private toBool (value: string) {
+  private toBool(value: string) {
     return value === '' || value;
   }
 }

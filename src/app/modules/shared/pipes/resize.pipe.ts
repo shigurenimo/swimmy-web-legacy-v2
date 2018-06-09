@@ -1,13 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'resize'
+  name: 'resize',
 })
 export class ResizePipe implements PipeTransform {
-  transform (value: any, args?: any): any {
-    if (!value) { return ''; }
-
-    console.log('value', value);
+  transform(value: any, args?: any): any {
+    if (!value) {
+      return '';
+    }
 
     if (!value.includes('lh3')) {
       return value;

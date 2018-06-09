@@ -6,18 +6,19 @@ import { SharedModule } from '../shared/shared.module';
 import { HomeComponent } from './components/home/home.component';
 
 const appRoutes = [
-  { path: '', component: HomeComponent }
+  {path: '', component: HomeComponent},
 ];
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(appRoutes),
     SharedModule,
   ],
-  exports: []
+  exports: [],
 })
-export class HelloModule {}
+export class HelloModule {
+}

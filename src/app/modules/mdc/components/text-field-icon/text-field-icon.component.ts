@@ -7,24 +7,24 @@ import { MDCTextFieldIcon } from '@material/textfield/icon';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./text-field-icon.component.scss']
+  styleUrls: ['./text-field-icon.component.scss'],
 })
 export class TextFieldIconComponent implements OnInit, OnDestroy, AfterContentInit {
   public textFieldIcon;
 
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-text-field__icon');
     this.elementRef.nativeElement.classList.add('material-icons');
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.textFieldIcon.destroy();
   }
 
-  ngAfterContentInit () {
+  ngAfterContentInit() {
     this.textFieldIcon = new MDCTextFieldIcon(this.elementRef.nativeElement);
   }
 }

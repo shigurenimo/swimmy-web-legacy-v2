@@ -5,10 +5,10 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./notched-outline.component.scss']
+  styleUrls: ['./notched-outline.component.scss'],
 })
 export class NotchedOutlineComponent implements OnInit {
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
   ngOnInit() {

@@ -75,17 +75,9 @@ export class DrawerComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public uid = null;
   public username = null;
-
-  @ViewChild(MdcDrawerComponent)
-  private drawerComponent: MdcDrawerComponent;
-
-  private isOpen$$;
-  private authState$$ = null;
-
   public routerLinkActiveOptions = {
     exact: true,
   };
-
   public links = [{
     routerLink: ['/'],
     icon: 'home',
@@ -99,16 +91,20 @@ export class DrawerComponent implements OnInit, OnDestroy, AfterViewInit {
     icon: 'message',
     name: 'スレッド',
   }];
-
-  public get isTemporary() {
-    return this.windowService.width < 768;
-  }
+  @ViewChild(MdcDrawerComponent)
+  private drawerComponent: MdcDrawerComponent;
+  private isOpen$$;
+  private authState$$ = null;
 
   constructor(
     public authService: AuthService,
     public drawerService: DrawerService,
     private windowService: WindowService,
   ) {
+  }
+
+  public get isTemporary() {
+    return this.windowService.width < 768;
   }
 
   public ngOnInit() {

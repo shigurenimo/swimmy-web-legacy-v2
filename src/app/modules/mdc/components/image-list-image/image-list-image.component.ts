@@ -6,18 +6,18 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./image-list-image.component.scss']
+  styleUrls: ['./image-list-image.component.scss'],
 })
 export class ImageListImageComponent implements OnInit {
   @Input() imageAspectContainer: string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-image-list__image');
 
     if (this.utilsService.toBool(this.imageAspectContainer)) {

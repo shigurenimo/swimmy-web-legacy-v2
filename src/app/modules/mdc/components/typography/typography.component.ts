@@ -6,7 +6,7 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./typography.component.scss']
+  styleUrls: ['./typography.component.scss'],
 })
 export class TypographyComponent implements OnInit {
   @Input() headline1: string;
@@ -23,13 +23,13 @@ export class TypographyComponent implements OnInit {
   @Input() button: string;
   @Input() overline: string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utils: UtilsService
+    private utils: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-typography');
 
     if (this.utils.toBool(this.headline1)) {

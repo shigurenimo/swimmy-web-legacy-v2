@@ -5,7 +5,7 @@ import { Component, ElementRef, Input, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./button.component.css']
+  styleUrls: ['./button.component.css'],
 })
 export class ButtonComponent implements OnInit {
   @Input() raised: string;
@@ -13,10 +13,10 @@ export class ButtonComponent implements OnInit {
   @Input() outlined: string;
   @Input() dense: string;
 
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-button');
 
     if (this.toBool(this.raised)) {
@@ -33,7 +33,7 @@ export class ButtonComponent implements OnInit {
     }
   }
 
-  private toBool (value: string) {
+  private toBool(value: string) {
     return value === '' || value;
   }
 }

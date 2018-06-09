@@ -6,19 +6,19 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./top-app-bar-section.component.scss']
+  styleUrls: ['./top-app-bar-section.component.scss'],
 })
 export class TopAppBarSectionComponent implements OnInit {
   @Input() alignStart: string;
   @Input() alignEnd: string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utils: UtilsService
+    private utils: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-top-app-bar__section');
 
     if (this.utils.toBool(this.alignStart)) {

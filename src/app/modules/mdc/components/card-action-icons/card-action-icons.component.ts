@@ -7,11 +7,12 @@ import { Component, OnInit } from '@angular/core';
       card-action-icons works!
     </p>
   `,
-  styleUrls: ['./card-action-icons.component.scss']
+  styleUrls: ['./card-action-icons.component.scss'],
 })
 export class CardActionIconsComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

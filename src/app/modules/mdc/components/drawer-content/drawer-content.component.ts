@@ -5,10 +5,11 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./drawer-content.component.scss']
+  styleUrls: ['./drawer-content.component.scss'],
 })
 export class DrawerContentComponent implements OnInit {
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-drawer__content');

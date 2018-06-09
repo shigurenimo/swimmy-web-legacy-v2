@@ -10,7 +10,7 @@ import { Post } from '../../interfaces/post';
       </div>
     </ng-container>
   `,
-  styleUrls: ['card-image.component.scss']
+  styleUrls: ['card-image.component.scss'],
 })
 export class CardImageComponent {
   @Input() post: Post;

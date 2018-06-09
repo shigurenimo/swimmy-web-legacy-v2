@@ -6,20 +6,20 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./dialog-footer-button.component.scss']
+  styleUrls: ['./dialog-footer-button.component.scss'],
 })
 export class DialogFooterButtonComponent implements OnInit {
 
   @Input() accept: string;
   @Input() cancel: string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utilsService: UtilsService
-    ) {
+    private utilsService: UtilsService,
+  ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-dialog__footer__button');
     this.elementRef.nativeElement.classList.add('mdc-button');
 

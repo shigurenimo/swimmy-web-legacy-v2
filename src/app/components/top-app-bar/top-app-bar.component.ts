@@ -36,16 +36,16 @@ import { WindowService } from '../../services/window.service';
 export class TopAppBarComponent implements OnInit, AfterContentInit {
   public appTitle = '';
 
-  public get isTemporary() {
-    return this.windowService.width < 768;
-  }
-
   constructor(
     private router: Router,
     private drawerService: DrawerService,
     private windowService: WindowService,
     private browser: BrowserService,
   ) {
+  }
+
+  public get isTemporary() {
+    return this.windowService.width < 768;
   }
 
   public ngOnInit() {

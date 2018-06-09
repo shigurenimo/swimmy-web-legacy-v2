@@ -5,13 +5,14 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./dialog-backdrop.component.scss']
+  styleUrls: ['./dialog-backdrop.component.scss'],
 })
 export class DialogBackdropComponent implements OnInit {
 
-  constructor (private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-dialog__backdrop');
   }
 

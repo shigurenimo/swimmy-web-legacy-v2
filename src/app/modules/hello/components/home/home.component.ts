@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PostsService } from '../../../../services/posts.service';
 
 @Component({
   selector: 'app-view-info',
@@ -13,8 +12,7 @@ import { PostsService } from '../../../../services/posts.service';
   styleUrls: ['home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private posts: PostsService) {
-    console.log(this.posts);
+  constructor() {
   }
 
   ngOnInit() {

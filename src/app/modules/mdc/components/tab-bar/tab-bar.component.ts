@@ -6,18 +6,18 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./tab-bar.component.scss']
+  styleUrls: ['./tab-bar.component.scss'],
 })
 export class TabBarComponent implements OnInit {
   @Input() withIconAndText: string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
     private utils: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-tab-bar');
 
     if (this.utils.toBool(this.withIconAndText)) {

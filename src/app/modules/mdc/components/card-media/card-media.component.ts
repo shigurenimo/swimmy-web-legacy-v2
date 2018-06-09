@@ -5,12 +5,12 @@ import { Component, ElementRef, Input, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./card-media.component.scss']
+  styleUrls: ['./card-media.component.scss'],
 })
 export class CardMediaComponent implements OnInit {
   @Input() outlined: string;
 
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
   ngOnInit() {
@@ -21,7 +21,7 @@ export class CardMediaComponent implements OnInit {
     }
   }
 
-  private isEnabled (name: string) {
+  private isEnabled(name: string) {
     return this[name] === '' || this[name];
   }
 }

@@ -5,10 +5,11 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./list-item-secondary-text.component.scss']
+  styleUrls: ['./list-item-secondary-text.component.scss'],
 })
 export class ListItemSecondaryTextComponent implements OnInit {
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-list-item__secondary-text');

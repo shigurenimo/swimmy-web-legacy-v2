@@ -5,13 +5,14 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./list-divider.component.scss']
+  styleUrls: ['./list-divider.component.scss'],
 })
 export class ListDividerComponent implements OnInit {
 
-  constructor (private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-list-divider');
   }
 

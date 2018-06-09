@@ -6,7 +6,6 @@ import { Timestamp } from '@firebase/firestore-types'
   name: 'elapsedDate'
 })
 export class ElapsedDatePipe implements PipeTransform {
-
   transform (value: Timestamp, args?: any): String {
     const diff = new Date().getTime() - value.toDate().getTime();
     const hours = Math.round(diff / (1000 * 60 * 60));
@@ -18,5 +17,4 @@ export class ElapsedDatePipe implements PipeTransform {
     }
     return Math.round(diff / (1000 * 60 * 60 * 24)) + '日前';
   }
-
 }

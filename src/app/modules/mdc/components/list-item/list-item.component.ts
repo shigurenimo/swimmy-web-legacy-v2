@@ -6,15 +6,15 @@ import { Component, ElementRef, Input, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./list-item.component.scss']
+  styleUrls: ['./list-item.component.scss'],
 })
 export class ListItemComponent implements OnInit {
   @Input() activated: string;
 
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-list-item');
     if (this.activated) {
       this.elementRef.nativeElement.classList.add('mdc-list-item--activated');

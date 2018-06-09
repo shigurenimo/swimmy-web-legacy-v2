@@ -60,8 +60,6 @@ import { BrowserService } from '../../services/browser.service';
   styleUrls: ['view-settings.component.scss'],
 })
 export class ViewSettingsComponent implements OnInit, OnDestroy {
-  private authState$$ = null;
-
   public displayName = null;
   public photoURL = null;
   public isLoadingQuery = true;
@@ -82,7 +80,7 @@ export class ViewSettingsComponent implements OnInit, OnDestroy {
     text: 'パスワード',
     secondaryText: 'ログイン時に使用するパスワードを変更する。',
   }];
-
+  private authState$$ = null;
   @ViewChild(DialogComponent)
   private dialogComponent: DialogComponent;
 

@@ -8,24 +8,24 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./snackbar.component.scss']
+  styleUrls: ['./snackbar.component.scss'],
 })
 export class SnackbarComponent implements OnInit, AfterContentInit, OnDestroy {
   snackbar;
 
   @Input() 'align-start': string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utilsService: UtilsService
-    ) {
+    private utilsService: UtilsService,
+  ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-snackbar');
   }
 
-  ngAfterContentInit () {
+  ngAfterContentInit() {
     this.snackbar = new MDCSnackbar(this.elementRef.nativeElement);
 
     if (this.utilsService.toBool(this['align-start'])) {
@@ -33,7 +33,7 @@ export class SnackbarComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.snackbar.destroy();
   }
 }

@@ -7,11 +7,12 @@ import { Component, OnInit } from '@angular/core';
       view-info works!
     </p>
   `,
-  styleUrls: ['view-info.component.scss']
+  styleUrls: ['view-info.component.scss'],
 })
 export class ViewInfoComponent implements OnInit {
-  constructor () { }
+  constructor() {
+  }
 
-  ngOnInit () {
+  ngOnInit() {
   }
 }

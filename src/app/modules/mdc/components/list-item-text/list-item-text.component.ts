@@ -6,12 +6,13 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./list-item-text.component.scss']
+  styleUrls: ['./list-item-text.component.scss'],
 })
 export class ListItemTextComponent implements OnInit {
-  constructor (private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-list-item__text');
   }
 }

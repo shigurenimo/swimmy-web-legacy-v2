@@ -5,13 +5,13 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./top-app-bar-title.component.scss']
+  styleUrls: ['./top-app-bar-title.component.scss'],
 })
 export class TopAppBarTitleComponent implements OnInit {
-  constructor (private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-top-app-bar__title');
   }
 }

@@ -6,18 +6,18 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./list-item-graphic.component.scss']
+  styleUrls: ['./list-item-graphic.component.scss'],
 })
 export class ListItemGraphicComponent implements OnInit {
   @Input() 'material-icons': string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-list-item__graphic');
 
     if (this.utilsService.toBool(this['material-icons'])) {

@@ -7,7 +7,7 @@ import { UtilsService } from '../../services/utils.service';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./elevation.component.scss']
+  styleUrls: ['./elevation.component.scss'],
 })
 export class ElevationComponent implements OnInit {
   @Input() public z1: string;
@@ -35,13 +35,13 @@ export class ElevationComponent implements OnInit {
   @Input() public z23: string;
   @Input() public z24: string;
 
-  constructor (
+  constructor(
     private elementRef: ElementRef,
-    private utils: UtilsService
+    private utils: UtilsService,
   ) {
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-elevation');
 
     const numbers = [
@@ -50,7 +50,7 @@ export class ElevationComponent implements OnInit {
       9, 10, 11, 12,
       13, 14, 15, 16,
       17, 18, 19, 20,
-      21, 22, 23, 24
+      21, 22, 23, 24,
     ];
 
     numbers.forEach(n => {

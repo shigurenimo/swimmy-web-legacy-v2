@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class UtilsService {
-  toBool (value: string) {
+  toBool(value: string) {
     return value === '' || value;
   }
 }

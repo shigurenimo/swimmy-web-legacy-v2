@@ -5,8 +5,9 @@ import { Component } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./view.component.scss']
+  styleUrls: ['./view.component.scss'],
 })
 export class ViewComponent {
-  constructor () { }
+  constructor() {
+  }
 }

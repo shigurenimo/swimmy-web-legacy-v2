@@ -97,6 +97,10 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  public get src() {
+    return this.previewFile || this.user.photoURL;
+  }
+
   ngOnInit() {
     this.initUser();
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
@@ -110,10 +114,6 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     const [file] = files;
 
     this.snackbarComponent.snackbar.show({message: 'アップロードしています'});
-  }
-
-  public get src() {
-    return this.previewFile || this.user.photoURL;
   }
 
   public onMutate() {
@@ -146,7 +146,7 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
       this.isLoadingMutation = false;
     }, (err) => {
-      console.log(err);
+      console.error(err);
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_ERROR});
       this.isLoadingMutation = false;
     });

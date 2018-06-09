@@ -7,11 +7,12 @@ import { Component, OnInit } from '@angular/core';
       card-primary-action works!
     </p>
   `,
-  styleUrls: ['./card-primary-action.component.scss']
+  styleUrls: ['./card-primary-action.component.scss'],
 })
 export class CardPrimaryActionComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

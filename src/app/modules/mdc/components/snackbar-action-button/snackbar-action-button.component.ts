@@ -5,12 +5,13 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   template: `
     <ng-content></ng-content>
   `,
-  styleUrls: ['./snackbar-action-button.component.scss']
+  styleUrls: ['./snackbar-action-button.component.scss'],
 })
 export class SnackbarActionButtonComponent implements OnInit {
-  constructor (private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
-  ngOnInit () {
+  ngOnInit() {
     this.elementRef.nativeElement.classList.add('mdc-snackbar__action-button');
   }
 }
