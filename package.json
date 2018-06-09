@@ -28,7 +28,6 @@
     "@firebase/app": "^0.1.6",
     "@firebase/app-types": "^0.1.0",
     "algoliasearch": "^3.27.1",
-    "angularfire2": "5.0.0-rc.6",
     "apollo-angular": "1.0.1",
     "apollo-angular-link-http": "1.0.3",
     "apollo-cache-inmemory": "^1.1.12",
