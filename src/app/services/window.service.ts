@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
 export class WindowService {
   public width: number;
 
-  constructor () {
-    this.width = window.innerWidth
+  constructor() {
+    this.width = window.innerWidth;
   }
 
-  public updateWidth (): void {
-    this.width = window.innerWidth
+  public updateWidth(): void {
+    this.width = window.innerWidth;
   }
 }

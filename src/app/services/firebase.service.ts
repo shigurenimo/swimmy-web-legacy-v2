@@ -9,7 +9,7 @@ import {
 } from '@firebase/firestore-types';
 import { UploadTaskSnapshot } from '@firebase/storage-types';
 import { auth, firestore, functions, storage, User } from 'firebase/app';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class FirebaseService {
@@ -20,16 +20,16 @@ export class FirebaseService {
     return auth();
   }
 
+  public get functions(): functions.Functions {
+    return functions();
+  }
+
   public firestore(): firestore.Firestore {
     return firestore();
   }
 
   public storage(): storage.Storage {
     return storage();
-  }
-
-  public get functions(): functions.Functions {
-    return functions();
   }
 
   public createId() {

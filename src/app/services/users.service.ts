@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { QueryDocumentSnapshot } from '@firebase/firestore-types';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { fromPromise } from 'rxjs/observable/fromPromise';
+import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { UpdateUserInput } from '../interfaces/mutation';
@@ -46,7 +46,7 @@ export class UsersService {
   public updateUser(input: any) {
     const func = this.firebaseService.functions.httpsCallable('hello');
 
-    return fromPromise(func(input))
+    return from(func(input));
   }
 
   public _updateUser(id: string, input: UpdateUserInput) {

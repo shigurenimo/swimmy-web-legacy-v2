@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { auth, User } from 'firebase/app';
-import { Observable } from 'rxjs/Observable';
-import { fromPromise } from 'rxjs/observable/fromPromise';
-import { Subject } from 'rxjs/Subject';
+import { from, Observable, Subject } from 'rxjs';
 
 import { User as FirestoreUser } from '../interfaces/user';
 import { FirebaseService, fromAuth } from './firebase.service';
@@ -28,28 +26,21 @@ export class AuthService {
   }
 
   public getRedirectResult() {
-    const promise = this.firebase.auth.getRedirectResult();
-
-    return fromPromise(promise);
+    return from(this.firebase.auth.getRedirectResult());
   }
 
   public signInWithEmailAndPassword(email, password) {
-    const promise = this.firebase.auth.signInWithEmailAndPassword(email, password);
-
-    return fromPromise(promise);
+    return from(this.firebase.auth.signInWithEmailAndPassword(email, password));
   }
 
   public signInWithFacebookWithRedirect() {
     const provider = new auth.FacebookAuthProvider();
-    const promise = this.firebase.auth.signInWithRedirect(provider);
 
-    return fromPromise(promise);
+    return from(this.firebase.auth.signInWithRedirect(provider));
   }
 
   public signOut() {
-    const promise = this.firebase.auth.signOut();
-
-    return fromPromise(promise);
+    return from(this.firebase.auth.signOut());
   }
 
   public authState(): Observable<User> {
@@ -58,21 +49,17 @@ export class AuthService {
 
   public linkWithFacebookWithPopup() {
     const provider = new auth.FacebookAuthProvider();
-    const promise = this.firebase.auth.currentUser.linkWithPopup(provider);
 
-    return fromPromise(promise);
+    return from(this.firebase.auth.currentUser.linkWithPopup(provider));
   }
 
   public linkWithTwitterWithPopup() {
     const provider = new auth.TwitterAuthProvider();
-    const promise = this.firebase.auth.currentUser.linkWithPopup(provider);
 
-    return fromPromise(promise);
+    return from(this.firebase.auth.currentUser.linkWithPopup(provider));
   }
 
   public unlink(providerId: string) {
-    const promise = this.firebase.auth.currentUser.unlink(providerId);
-
-    return fromPromise(promise);
+    return from(this.firebase.auth.currentUser.unlink(providerId));
   }
 }

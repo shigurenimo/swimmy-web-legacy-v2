@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Observable } from 'rxjs/Observable';
-import { combineLatest } from 'rxjs/observable/combineLatest';
+import { combineLatest, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 import { Photo } from '../../interfaces/input';
@@ -153,7 +152,7 @@ export class FormPostNewComponent implements OnInit {
     });
     */
 
-    return // downloadURL$.pipe(map$);
+    return; // downloadURL$.pipe(map$);
   }
 
   public ngOnInit() {

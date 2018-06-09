@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import * as firebase from 'firebase/app';
-import { fromPromise } from 'rxjs/observable/fromPromise';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 import { UPDATE_DATA_SUCCESS, UPDATE_ERROR } from '../../constants/messages';
@@ -131,7 +131,7 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
     const currentUser = this.authService.auth.currentUser;
     const {password} = this.formGroup.value;
 
-    fromPromise(currentUser.updatePassword(password)).subscribe(() => {
+    from(currentUser.updatePassword(password)).subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
       this.resetFormGroup();
     }, (err) => {
@@ -166,9 +166,9 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
 
     const credential = firebase.auth.EmailAuthProvider.credential(email, currentPassword);
 
-    fromPromise(currentUser.reauthenticateWithCredential(credential)).pipe(
+    from(currentUser.reauthenticateWithCredential(credential)).pipe(
       mergeMap(() => {
-        return fromPromise(currentUser.updatePassword(password));
+        return from(currentUser.updatePassword(password));
       }),
     ).subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});

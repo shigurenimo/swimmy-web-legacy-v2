@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import * as firebase from 'firebase/app';
-import { fromPromise } from 'rxjs/observable/fromPromise';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 import { LOGIN_ERROR, UPDATE_DATA_ERROR, UPDATE_DATA_SUCCESS } from '../../constants/messages';
@@ -152,7 +152,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
     const {newUsername} = this.formGroup.value;
 
     const newEmail = `${newUsername}@swimmy.io`;
-    const email$ = fromPromise(currentUser.updateEmail(newEmail));
+    const email$ = from(currentUser.updateEmail(newEmail));
     const user$ = mergeMap(() => {
       return this.usersService._updateUser(currentUser.uid, {
         username: newUsername,
@@ -204,10 +204,10 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
     const credential = firebase.auth.EmailAuthProvider.credential(email, password);
 
     const username$ = mergeMap(() => {
-      return fromPromise(currentUser.updateEmail(newEmail));
+      return from(currentUser.updateEmail(newEmail));
     });
 
-    const credential$ = fromPromise(currentUser.reauthenticateWithCredential(credential));
+    const credential$ = from(currentUser.reauthenticateWithCredential(credential));
 
     const user$ = mergeMap(() => {
       return this.usersService._updateUser(currentUser.uid, {

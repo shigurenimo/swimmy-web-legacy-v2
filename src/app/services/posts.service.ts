@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { fromPromise } from 'rxjs/observable/fromPromise';
+import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 import { toArray } from '../helpers/toArray';
 import { AddPostInput, UpdatePostTagInput } from '../interfaces/mutation';
 import { AlgoliaService } from './algolia.service';
@@ -17,33 +18,6 @@ export class PostsService {
     private algoliaService: AlgoliaService,
     private firebaseService: FirebaseService,
   ) {
-  }
-
-  private fixPost(queryDocSnapshot) {
-    if (!queryDocSnapshot.exists) {
-      return null;
-    }
-
-    const data = queryDocSnapshot.data();
-
-    return {
-      ...data,
-      id: queryDocSnapshot.id,
-      photoURLs: toArray(data.photoURLs).map(photoURL => photoURL.photoURL),
-      tags: toArray(data.tags),
-    };
-  }
-
-  private fixPosts(querySnapshot) {
-    return querySnapshot.docs.map((queryDocSnapshot) => {
-      const data = queryDocSnapshot.data();
-      return {
-        ...data,
-        id: queryDocSnapshot.id,
-        photoURLs: toArray(data.photoURLs).map(photoURL => photoURL.photoURL),
-        tags: toArray(data.tags),
-      };
-    });
   }
 
   public addPost(input: AddPostInput) {
@@ -96,7 +70,7 @@ export class PostsService {
   public getPostsAsThread(query: string) {
     const promise = this.algoliaService.postsAsThread.search(query);
 
-    return fromPromise(promise);
+    return from(promise);
   }
 
   public observePostsAsThread(queryFn: (ref: any) => any) {
@@ -135,6 +109,33 @@ export class PostsService {
         }
       `,
       variables: {id},
+    });
+  }
+
+  private fixPost(queryDocSnapshot) {
+    if (!queryDocSnapshot.exists) {
+      return null;
+    }
+
+    const data = queryDocSnapshot.data();
+
+    return {
+      ...data,
+      id: queryDocSnapshot.id,
+      photoURLs: toArray(data.photoURLs).map(photoURL => photoURL.photoURL),
+      tags: toArray(data.tags),
+    };
+  }
+
+  private fixPosts(querySnapshot) {
+    return querySnapshot.docs.map((queryDocSnapshot) => {
+      const data = queryDocSnapshot.data();
+      return {
+        ...data,
+        id: queryDocSnapshot.id,
+        photoURLs: toArray(data.photoURLs).map(photoURL => photoURL.photoURL),
+        tags: toArray(data.tags),
+      };
     });
   }
 }

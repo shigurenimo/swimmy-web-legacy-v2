@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { UploadTaskSnapshot } from '@firebase/storage-types';
 
 import { storage } from 'firebase/app';
-
-import { Observable } from 'rxjs/Observable';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { fromPromise } from 'rxjs/observable/fromPromise';
+import { combineLatest, from, Observable } from 'rxjs';
 
 import { FirebaseService, fromUploadTask } from './firebase.service';
 
@@ -27,7 +24,7 @@ export class StorageService {
   public getDownloadURL(snapshot: UploadTaskSnapshot): Observable<string> {
     const promise = snapshot.ref.getDownloadURL();
 
-    return fromPromise(promise);
+    return from(promise);
   }
 
   public filterDownloadURL(snapshot: UploadTaskSnapshot): boolean {

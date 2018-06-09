@@ -8,7 +8,8 @@ const client = algoliasearch(environment.algolia.applicationId, environment.algo
 
 @Injectable()
 export class AlgoliaService {
-  public postsAsThread = client.initIndex('posts-as-thread')
+  public postsAsThread = client.initIndex('posts-as-thread');
 
-  constructor () {}
+  constructor() {
+  }
 }
