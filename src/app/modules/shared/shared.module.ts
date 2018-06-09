@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -14,7 +13,6 @@ import { ResizePipe } from './pipes/resize.pipe';
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     ReactiveFormsModule,
     SwModule,
     MdcModule,
@@ -22,7 +20,6 @@ import { ResizePipe } from './pipes/resize.pipe';
   exports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     ReactiveFormsModule,
     MdcModule,
     SwModule,
