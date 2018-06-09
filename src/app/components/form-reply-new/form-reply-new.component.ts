@@ -1,17 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map, mergeMap } from 'rxjs/operators';
-import { Photo } from '../../interfaces/input';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
+import { Photo } from '../../interfaces/input';
+import { AuthService } from '../../services/auth.service';
+import { FirebaseService } from '../../services/firebase.service';
 import { PostsService } from '../../services/posts.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
-  selector: 'app-card-reply-new',
+  selector: 'app-form-reply-new',
   template: `
     <form [formGroup]="formGroup" (ngSubmit)="onAddPost()">
       <div mdc-text-field withTrailingIcon fullwidth [disabled]='isLoadingMutation' class='mdc-text-field--padding'>
@@ -21,9 +21,9 @@ import { PostsService } from '../../services/posts.service';
       </div>
     </form>
   `,
-  styleUrls: ['card-reply-new.component.scss']
+  styleUrls: ['form-reply-new.component.scss'],
 })
-export class CardReplyNewComponent implements OnInit {
+export class FormReplyNewComponent implements OnInit {
   @Input() repliedPostId: string;
 
   public formGroup: FormGroup;
@@ -31,25 +31,26 @@ export class CardReplyNewComponent implements OnInit {
   public files = [];
   public isLoadingMutation = false;
 
-  constructor (
+  constructor(
     private formBuilder: FormBuilder,
     private posts: PostsService,
-    public afAuth: AngularFireAuth,
-    private afStorage: AngularFireStorage,
-    private afStore: AngularFirestore) {
+    public authService: AuthService,
+    private storage: StorageService,
+    private firebaseService: FirebaseService,
+  ) {
   }
 
-  private resetFormGroup () {
-    this.formGroup.reset({ content: '' });
+  private resetFormGroup() {
+    this.formGroup.reset({content: ''});
     this.files = [];
   }
 
-  private markAsDirty () {
+  private markAsDirty() {
     this.formGroup.controls.content.markAsDirty();
   }
 
-  public onAddPost () {
-    if (!this.afAuth.auth.currentUser) {
+  public onAddPost() {
+    if (!this.authService.currentUser) {
       return;
     }
 
@@ -61,7 +62,7 @@ export class CardReplyNewComponent implements OnInit {
 
     this.markAsDirty();
 
-    const { content } = this.formGroup.value;
+    const {content} = this.formGroup.value;
 
     let $mutation = null;
 
@@ -81,7 +82,7 @@ export class CardReplyNewComponent implements OnInit {
         return this.posts.addReplyPost({
           content: content,
           photos: photos,
-          replyPostId: this.repliedPostId
+          replyPostId: this.repliedPostId,
         });
       });
 
@@ -90,7 +91,7 @@ export class CardReplyNewComponent implements OnInit {
       $mutation = this.posts.addReplyPost({
         content: content,
         photos: [],
-        replyPostId: this.repliedPostId
+        replyPostId: this.repliedPostId,
       });
     }
 
@@ -103,21 +104,24 @@ export class CardReplyNewComponent implements OnInit {
     });
   }
 
-  public uploadImage (file) {
+  public uploadImage(file) {
     const originFileObj = file.originFileObj;
-    const photoId = this.afStore.createId();
+    const photoId = this.firebaseService.createId();
     const filePath = `posts/${photoId}`;
-    const task = this.afStorage.upload(filePath, originFileObj);
-    const downloadURL$ = task.snapshotChanges();
-    const map$ = map(({ downloadURL }) => {
-      return { downloadURL, photoId };
-    });
-    return downloadURL$.pipe(map$);
+    const task$ = this.storage.upload(filePath, originFileObj);
+
+    return task$.pipe(
+      filter(this.storage.filterDownloadURL),
+      mergeMap(this.storage.getDownloadURL),
+      map((downloadURL) => {
+        return {downloadURL, photoId};
+      }),
+    );
   }
 
-  public ngOnInit () {
+  public ngOnInit() {
     this.formGroup = this.formBuilder.group({
-      content: ['', [Validators.maxLength(200)]]
+      content: ['', [Validators.maxLength(200)]],
     });
   }
 }

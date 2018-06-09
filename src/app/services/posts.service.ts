@@ -1,46 +1,52 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { map } from 'rxjs/operators';
+import { toArray } from '../helpers/toArray';
 import { AddPostInput, UpdatePostTagInput } from '../interfaces/mutation';
-import { Post } from '../interfaces/post';
 import { AlgoliaService } from './algolia.service';
+import { FirebaseService, fromQueryDocRef, fromQueryRef } from './firebase.service';
 
 @Injectable()
 export class PostsService {
 
-  constructor (
-    private afs: AngularFirestore,
+  constructor(
     private apollo: Apollo,
-    private algoliaService: AlgoliaService
+    private algoliaService: AlgoliaService,
+    private firebaseService: FirebaseService,
   ) {
   }
 
-  private fixPost (doc) {
-    doc.photoURLs = Object.keys(doc.photoURLs).map((id) => {
-      return doc.photoURLs[id].photoURL;
-    });
-    doc.tags = Object.keys(doc.tags).map((id) => {
-      return doc.tags[id];
-    });
-    return doc;
+  private fixPost(queryDocSnapshot) {
+    if (!queryDocSnapshot.exists) {
+      return null;
+    }
+
+    const data = queryDocSnapshot.data();
+
+    return {
+      ...data,
+      id: queryDocSnapshot.id,
+      photoURLs: toArray(data.photoURLs).map(photoURL => photoURL.photoURL),
+      tags: toArray(data.tags),
+    };
   }
 
-  private fixPosts (docs: any[]) {
-    return docs.map((doc) => {
-      doc.photoURLs = Object.keys(doc.photoURLs).map((id) => {
-        return doc.photoURLs[id].photoURL;
-      });
-      doc.tags = Object.keys(doc.tags).map((id) => {
-        return doc.tags[id];
-      });
-      return doc;
+  private fixPosts(querySnapshot) {
+    return querySnapshot.docs.map((queryDocSnapshot) => {
+      const data = queryDocSnapshot.data();
+      return {
+        ...data,
+        id: queryDocSnapshot.id,
+        photoURLs: toArray(data.photoURLs).map(photoURL => photoURL.photoURL),
+        tags: toArray(data.tags),
+      };
     });
   }
 
-  public addPost (input: AddPostInput) {
+  public addPost(input: AddPostInput) {
     return this.apollo.mutate({
       mutation: gql`
         mutation addPost($input: AddPostInput!) {
@@ -49,11 +55,11 @@ export class PostsService {
           }
         }
       `,
-      variables: { input }
+      variables: {input},
     });
   }
 
-  public addReplyPost (input: AddPostInput) {
+  public addReplyPost(input: AddPostInput) {
     return this.apollo.mutate({
       mutation: gql`
         mutation addPost($input: AddPostInput!) {
@@ -62,63 +68,73 @@ export class PostsService {
           }
         }
       `,
-      variables: { input }
+      variables: {input},
     });
   }
 
-  public updatePostTag (input: UpdatePostTagInput) {
+  public updatePostTag(input: UpdatePostTagInput) {
     return this.apollo.mutate({
       mutation: mutationUpdatePostTag,
-      variables: { input }
+      variables: {input},
     });
   }
 
-  public observePost (postId: string) {
-    return this.afs.doc<Post>(`posts-as-anonymous/${postId}`)
-      .valueChanges()
-      .map(this.fixPost);
+  public observePost(postId: string) {
+    const ref = this.firebaseService.firestore().doc(`posts-as-anonymous/${postId}`);
+
+    return fromQueryDocRef(ref).pipe(map(this.fixPost));
   }
 
-  public observePosts (query: (ref: any) => any) {
-    return this.afs.collection<Post>('posts-as-anonymous', query)
-      .valueChanges()
-      .map(this.fixPosts);
+  public observePosts(queryFn: (ref: any) => any) {
+    const ref = this.firebaseService.firestore().collection('posts-as-anonymous');
+
+    const query = queryFn(ref);
+
+    return fromQueryRef(query).pipe(map(this.fixPosts));
   }
 
-  public getPostsAsThread (query: string) {
+  public getPostsAsThread(query: string) {
     const promise = this.algoliaService.postsAsThread.search(query);
+
     return fromPromise(promise);
   }
 
-  public observePostsAsThread (query: (ref: any) => any) {
-    return this.afs.collection<Post>('posts-as-thread', query)
-      .valueChanges()
-      .map(this.fixPosts);
+  public observePostsAsThread(queryFn: (ref: any) => any) {
+    const ref = this.firebaseService.firestore().collection('posts-as-thread');
+
+    const query = queryFn(ref);
+
+    return fromQueryRef(query).pipe(map(this.fixPosts));
   }
 
-  public getPostsAsPhoto (query: (ref: any) => any) {
-    return this.afs.collection<Post>('posts-as-photo', query)
-      .valueChanges()
-      .map(this.fixPosts);
+  public getPostsAsPhoto(queryFn: (ref: any) => any) {
+    const ref = this.firebaseService.firestore().collection('posts-as-photo');
+
+    const query = queryFn(ref);
+
+    return fromQueryRef(query).pipe(map(this.fixPosts));
   }
 
-  public observeRepliedPosts (replyPostId: string) {
-    const query = (ref) => {
+  public observeRepliedPosts(replyPostId: string) {
+    const ref = this.firebaseService.firestore().collection('posts');
+
+    const queryFn = (ref) => {
       return ref.where('replyPostId', '==', replyPostId);
     };
-    return this.afs.collection<Post>('posts', query)
-      .valueChanges()
-      .map(this.fixPosts);
+
+    const query = queryFn(ref);
+
+    return fromQueryRef(query).pipe(map(this.fixPosts));
   }
 
-  public deleteReplyPost (id: string) {
+  public deleteReplyPost(id: string) {
     return this.apollo.mutate({
       mutation: gql`
         mutation deletePost($id: ID!) {
           deletePost(id: $id)
         }
       `,
-      variables: { id }
+      variables: {id},
     });
   }
 }

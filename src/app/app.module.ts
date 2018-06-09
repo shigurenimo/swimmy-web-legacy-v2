@@ -1,23 +1,22 @@
 import { HttpHeaders } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
+import { take } from 'rxjs/operators';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CardImageComponent } from './components/card-image/card-image.component';
-import { CardPostComponent } from './components/card-post/card-post.component';
-import { CardReplyNewComponent } from './components/card-reply-new/card-reply-new.component';
-import { ChipSetPostComponent } from './components/chip-set-post/chip-set-post.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
-import { EditorPostComponent } from './components/editor-post/editor-post.component';
+import { FormPostNewComponent } from './components/form-post-new/form-post-new.component';
+import { FormReplyNewComponent } from './components/form-reply-new/form-reply-new.component';
+import { ListItemPostComponent } from './components/list-item-post/list-item-post.component';
 import { ListItemThreadComponent } from './components/list-item-thread/list-item-thread.component';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar.component';
 import { ViewHomeComponent } from './components/view-home/view-home.component';
@@ -32,21 +31,23 @@ import { ViewSettingsComponent } from './components/view-settings/view-settings.
 import { ViewThreadsComponent } from './components/view-threads/view-threads.component';
 import { ViewUsersDetailComponent } from './components/view-users-detail/view-users-detail.component';
 import { CoreModule } from './modules/core/core.module';
-import { FirebaseModule } from './modules/firebase/firebase.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { ElapsedDatePipe } from './pipes/elapsed-date.pipe';
 import { AlgoliaService } from './services/algolia.service';
+import { AuthService } from './services/auth.service';
 import { BrowserService } from './services/browser.service';
 import { DrawerService } from './services/drawer.service';
+import { FirebaseService } from './services/firebase.service';
 import { FunctionsService } from './services/functions.service';
 import { PostsService } from './services/posts.service';
+import { StorageService } from './services/storage.service';
 import { UsersService } from './services/users.service';
 import { WindowService } from './services/window.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    EditorPostComponent,
+    FormPostNewComponent,
     ViewHomeComponent,
     ViewImagesComponent,
     ViewInfoComponent,
@@ -59,18 +60,16 @@ import { WindowService } from './services/window.service';
     ViewThreadsComponent,
     ViewUsersDetailComponent,
     CardImageComponent,
-    CardPostComponent,
-    CardReplyNewComponent,
+    ListItemPostComponent,
+    FormReplyNewComponent,
     DrawerComponent,
     TopAppBarComponent,
     ListItemThreadComponent,
-    ChipSetPostComponent,
     ElapsedDatePipe,
   ],
   imports: [
     CoreModule,
     SharedModule,
-    FirebaseModule,
     ApolloModule,
     AppRoutingModule,
     BrowserModule,
@@ -81,12 +80,23 @@ import { WindowService } from './services/window.service';
   ],
   providers: [
     AlgoliaService,
+    AuthService,
     BrowserService,
     DrawerService,
     FunctionsService,
-    WindowService,
+    FirebaseService,
     PostsService,
+    StorageService,
     UsersService,
+    WindowService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (authService: AuthService) => () => {
+        return authService.authState().pipe(take((1))).toPromise();
+      },
+      deps: [AuthService],
+      multi: true,
+    },
   ],
   bootstrap: [
     AppComponent,
@@ -98,11 +108,11 @@ export class AppModule {
   constructor(
     private apollo: Apollo,
     private httpLink: HttpLink,
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
   ) {
     const httpBearer = setContext(async () => {
-      if (this.afAuth.auth.currentUser) {
-        const idToken = await this.afAuth.auth.currentUser.getIdToken();
+      if (this.authService.currentUser) {
+        const idToken = await this.authService.currentUser.getIdToken();
         const bearer = `Bearer ${idToken}`;
         const headers = new HttpHeaders().set('authorization', bearer);
         return {headers};

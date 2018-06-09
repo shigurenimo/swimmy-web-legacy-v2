@@ -1,30 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-
 import { Post } from '../../interfaces/post';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-view-home',
   template: `
-    <app-editor-post></app-editor-post>
+    <app-form-post-new></app-form-post-new>
 
     <ul mdc-list>
       <ng-container *ngFor="let node of posts">
-        <app-card-post
+        <app-list-item-post
           [post]='node'
           [isLogged]="isLogged"
           type="listItem"
         >
-        </app-card-post>
+        </app-list-item-post>
         <div mdc-list-divider></div>
       </ng-container>
     </ul>
   `,
-  styleUrls: ['view-home.component.scss']
+  styleUrls: ['view-home.component.scss'],
 })
 export class ViewHomeComponent implements OnInit, OnDestroy {
   public posts: Post[] = [];
@@ -33,15 +32,15 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
   private posts$$;
   private authState$$;
 
-  constructor (
+  constructor(
     private postsService: PostsService,
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private browser: BrowserService,
-    private activatedRoute: ActivatedRoute
-    ) {
+    private activatedRoute: ActivatedRoute,
+  ) {
   }
 
-  private onChangeAuthState (user) {
+  private onChangeAuthState(user) {
     if (user) {
       this.isLogged = true;
     }
@@ -53,15 +52,15 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  public ngOnInit () {
-    const authState$ = this.afAuth.authState;
+  public ngOnInit() {
+    const authState$ = this.authService.authState();
     this.authState$$ = authState$.subscribe((user) => {
       this.onChangeAuthState(user);
     });
-    this.browser.updateSnapshot(this.activatedRoute.snapshot)
+    this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  public ngOnDestroy () {
+  public ngOnDestroy() {
     if (this.authState$$) {
       this.authState$$.unsubscribe();
     }

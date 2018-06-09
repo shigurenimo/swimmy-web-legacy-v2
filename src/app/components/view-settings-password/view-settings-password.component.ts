@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { mergeMap } from 'rxjs/operators';
 
 import { UPDATE_DATA_SUCCESS, UPDATE_ERROR } from '../../constants/messages';
 import { SnackbarComponent } from '../../modules/mdc/components/snackbar/snackbar.component';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
 
 @Component({
@@ -79,7 +79,7 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
   private snackbarComponent: SnackbarComponent;
 
   constructor(
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private formBuilder: FormBuilder,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
@@ -87,7 +87,7 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authState$$ = this.afAuth.authState.subscribe((data) => {
+    this.authState$$ = this.authService.authState().subscribe((data) => {
       this.onAuthState(data);
     });
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
@@ -128,7 +128,7 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const currentUser = this.afAuth.auth.currentUser;
+    const currentUser = this.authService.auth.currentUser;
     const {password} = this.formGroup.value;
 
     fromPromise(currentUser.updatePassword(password)).subscribe(() => {
@@ -160,7 +160,7 @@ export class ViewSettingsPasswordComponent implements OnInit, OnDestroy {
   }
 
   private login() {
-    const currentUser = this.afAuth.auth.currentUser;
+    const currentUser = this.authService.auth.currentUser;
     const {email} = currentUser;
     const {currentPassword, password} = this.formGroup.value;
 

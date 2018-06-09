@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
+
 import * as firebase from 'firebase/app';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { mergeMap } from 'rxjs/operators';
+
 import { LOGIN_ERROR, UPDATE_DATA_ERROR, UPDATE_DATA_SUCCESS } from '../../constants/messages';
 import { DialogComponent } from '../../modules/mdc/components/dialog/dialog.component';
 import { SnackbarComponent } from '../../modules/mdc/components/snackbar/snackbar.component';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
 import { UsersService } from '../../services/users.service';
 
@@ -107,7 +109,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   private snackbarComponent: SnackbarComponent;
 
   constructor(
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private formBuilder: FormBuilder,
     private usersService: UsersService,
     private browser: BrowserService,
@@ -116,7 +118,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authState$$ = this.afAuth.authState.subscribe((data) => {
+    this.authState$$ = this.authService.authState().subscribe((data) => {
       this.onAuthState(data);
     });
     this.setForm();
@@ -146,13 +148,13 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const currentUser = this.afAuth.auth.currentUser;
+    const currentUser = this.authService.currentUser;
     const {newUsername} = this.formGroup.value;
 
     const newEmail = `${newUsername}@swimmy.io`;
     const email$ = fromPromise(currentUser.updateEmail(newEmail));
     const user$ = mergeMap(() => {
-      return this.usersService.updateUser(currentUser.uid, {
+      return this.usersService._updateUser(currentUser.uid, {
         username: newUsername,
       });
     });
@@ -192,7 +194,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const currentUser = this.afAuth.auth.currentUser;
+    const currentUser = this.authService.currentUser;
     const {username, password} = this.loginFormGroup.value;
     const {newUsername} = this.formGroup.value;
 
@@ -208,7 +210,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
     const credential$ = fromPromise(currentUser.reauthenticateWithCredential(credential));
 
     const user$ = mergeMap(() => {
-      return this.usersService.updateUser(currentUser.uid, {
+      return this.usersService._updateUser(currentUser.uid, {
         username: newUsername,
       });
     });
@@ -225,7 +227,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   }
 
   private setLoginForm() {
-    const user = this.afAuth.auth.currentUser;
+    const user = this.authService.currentUser;
 
     const username = user.email.replace('@swimmy.io', '');
 
@@ -236,7 +238,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   }
 
   private setForm() {
-    const user = this.afAuth.auth.currentUser;
+    const user = this.authService.currentUser;
 
     const username = user.email.replace('@swimmy.io', '');
 
@@ -247,7 +249,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
   }
 
   private resetFormGroup() {
-    const user = this.afAuth.auth.currentUser;
+    const user = this.authService.currentUser;
 
     const username = user.email.replace('@swimmy.io', '');
 

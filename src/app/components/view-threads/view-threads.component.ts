@@ -2,9 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-
 import { Post } from '../../interfaces/post';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
 import { PostsService } from '../../services/posts.service';
 
@@ -43,14 +42,14 @@ export class ViewThreadsComponent implements OnInit, OnDestroy {
 
   constructor(
     private postsService: PostsService,
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
   ) {
   }
 
   ngOnInit() {
-    const authState$ = this.afAuth.authState;
+    const authState$ = this.authService.authState();
     this.searchForm = new FormGroup({text: new FormControl()});
     this.authState$$ = authState$.subscribe(() => {
       this.onChangeAuthState();

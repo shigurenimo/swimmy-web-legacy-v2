@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-
-import { AngularFireAuth } from 'angularfire2/auth';
 import { DrawerComponent as MdcDrawerComponent } from '../../modules/mdc/components/drawer/drawer.component';
+import { AuthService } from '../../services/auth.service';
 import { DrawerService } from '../../services/drawer.service';
 import { WindowService } from '../../services/window.service';
 
@@ -44,7 +43,7 @@ import { WindowService } from '../../services/window.service';
               {{link.name}}
             </a>
           </ng-container>
-          <ng-container *ngIf="this.afAuth.auth.currentUser">
+          <ng-container *ngIf="authService.currentUser">
             <a
               mdc-list-item
               [routerLinkActiveOptions]='routerLinkActiveOptions'
@@ -55,7 +54,7 @@ import { WindowService } from '../../services/window.service';
               設定
             </a>
           </ng-container>
-          <ng-container *ngIf="!this.afAuth.auth.currentUser">
+          <ng-container *ngIf="!authService.currentUser">
             <a
               mdc-list-item
               [routerLinkActiveOptions]='routerLinkActiveOptions'
@@ -106,7 +105,7 @@ export class DrawerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(
-    public afAuth: AngularFireAuth,
+    public authService: AuthService,
     public drawerService: DrawerService,
     private windowService: WindowService,
   ) {
@@ -117,7 +116,7 @@ export class DrawerComponent implements OnInit, OnDestroy, AfterViewInit {
       this.drawerComponent.drawer.open = next;
     });
 
-    this.authState$$ = this.afAuth.authState.subscribe((next) => {
+    this.authState$$ = this.authService.authState().subscribe((next) => {
       this.onChangeAuthState(next);
     });
   }

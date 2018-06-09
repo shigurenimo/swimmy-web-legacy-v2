@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-
 import { DialogComponent } from '../../modules/mdc/components/dialog/dialog.component';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
 
 @Component({
@@ -88,7 +87,7 @@ export class ViewSettingsComponent implements OnInit, OnDestroy {
   private dialogComponent: DialogComponent;
 
   constructor(
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private router: Router,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
@@ -96,7 +95,7 @@ export class ViewSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authState$$ = this.afAuth.authState.subscribe((data) => {
+    this.authState$$ = this.authService.authState().subscribe((data) => {
       this.onAuthState(data);
     });
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
@@ -123,7 +122,7 @@ export class ViewSettingsComponent implements OnInit, OnDestroy {
 
     dialog.close();
 
-    this.afAuth.auth.signOut().then(() => {
+    this.authService.auth.signOut().then(() => {
       return this.router.navigate(['/']);
     });
   }

@@ -1,37 +1,55 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
 
+import { QueryDocumentSnapshot } from '@firebase/firestore-types';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { map } from 'rxjs/operators';
+
 import { UpdateUserInput } from '../interfaces/mutation';
 import { User } from '../interfaces/user';
+import { FirebaseService, fromQueryDocRef, fromQueryRef } from './firebase.service';
 
 @Injectable()
 export class UsersService {
 
-  constructor (
+  constructor(
     private apollo: Apollo,
-    private afs: AngularFirestore) {
+    private firebaseService: FirebaseService,
+  ) {
   }
 
-  public getUser (uid) {
-    return this.afs.doc(`users/${uid}`).valueChanges()
+  public getUser(uid) {
+    const ref = this.firebaseService.firestore().doc(`users/${uid}`);
+
+    return fromQueryDocRef(ref).pipe(
+      map(this.toUserFromQuery),
+    );
   }
 
-  public getUserByUsername (username) {
-    const query = (ref) => {
+  public getUserByUsername(username: string) {
+    const ref = this.firebaseService.firestore().collection('users');
+
+    const queryFn = (ref) => {
       return ref
         .where('username', '==', username)
         .limit(1);
     };
-    return this.afs.collection<User>('users', query)
-      .valueChanges()
-      .map((docs) => {
-        return docs ? docs[0] : null;
-      });
+
+    const query = queryFn(ref);
+
+    return fromQueryRef(query).pipe(
+      map((docs) => docs ? docs[0] : null),
+    );
   }
 
-  public updateUser (id: string, input: UpdateUserInput) {
+  public updateUser(input: any) {
+    const func = this.firebaseService.functions.httpsCallable('hello');
+
+    return fromPromise(func(input))
+  }
+
+  public _updateUser(id: string, input: UpdateUserInput) {
     return this.apollo.mutate<any>({
       mutation: gql`
         mutation updateUser($id: ID!, $input: UpdateUserInput!) {
@@ -45,7 +63,15 @@ export class UsersService {
           }
         }
       `,
-      variables: { id, input }
+      variables: {id, input},
     });
+  }
+
+  private toUserFromQuery(queryDocumentSnapshot: QueryDocumentSnapshot): User | null {
+    if (!queryDocumentSnapshot.exists) {
+      return null;
+    }
+
+    return queryDocumentSnapshot.data() as User;
   }
 }

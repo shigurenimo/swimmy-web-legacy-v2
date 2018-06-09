@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map, mergeMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
+
 import { Photo } from '../../interfaces/input';
+import { FirebaseService } from '../../services/firebase.service';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
-  selector: 'app-editor-post',
+  selector: 'app-form-post-new',
   template: `
     <form [formGroup]='formGroup' (ngSubmit)='onAddPost()'>
       <div mdc-text-field withTrailingIcon fullwidth [disabled]='isLoadingMutation' class='text-field'>
@@ -19,7 +18,7 @@ import { PostsService } from '../../services/posts.service';
         <i mdc-text-field-icon role="button">create</i>
         <div mdc-line-ripple></div>
       </div>
-      
+
       <!--
       <div class='actions'>
         <input #file type="file" accept="image/*" (change)="onChangeFiles(file.files)">
@@ -46,24 +45,23 @@ import { PostsService } from '../../services/posts.service';
     </div>
     -->
   `,
-  styleUrls: ['editor-post.component.scss']
+  styleUrls: ['form-post-new.component.scss'],
 })
-export class EditorPostComponent implements OnInit {
+export class FormPostNewComponent implements OnInit {
   public formGroup: FormGroup;
   public textareaPlaceholder = 'もしもし';
   public isLoadingMutation = false;
   public files = [];
   public previewFiles = [];
 
-  constructor (
+  constructor(
     private formBuilder: FormBuilder,
     private posts: PostsService,
-    public afAuth: AngularFireAuth,
-    private afStorage: AngularFireStorage,
-    private afStore: AngularFirestore) {
+    private firebaseService: FirebaseService,
+  ) {
   }
 
-  public onChangeFiles (files) {
+  public onChangeFiles(files) {
     const [file] = files;
     const reader = new FileReader();
 
@@ -75,15 +73,15 @@ export class EditorPostComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  private resetFormGroup () {
-    this.formGroup.reset({ content: '' });
+  private resetFormGroup() {
+    this.formGroup.reset({content: ''});
   }
 
-  public get content () {
+  public get content() {
     return this.formGroup.get('content');
   }
 
-  public onAddPost (): void {
+  public onAddPost(): void {
     if (this.isLoadingMutation) {
       return;
     }
@@ -112,7 +110,7 @@ export class EditorPostComponent implements OnInit {
         return this.posts.addPost({
           content: content,
           photos: photoURLs,
-          replyPostId: null
+          replyPostId: null,
         });
       });
 
@@ -121,7 +119,7 @@ export class EditorPostComponent implements OnInit {
       $mutation = this.posts.addPost({
         content: content,
         photos: [],
-        replyPostId: null
+        replyPostId: null,
       });
     }
 
@@ -134,16 +132,19 @@ export class EditorPostComponent implements OnInit {
     });
   }
 
-  public uploadImage (file): Observable<Photo> {
+  public uploadImage(file): Observable<Photo> {
     const originFileObj = file.originFileObj;
-    const photoId = this.afStore.createId();
+    const photoId = this.firebaseService.createId();
     const filePath = `posts/${photoId}`;
+
+    /*
     const task = this.afStorage.upload(filePath, originFileObj);
 
     const downloadURL$ = task.snapshotChanges();
     const map$ = map(({ downloadURL }): Photo => {
       return { downloadURL, photoId };
     });
+    */
 
     /*
     const downloadURL$ = task.downloadURL();
@@ -152,16 +153,16 @@ export class EditorPostComponent implements OnInit {
     });
     */
 
-    return downloadURL$.pipe(map$);
+    return // downloadURL$.pipe(map$);
   }
 
-  public ngOnInit () {
+  public ngOnInit() {
     this.formGroup = this.formBuilder.group({
-      content: ['', [Validators.maxLength(200)]]
+      content: ['', [Validators.maxLength(200)]],
     });
   }
 
-  private markAsDirty () {
+  private markAsDirty() {
     this.formGroup.controls.content.markAsDirty();
   }
 }

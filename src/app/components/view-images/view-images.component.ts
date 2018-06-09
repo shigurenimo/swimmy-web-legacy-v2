@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-
 import { Post } from '../../interfaces/post';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
 import { PostsService } from '../../services/posts.service';
 
@@ -23,7 +22,7 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
 
   constructor(
     private postsService: PostsService,
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
   ) {
@@ -40,7 +39,7 @@ export class ViewImagesComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    const authState$ = this.afAuth.authState;
+    const authState$ = this.authService.authState();
     this.authState$$ = authState$.subscribe(() => {
       this.onChangeAuthState();
     });

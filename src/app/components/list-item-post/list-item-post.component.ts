@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Post } from '../../interfaces/post';
+import { AuthService } from '../../services/auth.service';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
-  selector: 'app-card-post',
+  selector: 'app-list-item-post',
   template: `
     <div class="template-list-item">
       <!--
@@ -108,9 +108,9 @@ import { PostsService } from '../../services/posts.service';
       <i *ngIf="!isLoadingMutation" class="anticon anticon-plus"></i>
     </ng-template>
   `,
-  styleUrls: ['card-post.component.scss']
+  styleUrls: ['list-item-post.component.scss'],
 })
-export class CardPostComponent {
+export class ListItemPostComponent {
   @Input() post: Post;
   @Input() type = 'default';
   @Input() isLogged: boolean;
@@ -122,29 +122,30 @@ export class CardPostComponent {
   public isDelete = false;
   public newTag = '';
 
-  constructor (
+  constructor(
     private posts: PostsService,
-    public afa: AngularFireAuth) {
+    public authService: AuthService,
+  ) {
   }
 
-  public get deleteType () {
+  public get deleteType() {
     return this.isDelete ? 'danger' : null;
   }
 
-  public get deleteShape () {
+  public get deleteShape() {
     return this.isDelete ? null : 'circle';
   }
 
-  public get isDefaultType () {
+  public get isDefaultType() {
     return this.type === 'default';
   }
 
-  public get isListItemType () {
+  public get isListItemType() {
     return this.type === 'listItem';
   }
 
-  public onUpdateTag (name = 'スキ') {
-    if (!this.afa.auth.currentUser) {
+  public onUpdateTag(name = 'スキ') {
+    if (!this.authService.currentUser) {
       return;
     }
 
@@ -160,7 +161,7 @@ export class CardPostComponent {
       return;
     }
 
-    const post$ = this.posts.updatePostTag({ postId: this.post.id, name });
+    const post$ = this.posts.updatePostTag({postId: this.post.id, name});
 
     post$.subscribe((res) => {
       this.isEditNewTag = false;
@@ -172,7 +173,7 @@ export class CardPostComponent {
     });
   }
 
-  public onDelete () {
+  public onDelete() {
     if (!this.isDelete) {
       this.isDelete = true;
       return;
@@ -194,7 +195,7 @@ export class CardPostComponent {
     }
   }
 
-  public onEditNewTag () {
+  public onEditNewTag() {
     this.isEditNewTag = true;
   }
 }

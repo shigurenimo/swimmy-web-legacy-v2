@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { filter, mergeMap } from 'rxjs/operators';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
-
-import { mergeMap } from 'rxjs/operators';
 import { UPDATE_DATA_ERROR, UPDATE_DATA_LOADING, UPDATE_DATA_SUCCESS, UPLOAD_LOADING } from '../../constants/messages';
+import { User } from '../../interfaces/user';
 import { SnackbarComponent } from '../../modules/mdc/components/snackbar/snackbar.component';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
-
+import { FirebaseService } from '../../services/firebase.service';
+import { StorageService } from '../../services/storage.service';
 import { UsersService } from '../../services/users.service';
 
 @Component({
@@ -79,6 +79,7 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
   public isLoadingMutation = false;
   public file = null;
   public previewFile = null;
+  public user: User;
 
   private authState$$ = null;
 
@@ -86,20 +87,18 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
   private snackbarComponent: SnackbarComponent;
 
   constructor(
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private formBuilder: FormBuilder,
     private usersService: UsersService,
-    private afFirestore: AngularFirestore,
-    private afStorage: AngularFireStorage,
+    private firebaseService: FirebaseService,
+    private storageService: StorageService,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
   ) {
   }
 
   ngOnInit() {
-    this.authState$$ = this.afAuth.authState.subscribe((data) => {
-      this.onAuthState(data);
-    });
+    this.initUser();
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
@@ -114,7 +113,7 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
   }
 
   public get src() {
-    return this.previewFile || this.photoURL;
+    return this.previewFile || this.user.photoURL;
   }
 
   public onMutate() {
@@ -124,7 +123,8 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
 
     this.isLoadingMutation = true;
 
-    this.markAsDirty();
+    this.formGroup.get('displayName').markAsDirty();
+    this.formGroup.get('description').markAsDirty();
 
     if (!this.formGroup.valid) {
       this.isLoadingMutation = false;
@@ -132,9 +132,9 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     }
 
     const {displayName, description} = this.formGroup.value;
-    const uid = this.afAuth.auth.currentUser.uid;
+    const uid = this.authService.currentUser.uid;
 
-    const mutation$ = this.usersService.updateUser(uid, {
+    const mutation$ = this.usersService._updateUser(uid, {
       displayName: displayName,
       photos: [],
       description: description,
@@ -155,17 +155,25 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
   public onUpload(files) {
     const [file] = files;
 
-    const photoId = this.afFirestore.createId();
-    const uid = this.afAuth.auth.currentUser.uid;
+    const photoId = this.firebaseService.createId();
+    const uid = this.authService.currentUser.uid;
     const objectId = `users/${photoId}`;
 
-    const task = this.afStorage.upload(objectId, file);
+    const task$ = this.storageService.upload(objectId, file);
 
-    const downloadURL$ = task.snapshotChanges();
+    const filterDownloadURL = (snapshot: any): boolean => {
+      return snapshot.bytesTransferred === snapshot.totalBytes;
+    };
 
-    const mutation$ = mergeMap((a: any) => {
-      const photos = [{downloadURL: a.downloadURL, photoId}];
-      return this.usersService.updateUser(uid, {photos});
+    const downloadURL$ = task$.pipe(
+      filter(filterDownloadURL),
+      mergeMap(this.storageService.getDownloadURL),
+    );
+
+    const mutation$ = mergeMap((downloadURL: string) => {
+      console.log('downloadURL', downloadURL);
+      const photos = [{downloadURL, photoId}];
+      return this.usersService._updateUser(uid, {photos});
     });
 
     this.snackbarComponent.snackbar.show({message: UPLOAD_LOADING});
@@ -177,16 +185,25 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  private onGetUser(user) {
-    this.formGroup = this.formBuilder.group({
-      displayName: [user.displayName || '', [Validators.required]],
-      description: [user.description || '', []],
-    });
-    this.photoURL = user.photoURL;
-    this.isLoadingQuery = false;
+  private uploadImage(): Observable<string> {
+    const uid = this.firebaseService.createId();
+    const fileName = `${uid}`;
+    const filePath = `icons/${fileName}`;
+
+    const task$ = this.storageService.upload(filePath, this.file);
+
+    const filterDownloadURL = (snapshot: any): boolean => {
+      return snapshot.bytesTransferred === snapshot.totalBytes;
+    };
+
+    return task$.pipe(
+      filter(filterDownloadURL),
+      mergeMap(this.storageService.getDownloadURL),
+    );
   }
 
-  private onAuthState(user) {
+  private initUser(): void {
+    const user = this.authService.auth.currentUser;
     if (user) {
       this.usersService.getUser(user.uid).subscribe((userData) => {
         this.onGetUser(userData);
@@ -196,8 +213,12 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  private markAsDirty() {
-    this.formGroup.controls.displayName.markAsDirty();
-    this.formGroup.controls.description.markAsDirty();
+  private onGetUser(user): void {
+    this.user = user;
+    this.formGroup = this.formBuilder.group({
+      displayName: [user.displayName || '', [Validators.required]],
+      description: [user.description || '', []],
+    });
+    this.isLoadingQuery = false;
   }
 }

@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
-
 import { PostsService } from '../../services/posts.service';
 
 @Component({
@@ -11,12 +10,12 @@ import { PostsService } from '../../services/posts.service';
   template: `
     <ng-container *ngIf="post">
       <ul mdc-list>
-        <app-card-post
+        <app-list-item-post
           [post]='post'
           [isLogged]="isLogged"
           type="listItem"
         >
-        </app-card-post>
+        </app-list-item-post>
         <div mdc-list-divider></div>
       </ul>
 
@@ -25,16 +24,16 @@ import { PostsService } from '../../services/posts.service';
       </div>
 
       <div class="template-editor">
-        <app-card-reply-new [repliedPostId]="post.id"></app-card-reply-new>
+        <app-form-reply-new [repliedPostId]="post.id"></app-form-reply-new>
       </div>
 
       <ul mdc-list>
         <ng-container *ngFor="let post of repliedPosts">
-          <app-card-post
+          <app-list-item-post
             [post]='post'
             [isLogged]="isLogged"
           >
-          </app-card-post>
+          </app-list-item-post>
           <div mdc-list-divider></div>
         </ng-container>
       </ul>
@@ -54,14 +53,14 @@ export class ViewPostsDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private posts: PostsService,
-    private afAuth: AngularFireAuth,
+    private authService: AuthService,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
   ) {
   }
 
   public ngOnInit() {
-    const authState$ = this.afAuth.authState;
+    const authState$ = this.authService.authState();
     this.authState$$ = authState$.subscribe((user) => {
       this.onChangeAuthState(user);
     });

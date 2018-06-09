@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
 import { BrowserService } from '../../services/browser.service';
 import { UsersService } from '../../services/users.service';
 
@@ -27,7 +26,6 @@ export class ViewUsersDetailComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
-    public afAuth: AngularFireAuth,
     private browser: BrowserService,
   ) {
   }

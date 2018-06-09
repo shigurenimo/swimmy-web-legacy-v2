@@ -2,20 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-import {
-  ERROR_INVALID_USERNAME,
-  ERROR_USERNAME_ALREADY_IN_USE,
-  MSG_INPUT_EMAIL,
-  USER_NOT_FOUND,
-} from '../../constants/login';
+import { AuthService } from '../../services/auth.service';
 import { BrowserService } from '../../services/browser.service';
-
 import { FunctionsService } from '../../services/functions.service';
 
 @Component({
   selector: 'app-view-login',
-  template: `    
+  template: `
     <form [formGroup]="formGroup">
       <h2 mdc-typography headline6>ユーザネーム</h2>
       <div
@@ -89,7 +82,7 @@ export class ViewLoginComponent implements OnInit {
   public isLoading = false;
 
   constructor(
-    private afa: AngularFireAuth,
+    private authService: AuthService,
     private router: Router,
     private formBuilder: FormBuilder,
     private functionsService: FunctionsService,
@@ -120,7 +113,7 @@ export class ViewLoginComponent implements OnInit {
     const password = this.password.value;
     const email = username + '@swimmy.io';
 
-    this.afa.auth
+    this.authService.auth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         this.catchMutation();
@@ -135,7 +128,7 @@ export class ViewLoginComponent implements OnInit {
     const password = this.password.value;
     const email = username + '@swimmy.io';
 
-    this.afa.auth
+    this.authService.auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         this.catchMutation();
@@ -161,7 +154,7 @@ export class ViewLoginComponent implements OnInit {
           this.catchErrorCode(error);
           return;
         }
-        this.afa.auth.signInWithEmailAndPassword(email, password)
+        this.authService.auth.signInWithEmailAndPassword(email, password)
           .then(() => {
             this.catchMutation();
           })

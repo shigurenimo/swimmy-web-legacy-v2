@@ -10,16 +10,16 @@ import { WindowService } from './services/window.service';
     <sw-view>
       <router-outlet></router-outlet>
     </sw-view>
-    
+
     <app-drawer></app-drawer>
-  `
+  `,
 })
 export class AppComponent {
-  constructor (private windowService: WindowService) {
+  constructor(private windowService: WindowService) {
   }
 
   @HostListener('window:resize', [])
-  private onWindowResize () {
+  private onWindowResize() {
     this.windowService.updateWidth();
   }
 }

@@ -7,6 +7,8 @@ export class ResizePipe implements PipeTransform {
   transform (value: any, args?: any): any {
     if (!value) { return ''; }
 
+    console.log('value', value);
+
     if (!value.includes('lh3')) {
       return value;
     }
