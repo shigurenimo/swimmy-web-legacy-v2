@@ -5,6 +5,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
+import 'firebase/functions';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';

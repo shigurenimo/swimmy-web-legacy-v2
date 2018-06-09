@@ -21,36 +21,21 @@ export class PostsService {
   }
 
   public addPost(input: AddPostInput) {
-    return this.apollo.mutate({
-      mutation: gql`
-        mutation addPost($input: AddPostInput!) {
-          addPost(input: $input) {
-            id
-          }
-        }
-      `,
-      variables: {input},
-    });
+    const func = this.firebaseService.functions.httpsCallable('addPost');
+
+    return from(func(input));
   }
 
   public addReplyPost(input: AddPostInput) {
-    return this.apollo.mutate({
-      mutation: gql`
-        mutation addPost($input: AddPostInput!) {
-          addPost(input: $input) {
-            id
-          }
-        }
-      `,
-      variables: {input},
-    });
+    const func = this.firebaseService.functions.httpsCallable('addPost');
+
+    return from(func(input));
   }
 
   public updatePostTag(input: UpdatePostTagInput) {
-    return this.apollo.mutate({
-      mutation: mutationUpdatePostTag,
-      variables: {input},
-    });
+    const func = this.firebaseService.functions.httpsCallable('updatePostTag');
+
+    return from(func(input));
   }
 
   public observePost(postId: string) {

@@ -24,7 +24,7 @@ import { UsersService } from '../../services/users.service';
             <div class='image'></div>
           </ng-container>
           <ng-container *ngIf='src'>
-            <img [src]='src' class='image'>
+            <img [src]='src | resize:"icon"' class='image'>
           </ng-container>
         </div>
       </div>
@@ -173,7 +173,7 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     const mutation$ = mergeMap((downloadURL: string) => {
       console.log('downloadURL', downloadURL);
       const photos = [{downloadURL, photoId}];
-      return this.usersService._updateUser(uid, {photos});
+      return this.usersService.updateUser({id: uid, photos});
     });
 
     this.snackbarComponent.snackbar.show({message: UPLOAD_LOADING});
