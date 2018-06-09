@@ -1,7 +1,5 @@
-import { Uid } from '../types/owner';
-
 export interface Owner {
-  uid: Uid;
+  uid: string;
   displayName: string;
   photoURL: string;
 }

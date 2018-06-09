@@ -86,7 +86,7 @@ export const Mutation = {
       photoURL,
     };
 
-    const newUser = await createUpdateUser(user.uid, createUpdateUserInput);
+    const newUser = await createUpdateUser(createUpdateUserInput);
 
     await updateUser(id, newUser);
 

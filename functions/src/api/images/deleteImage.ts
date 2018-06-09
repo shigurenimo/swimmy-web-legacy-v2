@@ -7,7 +7,11 @@ export const deleteImage = async (imageId: string): Promise<void> => {
     throw new Error('imageId not found');
   }
 
-  const ref = firestore().collection(IMAGES).doc(imageId);
+  const documentPath = [IMAGES, imageId].join('/');
 
-  await ref.delete();
+  const documentReference = firestore().doc(documentPath);
+
+  console.log('delete', documentPath);
+
+  await documentReference.delete();
 };

@@ -14,13 +14,14 @@ const handler = async (snapshot: Change<DocumentSnapshot>, context: EventContext
   const userBefore = snapshot.before.data() as User;
 
   if (isUnchangedOwner(user, userBefore)) {
+    console.log('no change');
     return;
   }
 
   if (user.photoURL !== userBefore.photoURL) {
     const photoIds = Object.keys(userBefore.photoURLs);
-    for (let i = 0, len = photoIds.length; i < len; ++i) {
-      await deleteImage(photoIds[i]);
+    for (const photoId of photoIds) {
+      await deleteImage(photoId);
     }
   }
 
@@ -31,6 +32,6 @@ const handler = async (snapshot: Change<DocumentSnapshot>, context: EventContext
   };
 
   await updateAuthDisplayName(uid, owner);
-}
+};
 
 export = document.onUpdate(handler);

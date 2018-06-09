@@ -2,19 +2,17 @@ import { UserForUpdate } from '../../interfaces/user';
 import { PhotoURLs } from '../../types/photoURL';
 
 interface Input {
-  description: string;
-  displayName: string;
-  username: string;
+  description?: string;
+  displayName?: string;
+  username?: string;
   photoURLs: PhotoURLs;
   photoURL: string | null;
 }
 
-export const createUpdateUser = (uid: string, input: Input): Promise<UserForUpdate> => {
+export const createUpdateUser = (input: Input): Promise<UserForUpdate> => {
   const updatedAt = new Date();
 
-  const newUser = {
-    updatedAt: updatedAt
-  } as any;
+  const newUser = {updatedAt} as any;
 
   if (input.description) {
     newUser.description = input.description;
@@ -28,12 +26,9 @@ export const createUpdateUser = (uid: string, input: Input): Promise<UserForUpda
     newUser.username = input.username;
   }
 
-  if (Object.keys(input.photoURLs)) {
-    newUser.photoURLs = input.photoURLs;
-  }
-
   if (input.photoURL) {
     newUser.photoURL = input.photoURL;
+    newUser.photoURLs = input.photoURLs;
   }
 
   return newUser;

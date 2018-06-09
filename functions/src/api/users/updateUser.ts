@@ -4,7 +4,15 @@ import { USERS } from '../../constants/index';
 import { UserForUpdate } from '../../interfaces/user';
 
 export const updateUser = async (uid: string, newUser: UserForUpdate): Promise<void> => {
-  const ref = firestore().collection(USERS).doc(uid);
+  if (!uid) {
+    throw new Error('uid not found');
+  }
 
-  await ref.set(newUser, { merge: true });
+  const documentPath = [USERS, uid].join('/');
+
+  const documentReference = firestore().doc(documentPath);
+
+  console.log('set', documentPath, newUser);
+
+  await documentReference.set(newUser, {merge: true});
 };

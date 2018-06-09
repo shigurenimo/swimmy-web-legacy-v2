@@ -64,10 +64,22 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'hello') {
   exports.hello = require('./lib/https/hello')
 }
 
+if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
+  exports.addPost = require('./lib/https/addPost')
+}
+
 if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
   exports.graphql = require('./lib/https/graphql')
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'restoreUser') {
-  exports.restoreUser = require('./lib/https/restoreUser')
+if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTag') {
+  exports.updatePostTag = require('./lib/https/updatePostTag')
+}
+
+if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
+  exports.addPost = require('./lib/https/addPost')
+}
+
+if (!FUNCTION_NAME || FUNCTION_NAME === 'updateUser') {
+  exports.updateUser = require('./lib/https/updateUser')
 }
