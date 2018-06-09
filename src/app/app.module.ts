@@ -2,8 +2,6 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { ApolloModule } from 'apollo-angular';
-import { HttpLinkModule } from 'apollo-angular-link-http';
 import { take } from 'rxjs/operators';
 
 import { environment } from '../environments/environment';
@@ -67,10 +65,8 @@ import { WindowService } from './services/window.service';
   imports: [
     CoreModule,
     SharedModule,
-    ApolloModule,
     AppRoutingModule,
     BrowserModule,
-    HttpLinkModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production,
     }),
