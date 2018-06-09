@@ -154,7 +154,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
     const newEmail = `${newUsername}@swimmy.io`;
     const email$ = from(currentUser.updateEmail(newEmail));
     const user$ = mergeMap(() => {
-      return this.usersService._updateUser(currentUser.uid, {
+      return this.usersService.updateUser({
         username: newUsername,
       });
     });
@@ -210,7 +210,7 @@ export class ViewSettingsUsernameComponent implements OnInit, OnDestroy {
     const credential$ = from(currentUser.reauthenticateWithCredential(credential));
 
     const user$ = mergeMap(() => {
-      return this.usersService._updateUser(currentUser.uid, {
+      return this.usersService.updateUser({
         username: newUsername,
       });
     });

@@ -132,9 +132,8 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     }
 
     const {displayName, description} = this.formGroup.value;
-    const uid = this.authService.currentUser.uid;
 
-    const mutation$ = this.usersService._updateUser(uid, {
+    const mutation$ = this.usersService.updateUser({
       displayName: displayName,
       photos: [],
       description: description,
@@ -173,7 +172,7 @@ export class ViewSettingsProfileComponent implements OnInit, OnDestroy {
     const mutation$ = mergeMap((downloadURL: string) => {
       console.log('downloadURL', downloadURL);
       const photos = [{downloadURL, photoId}];
-      return this.usersService.updateUser({id: uid, photos});
+      return this.usersService.updateUser({photos});
     });
 
     this.snackbarComponent.snackbar.show({message: UPLOAD_LOADING});

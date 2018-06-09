@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +11,6 @@ import { FirebaseService, fromQueryDocRef, fromQueryRef } from './firebase.servi
 export class PostsService {
 
   constructor(
-    private apollo: Apollo,
     private algoliaService: AlgoliaService,
     private firebaseService: FirebaseService,
   ) {
@@ -87,14 +83,9 @@ export class PostsService {
   }
 
   public deleteReplyPost(id: string) {
-    return this.apollo.mutate({
-      mutation: gql`
-        mutation deletePost($id: ID!) {
-          deletePost(id: $id)
-        }
-      `,
-      variables: {id},
-    });
+    const func = this.firebaseService.functions.httpsCallable('deletePost');
+
+    return from(func({id}));
   }
 
   private fixPost(queryDocSnapshot) {
@@ -124,27 +115,3 @@ export class PostsService {
     });
   }
 }
-
-export const mutationUpdatePostTag = gql`
-  mutation updatePostTag($input: UpdatePostTagInput!) {
-    updatePostTag(input: $input) {
-      id
-      content
-      createdAt
-      ownerId
-      owner {
-        id
-        displayName
-        photoURL
-      }
-      photoURLs
-      repliedPostCount
-      replyPostId
-      tags {
-        id
-        name
-        count
-      }
-    }
-  }
-`;

@@ -1,12 +1,9 @@
-import { HttpHeaders } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { Apollo, ApolloModule } from 'apollo-angular';
-import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { setContext } from 'apollo-link-context';
+import { ApolloModule } from 'apollo-angular';
+import { HttpLinkModule } from 'apollo-angular-link-http';
 import { take } from 'rxjs/operators';
 
 import { environment } from '../environments/environment';
@@ -105,52 +102,6 @@ import { WindowService } from './services/window.service';
   schemas: [],
 })
 export class AppModule {
-  constructor(
-    private apollo: Apollo,
-    private httpLink: HttpLink,
-    private authService: AuthService,
-  ) {
-    const httpBearer = setContext(async () => {
-      if (this.authService.currentUser) {
-        const idToken = await this.authService.currentUser.getIdToken();
-        const bearer = `Bearer ${idToken}`;
-        const headers = new HttpHeaders().set('authorization', bearer);
-        return {headers};
-      } else {
-        return {};
-      }
-    });
-
-    const cache = new InMemoryCache();
-
-    const httpDefault = httpLink.create({
-      uri: environment.graphql,
-      method: 'POST',
-    });
-
-    const httpServiceWorker = httpLink.create({
-      uri: environment.graphql,
-      method: 'GET',
-    });
-
-    apollo.createDefault({
-      link: httpBearer.concat(httpDefault),
-      cache: cache,
-      defaultOptions: {
-        watchQuery: {
-          errorPolicy: 'all',
-        },
-      },
-    });
-
-    apollo.createNamed('sw', {
-      link: httpBearer.concat(httpServiceWorker),
-      cache: cache,
-      defaultOptions: {
-        watchQuery: {
-          errorPolicy: 'all',
-        },
-      },
-    });
+  constructor() {
   }
 }

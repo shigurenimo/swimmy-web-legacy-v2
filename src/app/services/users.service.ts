@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { QueryDocumentSnapshot } from '@firebase/firestore-types';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -13,10 +11,7 @@ import { FirebaseService, fromQueryDocRef, fromQueryRef } from './firebase.servi
 @Injectable()
 export class UsersService {
 
-  constructor(
-    private apollo: Apollo,
-    private firebaseService: FirebaseService,
-  ) {
+  constructor(private firebaseService: FirebaseService) {
   }
 
   public getUser(uid) {
@@ -43,28 +38,10 @@ export class UsersService {
     );
   }
 
-  public updateUser(input: UpdateUserInput & {id: string}) {
+  public updateUser(input: UpdateUserInput) {
     const func = this.firebaseService.functions.httpsCallable('updateUser');
 
     return from(func(input));
-  }
-
-  public _updateUser(id: string, input: UpdateUserInput) {
-    return this.apollo.mutate<any>({
-      mutation: gql`
-        mutation updateUser($id: ID!, $input: UpdateUserInput!) {
-          updateUser(id: $id, input: $input) {
-            description
-            displayName
-            photoURL
-            postCount
-            updatedAt
-            uid
-          }
-        }
-      `,
-      variables: {id, input},
-    });
   }
 
   private toUserFromQuery(queryDocumentSnapshot: QueryDocumentSnapshot): User | null {
