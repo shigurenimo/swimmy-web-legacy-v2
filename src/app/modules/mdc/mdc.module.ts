@@ -64,6 +64,7 @@ import { TopAppBarSectionComponent } from './components/top-app-bar-section/top-
 import { TopAppBarTitleComponent } from './components/top-app-bar-title/top-app-bar-title.component';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar.component';
 import { TypographyComponent } from './components/typography/typography.component';
+import { ThemePrimaryDirective } from './directives/theme-primary.directive';
 import { UtilsService } from './services/utils.service';
 
 @NgModule({
@@ -135,6 +136,7 @@ import { UtilsService } from './services/utils.service';
     TopAppBarSectionComponent,
     TopAppBarTitleComponent,
     TypographyComponent,
+    ThemePrimaryDirective,
   ],
   declarations: [
     ButtonIconComponent,
@@ -200,6 +202,7 @@ import { UtilsService } from './services/utils.service';
     TopAppBarSectionComponent,
     TopAppBarTitleComponent,
     TypographyComponent,
+    ThemePrimaryDirective,
   ],
   providers: [
     UtilsService,
