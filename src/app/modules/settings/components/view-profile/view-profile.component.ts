@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { filter, mergeMap } from 'rxjs/operators';
 
 import {
@@ -21,7 +20,7 @@ import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.com
 @Component({
   selector: 'app-view-profile',
   template: `
-    <ng-container *ngIf='!isLoadingQuery && !isNotFound'>
+    <ng-container *ngIf="!isLoadingQuery">
       <div class='block-icon'>
         <input #file type="file" accept="image/*" (change)="onUpload(file.files)">
         <div #upload (click)="file.click()" class='icon' mdc-elevation z2>
@@ -69,24 +68,17 @@ import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.com
         <button mdc-snackbar-action-button></button>
       </div>
     </div>
-
-    <div *ngIf='!isLoadingQuery && isNotFound'>
-      <p>データの取得に失敗しました</p>
-    </div>
   `,
   styleUrls: ['view-profile.component.scss'],
 })
-export class ViewProfileComponent implements OnInit, OnDestroy {
+export class ViewProfileComponent implements OnInit {
   public formGroup: FormGroup;
   public photoURL = '';
   public isLoadingQuery = true;
-  public isNotFound = false;
   public isLoadingMutation = false;
   public file = null;
   public previewFile = null;
   public user: User;
-
-  private authState$$ = null;
 
   @ViewChild(SnackbarComponent)
   private snackbarComponent: SnackbarComponent;
@@ -102,23 +94,13 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public get src() {
-    return this.previewFile || this.user.photoURL;
-  }
-
-  ngOnInit() {
+  public ngOnInit() {
     this.initUser();
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  ngOnDestroy() {
-    this.authState$$.unsubscribe();
-  }
-
-  public onChangeFiles(files) {
-    const [file] = files;
-
-    this.snackbarComponent.snackbar.show({message: 'アップロードしています'});
+  public get src() {
+    return this.previewFile || this.user.photoURL;
   }
 
   public onMutate() {
@@ -160,7 +142,6 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     const [file] = files;
 
     const photoId = this.firebaseService.createId();
-    const uid = this.authService.currentUser.uid;
     const objectId = `users/${photoId}`;
 
     const task$ = this.storageService.upload(objectId, file);
@@ -175,7 +156,6 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     );
 
     const mutation$ = mergeMap((downloadURL: string) => {
-      console.log('downloadURL', downloadURL);
       const photos = [{downloadURL, photoId}];
       return this.usersService.updateUser({photos});
     });
@@ -189,32 +169,11 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  private uploadImage(): Observable<string> {
-    const uid = this.firebaseService.createId();
-    const fileName = `${uid}`;
-    const filePath = `icons/${fileName}`;
-
-    const task$ = this.storageService.upload(filePath, this.file);
-
-    const filterDownloadURL = (snapshot: any): boolean => {
-      return snapshot.bytesTransferred === snapshot.totalBytes;
-    };
-
-    return task$.pipe(
-      filter(filterDownloadURL),
-      mergeMap(this.storageService.getDownloadURL),
-    );
-  }
-
   private initUser(): void {
     const user = this.authService.auth.currentUser;
-    if (user) {
-      this.usersService.getUser(user.uid).subscribe((userData) => {
-        this.onGetUser(userData);
-      });
-    } else {
-      this.isNotFound = true;
-    }
+    this.usersService.getUser(user.uid).subscribe((userData) => {
+      this.onGetUser(userData);
+    });
   }
 
   private onGetUser(user): void {

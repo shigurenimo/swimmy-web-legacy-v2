@@ -51,7 +51,7 @@ export class PostsService {
   public getPostsAsThread(query: string) {
     const promise = this.algoliaService.postsAsThread.search(query);
 
-    return from(promise);
+    return from(promise).pipe(map(res => res.hits));
   }
 
   public observePostsAsThread(queryFn: (ref: any) => any) {

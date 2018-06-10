@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -16,38 +16,36 @@ import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.com
 @Component({
   selector: 'app-view-username',
   template: `
-    <ng-container *ngIf='!isLoadingQuery && !isNotFound'>
-      <form [formGroup]='formGroup' (ngSubmit)='onMutate()' class='block-form'>
-        <h2 mdc-typography headline6>現在のユーザネーム</h2>
-        <div
-          mdc-text-field
-          withTrailingIcon
-          fullwidth
-          class='mdc-text-field--padding'
-        >
-          <input mdc-text-field-input formControlName='currentUsername' placeholder='username' [readonly]='true'>
-          <div mdc-line-ripple></div>
-        </div>
+    <form [formGroup]='formGroup' (ngSubmit)='onMutate()' class='block-form'>
+      <h2 mdc-typography headline6>現在のユーザネーム</h2>
+      <div
+        mdc-text-field
+        withTrailingIcon
+        fullwidth
+        class='mdc-text-field--padding'
+      >
+        <input mdc-text-field-input formControlName='currentUsername' placeholder='username' [readonly]='true'>
+        <div mdc-line-ripple></div>
+      </div>
 
-        <h2 mdc-typography headline6>新しいユーザネーム</h2>
-        <div
-          mdc-text-field
-          withTrailingIcon
-          fullwidth
-          class='mdc-text-field--padding'
-        >
-          <input mdc-text-field-input formControlName='newUsername' placeholder='username?'>
-          <i mdc-text-field-icon role="button">edit</i>
-          <div mdc-line-ripple></div>
-        </div>
+      <h2 mdc-typography headline6>新しいユーザネーム</h2>
+      <div
+        mdc-text-field
+        withTrailingIcon
+        fullwidth
+        class='mdc-text-field--padding'
+      >
+        <input mdc-text-field-input formControlName='newUsername' placeholder='username?'>
+        <i mdc-text-field-icon role="button">edit</i>
+        <div mdc-line-ripple></div>
+      </div>
 
-        <div class='block-form-submut'>
-          <button mdc-button raised [disabled]='isDisabled' (click)="onMutate()">
-            <span>変更する</span>
-          </button>
-        </div>
-      </form>
-    </ng-container>
+      <div class='block-form-submut'>
+        <button mdc-button raised [disabled]='isDisabled' (click)="onMutate()">
+          <span>変更する</span>
+        </button>
+      </div>
+    </form>
 
     <aside mdc-dialog>
       <div mdc-dialog-surface>
@@ -92,15 +90,11 @@ import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.com
   `,
   styleUrls: ['view-username.component.scss'],
 })
-export class ViewUsernameComponent implements OnInit, OnDestroy {
+export class ViewUsernameComponent implements OnInit {
   public formGroup: FormGroup;
   public loginFormGroup: FormGroup;
-  public isNotFound = false;
-  public isLoadingQuery = true;
   public isLoadingMutatation = false;
   public isLoadingLogin = false;
-
-  private authState$$ = null;
 
   @ViewChild(DialogComponent)
   private dialogComponent: DialogComponent;
@@ -117,21 +111,14 @@ export class ViewUsernameComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public get isDisabled() {
-    return !this.formGroup.get('newUsername').value;
-  }
-
-  ngOnInit() {
-    this.authState$$ = this.authService.authState().subscribe((data) => {
-      this.onAuthState(data);
-    });
+  public ngOnInit() {
     this.setForm();
     this.setLoginForm();
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  ngOnDestroy() {
-    this.authState$$.unsubscribe();
+  public get isDisabled() {
+    return !this.formGroup.get('newUsername').value;
   }
 
   public onMutate() {
@@ -254,13 +241,5 @@ export class ViewUsernameComponent implements OnInit, OnDestroy {
     const username = user.email.replace('@swimmy.io', '');
 
     this.formGroup.reset({currentUsername: username, newUsername: ''});
-  }
-
-  private onAuthState(user) {
-    if (user) {
-      this.isLoadingQuery = false;
-    } else {
-      this.isNotFound = true;
-    }
   }
 }

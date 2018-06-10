@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { Observable } from 'rxjs/internal/Observable';
+
 import { Post } from '../../../../interfaces/post';
-import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
 import { PostsService } from '../../../../services/posts.service';
 
@@ -14,7 +15,7 @@ import { PostsService } from '../../../../services/posts.service';
 
     <div class="template-posts">
       <div mdc-list two-line>
-        <ng-container *ngFor="let post of posts">
+        <ng-container *ngFor="let post of (posts$ | async) as posts">
           <app-list-item-thread [post]='post'></app-list-item-thread>
           <div mdc-list-divider></div>
         </ng-container>
@@ -33,44 +34,25 @@ import { PostsService } from '../../../../services/posts.service';
   `,
   styleUrls: ['view-home.component.scss'],
 })
-export class ViewHomeComponent implements OnInit, OnDestroy {
+export class ViewHomeComponent implements OnInit {
   public searchForm;
-  public posts: Post[] = [];
-
-  private posts$$;
-  private authState$$;
+  public posts$: Observable<Post[]>;
 
   constructor(
     private postsService: PostsService,
-    private authService: AuthService,
     private browser: BrowserService,
     private activatedRoute: ActivatedRoute,
   ) {
   }
 
-  ngOnInit() {
-    const authState$ = this.authService.authState();
+  public ngOnInit() {
     this.searchForm = new FormGroup({text: new FormControl()});
-    this.authState$$ = authState$.subscribe(() => {
-      this.onChangeAuthState();
-    });
+    this.onSearch();
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
-  }
-
-  ngOnDestroy() {
-    this.authState$$.unsubscribe();
-    this.posts$$.unsubscribe();
   }
 
   public onSearch() {
     const text = this.searchForm.get('text').value || '';
-    const posts$ = this.postsService.getPostsAsThread(text);
-    this.posts$$ = posts$.subscribe((res) => {
-      this.posts = res.hits;
-    });
-  }
-
-  private onChangeAuthState() {
-    this.onSearch();
+    this.posts$ = this.postsService.getPostsAsThread(text);
   }
 }

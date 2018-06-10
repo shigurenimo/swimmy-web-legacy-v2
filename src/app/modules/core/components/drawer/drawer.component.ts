@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { DrawerService } from '../../../../services/drawer.service';
 import { WindowService } from '../../../../services/window.service';
@@ -40,29 +40,27 @@ import { DrawerComponent as MdcDrawerComponent } from '../../../mdc/components/d
               routerLinkActive='activated'
             >
               <i mdc-list-item-graphic material-icons>{{link.icon}}</i>
-              {{link.name}}
+              <span mdc-list-item-text>{{link.text}}</span>
             </a>
           </ng-container>
           <ng-container *ngIf="authService.currentUser">
             <a
               mdc-list-item
-              [routerLinkActiveOptions]='routerLinkActiveOptions'
               routerLink='/settings'
               routerLinkActive='activated'
             >
               <i mdc-list-item-graphic material-icons>settings</i>
-              設定
+              <span mdc-list-item-text>設定</span>
             </a>
           </ng-container>
           <ng-container *ngIf="!authService.currentUser">
             <a
               mdc-list-item
-              [routerLinkActiveOptions]='routerLinkActiveOptions'
               routerLink='/login'
               routerLinkActive='activated'
             >
               <i mdc-list-item-graphic material-icons>perm_identity</i>
-              ログイン
+              <span mdc-list-item-text>ログイン</span>
             </a>
           </ng-container>
         </nav>
@@ -71,30 +69,28 @@ import { DrawerComponent as MdcDrawerComponent } from '../../../mdc/components/d
   `,
   styleUrls: ['./drawer.component.scss'],
 })
-export class DrawerComponent implements OnInit, OnDestroy, AfterViewInit {
-
-  public uid = null;
-  public username = null;
+export class DrawerComponent implements OnInit, OnDestroy {
   public routerLinkActiveOptions = {
     exact: true,
   };
   public links = [{
     routerLink: ['/'],
     icon: 'home',
-    name: 'タイムライン',
+    text: 'タイムライン',
   }, {
-    routerLink: ['/images'],
+    routerLink: ['/storage'],
     icon: 'camera',
-    name: 'ストレージ',
+    text: 'ストレージ',
   }, {
     routerLink: ['/threads'],
     icon: 'message',
-    name: 'スレッド',
+    text: 'スレッド',
   }];
+
+  private isOpen$$;
+
   @ViewChild(MdcDrawerComponent)
   private drawerComponent: MdcDrawerComponent;
-  private isOpen$$;
-  private authState$$ = null;
 
   constructor(
     public authService: AuthService,
@@ -103,34 +99,17 @@ export class DrawerComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
   }
 
-  public get isTemporary() {
-    return this.windowService.width < 768;
-  }
-
   public ngOnInit() {
     this.isOpen$$ = this.drawerService.isOpen$.subscribe(next => {
       this.drawerComponent.drawer.open = next;
-    });
-
-    this.authState$$ = this.authService.authState().subscribe((next) => {
-      this.onChangeAuthState(next);
     });
   }
 
   public ngOnDestroy() {
     this.isOpen$$.unsubscribe();
-    this.authState$$.unsubscribe();
   }
 
-  public ngAfterViewInit() {
-  }
-
-  private onChangeAuthState(user) {
-    if (user) {
-      this.uid = user.uid;
-      this.username = user.email.replace('@swimmy.io', '');
-    } else {
-      this.uid = null;
-    }
+  public get isTemporary() {
+    return this.windowService.width < 768;
   }
 }

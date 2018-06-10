@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,48 +14,46 @@ import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.com
 @Component({
   selector: 'app-view-password',
   template: `
-    <ng-container *ngIf='!isLoadingQuery && !isNotFound'>
-      <form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
-        <h2 mdc-typography headline6>現在のパスワード</h2>
-        <div
-          mdc-text-field
-          withTrailingIcon
-          fullwidth
-          class="mdc-text-field--padding"
-        >
-          <input mdc-text-field-input type="password" formControlName='currentPassword'>
-          <div mdc-line-ripple></div>
-        </div>
+    <form [formGroup]='formGroup' (ngSubmit)='onMutate()'>
+      <h2 mdc-typography headline6>現在のパスワード</h2>
+      <div
+        mdc-text-field
+        withTrailingIcon
+        fullwidth
+        class="mdc-text-field--padding"
+      >
+        <input mdc-text-field-input type="password" formControlName='currentPassword'>
+        <div mdc-line-ripple></div>
+      </div>
 
-        <h2 mdc-typography headline6>新しいパスワード</h2>
-        <div
-          mdc-text-field
-          withTrailingIcon
-          fullwidth
-          class="mdc-text-field--padding"
+      <h2 mdc-typography headline6>新しいパスワード</h2>
+      <div
+        mdc-text-field
+        withTrailingIcon
+        fullwidth
+        class="mdc-text-field--padding"
+      >
+        <input
+          mdc-text-field-input
+          type="password"
+          formControlName="password"
+          [placeholder]="passwordPlaceholder"
         >
-          <input
-            mdc-text-field-input
-            type="password"
-            formControlName="password"
-            [placeholder]="passwordPlaceholder"
-          >
-          <div mdc-line-ripple></div>
-        </div>
+        <div mdc-line-ripple></div>
+      </div>
 
-        <ng-container *ngIf="isError('password')">
-          <ng-container *ngIf="hasError('password', 'auth/weak-password')">
-            <p sw-text-field-error class="mdc-text-field--padding">パスワードが弱すぎます</p>
-          </ng-container>
+      <ng-container *ngIf="isError('password')">
+        <ng-container *ngIf="hasError('password', 'auth/weak-password')">
+          <p sw-text-field-error class="mdc-text-field--padding">パスワードが弱すぎます</p>
         </ng-container>
+      </ng-container>
 
-        <div class='block-form-submut'>
-          <button mdc-button raised [disabled]='isDisabled' (click)="onMutate()">
-            <span>変更する</span>
-          </button>
-        </div>
-      </form>
-    </ng-container>
+      <div class='block-form-submut'>
+        <button mdc-button raised [disabled]='isDisabled' (click)="onMutate()">
+          <span>変更する</span>
+        </button>
+      </div>
+    </form>
 
     <div mdc-snackbar align-start>
       <div mdc-snackbar-text></div>
@@ -66,13 +64,11 @@ import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.com
   `,
   styleUrls: ['view-password.component.scss'],
 })
-export class ViewPasswordComponent implements OnInit, OnDestroy {
+export class ViewPasswordComponent implements OnInit {
   public formGroup: FormGroup;
   public passwordPlaceholder = Math.random().toString(36).slice(-16);
-  public isLoadingQuery = true;
-  public isNotFound = false;
   public isLoadingMutatation = false;
-  private authState$$ = null;
+
   @ViewChild(SnackbarComponent)
   private snackbarComponent: SnackbarComponent;
 
@@ -84,23 +80,13 @@ export class ViewPasswordComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public get isDisabled() {
-    return !this.formGroup.get('password').value;
-  }
-
-  public get password() {
-    return this.formGroup.controls.password;
-  }
-
-  ngOnInit() {
-    this.authState$$ = this.authService.authState().subscribe((data) => {
-      this.onAuthState(data);
-    });
+  public ngOnInit() {
+    this.setFormGroup();
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  ngOnDestroy() {
-    this.authState$$.unsubscribe();
+  public get isDisabled() {
+    return !this.formGroup.get('password').value;
   }
 
   public isError(name: string): boolean {
@@ -119,7 +105,7 @@ export class ViewPasswordComponent implements OnInit, OnDestroy {
 
     this.isLoadingMutatation = true;
 
-    this.password.markAsDirty();
+    this.formGroup.get('password').markAsDirty();
 
     if (!this.formGroup.valid) {
       this.isLoadingMutatation = false;
@@ -138,7 +124,7 @@ export class ViewPasswordComponent implements OnInit, OnDestroy {
           this.login();
           break;
         case 'auth/weak-password':
-          this.password.setErrors({[err.code]: true});
+          this.formGroup.get('password').setErrors({[err.code]: true});
           this.isLoadingMutatation = false;
           break;
         default:
@@ -176,14 +162,5 @@ export class ViewPasswordComponent implements OnInit, OnDestroy {
       this.snackbarComponent.snackbar.show({message: UPDATE_ERROR});
       this.isLoadingMutatation = false;
     });
-  }
-
-  private onAuthState(user) {
-    if (user) {
-      this.setFormGroup();
-      this.isLoadingQuery = false;
-    } else {
-      this.isNotFound = true;
-    }
   }
 }

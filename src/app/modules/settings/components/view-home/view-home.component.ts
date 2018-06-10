@@ -1,43 +1,40 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { from } from 'rxjs/internal/observable/from';
+import { mergeMap } from 'rxjs/operators';
+
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
-
 import { DialogComponent } from '../../../mdc/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-view-home',
   template: `
-    <div *ngIf='!isLoadingQuery && isNotFound'>
-      <p>ログインが必要です</p>
-    </div>
-
-    <ng-container *ngIf='!isLoadingQuery && !isNotFound'>
-      <ul mdc-list two-line>
-        <ng-container *ngFor='let item of list'>
-          <li mdc-list-item [routerLink]='item.routerLink'>
-            <i mdc-list-item-graphic material-icons>{{item.icon}}</i>
-            <span mdc-list-item-text>
-              {{item.text}}
-              <span mdc-list-item-secondary-text>
-                {{item.secondaryText}}
-              </span>
-            </span>
-          </li>
-          <li mdc-list-divider></li>
-        </ng-container>
-        <li mdc-list-item (click)='onLogoutModal()'>
-          <i mdc-list-item-graphic material-icons>pause</i>
+    <ul mdc-list two-line>
+      <ng-container *ngFor='let item of links'>
+        <li mdc-list-item [routerLink]='item.routerLink'>
+          <i mdc-list-item-graphic material-icons>{{item.icon}}</i>
           <span mdc-list-item-text>
-            ログアウト
-            <span mdc-list-item-secondary-text>
-              ログアウトします。
-            </span>
+          {{item.text}}
+          <span mdc-list-item-secondary-text>
+            {{item.secondaryText}}
           </span>
+        </span>
         </li>
         <li mdc-list-divider></li>
-      </ul>
-    </ng-container>
+      </ng-container>
+      <li mdc-list-item (click)='onLogoutModal()'>
+        <i mdc-list-item-graphic material-icons>pause</i>
+        <span mdc-list-item-text>
+          ログアウト
+          <span mdc-list-item-secondary-text>
+            ログアウトします。
+          </span>
+        </span>
+      </li>
+      <li mdc-list-divider></li>
+    </ul>
 
     <aside mdc-dialog>
       <div mdc-dialog-surface>
@@ -59,29 +56,11 @@ import { DialogComponent } from '../../../mdc/components/dialog/dialog.component
   `,
   styleUrls: ['view-home.component.scss'],
 })
-export class ViewHomeComponent implements OnInit, OnDestroy {
-  public displayName = null;
-  public photoURL = null;
-  public isLoadingQuery = true;
-  public isNotFound = false;
-  public list = [{
-    routerLink: '/settings/profile',
-    icon: 'perm_identity',
-    text: 'プロフィール',
-    secondaryText: 'アイコンの変更など。',
-  }, {
-    routerLink: '/settings/username',
-    icon: 'dns',
-    text: 'ユーザネーム',
-    secondaryText: 'ログイン時に使用するユーザネームを変更する。',
-  }, {
-    routerLink: '/settings/password',
-    icon: 'https',
-    text: 'パスワード',
-    secondaryText: 'ログイン時に使用するパスワードを変更する。',
-  }];
-  private authState$$ = null;
+export class ViewHomeComponent implements OnInit {
   @ViewChild(DialogComponent)
+
+  public links: { routerLink: string, icon: string, text: string, secondaryText: string }[];
+
   private dialogComponent: DialogComponent;
 
   constructor(
@@ -92,46 +71,44 @@ export class ViewHomeComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
-    this.authState$$ = this.authService.authState().subscribe((data) => {
-      this.onAuthState(data);
-    });
+  public ngOnInit() {
+    this.links = [{
+      routerLink: '/settings/profile',
+      icon: 'perm_identity',
+      text: 'プロフィール',
+      secondaryText: 'アイコンの変更など。',
+    }, {
+      routerLink: '/settings/username',
+      icon: 'dns',
+      text: 'ユーザネーム',
+      secondaryText: 'ログイン時に使用するユーザネームを変更する。',
+    }, {
+      routerLink: '/settings/password',
+      icon: 'https',
+      text: 'パスワード',
+      secondaryText: 'ログイン時に使用するパスワードを変更する。',
+    }];
     this.browser.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  ngOnDestroy() {
-    this.authState$$.unsubscribe();
-  }
-
   public onLogoutModal() {
-    const dialog = this.dialogComponent.dialog;
-
-    dialog.show();
+    this.dialogComponent.dialog.show();
   }
 
   public onCancelLogout() {
-    const dialog = this.dialogComponent.dialog;
-
-    dialog.close();
+    this.dialogComponent.dialog.close();
   }
 
   public onLogout() {
-    const dialog = this.dialogComponent.dialog;
+    this.dialogComponent.dialog.close();
 
-    dialog.close();
-
-    this.authService.auth.signOut().then(() => {
-      return this.router.navigate(['/']);
+    this.authService.signOut().pipe(
+      mergeMap(() => {
+        return from(this.router.navigate(['/']));
+      }),
+    ).subscribe(() => {
+    }, (err) => {
+      console.error(err);
     });
-  }
-
-  private onAuthState(user) {
-    if (user) {
-      this.displayName = user.displayName;
-      this.photoURL = user.photoURL;
-    } else {
-      this.isNotFound = true;
-    }
-    this.isLoadingQuery = false;
   }
 }
