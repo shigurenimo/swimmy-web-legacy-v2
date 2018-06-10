@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Injectable()
 export class DrawerService {
-  public isOpen$: Subject<boolean> = new Subject();
-
-  private isOpen: boolean = window.innerWidth < 768;
+  public isOpen$: BehaviorSubject<boolean>;
 
   constructor() {
-    this.isOpen$.next(this.isOpen);
+    this.isOpen$ = new BehaviorSubject(false);
+  }
+
+  public close(): void {
+    this.isOpen$.next(false);
   }
 
   public toggle(): void {
-    this.isOpen = !this.isOpen;
-    this.isOpen$.next(this.isOpen);
+    this.isOpen$.next(!this.isOpen$.getValue());
   }
 }

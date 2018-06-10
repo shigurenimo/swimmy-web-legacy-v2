@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { DrawerService } from '../../../../services/drawer.service';
 import { WindowService } from '../../../../services/window.service';
@@ -69,7 +69,7 @@ import { DrawerComponent as MdcDrawerComponent } from '../../../mdc/components/d
   `,
   styleUrls: ['./drawer.component.scss'],
 })
-export class DrawerComponent implements OnInit, OnDestroy {
+export class DrawerComponent implements AfterViewInit, OnDestroy {
   public routerLinkActiveOptions = {
     exact: true,
   };
@@ -99,9 +99,12 @@ export class DrawerComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public ngOnInit() {
+  public ngAfterViewInit() {
     this.isOpen$$ = this.drawerService.isOpen$.subscribe(next => {
       this.drawerComponent.drawer.open = next;
+    });
+    this.drawerComponent.drawer.listen('click', () => {
+      this.drawerService.close();
     });
   }
 

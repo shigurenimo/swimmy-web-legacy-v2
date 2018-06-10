@@ -1,5 +1,6 @@
-import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/internal/Observable';
 import { BrowserService } from '../../../../services/browser.service';
 
 import { DrawerService } from '../../../../services/drawer.service';
@@ -14,7 +15,7 @@ import { WindowService } from '../../../../services/window.service';
           <ng-container *ngIf='isTemporary'>
             <a mdc-top-app-bar-navigation-icon (click)='onToggleDrawer()'>menu</a>
           </ng-container>
-          <span mdc-top-app-bar-title>{{appTitle}}</span>
+          <span mdc-top-app-bar-title>{{appTitle$ | async}}</span>
         </section>
         <section mdc-top-app-bar-section alignEnd>
           <a
@@ -33,14 +34,14 @@ import { WindowService } from '../../../../services/window.service';
   `,
   styleUrls: ['./top-app-bar.component.scss'],
 })
-export class TopAppBarComponent implements OnInit, AfterContentInit {
-  public appTitle = '';
+export class TopAppBarComponent implements OnInit {
+  public appTitle$: Observable<string>;
 
   constructor(
     private router: Router,
     private drawerService: DrawerService,
     private windowService: WindowService,
-    private browser: BrowserService,
+    private browserService: BrowserService,
   ) {
   }
 
@@ -49,12 +50,7 @@ export class TopAppBarComponent implements OnInit, AfterContentInit {
   }
 
   public ngOnInit() {
-    this.browser.getAppTitle().subscribe(value => {
-      this.appTitle = value;
-    });
-  }
-
-  public ngAfterContentInit() {
+    this.appTitle$ = this.browserService.getAppTitle();
   }
 
   public onToggleDrawer() {
