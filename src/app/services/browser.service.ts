@@ -15,7 +15,6 @@ export class BrowserService {
   }
 
   public updateSnapshot(snapshot: ActivatedRouteSnapshot) {
-    const {title} = snapshot.data;
-    this.appTitle.next(title);
+    this.appTitle.next(snapshot.data.title);
   }
 }
