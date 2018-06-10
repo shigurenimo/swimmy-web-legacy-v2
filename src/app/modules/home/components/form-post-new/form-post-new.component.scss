@@ -9,24 +9,24 @@ input[type='file'] {
   padding-left: 8px;
 }
 
-.actions {
+.block-actions {
   padding: 8px 8px 0;
   display: flex;
   justify-content: flex-end;
+  .input {
+    margin-left: 10px;
+  }
 }
 
-.actions .input {
-  margin-left: 10px;
-}
-
-.images {
+.block-images {
   padding-top: 8px;
-}
-
-.images .image-avater {
-  display: inline-block;
-  vertical-align: top;
-  margin-right: 8px;
+  .image {
+    display: inline-block;
+    width: 80px;
+    height: auto;
+    vertical-align: top;
+    margin-right: 8px;
+  }
 }
 
 .error {

@@ -8,9 +8,7 @@ import { PostsService } from '../../../../services/posts.service';
   selector: 'app-list-item-post',
   template: `
     <div class="template-list-item">
-      <!--
       <ng-container *ngTemplateOutlet="templatePhotoURLs"></ng-container>
-      -->
 
       <ng-container *ngIf='type === "listItem" && post.replyPostId'>
         <ng-container *ngTemplateOutlet="templateReplyPostId"></ng-container>
@@ -36,10 +34,10 @@ import { PostsService } from '../../../../services/posts.service';
     <ng-template #templatePhotoURLs>
       <ng-container *ngIf="post.photoURLs.length">
         <div class="template-photoURLs">
-          <div class="item" *ngFor="let photoURL of post.photoURLs">
-            <img *ngIf="isDefaultType" [src]="photoURL|resize:resize">
-            <img *ngIf="isListItemType" routerLink="/posts/{{post.id}}" [src]="photoURL|resize:resize">
-          </div>
+          <ng-container *ngFor="let photoURL of post.photoURLs">
+            <img *ngIf="isDefaultType" [src]="photoURL | resize:resize">
+            <img *ngIf="isListItemType" routerLink="/posts/{{post.id}}" [src]="photoURL | resize:resize">
+          </ng-container>
         </div>
       </ng-container>
     </ng-template>
@@ -47,10 +45,7 @@ import { PostsService } from '../../../../services/posts.service';
     <ng-template #templateContent>
       <div class="template-content" routerLink="/posts/{{post.id}}">
         <ng-container *ngIf="post.content">
-          <p *ngIf="isDefaultType">{{post.content}}<span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
-          <div *ngIf="isListItemType">
-            <p class='text'>{{post.content}}<span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
-          </div>
+          <p class='text'>{{post.content}}<span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
         </ng-container>
         <ng-container *ngIf="!post.content">
           <p><span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
@@ -60,17 +55,13 @@ import { PostsService } from '../../../../services/posts.service';
 
     <ng-template #templateListItemActions>
       <div class='template-actions'>
-        <div>
-          <ng-container *ngTemplateOutlet="templateChipSet"></ng-container>
-        </div>
+        <ng-container *ngTemplateOutlet="templateChipSet"></ng-container>
       </div>
     </ng-template>
 
     <ng-template #templateActions>
       <div class='template-actions'>
-        <div>
-          <ng-container *ngTemplateOutlet="templateChipSet"></ng-container>
-        </div>
+        <ng-container *ngTemplateOutlet="templateChipSet"></ng-container>
       </div>
     </ng-template>
 

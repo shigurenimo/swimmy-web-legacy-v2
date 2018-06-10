@@ -57,10 +57,9 @@ import { DialogComponent } from '../../../mdc/components/dialog/dialog.component
   styleUrls: ['view-home.component.scss'],
 })
 export class ViewHomeComponent implements OnInit {
-  @ViewChild(DialogComponent)
-
   public links: { routerLink: string, icon: string, text: string, secondaryText: string }[];
 
+  @ViewChild(DialogComponent)
   private dialogComponent: DialogComponent;
 
   constructor(

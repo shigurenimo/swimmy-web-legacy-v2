@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 import { Photo } from '../../../../interfaces/input';
 import { FirebaseService } from '../../../../services/firebase.service';
 import { PostsService } from '../../../../services/posts.service';
+import { StorageService } from '../../../../services/storage.service';
 
 @Component({
   selector: 'app-form-post-new',
@@ -18,31 +19,20 @@ import { PostsService } from '../../../../services/posts.service';
         <div mdc-line-ripple></div>
       </div>
 
-      <!--
-      <div class='actions'>
+      <div class='block-actions'>
         <input #file type="file" accept="image/*" (change)="onChangeFiles(file.files)">
-
         <button #upload (click)="file.click()" mdc-button raised>
           <i mdc-button-icon>link</i>
           <span>画像</span>
         </button>
       </div>
-      -->
     </form>
 
-    <!--
-    <div *ngIf='previewFiles[0]' class='images'>
-      <ul mdc-image-list>
-        <ng-container *ngFor='let file of previewFiles'>
-          <li mdc-image-list-item>
-            <div mdc-image-list-image imageAspectContainer>
-              <img mdc-image-list-image [src]="file">
-            </div>
-          </li>
-        </ng-container>
-      </ul>
+    <div *ngIf='previewFiles[0]' class='block-images'>
+      <ng-container *ngFor='let file of previewFiles'>
+        <img class="image" [src]="file">
+      </ng-container>
     </div>
-    -->
   `,
   styleUrls: ['form-post-new.component.scss'],
 })
@@ -57,6 +47,7 @@ export class FormPostNewComponent implements OnInit {
     private formBuilder: FormBuilder,
     private posts: PostsService,
     private firebaseService: FirebaseService,
+    private storageService: StorageService,
   ) {
   }
 
@@ -96,20 +87,18 @@ export class FormPostNewComponent implements OnInit {
 
     if (this.files.length) {
       const uploadImageMap$ = this.files.map((file) => {
-        return this.uploadImage(file);
+        return this.getDownloadURL(file);
       });
 
       const uploadImages$ = combineLatest(uploadImageMap$);
 
-      const post$ = mergeMap((photoURLs: Photo[]) => {
-        return this.posts.addPost({
-          content: content,
-          photos: photoURLs,
-          replyPostId: null,
-        });
+      const addPost = (photos: Photo[]) => this.posts.addPost({
+        content: content,
+        photos: photos,
+        replyPostId: null,
       });
 
-      $mutation = uploadImages$.pipe(post$);
+      $mutation = uploadImages$.pipe(mergeMap(addPost));
     } else {
       $mutation = this.posts.addPost({
         content: content,
@@ -127,28 +116,25 @@ export class FormPostNewComponent implements OnInit {
     });
   }
 
-  public uploadImage(file): Observable<Photo> {
-    const originFileObj = file.originFileObj;
+  public getDownloadURL(file): Observable<Photo> {
     const photoId = this.firebaseService.createId();
-    const filePath = `posts/${photoId}`;
+    const objectId = `posts/${photoId}`;
 
-    /*
-    const task = this.afStorage.upload(filePath, originFileObj);
+    const task$ = this.storageService.upload(objectId, file);
 
-    const downloadURL$ = task.snapshotChanges();
-    const map$ = map(({ downloadURL }): Photo => {
-      return { downloadURL, photoId };
-    });
-    */
+    const filterDownloadURL = (snapshot: any): boolean => {
+      return snapshot.bytesTransferred === snapshot.totalBytes;
+    };
 
-    /*
-    const downloadURL$ = task.downloadURL();
-    const map$ = map((downloadURL: string): Photo => {
-      return { downloadURL, photoId };
-    });
-    */
+    const toPhoto = (downloadURL: string): Photo => {
+      return {downloadURL, photoId};
+    };
 
-    return; // downloadURL$.pipe(map$);
+    return task$.pipe(
+      filter(filterDownloadURL),
+      mergeMap(this.storageService.getDownloadURL),
+      map(toPhoto),
+    );
   }
 
   public ngOnInit() {

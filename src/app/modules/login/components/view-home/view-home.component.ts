@@ -16,7 +16,14 @@ import { BrowserService } from '../../../../services/browser.service';
         fullwidth
         class="mdc-text-field--padding"
       >
-        <input mdc-text-field-input formControlName='username' placeholder="username">
+        <input
+          mdc-text-field-input
+          type="text"
+          autocomplete="on"
+          formControlName='username'
+          placeholder="username"
+          name="username"
+        >
         <div mdc-line-ripple></div>
       </div>
 
@@ -45,7 +52,14 @@ import { BrowserService } from '../../../../services/browser.service';
         fullwidth
         class="mdc-text-field--padding"
       >
-        <input mdc-text-field-input type="password" formControlName='password' placeholder="password">
+        <input
+          mdc-text-field-input
+          autocomplete="on"
+          type="password"
+          name="password"
+          formControlName='password'
+          placeholder="password"
+        >
         <div mdc-line-ripple></div>
       </div>
 
@@ -65,11 +79,11 @@ import { BrowserService } from '../../../../services/browser.service';
       </ng-container>
 
       <div class='block-form-submut'>
-        <button mdc-button raised [disabled]='isLoading' (click)="onSignUp($event)">
-          <span>登録</span>
-        </button>
         <button mdc-button raised [disabled]='isLoading' (click)="onSignIn($event)">
           <span>ログイン</span>
+        </button>
+        <button mdc-button raised [disabled]='isLoading' (click)="onSignUp($event)">
+          <span>登録</span>
         </button>
       </div>
     </form>

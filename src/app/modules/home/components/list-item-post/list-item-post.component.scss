@@ -41,18 +41,13 @@ p {
   }
 }
 
-.photoURLs {
+.template-photoURLs {
   padding: 8px 8px 0 8px;
-
-  .item {
-    flex: auto;
-    width: 100px;
+  img {
+    display: inline-block;
+    vertical-align: top;
     max-width: 400px;
     font-size: 0;
-  }
-
-  img {
-    width: 100%;
   }
 }
 
