@@ -10,9 +10,15 @@ import { PostsService } from '../../../../services/posts.service';
 @Component({
   selector: 'app-view-home',
   template: `
-    <ng-container *ngFor='let post of (posts$ | async) as posts'>
-      <app-card-image [post]='post'></app-card-image>
+    <ng-container *ngIf='(posts$ | async) as posts; else loader'>
+      <ng-container *ngFor='let post of posts'>
+        <app-card-image [post]='post'></app-card-image>
+      </ng-container>
     </ng-container>
+
+    <ng-template #loader>
+      <div sw-loader></div>
+    </ng-template>
   `,
   styleUrls: ['view-home.component.scss'],
 })

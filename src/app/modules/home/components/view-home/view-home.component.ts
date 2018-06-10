@@ -12,17 +12,23 @@ import { PostsService } from '../../../../services/posts.service';
   template: `
     <app-form-post-new></app-form-post-new>
 
-    <ul mdc-list>
-      <ng-container *ngFor="let post of posts$ | async as posts">
-        <app-list-item-post
-          [post]='post'
-          [isLogged]="authService.auth.currentUser"
-          type="listItem"
-        >
-        </app-list-item-post>
-        <div mdc-list-divider></div>
-      </ng-container>
-    </ul>
+    <ng-container *ngIf="(posts$ | async) as posts; else loader">
+      <ul mdc-list>
+        <ng-container *ngFor="let post of posts">
+          <app-list-item-post
+            [post]='post'
+            [isLogged]="authService.auth.currentUser"
+            type="listItem"
+          >
+          </app-list-item-post>
+          <div mdc-list-divider></div>
+        </ng-container>
+      </ul>
+    </ng-container>
+    
+    <ng-template #loader>
+      <div sw-loader></div>
+    </ng-template>
   `,
   styleUrls: ['view-home.component.scss'],
 })
