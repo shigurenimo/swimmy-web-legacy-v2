@@ -9,7 +9,7 @@ import { WindowService } from '../../../../services/window.service';
 @Component({
   selector: 'app-top-app-bar',
   template: `
-    <header mdc-top-app-bar>
+    <header mdc-top-app-bar class="sw-top-app-bar">
       <div mdc-top-app-bar-row>
         <section mdc-top-app-bar-section alignStart>
           <ng-container *ngIf='isTemporary'>

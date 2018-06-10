@@ -1,4 +1,5 @@
 @import "./theme";
+@import "~@material/theme/mdc-theme";
 @import "~@material/typography/mdc-typography";
 @import "~@material/button/mdc-button";
 @import "~@material/chips/mdc-chips";
@@ -19,8 +20,19 @@
   outline: none;
 }
 
+.mdc-top-app-bar {
+  z-index: 80;
+  @include mdc-top-app-bar-fill-color-accessible(white);
+  @include mdc-top-app-bar-icon-ink-color($mdc-theme-primary);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.mdc-drawer--persistent .mdc-drawer__toolbar-spacer {
+  border-bottom: none;
+}
+
 html {
-  background: #ffffff; /* #f2f2f2; */
+  background: white;
 }
 
 body {
