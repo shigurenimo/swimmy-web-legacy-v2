@@ -8,7 +8,7 @@ import { BrowserService } from '../../../../services/browser.service';
 @Component({
   selector: 'app-view-home',
   template: `
-    <form [formGroup]="formGroup">
+    <form [formGroup]="formGroup" (ngSubmit)='onSignIn()'>
       <h2 mdc-typography headline6>ユーザネーム</h2>
       <div
         mdc-text-field
@@ -79,11 +79,11 @@ import { BrowserService } from '../../../../services/browser.service';
       </ng-container>
 
       <div class='block-form-submut'>
-        <button mdc-button raised [disabled]='isLoading' (click)="onSignIn($event)">
-          <span>ログイン</span>
-        </button>
-        <button mdc-button raised [disabled]='isLoading' (click)="onSignUp($event)">
+        <button mdc-button raised type="button" [disabled]='isLoading' (click)="onSignUp()">
           <span>登録</span>
+        </button>
+        <button mdc-button raised type="submit" [disabled]='isLoading' (click)="onSignIn()">
+          <span>ログイン</span>
         </button>
       </div>
     </form>
@@ -128,9 +128,7 @@ export class ViewHomeComponent implements OnInit {
     return this.formGroup.get(name).hasError(errorCode);
   }
 
-  public onSignUp(event) {
-    event.preventDefault();
-
+  public onSignUp() {
     if (this.isLoading) {
       return;
     }
@@ -140,9 +138,7 @@ export class ViewHomeComponent implements OnInit {
     this.mutateSignUp();
   }
 
-  public onSignIn(event) {
-    event.preventDefault();
-
+  public onSignIn() {
     if (this.isLoading) {
       return;
     }

@@ -15,15 +15,17 @@ import { StorageService } from '../../../../services/storage.service';
     <form [formGroup]='formGroup' (ngSubmit)='onAddPost()'>
       <div mdc-text-field withTrailingIcon fullwidth [disabled]='isLoadingMutation' class='text-field'>
         <input mdc-text-field-input formControlName='content' [placeholder]='textareaPlaceholder'>
-        <i mdc-text-field-icon role="button">create</i>
         <div mdc-line-ripple></div>
       </div>
 
       <div class='block-actions'>
         <input #file type="file" accept="image/*" (change)="onChangeFiles(file.files)">
-        <button #upload (click)="file.click()" mdc-button raised>
+        <button #upload type="button" (click)="file.click()" mdc-button raised>
           <i mdc-button-icon>link</i>
           <span>画像</span>
+        </button>
+        <button mdc-button raised type="submit">
+          <span>送信</span>
         </button>
       </div>
     </form>
