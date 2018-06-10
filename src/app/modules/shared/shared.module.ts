@@ -4,11 +4,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MdcModule } from '../mdc/mdc.module';
 import { SwModule } from '../sw/sw.module';
+import { ElapsedDatePipe } from './pipes/elapsed-date.pipe';
 import { ResizePipe } from './pipes/resize.pipe';
 
 @NgModule({
   declarations: [
     ResizePipe,
+    ElapsedDatePipe,
   ],
   imports: [
     CommonModule,
@@ -24,6 +26,7 @@ import { ResizePipe } from './pipes/resize.pipe';
     MdcModule,
     SwModule,
     ResizePipe,
+    ElapsedDatePipe,
   ],
 })
 export class SharedModule {

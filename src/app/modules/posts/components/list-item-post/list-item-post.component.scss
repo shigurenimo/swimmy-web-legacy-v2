@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+:host:hover {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+p {
+  margin: 0;
+}
+
+.template-replyPostId {
+  padding: 8px 0 0 0;
+
+  a {
+    color: tomato;
+    cursor: pointer;
+  }
+
+  a::before {
+    content: 'To ';
+  }
+}
+
+.template-list-item {
+  padding: 0 8px;
+}
+
+.template-content {
+  padding: 8px 0 0 0;
+
+  .text {
+    white-space: pre-wrap;
+  }
+
+  .createdAt {
+    padding-left: 8px;
+    font-size: 0.8rem;
+    opacity: 0.4;
+  }
+}
+
+.photoURLs {
+  padding: 8px 8px 0 8px;
+
+  .item {
+    flex: auto;
+    width: 100px;
+    max-width: 400px;
+    font-size: 0;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+.template-actions {
+  display: flex;
+  align-items: flex-end;
+
+  .block-text-field {
+    padding: 4px;
+  }
+
+  .fix-height {
+    height: 17px;
+  }
+}
+
+.mdc-chip__text--editable {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.mdc-chip--button {
+  border: none;
+}

@@ -7,9 +7,9 @@ import { WindowService } from './services/window.service';
   template: `
     <app-top-app-bar></app-top-app-bar>
 
-    <sw-view>
+    <app-view>
       <router-outlet></router-outlet>
-    </sw-view>
+    </app-view>
 
     <app-drawer></app-drawer>
   `,
