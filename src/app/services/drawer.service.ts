@@ -6,7 +6,7 @@ export class DrawerService {
   public isOpen$: BehaviorSubject<boolean>;
 
   constructor() {
-    this.isOpen$ = new BehaviorSubject(false);
+    this.isOpen$ = new BehaviorSubject(window.innerWidth > 768);
   }
 
   public close(): void {

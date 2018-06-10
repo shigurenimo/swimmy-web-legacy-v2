@@ -104,7 +104,9 @@ export class DrawerComponent implements AfterViewInit, OnDestroy {
       this.drawerComponent.drawer.open = next;
     });
     this.drawerComponent.drawer.listen('click', () => {
-      this.drawerService.close();
+      if (this.isTemporary) {
+        this.drawerService.close();
+      }
     });
   }
 
