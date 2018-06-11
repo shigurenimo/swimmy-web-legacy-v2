@@ -1,4 +1,4 @@
-@import "./theme";
+@import "mdc.theme";
 @import "~@material/theme/mdc-theme";
 @import "~@material/typography/mdc-typography";
 @import "~@material/button/mdc-button";
@@ -13,22 +13,17 @@
 @import "~@material/dialog/mdc-dialog";
 @import "~@material/elevation/mdc-elevation";
 @import "~@material/snackbar/mdc-snackbar";
+@import "mdc.button";
+@import "mdc.drawer";
+@import "mdc.list-item";
+@import "mdc.snackbar";
+@import "mdc.tab";
+@import "mdc.top-app-bar";
 
 * {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   outline: none;
-}
-
-.mdc-top-app-bar {
-  z-index: 80;
-  @include mdc-top-app-bar-fill-color-accessible(white);
-  @include mdc-top-app-bar-icon-ink-color($mdc-theme-primary);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.mdc-drawer--persistent .mdc-drawer__toolbar-spacer {
-  border-bottom: none;
 }
 
 html {

@@ -1,0 +1,6 @@
+.mdc-top-app-bar {
+  z-index: 80;
+  @include mdc-top-app-bar-fill-color-accessible(white);
+  @include mdc-top-app-bar-icon-ink-color($mdc-theme-primary);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
