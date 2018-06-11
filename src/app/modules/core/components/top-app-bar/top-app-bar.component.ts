@@ -1,8 +1,10 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/internal/Observable';
-import { BrowserService } from '../../../../services/browser.service';
 
+import { BehaviorSubject } from 'rxjs/index';
+
+import { BrowserService } from '../../../../services/browser.service';
 import { DrawerService } from '../../../../services/drawer.service';
 import { WindowService } from '../../../../services/window.service';
 
@@ -12,8 +14,13 @@ import { WindowService } from '../../../../services/window.service';
     <header mdc-top-app-bar class="sw-top-app-bar">
       <div mdc-top-app-bar-row>
         <section mdc-top-app-bar-section alignStart>
-          <ng-container *ngIf='isTemporary'>
-            <a mdc-top-app-bar-navigation-icon (click)='onToggleDrawer()'>menu</a>
+          <ng-container *ngIf="isLeftActionType('menu')">
+            <ng-container *ngIf='isTemporary'>
+              <a mdc-top-app-bar-navigation-icon (click)='onToggleDrawer()'>menu</a>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="isLeftActionType('return')">
+            <a mdc-top-app-bar-navigation-icon (click)='onGoBack()'>undo</a>
           </ng-container>
           <span mdc-top-app-bar-title>{{appTitle$ | async}}</span>
         </section>
@@ -24,7 +31,7 @@ import { WindowService } from '../../../../services/window.service';
             alt="scroll top"
             (click)='onScrollTop()'
           >
-            keyboard_arrow_up
+            vertical_align_top
           </a>
         </section>
       </div>
@@ -35,9 +42,11 @@ import { WindowService } from '../../../../services/window.service';
   styleUrls: ['./top-app-bar.component.scss'],
 })
 export class TopAppBarComponent implements OnInit {
-  public appTitle$: Observable<string>;
+  public appTitle$: BehaviorSubject<string>;
+  public leftActionType$: BehaviorSubject<string>;
 
   constructor(
+    private location: Location,
     private router: Router,
     private drawerService: DrawerService,
     private windowService: WindowService,
@@ -45,16 +54,25 @@ export class TopAppBarComponent implements OnInit {
   ) {
   }
 
+  public ngOnInit() {
+    this.appTitle$ = this.browserService.getAppTitle();
+    this.leftActionType$ = this.browserService.getLeftActionType();
+  }
+
   public get isTemporary() {
     return this.windowService.width < 768;
   }
 
-  public ngOnInit() {
-    this.appTitle$ = this.browserService.getAppTitle();
+  public isLeftActionType(name) {
+    return this.leftActionType$.getValue() === name;
   }
 
   public onToggleDrawer() {
     this.drawerService.toggle();
+  }
+
+  public onGoBack() {
+    this.location.back();
   }
 
   public onScrollTop() {

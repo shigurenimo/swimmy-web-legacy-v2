@@ -3,5 +3,8 @@ import { ViewDetailComponent } from './components/view-detail/view-detail.compon
 export const usersRoutes = [{
   path: ':username',
   component: ViewDetailComponent,
-  data: {title: 'ユーザ'},
+  data: {
+    title: 'ユーザ',
+    leftActionType: 'return',
+  },
 }];

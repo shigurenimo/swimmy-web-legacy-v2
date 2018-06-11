@@ -3,5 +3,8 @@ import { ViewDetailComponent } from './components/view-detail/view-detail.compon
 export const postsRoutes = [{
   path: ':postId',
   component: ViewDetailComponent,
-  data: {title: 'スレッド'},
+  data: {
+    title: 'スレッド',
+    leftActionType: 'return',
+  },
 }];

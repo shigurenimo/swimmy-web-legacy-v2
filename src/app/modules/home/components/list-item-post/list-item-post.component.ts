@@ -36,14 +36,14 @@ import { PostsService } from '../../../../services/posts.service';
         <div class="template-photoURLs">
           <ng-container *ngFor="let photoURL of post.photoURLs">
             <img *ngIf="isDefaultType" [src]="photoURL | resize:resize">
-            <img *ngIf="isListItemType" routerLink="/posts/{{post.id}}" [src]="photoURL | resize:resize">
+            <img *ngIf="isListItemType" [routerLink]="link" [src]="photoURL | resize:resize">
           </ng-container>
         </div>
       </ng-container>
     </ng-template>
 
     <ng-template #templateContent>
-      <div class="template-content" routerLink="/posts/{{post.id}}">
+      <div class="template-content" [routerLink]="link">
         <ng-container *ngIf="post.content">
           <p class='text'>{{post.content}}<span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
         </ng-container>
@@ -119,12 +119,10 @@ export class ListItemPostComponent {
   ) {
   }
 
-  public get deleteType() {
-    return this.isDelete ? 'danger' : null;
-  }
-
-  public get deleteShape() {
-    return this.isDelete ? null : 'circle';
+  public get link() {
+    return this.post.replyPostId
+      ? `/posts/${this.post.replyPostId}`
+      : `/posts/${this.post.id}`;
   }
 
   public get isDefaultType() {
