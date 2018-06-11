@@ -1,5 +1,6 @@
 :host {
   display: block;
+  padding: 0 8px;
 }
 
 :host:hover {
@@ -21,10 +22,6 @@ p {
   a::before {
     content: 'To ';
   }
-}
-
-.template-list-item {
-  padding: 0 8px;
 }
 
 .template-content {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../../../services/auth.service';
@@ -8,14 +8,9 @@ import { PostsService } from '../../../../services/posts.service';
 @Component({
   selector: 'app-view-detail',
   template: `
-    <ng-container *ngIf="post">
+    <ng-container *ngIf="(post$ | async) as post">
       <ul mdc-list>
-        <app-list-item-post
-          [post]='post'
-          [isLogged]="isLogged"
-          type="listItem"
-        >
-        </app-list-item-post>
+        <app-list-item-post [post]='post' [isLogged]="isLogged"></app-list-item-post>
         <div mdc-list-divider></div>
       </ul>
 
@@ -26,86 +21,39 @@ import { PostsService } from '../../../../services/posts.service';
       <div class="template-editor">
         <app-form-reply-new [repliedPostId]="post.id"></app-form-reply-new>
       </div>
-
-      <ul mdc-list>
-        <ng-container *ngFor="let post of repliedPosts">
-          <app-list-item-post
-            [post]='post'
-            [isLogged]="isLogged"
-          >
-          </app-list-item-post>
-          <div mdc-list-divider></div>
-        </ng-container>
-      </ul>
     </ng-container>
+    
+    <ul mdc-list>
+      <ng-container *ngFor="let repliedPost of (repliedPosts$ | async)">
+        <app-list-item-reply [post]='repliedPost' [isLogged]="isLogged"></app-list-item-reply>
+        <div mdc-list-divider></div>
+      </ng-container>
+    </ul>
   `,
   styleUrls: ['view-detail.component.scss'],
 })
-export class ViewDetailComponent implements OnInit, OnDestroy {
-  public isLogged = false;
-  public post = null;
-  public repliedPosts = [];
-  private authState$$ = null;
-  private params$$ = null;
-  private posts$$ = null;
-  private repliedPosts$$ = null;
+export class ViewDetailComponent implements OnInit {
+  public post$;
+  public repliedPosts$;
 
   constructor(
-    private posts: PostsService,
+    private postsService: PostsService,
     private authService: AuthService,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
   ) {
   }
 
   public ngOnInit() {
-    const authState$ = this.authService.authState();
-    this.authState$$ = authState$.subscribe((user) => {
-      this.onChangeAuthState(user);
-    });
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+    const {postId} = this.activatedRoute.snapshot.params;
+
+    this.post$ = this.postsService.observePost(postId);
+    this.repliedPosts$ = this.postsService.observeRepliedPosts(postId);
+
+    this.browserService.updateSnapshot(this.activatedRoute.snapshot);
   }
 
-  public ngOnDestroy() {
-    if (this.params$$) {
-      this.params$$.unsubscribe();
-    }
-    this.authState$$.unsubscribe();
-    this.posts$$.unsubscribe();
-    this.repliedPosts$$.unsubscribe();
-  }
-
-  private onCatchError(err) {
-    console.error(err);
-  }
-
-  private onChangePost() {
-  }
-
-  private onChangeParams(params) {
-    const {postId} = params;
-
-    const posts$ = this.posts.observePost(postId);
-    this.posts$$ = posts$.subscribe((doc) => {
-      this.post = doc;
-    }, (err) => {
-      this.onCatchError(err);
-    });
-
-    const repliedPosts$ = this.posts.observeRepliedPosts(postId);
-    this.repliedPosts$$ = repliedPosts$.subscribe((docs) => {
-      this.repliedPosts = docs;
-    }, (err) => {
-      this.onCatchError(err);
-    });
-  }
-
-  private onChangeAuthState(user) {
-    if (user) {
-      this.isLogged = true;
-    }
-    this.params$$ = this.activatedRoute.params.subscribe((params) => {
-      this.onChangeParams(params);
-    });
+  public get isLogged(): boolean {
+    return !!this.authService.auth.currentUser;
   }
 }

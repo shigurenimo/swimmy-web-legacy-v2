@@ -79,7 +79,9 @@ export class PostsService {
 
     const query = queryFn(ref);
 
-    return fromQueryRef(query).pipe(map(this.fixPosts));
+    const sort = posts => posts.sort((a, b) => a.createdAt - b.createdAt);
+
+    return fromQueryRef(query).pipe(map(this.fixPosts), map(sort));
   }
 
   public deleteReplyPost(id: string) {

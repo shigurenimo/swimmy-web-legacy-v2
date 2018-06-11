@@ -7,65 +7,34 @@ import { PostsService } from '../../../../services/posts.service';
 @Component({
   selector: 'app-list-item-post',
   template: `
-    <div class="template-list-item">
-      <ng-container *ngTemplateOutlet="templatePhotoURLs"></ng-container>
+    <!-- template photoURLs -->
+    <ng-container *ngIf="post.photoURLs.length">
+      <div class="template-photoURLs">
+        <ng-container *ngFor="let photoURL of post.photoURLs">
+          <img [routerLink]="link" [src]="photoURL | resize:resize">
+        </ng-container>
+      </div>
+    </ng-container>
 
-      <ng-container *ngIf='type === "listItem" && post.replyPostId'>
-        <ng-container *ngTemplateOutlet="templateReplyPostId"></ng-container>
-      </ng-container>
-
-      <ng-container *ngTemplateOutlet="templateContent"></ng-container>
-
-      <ng-container *ngIf='type !== "listItem"'>
-        <ng-container *ngTemplateOutlet="templateActions"></ng-container>
-      </ng-container>
-
-      <ng-container *ngIf='type === "listItem"'>
-        <ng-container *ngTemplateOutlet="templateListItemActions"></ng-container>
-      </ng-container>
-    </div>
-
-    <ng-template #templateReplyPostId>
+    <!-- template replyPostId -->
+    <ng-container *ngIf='post.replyPostId'>
       <div class="template-replyPostId">
         <a routerLink="/posts/{{post.replyPostId}}">{{post.replyPostId}}</a>
       </div>
-    </ng-template>
+    </ng-container>
 
-    <ng-template #templatePhotoURLs>
-      <ng-container *ngIf="post.photoURLs.length">
-        <div class="template-photoURLs">
-          <ng-container *ngFor="let photoURL of post.photoURLs">
-            <img *ngIf="isDefaultType" [src]="photoURL | resize:resize">
-            <img *ngIf="isListItemType" [routerLink]="link" [src]="photoURL | resize:resize">
-          </ng-container>
-        </div>
+    <!-- template content -->
+    <div class="template-content" [routerLink]="link">
+      <ng-container *ngIf="post.content">
+        <p class='text'>{{post.content}}<span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
       </ng-container>
-    </ng-template>
+      <ng-container *ngIf="!post.content">
+        <p><span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
+      </ng-container>
+    </div>
 
-    <ng-template #templateContent>
-      <div class="template-content" [routerLink]="link">
-        <ng-container *ngIf="post.content">
-          <p class='text'>{{post.content}}<span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
-        </ng-container>
-        <ng-container *ngIf="!post.content">
-          <p><span class="createdAt">- {{post.createdAt | elapsedDate}}</span></p>
-        </ng-container>
-      </div>
-    </ng-template>
-
-    <ng-template #templateListItemActions>
-      <div class='template-actions'>
-        <ng-container *ngTemplateOutlet="templateChipSet"></ng-container>
-      </div>
-    </ng-template>
-
-    <ng-template #templateActions>
-      <div class='template-actions'>
-        <ng-container *ngTemplateOutlet="templateChipSet"></ng-container>
-      </div>
-    </ng-template>
-
-    <ng-template #templateChipSet>
+    <!-- template listItemActions -->
+    <div class='template-actions'>
       <div mdc-chip-set>
         <ng-container *ngFor="let tag of post.tags">
           <div mdc-chip (click)="onUpdateTag(tag.name)">
@@ -92,26 +61,20 @@ import { PostsService } from '../../../../services/posts.service';
           </div>
         </ng-container>
       </div>
-    </ng-template>
-
-    <ng-template #suffixInputTag>
-      <i *ngIf="isLoadingMutation" class="anticon anticon-loading anticon-spin"></i>
-      <i *ngIf="!isLoadingMutation" class="anticon anticon-plus"></i>
-    </ng-template>
+    </div>
   `,
   styleUrls: ['list-item-post.component.scss'],
 })
 export class ListItemPostComponent {
-  @Input() post: Post;
-  @Input() type = 'default';
-  @Input() isLogged: boolean;
-
   public resize = 'post';
   public isEditNewTag = false;
   public isLoadingMutation = false;
   public isDeleteMutate = false;
   public isDelete = false;
   public newTag = '';
+
+  @Input() public post: Post;
+  @Input() public isLogged: boolean;
 
   constructor(
     private posts: PostsService,
@@ -125,15 +88,7 @@ export class ListItemPostComponent {
       : `/posts/${this.post.id}`;
   }
 
-  public get isDefaultType() {
-    return this.type === 'default';
-  }
-
-  public get isListItemType() {
-    return this.type === 'listItem';
-  }
-
-  public onUpdateTag(name = 'スキ') {
+  public onUpdateTag(name: string) {
     if (!this.authService.currentUser) {
       return;
     }
@@ -160,28 +115,6 @@ export class ListItemPostComponent {
       console.error(err);
       this.isLoadingMutation = false;
     });
-  }
-
-  public onDelete() {
-    if (!this.isDelete) {
-      this.isDelete = true;
-      return;
-    }
-
-    if (this.isDeleteMutate) {
-      return;
-    }
-
-    this.isDeleteMutate = true;
-
-    if (this.post.replyPostId) {
-      const postId$ = this.posts.deleteReplyPost(this.post.id);
-      postId$.subscribe(() => {
-        this.isDeleteMutate = false;
-      }, (err) => {
-        this.isDeleteMutate = false;
-      });
-    }
   }
 
   public onEditNewTag() {

@@ -5,7 +5,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { PostsService } from '../../../../services/posts.service';
 
 @Component({
-  selector: 'app-list-item-post',
+  selector: 'app-list-item-reply',
   template: `
     <!-- template photoURLs -->
     <ng-container *ngIf="post.photoURLs.length">
@@ -26,7 +26,7 @@ import { PostsService } from '../../../../services/posts.service';
       </ng-container>
     </div>
 
-    <!-- template listItemActions -->
+
     <div class='template-actions'>
       <div mdc-chip-set>
         <ng-container *ngFor="let tag of post.tags">
@@ -56,14 +56,12 @@ import { PostsService } from '../../../../services/posts.service';
       </div>
     </div>
   `,
-  styleUrls: ['list-item-post.component.scss'],
+  styleUrls: ['list-item-reply.component.scss'],
 })
-export class ListItemPostComponent {
+export class ListItemReplyComponent {
   public resize = 'post';
   public isEditNewTag = false;
   public isLoadingMutation = false;
-  public isLoadingDeleteMutate = false;
-  public isLoadingDelete = false;
   public newTag = '';
 
   @Input() public post: Post;
@@ -75,7 +73,7 @@ export class ListItemPostComponent {
   ) {
   }
 
-  public onUpdateTag(name: string) {
+  public onUpdateTag(name = 'スキ') {
     if (!this.authService.currentUser) {
       return;
     }
@@ -102,28 +100,6 @@ export class ListItemPostComponent {
       console.error(err);
       this.isLoadingMutation = false;
     });
-  }
-
-  public onDelete() {
-    if (!this.isLoadingDelete) {
-      this.isLoadingDelete = true;
-      return;
-    }
-
-    if (this.isLoadingDeleteMutate) {
-      return;
-    }
-
-    this.isLoadingDeleteMutate = true;
-
-    if (this.post.replyPostId) {
-      const postId$ = this.posts.deleteReplyPost(this.post.id);
-      postId$.subscribe(() => {
-        this.isLoadingDeleteMutate = false;
-      }, (err) => {
-        this.isLoadingDeleteMutate = false;
-      });
-    }
   }
 
   public onEditNewTag() {
