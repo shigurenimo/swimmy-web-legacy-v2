@@ -17,6 +17,7 @@ import { PostsService } from './services/posts.service';
 import { StorageService } from './services/storage.service';
 import { UsersService } from './services/users.service';
 import { WindowService } from './services/window.service';
+import { ZoneService } from './services/zone';
 
 const AppInitializer = {
   provide: APP_INITIALIZER,
@@ -49,6 +50,7 @@ const AppInitializer = {
     StorageService,
     UsersService,
     WindowService,
+    ZoneService,
     AppInitializer,
   ],
   bootstrap: [
