@@ -9,6 +9,8 @@
 
 p {
   margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .template-replyPostId {
@@ -26,10 +28,6 @@ p {
 
 .template-content {
   padding: 8px 0 0 0;
-
-  .text {
-    white-space: pre-wrap;
-  }
 
   .createdAt {
     padding-left: 8px;
