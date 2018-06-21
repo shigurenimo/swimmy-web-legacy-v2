@@ -9,6 +9,7 @@ import { mergeMap } from 'rxjs/operators';
 import { LOGIN_ERROR, UPDATE_DATA_ERROR, UPDATE_DATA_SUCCESS } from '../../../../constants/messages';
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 import { UsersService } from '../../../../services/users.service';
 import { DialogComponent } from '../../../mdc/components/dialog/dialog.component';
 import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.component';
@@ -106,19 +107,23 @@ export class ViewUsernameComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private usersService: UsersService,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
+  }
+
+  public get isDisabled() {
+    return !this.formGroup.get('newUsername').value;
   }
 
   public ngOnInit() {
     this.setForm();
     this.setLoginForm();
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
-  }
-
-  public get isDisabled() {
-    return !this.formGroup.get('newUsername').value;
+    const snapshot = this.activatedRoute.snapshot;
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlFromSnapshot(snapshot);
+    this.dataLayerService.pushPage();
   }
 
   public onMutate() {

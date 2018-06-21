@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 import { PostsService } from '../../../../services/posts.service';
 
 @Component({
@@ -22,7 +23,7 @@ import { PostsService } from '../../../../services/posts.service';
         <app-form-reply-new [repliedPostId]="post.id"></app-form-reply-new>
       </div>
     </ng-container>
-    
+
     <ul mdc-list>
       <ng-container *ngFor="let repliedPost of (repliedPosts$ | async)">
         <app-list-item-reply [post]='repliedPost' [isLogged]="isLogged"></app-list-item-reply>
@@ -41,19 +42,23 @@ export class ViewDetailComponent implements OnInit {
     private authService: AuthService,
     private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
-  }
-
-  public ngOnInit() {
-    const {postId} = this.activatedRoute.snapshot.params;
-
-    this.post$ = this.postsService.observePost(postId);
-    this.repliedPosts$ = this.postsService.observeRepliedPosts(postId);
-
-    this.browserService.updateSnapshot(this.activatedRoute.snapshot);
   }
 
   public get isLogged(): boolean {
     return !!this.authService.auth.currentUser;
+  }
+
+  public ngOnInit() {
+    const snapshot = this.activatedRoute.snapshot;
+    const {postId} = snapshot.params;
+
+    this.post$ = this.postsService.observePost(postId);
+    this.repliedPosts$ = this.postsService.observeRepliedPosts(postId);
+
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlTitle(`スレッド | ${postId}`);
+    this.dataLayerService.pushPage();
   }
 }

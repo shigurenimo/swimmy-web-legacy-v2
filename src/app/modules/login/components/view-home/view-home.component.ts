@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 
 @Component({
   selector: 'app-view-home',
@@ -98,8 +99,9 @@ export class ViewHomeComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
   }
 
@@ -116,7 +118,10 @@ export class ViewHomeComponent implements OnInit {
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
     });
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+    const snapshot = this.activatedRoute.snapshot;
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlFromSnapshot(snapshot);
+    this.dataLayerService.pushPage();
   }
 
   public isError(name: string): boolean {

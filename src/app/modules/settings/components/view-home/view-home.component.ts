@@ -6,6 +6,7 @@ import { mergeMap } from 'rxjs/operators';
 
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 import { DialogComponent } from '../../../mdc/components/dialog/dialog.component';
 
 @Component({
@@ -65,8 +66,9 @@ export class ViewHomeComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
   }
 
@@ -87,7 +89,11 @@ export class ViewHomeComponent implements OnInit {
       text: 'パスワード',
       secondaryText: 'ログイン時に使用するパスワードを変更する。',
     }];
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+
+    const snapshot = this.activatedRoute.snapshot;
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlFromSnapshot(snapshot);
+    this.dataLayerService.pushPage();
   }
 
   public onLogoutModal() {

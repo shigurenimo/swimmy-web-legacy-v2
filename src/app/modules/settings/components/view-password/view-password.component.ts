@@ -9,6 +9,7 @@ import { mergeMap } from 'rxjs/operators';
 import { UPDATE_DATA_SUCCESS, UPDATE_ERROR } from '../../../../constants/messages';
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 import { SnackbarComponent } from '../../../mdc/components/snackbar/snackbar.component';
 
 @Component({
@@ -75,14 +76,18 @@ export class ViewPasswordComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
   }
 
   public ngOnInit() {
     this.setFormGroup();
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+    const snapshot = this.activatedRoute.snapshot;
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlFromSnapshot(snapshot);
+    this.dataLayerService.pushPage();
   }
 
   public get isDisabled() {

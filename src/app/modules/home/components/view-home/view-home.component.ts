@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Post } from '../../../../interfaces/post';
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 import { PostsService } from '../../../../services/posts.service';
 
 @Component({
@@ -25,7 +26,7 @@ import { PostsService } from '../../../../services/posts.service';
         </ng-container>
       </ul>
     </ng-container>
-    
+
     <ng-template #loader>
       <div sw-loader></div>
     </ng-template>
@@ -38,8 +39,9 @@ export class ViewHomeComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private postsService: PostsService,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
   }
 
@@ -47,6 +49,9 @@ export class ViewHomeComponent implements OnInit {
     this.posts$ = this.postsService.observePosts((ref) => {
       return ref.limit(70).orderBy('createdAt', 'desc');
     });
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+    const snapshot = this.activatedRoute.snapshot;
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlFromSnapshot(snapshot);
+    this.dataLayerService.pushPage();
   }
 }

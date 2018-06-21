@@ -11,6 +11,7 @@ import { CoreModule } from './modules/core/core.module';
 import { AlgoliaService } from './services/algolia.service';
 import { AuthService } from './services/auth.service';
 import { BrowserService } from './services/browser.service';
+import { DataLayerService } from './services/data-layer.service';
 import { DrawerService } from './services/drawer.service';
 import { FirebaseService } from './services/firebase.service';
 import { PostsService } from './services/posts.service';
@@ -44,6 +45,7 @@ const AppInitializer = {
     AlgoliaService,
     AuthService,
     BrowserService,
+    DataLayerService,
     DrawerService,
     FirebaseService,
     PostsService,

@@ -12,6 +12,7 @@ import {
 import { User } from '../../../../interfaces/user';
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 import { FirebaseService } from '../../../../services/firebase.service';
 import { StorageService } from '../../../../services/storage.service';
 import { UsersService } from '../../../../services/users.service';
@@ -89,14 +90,18 @@ export class ViewProfileComponent implements OnInit {
     private usersService: UsersService,
     private firebaseService: FirebaseService,
     private storageService: StorageService,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
   }
 
   public ngOnInit() {
     this.initUser();
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+    const snapshot = this.activatedRoute.snapshot;
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlFromSnapshot(snapshot);
+    this.dataLayerService.pushPage();
   }
 
   public get src() {

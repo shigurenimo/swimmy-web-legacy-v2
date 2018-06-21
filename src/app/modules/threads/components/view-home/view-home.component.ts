@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/internal/Observable';
 
 import { Post } from '../../../../interfaces/post';
 import { BrowserService } from '../../../../services/browser.service';
+import { DataLayerService } from '../../../../services/data-layer.service';
 import { PostsService } from '../../../../services/posts.service';
 
 @Component({
@@ -40,15 +41,19 @@ export class ViewHomeComponent implements OnInit {
 
   constructor(
     private postsService: PostsService,
-    private browser: BrowserService,
+    private browserService: BrowserService,
     private activatedRoute: ActivatedRoute,
+    private dataLayerService: DataLayerService,
   ) {
   }
 
   public ngOnInit() {
     this.searchForm = new FormGroup({text: new FormControl()});
     this.onSearch();
-    this.browser.updateSnapshot(this.activatedRoute.snapshot);
+    const snapshot = this.activatedRoute.snapshot;
+    this.browserService.updateAppUIFromSnapshot(snapshot);
+    this.browserService.updateHtmlFromSnapshot(snapshot);
+    this.dataLayerService.pushPage();
   }
 
   public onSearch() {
