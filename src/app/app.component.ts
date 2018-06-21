@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-
 import { WindowService } from './services/window.service';
 
 @Component({

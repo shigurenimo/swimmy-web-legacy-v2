@@ -1,9 +1,9 @@
-# Node.js
-yarn-error.log
-
 # Firebase
 /public
 firebase-debug.log
+
+# Node.js
+yarn-error.log
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
