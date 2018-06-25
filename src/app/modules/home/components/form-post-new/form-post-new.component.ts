@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { pipe } from 'rxjs/internal-compatibility';
+import { filter, map, mergeMap, tap } from 'rxjs/operators';
 
 import { Photo } from '../../../../interfaces/input';
 import { FirebaseService } from '../../../../services/firebase.service';
@@ -80,12 +81,12 @@ export class FormPostNewComponent implements OnInit {
 
     const content = this.content.value;
 
-    let $mutation = null;
-
     if (!this.files.length && !content) {
       this.isLoadingMutation = false;
       return;
     }
+
+    let $mutation = null;
 
     if (this.files.length) {
       const uploadImageMap$ = this.files.map((file) => {
@@ -109,12 +110,16 @@ export class FormPostNewComponent implements OnInit {
       });
     }
 
-    $mutation.subscribe(() => {
+    const pipeline = pipe(
+      tap(() => {
+        this.isLoadingMutation = false;
+      }),
+    );
+
+    pipeline($mutation).subscribe(() => {
       this.resetFormGroup();
-      this.isLoadingMutation = false;
     }, (err) => {
       console.error(err);
-      this.isLoadingMutation = false;
     });
   }
 
@@ -132,11 +137,13 @@ export class FormPostNewComponent implements OnInit {
       return {downloadURL, photoId};
     };
 
-    return task$.pipe(
+    const pipeline = pipe(
       filter(filterDownloadURL),
       mergeMap(this.storageService.getDownloadURL),
       map(toPhoto),
     );
+
+    return pipeline(task$);
   }
 
   public ngOnInit() {

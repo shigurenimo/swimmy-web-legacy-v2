@@ -16,20 +16,20 @@ export class FirebaseService {
   constructor() {
   }
 
-  public get auth(): auth.Auth {
-    return auth();
+  public get auth() {
+    return auth;
   }
 
-  public get functions(): functions.Functions {
-    return functions();
+  public get functions() {
+    return functions;
   }
 
-  public firestore(): firestore.Firestore {
-    return firestore();
+  public get firestore() {
+    return firestore;
   }
 
-  public storage(): storage.Storage {
-    return storage();
+  public get storage() {
+    return storage;
   }
 
   public createId() {

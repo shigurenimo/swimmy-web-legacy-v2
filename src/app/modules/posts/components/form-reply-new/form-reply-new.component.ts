@@ -2,7 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { pipe } from 'rxjs/internal-compatibility';
+import { filter, map, mergeMap, tap } from 'rxjs/operators';
 
 import { Photo } from '../../../../interfaces/input';
 import { AuthService } from '../../../../services/auth.service';
@@ -69,15 +70,17 @@ export class FormReplyNewComponent implements OnInit {
 
       const uploadImages$ = combineLatest(uploadImageMap$);
 
-      const post$ = mergeMap((photos: Photo[]) => {
-        return this.posts.addReplyPost({
-          content: content,
-          photos: photos,
-          replyPostId: this.repliedPostId,
-        });
-      });
+      const pipeline = pipe(
+        mergeMap((photos: Photo[]) => {
+          return this.posts.addReplyPost({
+            content: content,
+            photos: photos,
+            replyPostId: this.repliedPostId,
+          });
+        }),
+      );
 
-      $mutation = uploadImages$.pipe(post$);
+      $mutation = pipeline(uploadImages$);
     } else {
       $mutation = this.posts.addReplyPost({
         content: content,
@@ -86,12 +89,16 @@ export class FormReplyNewComponent implements OnInit {
       });
     }
 
-    $mutation.subscribe(() => {
+    const pipeline = pipe(
+      tap(() => {
+        this.isLoadingMutation = false;
+      }),
+    );
+
+    pipeline($mutation).subscribe(() => {
       this.resetFormGroup();
-      this.isLoadingMutation = false;
     }, (err) => {
       console.error(err);
-      this.isLoadingMutation = false;
     });
   }
 

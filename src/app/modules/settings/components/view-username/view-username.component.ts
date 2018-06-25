@@ -4,7 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import * as firebase from 'firebase/app';
 import { from } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { pipe } from 'rxjs/internal-compatibility';
+import { mergeMap, tap } from 'rxjs/operators';
 
 import { LOGIN_ERROR, UPDATE_DATA_ERROR, UPDATE_DATA_SUCCESS } from '../../../../constants/messages';
 import { AuthService } from '../../../../services/auth.service';
@@ -140,28 +141,31 @@ export class ViewUsernameComponent implements OnInit {
       return;
     }
 
-    const currentUser = this.authService.currentUser;
     const {newUsername} = this.formGroup.value;
 
     const newEmail = `${newUsername}@swimmy.io`;
-    const email$ = from(currentUser.updateEmail(newEmail));
-    const user$ = mergeMap(() => {
-      return this.usersService.updateUser({
-        username: newUsername,
-      });
-    });
+    const email$ = this.authService.updateEmail(newEmail);
 
-    return email$.pipe(user$).subscribe(() => {
+    const pipeline = pipe(
+      mergeMap(() => {
+        return this.usersService.updateUser({
+          username: newUsername,
+        });
+      }),
+      tap(() => {
+        this.isLoadingMutatation = false;
+      }),
+    );
+
+    pipeline(email$).subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
       this.resetFormGroup();
-      this.isLoadingMutatation = false;
     }, (err) => {
       if (err.code === 'auth/requires-recent-login') {
         this.dialogComponent.dialog.show();
       } else {
         this.snackbarComponent.snackbar.show({message: UPDATE_DATA_ERROR});
       }
-      this.isLoadingMutatation = false;
     });
   }
 
@@ -193,28 +197,30 @@ export class ViewUsernameComponent implements OnInit {
     const email = `${username}@swimmy.io`;
     const newEmail = `${newUsername}@swimmy.io`;
 
-    const credential = firebase.auth.EmailAuthProvider.credential(email, password);
+    const credential = this.authService.auth.EmailAuthProvider.credential(email, password);
 
-    const username$ = mergeMap(() => {
-      return from(currentUser.updateEmail(newEmail));
-    });
+    const reauthenticate$ = this.authService.reauthenticateWithCredential(credential);
 
-    const credential$ = from(currentUser.reauthenticateWithCredential(credential));
+    const pipeline = pipe(
+      mergeMap(() => {
+        return from(currentUser.updateEmail(newEmail));
+      }),
+      mergeMap(() => {
+        return this.usersService.updateUser({
+          username: newUsername,
+        });
+      }),
+      tap(() => {
+        this.isLoadingLogin = false;
+      }),
+    );
 
-    const user$ = mergeMap(() => {
-      return this.usersService.updateUser({
-        username: newUsername,
-      });
-    });
-
-    credential$.pipe(username$).pipe(user$).subscribe(() => {
+    pipeline(reauthenticate$).subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
       this.dialogComponent.dialog.close();
       this.resetFormGroup();
-      this.isLoadingLogin = false;
     }, (err) => {
       this.snackbarComponent.snackbar.show({message: LOGIN_ERROR});
-      this.isLoadingLogin = false;
     });
   }
 

@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { pipe } from 'rxjs/internal-compatibility';
+import { tap } from 'rxjs/operators';
 
 import { Post } from '../../../../interfaces/post';
 import { AuthService } from '../../../../services/auth.service';
@@ -11,7 +13,7 @@ import { PostsService } from '../../../../services/posts.service';
     <ng-container *ngIf="post.photoURLs.length">
       <div class="template-photoURLs">
         <ng-container *ngFor="let photoURL of post.photoURLs">
-          <img [routerLink]="link" [src]="photoURL | resize:resize">
+          <img [routerLink]="link" [src]="photoURL | resize:'post'">
         </ng-container>
       </div>
     </ng-container>
@@ -66,29 +68,26 @@ import { PostsService } from '../../../../services/posts.service';
   styleUrls: ['list-item-post.component.scss'],
 })
 export class ListItemPostComponent {
-  public resize = 'post';
   public isEditNewTag = false;
   public isLoadingMutation = false;
-  public isDeleteMutate = false;
-  public isDelete = false;
   public newTag = '';
 
   @Input() public post: Post;
   @Input() public isLogged: boolean;
 
   constructor(
-    private posts: PostsService,
     public authService: AuthService,
+    private posts: PostsService,
   ) {
   }
 
-  public get link() {
+  public get link(): string {
     return this.post.replyPostId
       ? `/posts/${this.post.replyPostId}`
       : `/posts/${this.post.id}`;
   }
 
-  public onUpdateTag(name: string) {
+  public onUpdateTag(name: string): void {
     if (!this.authService.currentUser) {
       return;
     }
@@ -107,17 +106,20 @@ export class ListItemPostComponent {
 
     const post$ = this.posts.updatePostTag({postId: this.post.id, name});
 
-    post$.subscribe((res) => {
-      this.isEditNewTag = false;
-      this.isLoadingMutation = false;
+    const pipeline = pipe(
+      tap(() => {
+        this.isLoadingMutation = false;
+      }),
+    );
+
+    pipeline(post$).subscribe((res) => {
       this.newTag = '';
     }, (err) => {
       console.error(err);
-      this.isLoadingMutation = false;
     });
   }
 
-  public onEditNewTag() {
+  public onEditNewTag(): void {
     this.isEditNewTag = true;
   }
 }

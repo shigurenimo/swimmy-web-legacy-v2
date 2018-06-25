@@ -18,7 +18,7 @@ import { PostsService } from '../../../../services/posts.service';
         <ng-container *ngFor="let post of posts">
           <app-list-item-post
             [post]='post'
-            [isLogged]="authService.auth.currentUser"
+            [isLogged]="authService.auth().currentUser"
             type="listItem"
           >
           </app-list-item-post>
@@ -49,7 +49,9 @@ export class ViewHomeComponent implements OnInit {
     this.posts$ = this.postsService.observePosts((ref) => {
       return ref.limit(70).orderBy('createdAt', 'desc');
     });
+
     const snapshot = this.activatedRoute.snapshot;
+
     this.browserService.updateAppUIFromSnapshot(snapshot);
     this.browserService.updateHtmlFromSnapshot(snapshot);
     this.dataLayerService.pushPage();

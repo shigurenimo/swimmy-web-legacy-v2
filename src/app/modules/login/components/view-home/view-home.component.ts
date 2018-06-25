@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { pipe } from 'rxjs/internal-compatibility';
+import { from } from 'rxjs/internal/observable/from';
+import { mergeMap } from 'rxjs/operators';
 
 import { AuthService } from '../../../../services/auth.service';
 import { BrowserService } from '../../../../services/browser.service';
@@ -158,14 +161,18 @@ export class ViewHomeComponent implements OnInit {
     const password = this.password.value;
     const email = username + '@swimmy.io';
 
-    this.authService.auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        this.catchMutation();
-      })
-      .catch((err) => {
-        this.catchErrorCode(err.code);
-      });
+    const createUserWithEmailAndPassword$ = this.authService.createUserWithEmailAndPassword(email, password);
+
+    const pipeline = pipe(
+      mergeMap(() => {
+        return from(this.router.navigate(['/']));
+      }),
+    );
+
+    pipeline(createUserWithEmailAndPassword$).subscribe(() => {
+    }, err => {
+      this.catchErrorCode(err.code);
+    });
   }
 
   private mutateSignIn() {
@@ -173,18 +180,22 @@ export class ViewHomeComponent implements OnInit {
     const password = this.password.value;
     const email = username + '@swimmy.io';
 
-    this.authService.auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.catchMutation();
-      })
-      .catch((err) => {
-        if (err.code === 'auth/user-disabled') {
-          this.mutateRestore();
-        } else {
-          this.catchErrorCode(err.code);
-        }
-      });
+    const signInWithEmailAndPassword$ = this.authService.signInWithEmailAndPassword(email, password);
+
+    const pipeline = pipe(
+      mergeMap(() => {
+        return from(this.router.navigate(['/']));
+      }),
+    );
+
+    pipeline(signInWithEmailAndPassword$).subscribe(() => {
+    }, err => {
+      if (err.code === 'auth/user-disabled') {
+        this.mutateRestore();
+      } else {
+        this.catchErrorCode(err.code);
+      }
+    });
   }
 
   private mutateRestore() {
@@ -200,19 +211,19 @@ export class ViewHomeComponent implements OnInit {
         this.catchErrorCode(error);
         return;
       }
-      this.authService.auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          this.catchMutation();
-        })
-        .catch((err) => {
-          this.catchErrorCode(err.code);
-        });
-    });
-  }
 
-  private catchMutation() {
-    this.router.navigate(['/']).catch((err) => {
-      console.error(err);
+      const signInWithEmailAndPassword$ = this.authService.signInWithEmailAndPassword(email, password);
+
+      const pipeline = pipe(
+        mergeMap(() => {
+          return from(this.router.navigate(['/']));
+        }),
+      );
+
+      pipeline(signInWithEmailAndPassword$).subscribe(() => {
+      }, err => {
+        this.catchErrorCode(err.code);
+      });
     });
   }
 

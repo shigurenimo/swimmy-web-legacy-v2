@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
   }
 
   async redirect(): Promise<boolean> {
-    if (this.authService.auth.currentUser) {
+    if (this.authService.auth().currentUser) {
       return true;
     } else {
       this.router.navigate(['/login']).catch(err => {

@@ -23,7 +23,6 @@ import { UsersService } from '../../../../services/users.service';
 export class ViewDetailComponent implements OnInit {
   public user;
   public isLoading = true;
-  private params$$;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,7 +42,6 @@ export class ViewDetailComponent implements OnInit {
 
     user$.subscribe((data) => {
       this.changeUser(data);
-    }, () => {
     });
 
     this.browserService.updateAppUIFromSnapshot(snapshot);

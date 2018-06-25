@@ -4,7 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import * as firebase from 'firebase/app';
 import { from } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { pipe } from 'rxjs/internal-compatibility';
+import { mergeMap, tap } from 'rxjs/operators';
 
 import { UPDATE_DATA_SUCCESS, UPDATE_ERROR } from '../../../../constants/messages';
 import { AuthService } from '../../../../services/auth.service';
@@ -117,10 +118,11 @@ export class ViewPasswordComponent implements OnInit {
       return;
     }
 
-    const currentUser = this.authService.auth.currentUser;
     const {password} = this.formGroup.value;
 
-    from(currentUser.updatePassword(password)).subscribe(() => {
+    const updatePassword$ = this.authService.updatePassword(password);
+
+    updatePassword$.subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
       this.resetFormGroup();
     }, (err) => {
@@ -149,23 +151,27 @@ export class ViewPasswordComponent implements OnInit {
   }
 
   private login() {
-    const currentUser = this.authService.auth.currentUser;
-    const {email} = currentUser;
+    const {email} = this.authService.auth().currentUser;
     const {currentPassword, password} = this.formGroup.value;
 
-    const credential = firebase.auth.EmailAuthProvider.credential(email, currentPassword);
+    const credential = this.authService.auth.EmailAuthProvider.credential(email, currentPassword);
 
-    from(currentUser.reauthenticateWithCredential(credential)).pipe(
+    const pipeline = pipe(
       mergeMap(() => {
-        return from(currentUser.updatePassword(password));
+        return this.authService.updatePassword(password);
       }),
-    ).subscribe(() => {
+      tap(() => {
+        this.isLoadingMutatation = false;
+      }),
+    );
+
+    const reauthenticate$ = this.authService.reauthenticateWithCredential(credential);
+
+    pipeline(reauthenticate$).subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
       this.resetFormGroup();
-      this.isLoadingMutatation = false;
     }, () => {
       this.snackbarComponent.snackbar.show({message: UPDATE_ERROR});
-      this.isLoadingMutatation = false;
     });
   }
 }

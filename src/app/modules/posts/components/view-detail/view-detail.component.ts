@@ -47,7 +47,7 @@ export class ViewDetailComponent implements OnInit {
   }
 
   public get isLogged(): boolean {
-    return !!this.authService.auth.currentUser;
+    return !!this.authService.auth().currentUser;
   }
 
   public ngOnInit() {

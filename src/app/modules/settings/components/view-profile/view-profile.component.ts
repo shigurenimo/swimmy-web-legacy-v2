@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { pipe } from 'rxjs/internal-compatibility';
 import { filter, mergeMap } from 'rxjs/operators';
 
 import {
@@ -160,14 +161,16 @@ export class ViewProfileComponent implements OnInit {
       mergeMap(this.storageService.getDownloadURL),
     );
 
-    const mutation$ = mergeMap((downloadURL: string) => {
-      const photos = [{downloadURL, photoId}];
-      return this.usersService.updateUser({photos});
-    });
-
     this.snackbarComponent.snackbar.show({message: UPLOAD_LOADING});
 
-    downloadURL$.pipe(mutation$).subscribe((photoURL) => {
+    const pipeline = pipe(
+      mergeMap((downloadURL: string) => {
+        const photos = [{downloadURL, photoId}];
+        return this.usersService.updateUser({photos});
+      })
+    )
+
+    pipeline(downloadURL$).subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
     }, err => {
       console.error(err);
@@ -175,7 +178,7 @@ export class ViewProfileComponent implements OnInit {
   }
 
   private initUser(): void {
-    const user = this.authService.auth.currentUser;
+    const user = this.authService.auth().currentUser;
     this.usersService.getUser(user.uid).subscribe((userData) => {
       this.onGetUser(userData);
     });

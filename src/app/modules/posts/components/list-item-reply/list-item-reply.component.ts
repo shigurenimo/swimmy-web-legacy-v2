@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { pipe } from 'rxjs/internal-compatibility';
+import { tap } from 'rxjs/operators';
 
 import { Post } from '../../../../interfaces/post';
 import { AuthService } from '../../../../services/auth.service';
@@ -11,7 +13,7 @@ import { PostsService } from '../../../../services/posts.service';
     <ng-container *ngIf="post.photoURLs.length">
       <div class="template-photoURLs">
         <div class="item" *ngFor="let photoURL of post.photoURLs">
-          <img [src]="photoURL|resize:resize">
+          <img [src]="photoURL | resize:'post'">
         </div>
       </div>
     </ng-container>
@@ -59,7 +61,6 @@ import { PostsService } from '../../../../services/posts.service';
   styleUrls: ['list-item-reply.component.scss'],
 })
 export class ListItemReplyComponent {
-  public resize = 'post';
   public isEditNewTag = false;
   public isLoadingMutation = false;
   public newTag = '';
@@ -73,7 +74,7 @@ export class ListItemReplyComponent {
   ) {
   }
 
-  public onUpdateTag(name = 'スキ') {
+  public onUpdateTag(name: string) {
     if (!this.authService.currentUser) {
       return;
     }
@@ -92,13 +93,17 @@ export class ListItemReplyComponent {
 
     const post$ = this.posts.updatePostTag({postId: this.post.id, name});
 
-    post$.subscribe((res) => {
-      this.isEditNewTag = false;
-      this.isLoadingMutation = false;
+    const pipeline = pipe(
+      tap(() => {
+        this.isEditNewTag = false;
+        this.isLoadingMutation = false;
+      }),
+    );
+
+    pipeline(post$).subscribe((res) => {
       this.newTag = '';
     }, (err) => {
       console.error(err);
-      this.isLoadingMutation = false;
     });
   }
 

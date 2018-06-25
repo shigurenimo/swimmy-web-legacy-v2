@@ -81,25 +81,25 @@ export class PostsService {
   }
 
   public deleteReplyPost(id: string) {
-    const func = this.firebaseService.functions.httpsCallable('deletePost');
+    const func = this.firebaseService.functions().httpsCallable('deletePost');
 
     return from(func({id}));
   }
 
   public addPost(input: AddPostInput) {
-    const func = this.firebaseService.functions.httpsCallable('addPost');
+    const func = this.firebaseService.functions().httpsCallable('addPost');
 
     return from(func(input));
   }
 
   public addReplyPost(input: AddPostInput) {
-    const func = this.firebaseService.functions.httpsCallable('addPost');
+    const func = this.firebaseService.functions().httpsCallable('addPost');
 
     return from(func(input));
   }
 
   public updatePostTag(input: UpdatePostTagInput) {
-    const func = this.firebaseService.functions.httpsCallable('updatePostTag');
+    const func = this.firebaseService.functions().httpsCallable('updatePostTag');
 
     return from(func(input));
   }

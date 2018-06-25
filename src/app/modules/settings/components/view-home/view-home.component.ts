@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { pipe } from 'rxjs/internal-compatibility';
 
 import { from } from 'rxjs/internal/observable/from';
 import { mergeMap } from 'rxjs/operators';
@@ -107,11 +108,13 @@ export class ViewHomeComponent implements OnInit {
   public onLogout() {
     this.dialogComponent.dialog.close();
 
-    this.authService.signOut().pipe(
+    const pipeline = pipe(
       mergeMap(() => {
         return from(this.router.navigate(['/']));
       }),
-    ).subscribe(() => {
+    );
+
+    pipeline(this.authService.signOut()).subscribe(() => {
     }, (err) => {
       console.error(err);
     });

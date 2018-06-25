@@ -39,7 +39,7 @@ export class UsersService {
   }
 
   public updateUser(input: UpdateUserInput) {
-    const func = this.firebaseService.functions.httpsCallable('updateUser');
+    const func = this.firebaseService.functions().httpsCallable('updateUser');
 
     return from(func(input));
   }
