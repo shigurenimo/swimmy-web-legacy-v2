@@ -86,7 +86,48 @@ export class FormPostNewComponent implements OnInit {
       return;
     }
 
-    let $mutation = null;
+    let addPost$ = this.addPost();
+
+    const pipeline = pipe(
+      tap(() => {
+        this.isLoadingMutation = false;
+      }),
+    );
+
+    pipeline(addPost$).subscribe(() => {
+      this.resetFormGroup();
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  public getDownloadURL(file): Observable<Photo> {
+    const photoId = this.firebaseService.createId();
+    const objectId = `posts/${photoId}`;
+
+    const task$ = this.storageService.upload(objectId, file);
+
+    const toPhoto = (downloadURL: string): Photo => {
+      return { downloadURL, photoId };
+    };
+
+    const pipeline = pipe(
+      filter(this.storageService.filterDownloadURL),
+      mergeMap(this.storageService.getDownloadURL),
+      map(toPhoto),
+    );
+
+    return pipeline(task$);
+  }
+
+  public ngOnInit() {
+    this.formGroup = this.formBuilder.group({
+      content: ['', [Validators.maxLength(200)]],
+    });
+  }
+
+  private addPost() {
+    const content = this.content.value;
 
     if (this.files.length) {
       const uploadImageMap$ = this.files.map((file) => {
@@ -101,59 +142,18 @@ export class FormPostNewComponent implements OnInit {
         replyPostId: null,
       });
 
-      $mutation = uploadImages$.pipe(mergeMap(addPost));
+      return mergeMap(addPost)(uploadImages$);
     } else {
-      $mutation = this.posts.addPost({
+      return this.posts.addPost({
         content: content,
         photos: [],
         replyPostId: null,
       });
     }
-
-    const pipeline = pipe(
-      tap(() => {
-        this.isLoadingMutation = false;
-      }),
-    );
-
-    pipeline($mutation).subscribe(() => {
-      this.resetFormGroup();
-    }, (err) => {
-      console.error(err);
-    });
-  }
-
-  public getDownloadURL(file): Observable<Photo> {
-    const photoId = this.firebaseService.createId();
-    const objectId = `posts/${photoId}`;
-
-    const task$ = this.storageService.upload(objectId, file);
-
-    const filterDownloadURL = (snapshot: any): boolean => {
-      return snapshot.bytesTransferred === snapshot.totalBytes;
-    };
-
-    const toPhoto = (downloadURL: string): Photo => {
-      return {downloadURL, photoId};
-    };
-
-    const pipeline = pipe(
-      filter(filterDownloadURL),
-      mergeMap(this.storageService.getDownloadURL),
-      map(toPhoto),
-    );
-
-    return pipeline(task$);
-  }
-
-  public ngOnInit() {
-    this.formGroup = this.formBuilder.group({
-      content: ['', [Validators.maxLength(200)]],
-    });
   }
 
   private resetFormGroup() {
-    this.formGroup.reset({content: ''});
+    this.formGroup.reset({ content: '' });
   }
 
   private markAsDirty() {

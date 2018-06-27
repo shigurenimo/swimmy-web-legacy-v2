@@ -23,7 +23,7 @@ import { ZoneService } from './services/zone';
 const AppInitializer = {
   provide: APP_INITIALIZER,
   useFactory: (authService: AuthService) => () => {
-    return authService.authState().pipe(take((1))).toPromise();
+    return take(1)(authService.authState()).toPromise();
   },
   deps: [AuthService],
   multi: true,

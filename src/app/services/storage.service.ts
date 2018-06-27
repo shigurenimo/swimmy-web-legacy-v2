@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { UploadTaskSnapshot } from '@firebase/storage-types';
 
-import { storage } from 'firebase/app';
-import { combineLatest, from, Observable } from 'rxjs';
+import { UploadTaskSnapshot } from '@firebase/storage-types';
+import { from, Observable } from 'rxjs';
 
 import { FirebaseService, fromUploadTask } from './firebase.service';
 
@@ -30,30 +29,6 @@ export class StorageService {
   public filterDownloadURL(snapshot: UploadTaskSnapshot): boolean {
     return snapshot.bytesTransferred === snapshot.totalBytes;
   };
-
-  public watchUploadTask(uploadTask): Observable<any> {
-    return new Observable(({next, error, complete}) => {
-      const {STATE_CHANGED} = storage.TaskEvent;
-
-      uploadTask.on(STATE_CHANGED, next, error, complete);
-
-      return {unsubscribe: uploadTask.cancel};
-    });
-  }
-
-  public watchUploadTasks(uploadTasks): Observable<any[]> {
-    const uploadTasks$ = uploadTasks.map((uploadTask) => {
-      return this.watchUploadTask(uploadTask);
-    });
-
-    return combineLatest(uploadTasks$);
-  }
-
-  public put(ref, data: any, metadata?): Observable<any> {
-    const uploadTask = ref.put(data, metadata);
-
-    return this.watchUploadTask(uploadTask);
-  }
 
   public getProgress(snapshot) {
     return (snapshot.bytesTransferred / snapshot.totalBytes) * 100;

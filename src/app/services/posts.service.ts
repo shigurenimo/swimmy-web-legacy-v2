@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { from } from 'rxjs';
+import { pipe } from 'rxjs/internal-compatibility';
 import { map } from 'rxjs/operators';
 
 import { toArray } from '../helpers/toArray';
@@ -21,7 +22,7 @@ export class PostsService {
   public observePost(postId: string) {
     const ref = this.firebaseService.firestore().doc(`posts-as-anonymous/${postId}`);
 
-    const observable = fromQueryDocRef(ref).pipe(map(this.fixPost));
+    const observable = map(this.fixPost)(fromQueryDocRef(ref));
 
     return this.zoneService.runOutsideAngular(observable);
   }
@@ -31,7 +32,7 @@ export class PostsService {
 
     const query = queryFn(ref);
 
-    const observable = fromQueryRef(query).pipe(map(this.fixPosts));
+    const observable = map(this.fixPosts)(fromQueryRef(query));
 
     return this.zoneService.runOutsideAngular(observable);
   }
@@ -39,7 +40,7 @@ export class PostsService {
   public getPostsAsThread(query: string) {
     const promise = this.algoliaService.postsAsThread.search(query);
 
-    const observable = from(promise).pipe(map(res => res.hits));
+    const observable = map((res: any) => res.hits)(from(promise));
 
     return this.zoneService.runOutsideAngular(observable);
   }
@@ -49,7 +50,7 @@ export class PostsService {
 
     const query = queryFn(ref);
 
-    const observable = fromQueryRef(query).pipe(map(this.fixPosts));
+    const observable = map(this.fixPosts)(fromQueryRef(query));
 
     return this.zoneService.runOutsideAngular(observable);
   }
@@ -59,7 +60,7 @@ export class PostsService {
 
     const query = queryFn(ref);
 
-    const observable = fromQueryRef(query).pipe(map(this.fixPosts));
+    const observable = map(this.fixPosts)(fromQueryRef(query));
 
     return this.zoneService.runOutsideAngular(observable);
   }
@@ -75,7 +76,7 @@ export class PostsService {
 
     const sort = posts => posts.sort((a, b) => a.createdAt - b.createdAt);
 
-    const observable = fromQueryRef(query).pipe(map(this.fixPosts), map(sort));
+    const observable = pipe(map(this.fixPosts), map(sort))(fromQueryRef(query));
 
     return this.zoneService.runOutsideAngular(observable);
   }

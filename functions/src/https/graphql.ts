@@ -14,8 +14,8 @@ import { failureResponse } from '../utils/failureResponse';
 
 const typeDefsFile = join(__dirname, '..', '..', 'schema.graphqls');
 const typeDefs = readFileSync(typeDefsFile, 'utf-8');
-const resolverValidationOptions = {requireResolversForResolveType: false};
-const schema = makeExecutableSchema({typeDefs, resolvers, resolverValidationOptions});
+const resolverValidationOptions = { requireResolversForResolveType: false };
+const schema = makeExecutableSchema({ typeDefs, resolvers, resolverValidationOptions });
 
 interface Headers extends IncomingHttpHeaders {
   authorization: string
@@ -25,7 +25,7 @@ const handler: ExpressGraphQLOptionsFunction = async (
   request: express.Request,
   response: express.Response,
 ) => {
-  const {authorization} = request.headers as Headers;
+  const { authorization } = request.headers as Headers;
 
   if (authorization) {
     try {
@@ -37,14 +37,14 @@ const handler: ExpressGraphQLOptionsFunction = async (
         uid: decodedToken.uid,
         email: decodedToken.email || '',
       };
-      return {schema, context: {user}};
+      return { schema, context: { user } };
     } catch (err) {
       failureResponse(response, err);
     }
   }
 
-  return {schema, context: {}};
-}
+  return { schema, context: {} };
+};
 
 const graphql = graphqlExpress(handler);
 

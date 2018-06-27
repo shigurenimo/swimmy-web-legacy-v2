@@ -17,9 +17,7 @@ export class UsersService {
   public getUser(uid) {
     const ref = this.firebaseService.firestore().doc(`users/${uid}`);
 
-    return fromQueryDocRef(ref).pipe(
-      map(this.toUserFromQuery),
-    );
+    return map(this.toUserFromQuery)(fromQueryDocRef(ref));
   }
 
   public getUserByUsername(username: string) {
@@ -33,9 +31,7 @@ export class UsersService {
 
     const query = queryFn(ref);
 
-    return fromQueryRef(query).pipe(
-      map((docs) => docs ? docs[0] : null),
-    );
+    return map((docs) => docs ? docs[0] : null)(fromQueryRef(query));
   }
 
   public updateUser(input: UpdateUserInput) {

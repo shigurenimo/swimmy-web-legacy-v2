@@ -54,7 +54,7 @@ export class FormReplyNewComponent implements OnInit {
 
     this.markAsDirty();
 
-    const {content} = this.formGroup.value;
+    const { content } = this.formGroup.value;
 
     let $mutation = null;
 
@@ -108,13 +108,15 @@ export class FormReplyNewComponent implements OnInit {
     const filePath = `posts/${photoId}`;
     const task$ = this.storage.upload(filePath, originFileObj);
 
-    return task$.pipe(
+    const pipeline = pipe(
       filter(this.storage.filterDownloadURL),
       mergeMap(this.storage.getDownloadURL),
       map((downloadURL) => {
-        return {downloadURL, photoId};
+        return { downloadURL, photoId };
       }),
     );
+
+    return pipeline(task$);
   }
 
   public ngOnInit() {
@@ -124,7 +126,7 @@ export class FormReplyNewComponent implements OnInit {
   }
 
   private resetFormGroup() {
-    this.formGroup.reset({content: ''});
+    this.formGroup.reset({ content: '' });
     this.files = [];
   }
 

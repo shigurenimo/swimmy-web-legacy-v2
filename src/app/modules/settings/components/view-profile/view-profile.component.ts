@@ -156,21 +156,18 @@ export class ViewProfileComponent implements OnInit {
       return snapshot.bytesTransferred === snapshot.totalBytes;
     };
 
-    const downloadURL$ = task$.pipe(
-      filter(filterDownloadURL),
-      mergeMap(this.storageService.getDownloadURL),
-    );
-
     this.snackbarComponent.snackbar.show({message: UPLOAD_LOADING});
 
     const pipeline = pipe(
+      filter(filterDownloadURL),
+      mergeMap(this.storageService.getDownloadURL),
       mergeMap((downloadURL: string) => {
         const photos = [{downloadURL, photoId}];
         return this.usersService.updateUser({photos});
       })
     )
 
-    pipeline(downloadURL$).subscribe(() => {
+    pipeline(task$).subscribe(() => {
       this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
     }, err => {
       console.error(err);
