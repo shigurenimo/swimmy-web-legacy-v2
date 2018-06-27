@@ -1,21 +1,21 @@
 export const Post = {
-  id (root) {
+  id(root) {
     return root.id;
   },
-  createdAt (root) {
+  createdAt(root) {
     return new Date(root.createdAt);
   },
-  ownerId (root, args, context) {
+  ownerId(root, args, context) {
     if (context && context.user) {
       return context.user.uid === root.ownerId ? root.ownerId : null;
     } else {
       return null;
     }
   },
-  photoURL (root) {
+  photoURL(root) {
     return root.photoURL || null;
   },
-  tags (root) {
+  tags(root) {
     return root.tags.filter((tag) => {
       return tag.count;
     }).map((tag) => {
@@ -24,11 +24,11 @@ export const Post = {
         postId: root.id,
         tagId: tag.tagId,
         name: tag.name,
-        count: tag.count
+        count: tag.count,
       };
     });
   },
-  updatedAt (root) {
+  updatedAt(root) {
     return new Date(root.updatedAt);
-  }
+  },
 };

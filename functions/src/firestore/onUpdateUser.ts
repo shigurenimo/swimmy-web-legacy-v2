@@ -9,7 +9,7 @@ import { isUnchangedOwner } from '../utils/isUnchangedOwner';
 const document = firestore.document('users/{uid}');
 
 const handler = async (snapshot: Change<DocumentSnapshot>, context: EventContext): Promise<void> => {
-  const {uid} = context.params;
+  const { uid } = context.params;
   const user = snapshot.after.data() as User;
   const userBefore = snapshot.before.data() as User;
 

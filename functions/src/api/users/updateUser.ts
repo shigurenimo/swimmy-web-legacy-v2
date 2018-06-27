@@ -14,5 +14,5 @@ export const updateUser = async (uid: string, newUser: UserForUpdate): Promise<v
 
   console.log('set', documentPath, newUser);
 
-  await documentReference.set(newUser, {merge: true});
+  await documentReference.set(newUser, { merge: true });
 };

@@ -14,6 +14,6 @@ export = document.onCreate(async (user) => {
 
   await Promise.all([
     updateAuthDisplayName(user.uid, user),
-    setUser(user.uid, newUser)
+    setUser(user.uid, newUser),
   ]);
 })

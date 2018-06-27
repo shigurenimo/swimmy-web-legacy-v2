@@ -130,11 +130,11 @@ export class FormPostNewComponent implements OnInit {
     const content = this.content.value;
 
     if (this.files.length) {
-      const uploadImageMap$ = this.files.map((file) => {
+      const uploadImageMap = this.files.map((file) => {
         return this.getDownloadURL(file);
       });
 
-      const uploadImages$ = combineLatest(uploadImageMap$);
+      const uploadImages$ = combineLatest(uploadImageMap);
 
       const addPost = (photos: Photo[]) => this.posts.addPost({
         content: content,

@@ -11,7 +11,7 @@ interface Data {
 }
 
 export = https.onCall(async (data: Data, context: CallableContext) => {
-  const {username, password} = data;
+  const { username, password } = data;
 
   const usersRef = firestore().collection(USERS);
 
@@ -20,13 +20,13 @@ export = https.onCall(async (data: Data, context: CallableContext) => {
   const snapshot = snapshots.docs[0];
 
   if (!snapshot) {
-    return {valid: false, error: 'auth/user-disabled'};
+    return { valid: false, error: 'auth/user-disabled' };
   }
 
   const user = snapshot.data();
 
   if (!user.bycript) {
-    return {valid: false, error: 'auth/user-disabled'};
+    return { valid: false, error: 'auth/user-disabled' };
   }
 
   const sha512 = crypto.createHash('sha256');
@@ -38,12 +38,12 @@ export = https.onCall(async (data: Data, context: CallableContext) => {
   const result = await compare(hash, user.bycript);
 
   if (!result) {
-    return {valid: false, error: 'auth/wrong-password'};
+    return { valid: false, error: 'auth/wrong-password' };
   }
 
-  await auth().updateUser(user.uid, {password, disabled: false});
+  await auth().updateUser(user.uid, { password, disabled: false });
 
-  return {valid: true, error: null};
+  return { valid: true, error: null };
 })
 
 const compare = (hash, bcryptHash) => {

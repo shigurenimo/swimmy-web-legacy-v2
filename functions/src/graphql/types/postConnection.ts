@@ -1,8 +1,8 @@
 export const PostConnection = {
-  nodes (root) {
+  nodes(root) {
     return root.nodes;
   },
-  totalCount (root) {
+  totalCount(root) {
     return root.nodes.length;
-  }
+  },
 };

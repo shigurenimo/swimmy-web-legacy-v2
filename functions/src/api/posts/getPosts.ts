@@ -14,10 +14,10 @@ export const getPosts = async (docsQuery: PostDocsQuery): Promise<Post[]> => {
     limit = 15,
     orderBy = {
       direction: 'DESC',
-      field: 'createdAt'
+      field: 'createdAt',
     },
     type,
-    startAfter
+    startAfter,
   } = docsQuery;
 
   let ref = firestore().collection(POSTS) as any;
@@ -57,7 +57,7 @@ export const getPosts = async (docsQuery: PostDocsQuery): Promise<Post[]> => {
       const tag = data.tags[tagId];
       data.tags[tagId] = {
         name: tag.name,
-        count: tag.count
+        count: tag.count,
       };
     });
 

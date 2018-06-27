@@ -1,38 +1,38 @@
 export const User = {
-  id (root) {
+  id(root) {
     return root.id;
   },
-  createdAt (root) {
+  createdAt(root) {
     return root.createdAt;
   },
-  description (root) {
+  description(root) {
     return root.description;
   },
-  displayName (root) {
+  displayName(root) {
     return root.displayName;
   },
-  followeeCount (root) {
+  followeeCount(root) {
     return root.followeeCount;
   },
-  followerCount (root) {
+  followerCount(root) {
     return root.followerCount;
   },
-  headerPhotoURL (root) {
+  headerPhotoURL(root) {
     return root.headerPhotoURL;
   },
-  links (root) {
+  links(root) {
     return root.links;
   },
-  photoURL (root) {
+  photoURL(root) {
     return root.photoURL;
   },
-  postCount (root) {
+  postCount(root) {
     return root.postCount;
   },
-  uid (root) {
+  uid(root) {
     return root.id;
   },
-  updatedAt (root) {
+  updatedAt(root) {
     return root.updatedAt;
-  }
+  },
 };

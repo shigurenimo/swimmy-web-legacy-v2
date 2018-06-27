@@ -29,7 +29,7 @@ export = https.onCall(async (data: Data, context: CallableContext) => {
   const photoURLs = {};
 
   for (const photo of data.photos) {
-    const {photoId, downloadURL} = photo;
+    const { photoId, downloadURL } = photo;
     console.log(photoId, downloadURL);
     const photoObject = await getPhotoURL(USERS, photoId, downloadURL);
     await setImage(photoId, photoObject);
@@ -52,5 +52,5 @@ export = https.onCall(async (data: Data, context: CallableContext) => {
 
   await updateUser(owner.uid, newUser);
 
-  return {owner};
+  return { owner };
 });

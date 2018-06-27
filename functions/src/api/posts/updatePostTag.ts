@@ -83,7 +83,7 @@ export const updatePostTag = async (input: Input, user: Owner): Promise<void> =>
           delete postTags[tagId];
         }
 
-        t.update(userPostTagsRef, {[tagId]: firestore.FieldValue.delete()});
+        t.update(userPostTagsRef, { [tagId]: firestore.FieldValue.delete() });
       }
 
       // ユーザが持っていない
@@ -91,19 +91,19 @@ export const updatePostTag = async (input: Input, user: Owner): Promise<void> =>
         postTag.count += 1;
         postTags[tagId] = postTag;
 
-        t.set(userPostTagsRef, {[tagId]: {createdAt: createdAt}}, {merge: true});
+        t.set(userPostTagsRef, { [tagId]: { createdAt: createdAt } }, { merge: true });
       }
 
-      t.update(postRef, {tags: postTags});
+      t.update(postRef, { tags: postTags });
     }
 
     // Postに同じ名前のタグが存在しない
     if (!postTagExists) {
-      t.set(userPostTagsRef, {[tagId]: {createdAt: createdAt}}, {merge: true});
+      t.set(userPostTagsRef, { [tagId]: { createdAt: createdAt } }, { merge: true });
 
       postTags[tagId] = postTag;
 
-      t.update(postRef, {tags: postTags});
+      t.update(postRef, { tags: postTags });
     }
 
     // タグが存在する
@@ -115,7 +115,7 @@ export const updatePostTag = async (input: Input, user: Owner): Promise<void> =>
       if (count < 1) {
         t.delete(tagRef);
       } else {
-        t.update(tagRef, {count: count, updatedAt: createdAt});
+        t.update(tagRef, { count: count, updatedAt: createdAt });
       }
     }
 

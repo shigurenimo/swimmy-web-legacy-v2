@@ -4,27 +4,27 @@ import { getUser } from '../../api/users/getUser';
 import { getUserByUsername } from '../../api/users/getUserByUsername';
 
 export const Query = {
-  tag (root, { id }) {
+  tag(root, { id }) {
     return getTag(id);
   },
-  tags (root) {
+  tags(root) {
     return getTags({ limit: 40 });
   },
-  hello () {
+  hello() {
     return {
-      hello: 'hello!'
+      hello: 'hello!',
     };
   },
-  user (root, { id, username }) {
+  user(root, { id, username }) {
     if (username) {
       return getUserByUsername(username);
     } else {
       return getUser(id);
     }
   },
-  viewer (root, args, context) {
+  viewer(root, args, context) {
     return {
-      user: context.user
+      user: context.user,
     };
-  }
+  },
 };

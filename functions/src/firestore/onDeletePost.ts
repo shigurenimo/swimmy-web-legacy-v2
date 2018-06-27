@@ -22,17 +22,17 @@ export = document.onDelete(async (snapshot, context) => {
     isPostAsPhoto(post) &&
     deletePostAsPhoto(postId),
     isPostAsThread(post) &&
-    deletePostAsThread(postId)
+    deletePostAsThread(postId),
   ]);
 
   await Promise.all([
     deleteTags(post.tags),
     post.replyPostId &&
-    updatePostRepliedPostCount(post.replyPostId, -1)
+    updatePostRepliedPostCount(post.replyPostId, -1),
   ]);
 
   await Promise.all([
     post.ownerId &&
-    deleteUserPost(post.ownerId, postId)
+    deleteUserPost(post.ownerId, postId),
   ]);
 })

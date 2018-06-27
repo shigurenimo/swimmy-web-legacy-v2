@@ -1,9 +1,9 @@
 export const config = {
   service: {
-    images: null
+    images: null,
   },
   algolia: {
     appId: null,
-    key: null
-  }
+    key: null,
+  },
 };

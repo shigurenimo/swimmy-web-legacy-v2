@@ -28,7 +28,7 @@ export = https.onCall(async (data: Data, context: CallableContext) => {
   const photoURLs = {};
 
   for (const photo of data.photos) {
-    const {photoId, downloadURL} = photo;
+    const { photoId, downloadURL } = photo;
     const photoObject = await getPhotoURL(POSTS, photoId, downloadURL);
     await setImage(photoId, photoObject);
     photoURLs[photoId] = photoObject;

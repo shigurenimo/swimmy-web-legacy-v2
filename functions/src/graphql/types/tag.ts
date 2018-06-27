@@ -1,17 +1,17 @@
 export const Tag = {
-  id (root) {
+  id(root) {
     return root.id;
   },
-  count (root) {
+  count(root) {
     return root.count;
   },
-  createdAt (root) {
+  createdAt(root) {
     return root.createdAt;
   },
-  name (root) {
+  name(root) {
     return root.name;
   },
-  updatedAt (root) {
+  updatedAt(root) {
     return root.updatedAt;
-  }
+  },
 };

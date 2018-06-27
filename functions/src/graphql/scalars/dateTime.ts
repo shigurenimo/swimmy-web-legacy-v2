@@ -3,18 +3,18 @@ import { Kind } from 'graphql/language';
 
 export const DateTime = new GraphQLScalarType({
   name: 'DateTime',
-  serialize (value) {
+  serialize(value) {
     if (typeof value === 'object') {
       return value.toJSON();
     }
     return value;
   },
-  parseValue (value) {
+  parseValue(value) {
     return parseDate(value);
   },
-  parseLiteral (ast) {
+  parseLiteral(ast) {
     return ast.kind === Kind.STRING ? parseDate(ast.value) : null;
-  }
+  },
 });
 
 const parseDate = (str) => {

@@ -12,7 +12,7 @@ interface Input {
 export const createUpdateUser = (input: Input): Promise<UserForUpdate> => {
   const updatedAt = new Date();
 
-  const newUser = {updatedAt} as any;
+  const newUser = { updatedAt } as any;
 
   if (input.description) {
     newUser.description = input.description;

@@ -11,5 +11,5 @@ export = https.onCall((data, context) => {
 
   console.log(owner);
 
-  return {owner};
+  return { owner };
 });

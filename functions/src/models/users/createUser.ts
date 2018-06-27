@@ -9,7 +9,7 @@ export const createUser = (userRecord: auth.UserRecord): User => {
   const uid = userRecord.uid;
 
   const input = {
-    displayName: userRecord.email.match(/^[^@]+/)[0]
+    displayName: userRecord.email.match(/^[^@]+/)[0],
   } as any;
 
   const createdAt = new Date();
@@ -28,6 +28,6 @@ export const createUser = (userRecord: auth.UserRecord): User => {
     photoURL: '',
     photoURLs: {},
     postCount: 0,
-    updatedAt: createdAt
+    updatedAt: createdAt,
   };
 };

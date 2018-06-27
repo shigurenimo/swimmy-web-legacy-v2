@@ -21,7 +21,7 @@ export const deleteTag = async (tag: Tag): Promise<void> => {
 
     const newTag = {
       name: tag.name,
-      count: Number(data.count || 0) - 1
+      count: Number(data.count || 0) - 1,
     };
 
     t.set(ref, newTag, { merge: true });

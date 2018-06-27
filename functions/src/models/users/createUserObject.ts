@@ -11,6 +11,6 @@ export const createUserObject = (objectID, root) => {
     photoURL: root.photoURL,
     postCount: root.postCount,
     updatedAt: root.updatedAt / 1,
-    username: root.username
+    username: root.username,
   };
 };

@@ -18,8 +18,8 @@ export const deletePhotoURL = async (objectId: string): Promise<void> => {
     method: 'DELETE',
     body: JSON.stringify({
       bucketID: `${projectId}.appspot.com`,
-      objectID: objectId
+      objectID: objectId,
     }),
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   });
 };

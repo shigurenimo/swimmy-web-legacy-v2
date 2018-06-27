@@ -1,4 +1,4 @@
 export const TagOrderField = {
   UPDATED_AT: 'updatedAt',
-  CREATED_AT: 'createdAt'
+  CREATED_AT: 'createdAt',
 };

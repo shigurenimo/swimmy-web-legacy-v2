@@ -27,5 +27,5 @@ export const resolvers = {
   PostTag,
   Tag,
   Hello,
-  User
+  User,
 };

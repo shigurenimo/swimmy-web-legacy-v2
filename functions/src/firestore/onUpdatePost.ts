@@ -27,12 +27,12 @@ export = document.onUpdate(async (change, context) => {
       : deletePostAsPhoto(postId),
     isPostAsThread(post)
       ? setPostAsThread(postId, publicPost)
-      : deletePostAsThread(postId)
+      : deletePostAsThread(postId),
   ]);
 
   await Promise.all([
     post.ownerId &&
-    setUserPost(post.ownerId, postId, post)
+    setUserPost(post.ownerId, postId, post),
   ]);
 
   // await updatePostObject(postId, post);

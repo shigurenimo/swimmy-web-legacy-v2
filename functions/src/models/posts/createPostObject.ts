@@ -22,9 +22,9 @@ export const createPostObject = (objectID: string, root: Post): PostObject => {
         id: `${objectID}-${tagId}`,
         tagId: tagId,
         name: tag.name,
-        count: tag.count
+        count: tag.count,
       };
     }),
-    updatedAt: root.updatedAt as any / 1
+    updatedAt: root.updatedAt as any / 1,
   };
 };

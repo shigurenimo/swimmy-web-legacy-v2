@@ -36,7 +36,7 @@ export const getPhotoURL = async (
     return simple;
   }
 
-  const {projectId} = JSON.parse(process.env.FIREBASE_CONFIG);
+  const { projectId } = JSON.parse(process.env.FIREBASE_CONFIG);
 
   const res = await fetch(config.service.images, {
     method: 'POST',
@@ -44,14 +44,14 @@ export const getPhotoURL = async (
       bucketID: `${projectId}.appspot.com`,
       objectID: objectId,
     }),
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
   });
 
   if (!res.ok) {
     return simple;
   }
 
-  const {data} = await res.json();
+  const { data } = await res.json();
 
   return {
     objectId: objectId,

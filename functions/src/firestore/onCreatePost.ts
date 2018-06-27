@@ -17,13 +17,13 @@ export = document.onCreate(async (snapshot, context) => {
     post.ownerId &&
     setUserPost(post.ownerId, postId, post),
     post.replyPostId &&
-    updatePostRepliedPostCount(post.replyPostId)
+    updatePostRepliedPostCount(post.replyPostId),
   ]);
 
   const anonymousPost = createPostAsAnonymous(post);
 
   await Promise.all([
     isPostAsPhoto(post) &&
-    setPostAsPhoto(postId, anonymousPost)
+    setPostAsPhoto(postId, anonymousPost),
   ]);
 })

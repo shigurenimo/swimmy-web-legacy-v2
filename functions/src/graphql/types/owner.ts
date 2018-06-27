@@ -1,5 +1,5 @@
 export const Owner = {
-  id (root) {
+  id(root) {
     return root.uid;
-  }
+  },
 };
