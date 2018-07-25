@@ -136,7 +136,7 @@ export class FormPostNewComponent implements OnInit {
 
       const uploadImages$ = combineLatest(uploadImageMap);
 
-      const addPost = (photos: Photo[]) => this.posts.addPost({
+      const addPost = (photos: Photo[]) => this.posts.createPost({
         content: content,
         photos: photos,
         replyPostId: null,
@@ -144,7 +144,7 @@ export class FormPostNewComponent implements OnInit {
 
       return mergeMap(addPost)(uploadImages$);
     } else {
-      return this.posts.addPost({
+      return this.posts.createPost({
         content: content,
         photos: [],
         replyPostId: null,

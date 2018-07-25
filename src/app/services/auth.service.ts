@@ -48,8 +48,8 @@ export class AuthService {
     return from(this.firebaseService.auth().currentUser.updatePassword(password));
   }
 
-  public reauthenticateWithCredential (credential) {
-    return from(this.firebaseService.auth().currentUser.reauthenticateWithCredential(credential))
+  public reauthenticateWithCredential(credential) {
+    return from(this.firebaseService.auth().currentUser.reauthenticateWithCredential(credential));
   }
 
   public signOut() {
@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   public updateEmail(newEmail: string) {
-    return from(this.firebaseService.auth().currentUser.updateEmail(newEmail))
+    return from(this.firebaseService.auth().currentUser.updateEmail(newEmail));
   }
 
   public unlink(providerId: string) {

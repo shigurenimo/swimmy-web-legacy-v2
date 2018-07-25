@@ -87,14 +87,14 @@ export class PostsService {
     return from(func({id}));
   }
 
-  public addPost(input: AddPostInput) {
-    const func = this.firebaseService.functions().httpsCallable('addPost');
+  public createPost(input: AddPostInput) {
+    const func = this.firebaseService.functions().httpsCallable('createPost');
 
     return from(func(input));
   }
 
-  public addReplyPost(input: AddPostInput) {
-    const func = this.firebaseService.functions().httpsCallable('addPost');
+  public createReplyPost(input: AddPostInput) {
+    const func = this.firebaseService.functions().httpsCallable('createPost');
 
     return from(func(input));
   }

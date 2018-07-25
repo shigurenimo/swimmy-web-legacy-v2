@@ -64,8 +64,8 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'hello') {
   exports.hello = require('./lib/https/hello')
 }
 
-if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
-  exports.addPost = require('./lib/https/addPost')
+if (!FUNCTION_NAME || FUNCTION_NAME === 'createPost') {
+  exports.createPost = require('./lib/https/createPost')
 }
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
@@ -74,10 +74,6 @@ if (!FUNCTION_NAME || FUNCTION_NAME === 'graphql') {
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'updatePostTag') {
   exports.updatePostTag = require('./lib/https/updatePostTag')
-}
-
-if (!FUNCTION_NAME || FUNCTION_NAME === 'addPost') {
-  exports.addPost = require('./lib/https/addPost')
 }
 
 if (!FUNCTION_NAME || FUNCTION_NAME === 'updateUser') {

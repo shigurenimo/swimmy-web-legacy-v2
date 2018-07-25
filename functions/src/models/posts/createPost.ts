@@ -12,7 +12,7 @@ interface Input {
 export const createPost = async (
   postId: string,
   input: Input,
-  owner: Owner,
+  owner: Owner | null,
 ): Promise<Post> => {
   const createdAt = new Date();
 

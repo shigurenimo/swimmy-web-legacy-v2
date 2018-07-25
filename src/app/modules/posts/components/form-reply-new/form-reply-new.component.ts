@@ -70,9 +70,9 @@ export class FormReplyNewComponent implements OnInit {
 
       const uploadImages$ = combineLatest(uploadImageMap$);
 
-      const pipeline = pipe(
+      const pipeline_ = pipe(
         mergeMap((photos: Photo[]) => {
-          return this.posts.addReplyPost({
+          return this.posts.createReplyPost({
             content: content,
             photos: photos,
             replyPostId: this.repliedPostId,
@@ -80,9 +80,9 @@ export class FormReplyNewComponent implements OnInit {
         }),
       );
 
-      $mutation = pipeline(uploadImages$);
+      $mutation = pipeline_(uploadImages$);
     } else {
-      $mutation = this.posts.addReplyPost({
+      $mutation = this.posts.createReplyPost({
         content: content,
         photos: [],
         replyPostId: this.repliedPostId,
