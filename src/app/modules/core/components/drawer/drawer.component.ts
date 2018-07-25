@@ -63,6 +63,12 @@ import { DrawerComponent as MdcDrawerComponent } from '../../../mdc/components/d
               <span mdc-list-item-text>ログイン</span>
             </a>
           </ng-container>
+          <li
+            mdc-list-item
+          >
+            <i mdc-list-item-graphic material-icons>bug_report</i>
+            <span mdc-list-item-text>sw@2.0.2</span>
+          </li>
         </nav>
       </div>
     </ng-template>
