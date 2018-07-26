@@ -52,7 +52,7 @@ export class AuthService {
     return from(this.firebaseService.auth().currentUser.reauthenticateWithCredential(credential));
   }
 
-  public signOut() {
+  public signOut(): Observable<void> {
     return from(this.firebaseService.auth().signOut());
   }
 

@@ -1,10 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
-import * as firebase from 'firebase/app';
 import { from } from 'rxjs';
-import { pipe } from 'rxjs/internal-compatibility';
 import { mergeMap, tap } from 'rxjs/operators';
 
 import { LOGIN_ERROR, UPDATE_DATA_ERROR, UPDATE_DATA_SUCCESS } from '../../../../constants/messages';
@@ -141,12 +138,11 @@ export class ViewUsernameComponent implements OnInit {
       return;
     }
 
-    const {newUsername} = this.formGroup.value;
+    const { newUsername } = this.formGroup.value;
 
     const newEmail = `${newUsername}@swimmy.io`;
-    const email$ = this.authService.updateEmail(newEmail);
 
-    const pipeline = pipe(
+    const email$ = this.authService.updateEmail(newEmail).pipe(
       mergeMap(() => {
         return this.usersService.updateUser({
           username: newUsername,
@@ -157,14 +153,14 @@ export class ViewUsernameComponent implements OnInit {
       }),
     );
 
-    pipeline(email$).subscribe(() => {
-      this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
+    email$.subscribe(() => {
+      this.snackbarComponent.snackbar.show({ message: UPDATE_DATA_SUCCESS });
       this.resetFormGroup();
     }, (err) => {
       if (err.code === 'auth/requires-recent-login') {
         this.dialogComponent.dialog.show();
       } else {
-        this.snackbarComponent.snackbar.show({message: UPDATE_DATA_ERROR});
+        this.snackbarComponent.snackbar.show({ message: UPDATE_DATA_ERROR });
       }
     });
   }
@@ -191,17 +187,15 @@ export class ViewUsernameComponent implements OnInit {
     }
 
     const currentUser = this.authService.currentUser;
-    const {username, password} = this.loginFormGroup.value;
-    const {newUsername} = this.formGroup.value;
+    const { username, password } = this.loginFormGroup.value;
+    const { newUsername } = this.formGroup.value;
 
     const email = `${username}@swimmy.io`;
     const newEmail = `${newUsername}@swimmy.io`;
 
     const credential = this.authService.auth.EmailAuthProvider.credential(email, password);
 
-    const reauthenticate$ = this.authService.reauthenticateWithCredential(credential);
-
-    const pipeline = pipe(
+    const reauthenticate$ = this.authService.reauthenticateWithCredential(credential).pipe(
       mergeMap(() => {
         return from(currentUser.updateEmail(newEmail));
       }),
@@ -215,12 +209,12 @@ export class ViewUsernameComponent implements OnInit {
       }),
     );
 
-    pipeline(reauthenticate$).subscribe(() => {
-      this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
+    reauthenticate$.subscribe(() => {
+      this.snackbarComponent.snackbar.show({ message: UPDATE_DATA_SUCCESS });
       this.dialogComponent.dialog.close();
       this.resetFormGroup();
     }, (err) => {
-      this.snackbarComponent.snackbar.show({message: LOGIN_ERROR});
+      this.snackbarComponent.snackbar.show({ message: LOGIN_ERROR });
     });
   }
 
@@ -251,6 +245,6 @@ export class ViewUsernameComponent implements OnInit {
 
     const username = user.email.replace('@swimmy.io', '');
 
-    this.formGroup.reset({currentUsername: username, newUsername: ''});
+    this.formGroup.reset({ currentUsername: username, newUsername: '' });
   }
 }

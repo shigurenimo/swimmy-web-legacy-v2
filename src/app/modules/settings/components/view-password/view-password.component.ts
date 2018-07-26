@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
-import * as firebase from 'firebase/app';
-import { from } from 'rxjs';
 import { pipe } from 'rxjs/internal-compatibility';
 import { mergeMap, tap } from 'rxjs/operators';
 
@@ -118,12 +115,12 @@ export class ViewPasswordComponent implements OnInit {
       return;
     }
 
-    const {password} = this.formGroup.value;
+    const { password } = this.formGroup.value;
 
     const updatePassword$ = this.authService.updatePassword(password);
 
     updatePassword$.subscribe(() => {
-      this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
+      this.snackbarComponent.snackbar.show({ message: UPDATE_DATA_SUCCESS });
       this.resetFormGroup();
     }, (err) => {
       switch (err.code) {
@@ -131,7 +128,7 @@ export class ViewPasswordComponent implements OnInit {
           this.login();
           break;
         case 'auth/weak-password':
-          this.formGroup.get('password').setErrors({[err.code]: true});
+          this.formGroup.get('password').setErrors({ [err.code]: true });
           this.isLoadingMutatation = false;
           break;
         default:
@@ -147,12 +144,12 @@ export class ViewPasswordComponent implements OnInit {
   }
 
   private resetFormGroup() {
-    this.formGroup.reset({currentPassword: '', password: ''});
+    this.formGroup.reset({ currentPassword: '', password: '' });
   }
 
   private login() {
-    const {email} = this.authService.auth().currentUser;
-    const {currentPassword, password} = this.formGroup.value;
+    const { email } = this.authService.auth().currentUser;
+    const { currentPassword, password } = this.formGroup.value;
 
     const credential = this.authService.auth.EmailAuthProvider.credential(email, currentPassword);
 
@@ -165,13 +162,20 @@ export class ViewPasswordComponent implements OnInit {
       }),
     );
 
-    const reauthenticate$ = this.authService.reauthenticateWithCredential(credential);
+    const reauthenticate$ = this.authService.reauthenticateWithCredential(credential).pipe(
+      mergeMap(() => {
+        return this.authService.updatePassword(password);
+      }),
+      tap(() => {
+        this.isLoadingMutatation = false;
+      }),
+    );
 
-    pipeline(reauthenticate$).subscribe(() => {
-      this.snackbarComponent.snackbar.show({message: UPDATE_DATA_SUCCESS});
+    reauthenticate$.subscribe(() => {
+      this.snackbarComponent.snackbar.show({ message: UPDATE_DATA_SUCCESS });
       this.resetFormGroup();
     }, () => {
-      this.snackbarComponent.snackbar.show({message: UPDATE_ERROR});
+      this.snackbarComponent.snackbar.show({ message: UPDATE_ERROR });
     });
   }
 }
