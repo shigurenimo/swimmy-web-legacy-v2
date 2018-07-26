@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "ng build --prod --stats-json && node scripts/updateNgsw",
+    "build": "ng build --prod --stats-json && node deploy",
     "docs": "vuepress dev docs",
     "e2e": "ng e2e",
     "lint": "ng lint",
