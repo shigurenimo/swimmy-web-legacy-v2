@@ -15,6 +15,7 @@ import { DataLayerService } from './services/data-layer.service';
 import { DrawerService } from './services/drawer.service';
 import { FirebaseService } from './services/firebase.service';
 import { PostsService } from './services/posts.service';
+import { SnapshotService } from './services/snapshot.service';
 import { StorageService } from './services/storage.service';
 import { UsersService } from './services/users.service';
 import { WindowService } from './services/window.service';
@@ -50,6 +51,7 @@ const AppInitializer = {
     FirebaseService,
     PostsService,
     StorageService,
+    SnapshotService,
     UsersService,
     WindowService,
     ZoneService,
